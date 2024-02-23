@@ -1,0 +1,14 @@
+{
+    "name": "jdw5/surge-table",
+    "description": "Define tables with ease in Laravel",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Jdw5\\SurgeTable\\": "src/"
+        }
+    },
+    "require": {
+        "illuminate/support": "^10.45"
+    }
+}
