@@ -1,6 +1,11 @@
 {
     "name": "jdw5/surge-table",
     "description": "Define tables with ease in Laravel",
+    "keywords": [
+        "laravel",
+        "laravel-table",
+        "laravel-filter"
+    ],
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -9,6 +14,9 @@
         }
     },
     "require": {
+        "php": "^8.1",
         "illuminate/support": "^10.45"
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

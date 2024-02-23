@@ -1,11 +1,13 @@
 <?php
 
-namespace Jdw5\SurgeTable;
+namespace Jdw5\SurgeTable\Table;
 
+use Jdw5\SurgeTable\Table\Concerns\HasColumns;
 use JsonSerializable;
 
 abstract class Table implements JsonSerializable 
 {
+    use HasColumns;
 
     public static function make(array $data = []): static
     {
@@ -15,6 +17,9 @@ abstract class Table implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
+            'data' => [],
+            'columns' => $this->getTableColumns(),
+            
 
         ];
     }
