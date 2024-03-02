@@ -24,11 +24,7 @@ class MakeTableCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        $stub = match (true) {
-            !empty($this->option('model')) => '/stubs/table.model.php.stub',
-            default => '/stubs/table.php.stub',
-        };
-
+        $stub = '/stubs/table.php.stub';
         return $this->resolveStubPath($stub);
     }
 
@@ -50,10 +46,6 @@ class MakeTableCommand extends GeneratorCommand
 
         $replace = [];
 
-        if ($this->option('model')) {
-            $replace = $this->buildModelReplacements($replace);
-        }
-
         $replace["use {$tableNamespace};\n"] = '';
 
         return str_replace(
@@ -61,21 +53,6 @@ class MakeTableCommand extends GeneratorCommand
             array_values($replace),
             parent::buildClass($name),
         );
-    }
-
-    protected function buildModelReplacements(array $replace)
-    {
-        $modelClass = $this->parseModel($this->option('model'));
-
-        if (!class_exists($modelClass) && confirm("A {$modelClass} model does not exist. Do you want to generate it?", default: true)) {
-            $this->call('make:model', ['name' => $modelClass]);
-        }
-
-        return array_merge($replace, [
-            '{{ namespacedModel }}' => $modelClass,
-            '{{ model }}' => class_basename($modelClass),
-            '{{ modelVariable }}' => lcfirst(class_basename($modelClass)),
-        ]);
     }
 
     protected function parseModel($table)
@@ -87,27 +64,10 @@ class MakeTableCommand extends GeneratorCommand
         return $this->qualifyModel($table);
     }
 
-    protected function afterPromptingForMissingArguments(InputInterface $input, OutputInterface $output)
-    {
-        if (!$this->hasOption('model') || !empty($this->option('model'))) {
-            return;
-        }
-
-        $model = suggest(
-            label: 'What model should this table be for? (optional)',
-            options: $this->possibleModels(),
-        );
-
-        if ($model) {
-            $input->setOption('model', $model);
-        }
-    }
-
     protected function getOptions()
     {
         return [
             ['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the table already exists'],
-            ['model', 'm', InputOption::VALUE_OPTIONAL, 'Generate a table for the given model'],
         ];
     }
 }

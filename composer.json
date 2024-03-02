@@ -3,8 +3,8 @@
     "description": "Extend filters, models and table data for your Laravel applications.",
     "keywords": [
         "laravel",
-        "laravel-table",
-        "laravel-filter"
+        "laravel-tables",
+        "laravel-filters"
     ],
     "type": "library",
     "license": "MIT",
@@ -15,7 +15,9 @@
     },
     "require": {
         "php": "^8.1",
-        "illuminate/support": "^10.45"
+        "illuminate/support": "^10.45",
+        "illuminate/console": "^10.46",
+        "illuminate/database": "^10.38"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
