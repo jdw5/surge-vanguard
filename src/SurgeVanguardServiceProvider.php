@@ -2,10 +2,11 @@
 
 namespace Jdw5\SurgeVanguard;
 
-use Jdw5\SurgeVanguard\Refining\Refinement;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Builder;
+use Jdw5\SurgeVanguard\Refining\Refinement;
+use Jdw5\SurgeVanguard\Console\Commands\TableMakeCommand;
 
 class RefinementProvider extends ServiceProvider
 {
@@ -46,6 +47,15 @@ class RefinementProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        
+        if (! $this->app->runningInConsole()) {
+            $this->commands([
+                TableMakeCommand::class,
+            ]);
+        }
+    }
+
+    public function provides()
+    {
+        return [TableMakeCommand::class];
     }
 }
