@@ -1,0 +1,33 @@
+<?php
+
+namespace {{ namespace }};
+
+use Jdw5\SurgeVanguard\Table\Table;
+use Jdw5\SurgeVanguard\Refining\Sorts\Sort;
+use Jdw5\SurgeVanguard\Table\Columns\Column;
+use Jdw5\SurgeVanguard\Refining\Filters\Filter;
+use Jdw5\SurgeVanguard\Table\Actions\BulkAction;
+use Jdw5\SurgeVanguard\Table\Actions\PageAction;
+use Jdw5\SurgeVanguard\Table\Actions\InlineAction;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+
+final class {{ class }} extends Table
+{
+    protected $key = 'id';
+
+    protected function defineColumns(): array
+    {
+        return [];
+    }
+
+    protected function defineRefiners(): array
+    {
+        return [];
+    }
+
+    protected function defineActions(): array
+    {
+        return [];
+    }
+}

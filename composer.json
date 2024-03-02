@@ -1,6 +1,6 @@
 {
-    "name": "jdw5/surge-table",
-    "description": "Define tables with ease in Laravel",
+    "name": "jdw5/surge-vanguard",
+    "description": "Extend filters, models and table data for your Laravel applications.",
     "keywords": [
         "laravel",
         "laravel-table",
