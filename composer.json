@@ -23,10 +23,10 @@
         }
     },
     "require": {
-        "php": "^8.*",
-        "illuminate/support": "^10.*",
-        "illuminate/console": "^10.*",
-        "illuminate/database": "^10.*"
+        "php": "^8.0",
+        "illuminate/support": "^10.0",
+        "illuminate/console": "^10.0",
+        "illuminate/database": "^10.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -65,6 +65,11 @@
             "providers": [
                 "Jdw5\\Vanguard\\VanguardServiceProvider"
             ]
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
         }
     }
 }
