@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table\Concerns;
+namespace Jdw5\Vanguard\Table\Concerns;
 
-use Jdw5\SurgeVanguard\Table\Pagination\PaginateConfiguration;
+use Jdw5\Vanguard\Table\Pagination\PaginateConfiguration;
 
 trait HasPagination
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Refining\Filters;
+namespace Jdw5\Vanguard\Refining\Filters;
 
 use Closure;
 use Illuminate\Http\Request;
-use Jdw5\SurgeVanguard\Refining\Concerns\HasEnum;
-use Jdw5\SurgeVanguard\Refining\Filters\Enums\FilterMode;
+use Jdw5\Vanguard\Refining\Concerns\HasEnum;
+use Jdw5\Vanguard\Refining\Filters\Enums\FilterMode;
 use Illuminate\Database\Eloquent\Builder;
 
 class Filter extends BaseFilter

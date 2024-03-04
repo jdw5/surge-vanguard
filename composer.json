@@ -1,5 +1,5 @@
 {
-    "name": "jdw5/surge-vanguard",
+    "name": "jdw5/vanguard",
     "description": "Extend filters, models and table data for your Laravel applications.",
     "keywords": [
         "laravel",
@@ -8,9 +8,17 @@
     ],
     "type": "library",
     "license": "MIT",
+    "authors": [
+        {
+            
+            "name": "Joshua Wallace",
+            "email": "josh@joshua-wallace.com",
+            "homepage": "https://joshua-wallace.com"
+        }
+    ],
     "autoload": {
         "psr-4": {
-            "Jdw5\\SurgeTable\\": "src/"
+            "Jdw5\\Vanguard\\": "src/"
         }
     },
     "require": {
@@ -22,7 +30,10 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require-dev": {
-        "orchestra/testbench": "^8.21"
+        "laravel/pint": "dev-main",
+        "orchestra/testbench": "^8.0",
+        "pestphp/pest": "^2.28",
+        "phpstan/phpstan": "^1.10"
     },
     "autoload-dev": {
         "psr-4": {
@@ -47,5 +58,12 @@
         "lint": [
             "@php vendor/bin/phpstan analyse"
         ]
-    }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jdw5\\Vanguard\\VanguardServiceProvider"
+            ]
+        }
+    },
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table\Concerns;
+namespace Jdw5\Vanguard\Table\Concerns;
 
-use Jdw5\SurgeVanguard\Concerns\HasRefinements;
-use Jdw5\SurgeVanguard\Table\Columns\Column;
+use Jdw5\Vanguard\Concerns\HasRefinements;
+use Jdw5\Vanguard\Table\Columns\Column;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\CursorPaginator;

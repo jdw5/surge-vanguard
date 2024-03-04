@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Eloquent\Concerns;
+namespace Jdw5\Vanguard\Eloquent\Concerns;
 
-use Jdw5\SurgeVanguard\Table\Exceptions\TableModelNotFoundException;
+use Jdw5\Vanguard\Table\Exceptions\TableModelNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 

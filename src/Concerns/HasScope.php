@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Concerns;
+namespace Jdw5\Vanguard\Concerns;
 
 trait HasScope
 {

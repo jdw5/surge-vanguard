@@ -1,9 +1,9 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Refining\Sorts;
+namespace Jdw5\Vanguard\Refining\Sorts;
 
 use Illuminate\Http\Request;
-use Jdw5\SurgeVanguard\Refining\Sorts\BaseSort;
+use Jdw5\Vanguard\Refining\Sorts\BaseSort;
 use Illuminate\Database\Eloquent\Builder;
 
 class ToggleSort extends BaseSort

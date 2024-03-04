@@ -1,9 +1,9 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Eloquent;
+namespace Jdw5\Vanguard\Eloquent;
 
-use Jdw5\SurgeVanguard\Eloquent\Concerns\HasSelects;
-use Jdw5\SurgeVanguard\Eloquent\Contracts\Relates;
+use Jdw5\Vanguard\Eloquent\Concerns\HasSelects;
+use Jdw5\Vanguard\Eloquent\Contracts\Relates;
 
 class Relation implements Relates
 {

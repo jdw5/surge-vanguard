@@ -1,17 +1,17 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Refining\Filters;
+namespace Jdw5\Vanguard\Refining\Filters;
 
-use Jdw5\SurgeVanguard\Primitive;
+use Jdw5\Vanguard\Primitive;
 use Illuminate\Http\Request;
-use Jdw5\SurgeVanguard\Concerns\HasName;
-use Jdw5\SurgeVanguard\Concerns\HasLabel;
-use Jdw5\SurgeVanguard\Concerns\IsHideable;
-use Jdw5\SurgeVanguard\Refining\Refinement;
-use Jdw5\SurgeVanguard\Concerns\HasMetadata;
-use Jdw5\SurgeVanguard\Concerns\Configurable;
-use Jdw5\SurgeVanguard\Refining\Contracts\Filters;
-use Jdw5\SurgeVanguard\Refining\Concerns\HasDefault;
+use Jdw5\Vanguard\Concerns\HasName;
+use Jdw5\Vanguard\Concerns\HasLabel;
+use Jdw5\Vanguard\Concerns\IsHideable;
+use Jdw5\Vanguard\Refining\Refinement;
+use Jdw5\Vanguard\Concerns\HasMetadata;
+use Jdw5\Vanguard\Concerns\Configurable;
+use Jdw5\Vanguard\Refining\Contracts\Filters;
+use Jdw5\Vanguard\Refining\Concerns\HasDefault;
 use Illuminate\Database\Eloquent\Builder;
 
 abstract class BaseFilter extends Refinement implements Filters

@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Console\Commands;
+namespace Jdw5\Vanguard\Console\Commands;
 
 use InvalidArgumentException;
 use function Laravel\Prompts\confirm;

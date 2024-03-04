@@ -1,9 +1,9 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table\Actions;
+namespace Jdw5\Vanguard\Table\Actions;
 
-use Jdw5\SurgeVanguard\Concerns\IsDefault;
-use Jdw5\SurgeVanguard\Table\Actions\BaseAction;
+use Jdw5\Vanguard\Concerns\IsDefault;
+use Jdw5\Vanguard\Table\Actions\BaseAction;
 
 // use Hybridly\Tables\Actions\Concerns\ResolvesModel;
 

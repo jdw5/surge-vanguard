@@ -1,12 +1,12 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Eloquent;
+namespace Jdw5\Vanguard\Eloquent;
 
-use Jdw5\SurgeVanguard\Concerns\HasModel;
-use Jdw5\SurgeVanguard\Eloquent\Concerns\HasSelects;
-use Jdw5\SurgeVanguard\Eloquent\Contracts\Joins;
-use Jdw5\SurgeVanguard\Eloquent\Enum\JoinType;
-use Jdw5\SurgeVanguard\Eloquent\Exceptions\InvalidJoinType;
+use Jdw5\Vanguard\Concerns\HasModel;
+use Jdw5\Vanguard\Eloquent\Concerns\HasSelects;
+use Jdw5\Vanguard\Eloquent\Contracts\Joins;
+use Jdw5\Vanguard\Eloquent\Enum\JoinType;
+use Jdw5\Vanguard\Eloquent\Exceptions\InvalidJoinType;
 use ValueError;
 
 class Join implements Joins

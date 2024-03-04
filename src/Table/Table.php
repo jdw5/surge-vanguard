@@ -1,21 +1,21 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table;
+namespace Jdw5\Vanguard\Table;
 
-use Jdw5\SurgeVanguard\Primitive;
-use Jdw5\SurgeVanguard\Concerns\HasId;
-use Jdw5\SurgeVanguard\Concerns\HasScope;
-use Jdw5\SurgeVanguard\Concerns\HasActions;
-use Jdw5\SurgeVanguard\Table\Concerns\HasKey;
-use Jdw5\SurgeVanguard\Table\Contracts\Tables;
-use Jdw5\SurgeVanguard\Concerns\HasRefinements;
-use Jdw5\SurgeVanguard\Table\Concerns\HasColumns;
-use Jdw5\SurgeVanguard\Table\Concerns\HasRecords;
-use Jdw5\SurgeVanguard\Eloquent\Concerns\HasModel;
+use Jdw5\Vanguard\Primitive;
+use Jdw5\Vanguard\Concerns\HasId;
+use Jdw5\Vanguard\Concerns\HasScope;
+use Jdw5\Vanguard\Concerns\HasActions;
+use Jdw5\Vanguard\Table\Concerns\HasKey;
+use Jdw5\Vanguard\Table\Contracts\Tables;
+use Jdw5\Vanguard\Concerns\HasRefinements;
+use Jdw5\Vanguard\Table\Concerns\HasColumns;
+use Jdw5\Vanguard\Table\Concerns\HasRecords;
+use Jdw5\Vanguard\Eloquent\Concerns\HasModel;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\SurgeVanguard\Table\Concerns\HasPagination;
+use Jdw5\Vanguard\Table\Concerns\HasPagination;
 use Illuminate\Database\Eloquent\Collection;
-use Jdw5\SurgeVanguard\Table\Exceptions\InvalidKeyException;
+use Jdw5\Vanguard\Table\Exceptions\InvalidKeyException;
 
 abstract class Table extends Primitive implements Tables
 {

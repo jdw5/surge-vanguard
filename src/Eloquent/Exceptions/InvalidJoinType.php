@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Eloquent\Exceptions;
+namespace Jdw5\Vanguard\Eloquent\Exceptions;
 
 class InvalidJoinType extends \Exception
 {

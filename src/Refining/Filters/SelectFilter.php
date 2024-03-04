@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Refining\Filters;
+namespace Jdw5\Vanguard\Refining\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 

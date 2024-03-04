@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table\Concerns;
+namespace Jdw5\Vanguard\Table\Concerns;
 
-use Jdw5\SurgeVanguard\Table\Columns\Column;
+use Jdw5\Vanguard\Table\Columns\Column;
 use Illuminate\Support\Collection;
 
 trait HasColumns

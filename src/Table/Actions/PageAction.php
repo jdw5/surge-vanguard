@@ -1,9 +1,9 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table\Actions;
+namespace Jdw5\Vanguard\Table\Actions;
 
-use Jdw5\SurgeVanguard\Table\Actions\BaseAction;
-use Jdw5\SurgeVanguard\Table\Actions\Concerns\HasEndpoint;
+use Jdw5\Vanguard\Table\Actions\BaseAction;
+use Jdw5\Vanguard\Table\Actions\Concerns\HasEndpoint;
 
 class PageAction extends BaseAction
 {

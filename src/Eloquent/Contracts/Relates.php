@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Eloquent\Contracts;
+namespace Jdw5\Vanguard\Eloquent\Contracts;
 
 interface Relates
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table\Concerns;
+namespace Jdw5\Vanguard\Table\Concerns;
 
-use Jdw5\SurgeVanguard\Table\Exceptions\InvalidKeyException;
+use Jdw5\Vanguard\Table\Exceptions\InvalidKeyException;
 
 trait HasKey
 {

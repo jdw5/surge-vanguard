@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Refining\Concerns;
+namespace Jdw5\Vanguard\Refining\Concerns;
 
 use Illuminate\Http\Request;
 

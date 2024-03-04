@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table\Exceptions;
+namespace Jdw5\Vanguard\Table\Exceptions;
 
 use Exception;
 

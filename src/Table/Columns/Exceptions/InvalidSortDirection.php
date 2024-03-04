@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table\Columns\Exceptions;
+namespace Jdw5\Vanguard\Table\Columns\Exceptions;
 
 class InvalidSortDirection extends \Exception
 {

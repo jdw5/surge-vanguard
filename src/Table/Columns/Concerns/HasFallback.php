@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table\Columns\Concerns;
+namespace Jdw5\Vanguard\Table\Columns\Concerns;
 
 trait HasFallback
 {

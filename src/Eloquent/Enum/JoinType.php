@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Eloquent\Enum;
+namespace Jdw5\Vanguard\Eloquent\Enum;
 
 enum JoinType: string 
 {

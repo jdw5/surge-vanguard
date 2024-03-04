@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table\Exceptions;
+namespace Jdw5\Vanguard\Table\Exceptions;
 
-use Jdw5\SurgeVanguard\Table\Table;
+use Jdw5\Vanguard\Table\Table;
 
 class InvalidTableException extends \Exception
 {

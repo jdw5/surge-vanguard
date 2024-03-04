@@ -1,11 +1,11 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Concerns;
+namespace Jdw5\Vanguard\Concerns;
 
-use Jdw5\SurgeVanguard\Table\Actions\BaseAction;
-use Jdw5\SurgeVanguard\Table\Actions\BulkAction;
-use Jdw5\SurgeVanguard\Table\Actions\PageAction;
-use Jdw5\SurgeVanguard\Table\Actions\InlineAction;
+use Jdw5\Vanguard\Table\Actions\BaseAction;
+use Jdw5\Vanguard\Table\Actions\BulkAction;
+use Jdw5\Vanguard\Table\Actions\PageAction;
+use Jdw5\Vanguard\Table\Actions\InlineAction;
 use Illuminate\Support\Collection;
 
 trait HasActions

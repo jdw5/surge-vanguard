@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Refining\Filters\Enums;
+namespace Jdw5\Vanguard\Refining\Filters\Enums;
 
 enum FilterMode: string
 {

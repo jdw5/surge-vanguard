@@ -1,10 +1,10 @@
 <?php
 
-namespace Jdw5\SurgeVanguard;
+namespace Jdw5\Vanguard;
 
 use JsonSerializable;
-use Jdw5\SurgeVanguard\Concerns\Configurable;
-use Jdw5\SurgeVanguard\Concerns\EvaluatesClosures;
+use Jdw5\Vanguard\Concerns\Configurable;
+use Jdw5\Vanguard\Concerns\EvaluatesClosures;
 use Illuminate\Support\Traits\Tappable;
 use Illuminate\Support\Traits\Macroable;
 use Illuminate\Support\Traits\Conditionable;

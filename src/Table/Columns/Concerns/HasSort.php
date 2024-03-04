@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table\Columns\Concerns;
+namespace Jdw5\Vanguard\Table\Columns\Concerns;
 
-use Jdw5\SurgeVanguard\Refining\Sorts\ToggleSort;
+use Jdw5\Vanguard\Refining\Sorts\ToggleSort;
 
 trait HasSort
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table\Contracts;
+namespace Jdw5\Vanguard\Table\Contracts;
 
 use Illuminate\Database\Eloquent\Builder;
 

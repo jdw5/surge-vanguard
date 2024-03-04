@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table\Actions\Concerns;
+namespace Jdw5\Vanguard\Table\Actions\Concerns;
 
-use Jdw5\SurgeVanguard\Table\Actions\Exceptions\InvalidEndpointMethod;
+use Jdw5\Vanguard\Table\Actions\Exceptions\InvalidEndpointMethod;
 
 trait HasEndpoint
 {

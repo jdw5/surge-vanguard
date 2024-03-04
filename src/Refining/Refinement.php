@@ -1,17 +1,17 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Refining;
+namespace Jdw5\Vanguard\Refining;
 
-use Jdw5\SurgeVanguard\Primitive;
-use Jdw5\SurgeVanguard\Concerns\HasName;
-use Jdw5\SurgeVanguard\Concerns\HasType;
-use Jdw5\SurgeVanguard\Concerns\HasLabel;
-use Jdw5\SurgeVanguard\Concerns\IsHideable;
-use Jdw5\SurgeVanguard\Concerns\HasMetadata;
-use Jdw5\SurgeVanguard\Concerns\Configurable;
-use Jdw5\SurgeVanguard\Refining\Concerns\HasValue;
-use Jdw5\SurgeVanguard\Refining\Contracts\Refines;
-use Jdw5\SurgeVanguard\Refining\Concerns\HasDefault;
+use Jdw5\Vanguard\Primitive;
+use Jdw5\Vanguard\Concerns\HasName;
+use Jdw5\Vanguard\Concerns\HasType;
+use Jdw5\Vanguard\Concerns\HasLabel;
+use Jdw5\Vanguard\Concerns\IsHideable;
+use Jdw5\Vanguard\Concerns\HasMetadata;
+use Jdw5\Vanguard\Concerns\Configurable;
+use Jdw5\Vanguard\Refining\Concerns\HasValue;
+use Jdw5\Vanguard\Refining\Contracts\Refines;
+use Jdw5\Vanguard\Refining\Concerns\HasDefault;
 
 abstract class Refinement extends Primitive implements Refines
 {

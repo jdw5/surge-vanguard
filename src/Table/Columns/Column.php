@@ -1,17 +1,17 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table\Columns;
+namespace Jdw5\Vanguard\Table\Columns;
 
-use Jdw5\SurgeVanguard\Primitive;
-use Jdw5\SurgeVanguard\Concerns\HasName;
-use Jdw5\SurgeVanguard\Concerns\HasType;
-use Jdw5\SurgeVanguard\Concerns\HasLabel;
-use Jdw5\SurgeVanguard\Concerns\IsHideable;
-use Jdw5\SurgeVanguard\Concerns\HasMetadata;
-use Jdw5\SurgeVanguard\Table\Columns\Concerns\IsKey;
-use Jdw5\SurgeVanguard\Table\Columns\Concerns\HasSort;
-use Jdw5\SurgeVanguard\Table\Columns\Concerns\HasFallback;
-use Jdw5\SurgeVanguard\Table\Columns\Concerns\HasTransform;
+use Jdw5\Vanguard\Primitive;
+use Jdw5\Vanguard\Concerns\HasName;
+use Jdw5\Vanguard\Concerns\HasType;
+use Jdw5\Vanguard\Concerns\HasLabel;
+use Jdw5\Vanguard\Concerns\IsHideable;
+use Jdw5\Vanguard\Concerns\HasMetadata;
+use Jdw5\Vanguard\Table\Columns\Concerns\IsKey;
+use Jdw5\Vanguard\Table\Columns\Concerns\HasSort;
+use Jdw5\Vanguard\Table\Columns\Concerns\HasFallback;
+use Jdw5\Vanguard\Table\Columns\Concerns\HasTransform;
 
 class Column extends Primitive
 {

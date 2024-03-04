@@ -1,10 +1,10 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Refining\Sorts;
+namespace Jdw5\Vanguard\Refining\Sorts;
 
 use Illuminate\Http\Request;
-use Jdw5\SurgeVanguard\Refining\Refinement;
-use Jdw5\SurgeVanguard\Refining\Contracts\Sorts;
+use Jdw5\Vanguard\Refining\Refinement;
+use Jdw5\Vanguard\Refining\Contracts\Sorts;
 use Illuminate\Database\Eloquent\Builder;
 
 abstract class BaseSort extends Refinement implements Sorts

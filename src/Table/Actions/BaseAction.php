@@ -1,13 +1,13 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table\Actions;
+namespace Jdw5\Vanguard\Table\Actions;
 
-use Jdw5\SurgeVanguard\Primitive;
-use Jdw5\SurgeVanguard\Concerns\HasName;
-use Jdw5\SurgeVanguard\Concerns\HasLabel;
-use Jdw5\SurgeVanguard\Concerns\IsHideable;
-use Jdw5\SurgeVanguard\Concerns\HasMetadata;
-use Jdw5\SurgeVanguard\Table\Actions\Concerns\HasEndpoint;
+use Jdw5\Vanguard\Primitive;
+use Jdw5\Vanguard\Concerns\HasName;
+use Jdw5\Vanguard\Concerns\HasLabel;
+use Jdw5\Vanguard\Concerns\IsHideable;
+use Jdw5\Vanguard\Concerns\HasMetadata;
+use Jdw5\Vanguard\Table\Actions\Concerns\HasEndpoint;
 
 abstract class BaseAction extends Primitive
 {

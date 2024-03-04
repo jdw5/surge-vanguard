@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Eloquent\Concerns;
+namespace Jdw5\Vanguard\Eloquent\Concerns;
 
 trait HasTable
 {

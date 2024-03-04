@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Table\Pagination;
+namespace Jdw5\Vanguard\Table\Pagination;
 
 use JsonSerializable;
 

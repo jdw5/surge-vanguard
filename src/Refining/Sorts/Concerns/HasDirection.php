@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Refining\Sorts\Concerns;
+namespace Jdw5\Vanguard\Refining\Sorts\Concerns;
 
-use Jdw5\SurgeVanguard\Refining\Sorts\InvalidSortDirection;
+use Jdw5\Vanguard\Refining\Sorts\InvalidSortDirection;
 
 trait HasDirection
 {

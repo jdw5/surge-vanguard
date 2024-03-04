@@ -1,11 +1,11 @@
 <?php
 
-namespace Jdw5\SurgeVanguard\Concerns;
+namespace Jdw5\Vanguard\Concerns;
 
-use Jdw5\SurgeVanguard\Refining\Refinement;
+use Jdw5\Vanguard\Refining\Refinement;
 use Illuminate\Support\Collection;
-use Jdw5\SurgeVanguard\Refining\Sorts\BaseSort;
-use Jdw5\SurgeVanguard\Refining\Filters\BaseFilter;
+use Jdw5\Vanguard\Refining\Sorts\BaseSort;
+use Jdw5\Vanguard\Refining\Filters\BaseFilter;
 
 trait HasRefinements
 {
