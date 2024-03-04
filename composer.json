@@ -1,10 +1,11 @@
 {
-    "name": "jdw5/vanguard",
+    "name": "jdw5/surge-vanguard",
     "description": "Extend filters, models and table data for your Laravel applications.",
     "keywords": [
         "laravel",
         "laravel-tables",
-        "laravel-filters"
+        "laravel-filters",
+        "laravel-refiners"
     ],
     "type": "library",
     "license": "MIT",
@@ -65,5 +66,5 @@
                 "Jdw5\\Vanguard\\VanguardServiceProvider"
             ]
         }
-    },
+    }
 }

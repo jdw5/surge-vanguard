@@ -1,4 +1,4 @@
-# Surge Vanguard
+# Vanguard
 Rapidly develop refiners and table data for Vue + Inertia + Laravel applications.
 
 Inspired by hybridly.
@@ -27,7 +27,7 @@ composer require surge-vanguard
 There are no configuration files needed. You may want to publish the stub and command to customise the stub and add options to the command.
     
 ```console
-php artisan vendor:publish --tag=surge-vanguard-stubs
+php artisan vendor:publish --tag=vanguard-stubs
 ```
 
 ## Frontend Companion

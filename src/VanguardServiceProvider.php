@@ -55,7 +55,7 @@ class VanguardServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../stubs' => base_path('stubs'),
-        ], 'surge-vanguard-stubs');
+        ], 'vanguard-stubs');
     }
 
     public function provides()
