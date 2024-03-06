@@ -1,11 +1,10 @@
 <?php
 
-namespace Jdw5\Vanguard\Concerns;
+namespace Jdw5\Vanguard\Table\Columns\Concerns;
 
 trait HasVisibility
 {
     protected bool $show = true;
-    protected bool|\Closure $isVisible = true;
 
     public function hide(): static
     {

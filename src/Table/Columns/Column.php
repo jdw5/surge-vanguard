@@ -12,6 +12,7 @@ use Jdw5\Vanguard\Table\Columns\Concerns\IsKey;
 use Jdw5\Vanguard\Table\Columns\Concerns\HasSort;
 use Jdw5\Vanguard\Table\Columns\Concerns\HasFallback;
 use Jdw5\Vanguard\Table\Columns\Concerns\HasTransform;
+use Jdw5\Vanguard\Table\Columns\Concerns\HasVisibility;
 
 class Column extends Primitive
 {
@@ -24,7 +25,7 @@ class Column extends Primitive
     use HasSort;
     use HasFallback;
     use IsKey;
-    // Needs a visibility attribute
+    use HasVisibility;
 
     public function __construct(string $name)
     {
@@ -47,6 +48,7 @@ class Column extends Primitive
             'label' => $this->getLabel(), // Headlined display column
             'metadata' => $this->getMetadata(),
             'fallback' => $this->getFallback(),
+            'show' => $this->getVisibility(),
             'has_sort' => $this->hasSort(),
             'active' => $this->isSorting(),
             'direction' => $this->getDirection(),
