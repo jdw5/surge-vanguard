@@ -91,11 +91,17 @@ trait HasRecords
 
     protected function applyColumns(): void
     {
-        // Perform the transformations. If the field is empty, then use the fallback value if specified
-        
-        // $this->cachedData = collect($this->cachedData)->map(function ($row) {
-        //     return $row->only($this->getTableColumns()->map->getName()->toArray());
-        // });
+        // Optional to remove columns, or simply map over them
+        if (isset($this->apply) && !$this->apply) {
+            $this->cachedData = collect($this->cachedData)->map(function ($row) {
+                // Don't reduce because they can be null
+                return $this->getTableColumns()->map(function (Column $column) use ($row) {
+                    $name = $column->getName();
+                    return $column->transformUsing($row[$name] ?? $column->getFallback());
+                }, []);
+            });
+        }
+
         $this->cachedData = collect($this->cachedData)->map(function ($row) {
             // Perform the transform and fallback here
             return $this->getTableColumns()->reduce(function ($carry, Column $column) use ($row) {

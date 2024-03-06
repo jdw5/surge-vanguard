@@ -24,12 +24,13 @@ class Column extends Primitive
     use HasSort;
     use HasFallback;
     use IsKey;
+    // Needs a visibility attribute
 
     public function __construct(string $name)
     {
         $this->name($name);
         $this->label(str($name)->afterLast('.')->headline()->lower()->ucfirst());
-        $this->type('text');
+        $this->type('data');
         $this->setUp();
     }
 
