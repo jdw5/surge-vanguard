@@ -2,31 +2,90 @@
 
 namespace Jdw5\Vanguard\Concerns;
 
+use Jdw5\Vanguard\Enums\Breakpoint;
+
 trait IsHideable
 {
-    protected bool|\Closure $isHidden = false;
-    protected bool|\Closure $isVisible = true;
+    protected bool $show = true;
+    protected ?Breakpoint $breakpoint = null;
 
-    public function hidden(bool|\Closure $condition = true): static
+    /**
+     * Set the visibility of the column to hidden
+     * 
+     * @param bool $condition
+     * @return static
+     */
+    public function hide(bool $condition = false): static
     {
-        $this->isHidden = $condition;
-
+        $this->show = $condition;      
         return $this;
     }
 
-    public function visible(bool|\Closure $condition = true): static
+    /**
+     * Set the visibility of the column to shown
+     * 
+     * @param bool $condition
+     * @return static
+     */
+    public function show(bool $condition = true): static
     {
-        $this->isVisible = $condition;
-
+        $this->show = $condition;
         return $this;
+    }
+
+    /**
+     * Set the visibility of the column to hidden on extra small screens or larger
+     * 
+     * @return static
+     */
+    public function xs(): static
+    {
+        return $this->breakpoint(Breakpoint::XS);
+    }
+
+    public function sm(): static
+    {
+        return $this->breakpoint(Breakpoint::SM);
+    }
+
+    public function md(): static
+    {
+        return $this->breakpoint(Breakpoint::MD);
+    }
+
+    public function lg(): static
+    {
+        return $this->breakpoint(Breakpoint::LG);
+    }
+
+    public function xl(): static
+    {
+        return $this->breakpoint(Breakpoint::XL);
+    }
+
+    public function xxl(): static
+    {
+        return $this->breakpoint(Breakpoint::XXL);
+    }
+
+    public function breakpoint(Breakpoint|string $breakpoint): static
+    {
+        $this->breakpoint = $breakpoint instanceof Breakpoint ? $breakpoint : Breakpoint::tryFrom($breakpoint);
+        return $this;
+    }
+
+    public function getBreakpoint(): string|null
+    {
+        return $this->breakpoint->value ?? null;
+    }
+
+    public function isShown(): bool
+    {
+        return $this->show;
     }
 
     public function isHidden(): bool
     {
-        if ($this->evaluate($this->isHidden)) {
-            return true;
-        }
-
-        return !$this->evaluate($this->isVisible);
+        return ! $this->show;
     }
 }

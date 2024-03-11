@@ -4,12 +4,12 @@ namespace Jdw5\Vanguard\Refining\Sorts;
 
 use Illuminate\Http\Request;
 use Jdw5\Vanguard\Refining\Sorts\BaseSort;
+use Jdw5\Vanguard\Refining\Sorts\Concerns\HasActiveDirection;
 use Illuminate\Database\Eloquent\Builder;
 
 class ToggleSort extends BaseSort
 {
-    protected ?string $nextDirection = null;
-    protected ?string $direction = null;
+    public ?string $nextDirection = null;
 
     public function refine(Builder $builder, ?Request $request = null): void
     {
@@ -17,43 +17,37 @@ class ToggleSort extends BaseSort
         
         /** Set the sort field */
         $this->value($request->query(self::SORT_FIELD));
-        /** Set the direction field */
         $this->direction($request->query(self::ORDER_FIELD));
-        /** Update the direction to be the 3 way toggle */
+
         $this->nextDirection($this->getDirection());
 
-        if ($this->isActive()) {
+        // dd($this->getProperty(), $this->getDirection(), $this->isActive());
+        if (! $this->isActive()) {
             return;
         }
-        
-        $this->apply($builder, $this->property, $this->getDirection());
+        $this->apply($builder, $this->getProperty(), $this->getDirection());
     }
 
-    public function direction(?string $direction): static
-    {
-        $this->direction = $direction;
-        return $this;
-    }
-
-    public function nextDirection(?string $direction): static
+    public function nextDirection(?string $direction): void
     {
         if (!$this->isActive()) $direction = null;
+
         $this->nextDirection = match ($direction) {
             null => 'asc',
             'asc' => 'desc',
             default => null,
         };
-
-        return $this;
-    }
-
-    public function getDirection(): ?string
-    {
-        return $this->evaluate($this->direction);
     }
 
     public function getNextDirection(): ?string
     {
-        return $this->evaluate($this->nextDirection);
+        return $this->nextDirection;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return array_merge(parent::jsonSerialize(), [
+            'next_direction' => $this->getNextDirection(),
+        ]);
     }
 }

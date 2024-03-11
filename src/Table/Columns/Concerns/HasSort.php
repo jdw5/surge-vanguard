@@ -7,10 +7,11 @@ use Jdw5\Vanguard\Refining\Sorts\ToggleSort;
 trait HasSort
 {
     protected ?ToggleSort $sort = null;
+    // Need to have the property on the sort
 
-    public function sort(?string $alias = null): static
+    public function sort(?string $name = null, ?string $property = null): static
     {
-        $this->sort = ToggleSort::make($this->getName());
+        $this->sort = ToggleSort::make($property ?? ($name ?? $this->getName()), $name ?? $this->getName());
         return $this;
     }
 
@@ -26,7 +27,7 @@ trait HasSort
     
     public function getSort(): ?ToggleSort
     {
-        return $this->evaluate($this->sort);
+        return $this->sort;
     }
 
     public function isSorting(): bool

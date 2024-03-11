@@ -15,7 +15,7 @@ trait HasRefinements
     protected function getRefinements(): Collection
     {
         return $this->cachedRefinements ??= collect($this->defineRefinements())
-            ->filter(static fn (Refinement $refinement): bool => !$refinement->isHidden());
+            ->filter(static fn (Refinement $refinement): bool => !$refinement->isExcluded());
     }
 
     protected function getFilters(): Collection

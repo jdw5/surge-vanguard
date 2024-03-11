@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining\Exceptions;
+namespace Jdw5\Vanguard\Refining\Sorts;
 
 class InvalidSortDirection extends \Exception
 {

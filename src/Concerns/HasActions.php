@@ -12,11 +12,10 @@ trait HasActions
 {
     protected mixed $cachedActions = null;
 
-    public function getActions(bool $showHidden = false): Collection
+    public function getActions(): Collection
     {
         return $this->cachedActions ??= collect($this->defineActions())
-            ->when(!$showHidden)
-            ->filter(static fn (BaseAction $action): bool => !$action->isHidden());
+            ->filter(static fn (BaseAction $action): bool => !$action->isExcluded());
     }
 
     public function getInlineActions(bool $showHidden = false): Collection

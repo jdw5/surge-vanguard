@@ -5,79 +5,28 @@ namespace Jdw5\Vanguard\Refining\Filters;
 use Closure;
 use Illuminate\Http\Request;
 use Jdw5\Vanguard\Refining\Concerns\HasEnum;
-use Jdw5\Vanguard\Refining\Filters\Enums\FilterMode;
 use Illuminate\Database\Eloquent\Builder;
+use Jdw5\Vanguard\Refining\Filters\Concerns\HasMode;
+use Jdw5\Vanguard\Refining\Filters\Enums\FilterMode;
+use Jdw5\Vanguard\Refining\Filters\Concerns\HasOperator;
+use Jdw5\Vanguard\Refining\Filters\Concerns\HasQueryBoolean;
 
 class Filter extends BaseFilter
 {
-    use HasEnum;
-    
-    protected Closure|string $operator = '=';
-    protected FilterMode $mode = FilterMode::EXACT;
+    use HasMode;
+    use HasOperator;
+    use HasQueryBoolean;
 
     protected function setUp(): void
     {
         $this->type('filter');
     }
 
-    public function operator(string|Closure $operator): static
+    public function apply(Builder $builder, string $property, mixed $value): void
     {
-        $this->operator = $operator;
-        return $this;
-    }
-
-    public function mode(string|\Closure $mode): static
-    {
-        $this->mode = $mode;
-        return $this;
-    }
-
-    public function exact(): static
-    {
-        $this->mode = FilterMode::EXACT;
-        return $this;
-    }
-
-    public function loose(): static
-    {
-        $this->mode = FilterMode::LOOSE;
-        return $this;
-    }
-
-    public function beginsWith(): static
-    {
-        $this->mode = FilterMode::BEGINS_WITH;
-        return $this;
-    }
-
-    public function endsWith(): static
-    {
-        $this->mode = FilterMode::ENDS_WITH;
-        return $this;
-    }
-
-    public function getOperator(): string
-    {
-        return $this->evaluate($this->operator);
-    }
-
-    public function getMode(): FilterMode
-    {
-        return $this->evaluate($this->mode);        
-    }
-
-    public function apply(Builder $builder, mixed $value, string $property): void
-    {
-        if (($enumClass = $this->getEnumClass()) && !$value instanceof \BackedEnum) {
-            $value = $enumClass::tryFrom($value);
-
-            if (!$value) {
-                return;
-            }
-        }
-
         if ($this->getMode() === FilterMode::EXACT) {
-            $builder->where($property, $this->getOperator(), $value);
+            $queryMethod = ($this->getQueryBoolean() === 'or') ? 'orWhere' : 'where';
+            $builder->{$queryMethod}($property, $this->getOperator(), $value);
             return;
         }
 
@@ -102,7 +51,7 @@ class Filter extends BaseFilter
         $builder->whereRaw(
             sql: $sql,
             bindings: $bindings,
-            // boolean: $isRelation ? 'and' : $this->getQueryBoolean(),
+            boolean: $this->getQueryBoolean()
         );
     }
 }

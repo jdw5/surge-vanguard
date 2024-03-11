@@ -46,14 +46,6 @@ trait HasRecords
 
     protected function pipeline(): void
     {
-        /**
-         * Should use HasModel here
-         * - First check: Did they pass a model to the constructor
-         * - Second check: Did they define a query for the table
-         * - Third check: Did they define a model in the table
-         * - Will also work if they overwrite defineQuery()
-         * - Final check: Resolve based on the table name
-         * */ 
         if (! $this->hasQuery()) { 
             $this->query = $this->defineQuery();
         }
@@ -67,22 +59,10 @@ trait HasRecords
             )
         );
 
-        // if (! $this->hasQuery()) {
-        //     $this->query($this->getModel()->query());
-        // }
-        // $this->query($this->getQuery()
-        //     ->withRefinements($this->getRefinements())
-        //     ->withRefinements($this->getSortableColumns()->map
-        //         ->getSort()
-        //         ->filter()
-        //         ->toArray()
-        //     )
-        // );
 
         match ($this->paginateType()) {
             'paginate' => $this->handlePaginate(),
             'cursor' => $this->handleCursorPaginate(),
-            'none' => $this->handleUnpaginated(),
             default => $this->handleUnpaginated(),
         };
 
@@ -91,19 +71,7 @@ trait HasRecords
 
     protected function applyColumns(): void
     {
-        // Optional to remove columns, or simply map over them
-        if (isset($this->apply) && !$this->apply) {
-            $this->cachedData = collect($this->cachedData)->map(function ($row) {
-                // Don't reduce because they can be null
-                return $this->getTableColumns()->map(function (Column $column) use ($row) {
-                    $name = $column->getName();
-                    return $column->transformUsing($row[$name] ?? $column->getFallback());
-                }, []);
-            });
-        }
-
         $this->cachedData = collect($this->cachedData)->map(function ($row) {
-            // Perform the transform and fallback here
             return $this->getTableColumns()->reduce(function ($carry, Column $column) use ($row) {
                 $name = $column->getName();
                 $carry[$name] = $column->transformUsing($row[$name] ?? $column->getFallback());
@@ -162,7 +130,7 @@ trait HasRecords
             'from' => $paginator->firstItem(),
             'to' => $paginator->lastItem(),
             'total' => $paginator->total(),
-            'links' => $paginator->linkCollection()->toArray(),
+            'links' => $paginator->onEachSide(1)->linkCollection()->splice(1, -1)->values()->toArray(),
             'first_url' => $paginator->url(1),
             'last_url' => $paginator->url($paginator->lastPage()),
             'next_url' => $paginator->nextPageUrl(),

@@ -9,20 +9,20 @@ trait HasColumns
 {
     private mixed $cachedColumns = null;
 
+    protected function defineColumns(): array
+    {
+        return [];
+    }
+
     protected function getTableColumns(): Collection
     {
         return $this->cachedColumns ??= collect($this->defineColumns())
-            ->filter(static fn (Column $column): bool => !$column->isHidden());
+            ->filter(static fn (Column $column): bool => !$column->isExcluded());
     }
 
     protected function getSortableColumns(): Collection
     {
         return $this->getTableColumns()->filter(static fn (Column $column): bool => $column->hasSort());
-    }
-
-    protected function defineColumns(): array
-    {
-        return [];
     }
 
     protected function findKeyColumn(): ?Column

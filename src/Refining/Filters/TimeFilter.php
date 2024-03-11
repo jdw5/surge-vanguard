@@ -13,7 +13,7 @@ class SelectFilter extends Filter
 
     protected function setUp(): void
     {
-        $this->type('select');
+        $this->type('date');
     }
 
     public function refine(Builder $builder, ?Request $request = null): void

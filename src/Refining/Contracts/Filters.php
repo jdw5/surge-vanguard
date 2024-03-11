@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Builder;
 
 interface Filters
 {
-    public function apply(Builder $builder, mixed $value, string $property): void;
+    public function apply(Builder $builder, string $property, mixed $value): void;
 }

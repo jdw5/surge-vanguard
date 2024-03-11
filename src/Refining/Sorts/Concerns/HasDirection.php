@@ -9,7 +9,7 @@ trait HasDirection
     private const DEFAULT = 'asc';
     
     public ?string $direction = null;
-    protected ?string $activeDirection = null;
+    // protected ?string $activeDirection = null;
 
     public function direction(?string $direction = null): static
     {
@@ -27,21 +27,6 @@ trait HasDirection
         return $this->direction ?? self::DEFAULT;
     }
 
-    public function activeDirection(?string $direction = null): static
-    {
-        if (! in_array($direction, ['asc', 'desc', null])){
-            $direction = null;
-        }
-
-        $this->activeDirection = $direction;
-        return $this;
-    }
-
-    public function getActiveDirection(): ?string
-    {
-        return $this->evaluate($this->activeDirection);
-    }
-
     public function desc(): static
     {
         return $this->direction('desc');
@@ -51,4 +36,19 @@ trait HasDirection
     {
         return $this->direction('asc');
     }
+
+    // public function activeDirection(?string $direction = null): static
+    // {
+    //     if (! in_array($direction, ['asc', 'desc', null])){
+    //         $direction = null;
+    //     }
+
+    //     $this->activeDirection = $direction;
+    //     return $this;
+    // }
+
+    // public function getActiveDirection(): ?string
+    // {
+    //     return $this->evaluate($this->activeDirection);
+    // }
 }

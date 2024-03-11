@@ -6,33 +6,32 @@ use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Concerns\HasName;
 use Jdw5\Vanguard\Concerns\HasType;
 use Jdw5\Vanguard\Concerns\HasLabel;
-use Jdw5\Vanguard\Concerns\IsHideable;
+use Jdw5\Vanguard\Concerns\IsIncludable;
 use Jdw5\Vanguard\Concerns\HasMetadata;
 use Jdw5\Vanguard\Concerns\Configurable;
 use Jdw5\Vanguard\Refining\Concerns\HasValue;
 use Jdw5\Vanguard\Refining\Contracts\Refines;
 use Jdw5\Vanguard\Refining\Concerns\HasDefault;
+use Jdw5\Vanguard\Refining\Concerns\HasProperty;
 
 abstract class Refinement extends Primitive implements Refines
 {
     use HasName;
     use HasLabel;
     use HasMetadata;
-    use IsHideable;
+    use IsIncludable;
     use Configurable;
-    use HasDefault;
     use HasType;
     use HasValue;
+    use HasProperty;
+    use HasDefault;
 
-    public function __construct(
-        protected string $property,
-        protected ?string $alias = null
-    ) {
-        $this->name(str($alias ?? $property)->replace('.', '_'));
+    public function __construct(string $property, ?string $name = null) {
+        $this->property($property);
+        $this->name(str($name ?? $property)->replace('.', '_'));
         $this->label(str($this->getName())->headline()->lower()->ucfirst());
-        $this->configure();
 
-        if (is_null($alias)) $this->alias = $property;   
+        $this->configure();
     }
 
     public function isActive(): bool
@@ -45,10 +44,7 @@ abstract class Refinement extends Primitive implements Refines
         return [
             'name' => $this->getName(),
             'label' => $this->getLabel(),
-            // 'type' => $this->getType(),
             'metadata' => $this->getMetadata(),
-            'hidden' => $this->isHidden(),
-            'default' => $this->getDefaultValue(),
             'active' => $this->isActive(),
         ];
     }

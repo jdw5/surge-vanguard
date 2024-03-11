@@ -14,22 +14,32 @@ use Illuminate\Support\Collection;
 
 final class {{ class }} extends Table
 {
+    // protected $model = '';
     protected $key = 'id';
-    protected $apply = true;
 
+    public function defineQuery(): Builder
+    {
+        // return Model::query()
+    }
 
     protected function defineColumns(): array
     {
-        return [];
+        return [
+
+        ];
     }
 
     protected function defineRefiners(): array
     {
-        return [];
+        return [
+
+        ];
     }
 
     protected function defineActions(): array
     {
-        return [];
+        return [
+
+        ];
     }
 }
