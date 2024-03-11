@@ -19,6 +19,12 @@ trait HasRecords
     protected mixed $cachedData = null;
     private $query = null;
 
+    /**
+     * Define the query to be used for the table.
+     * 
+     * @param Builder|null $query
+     * @return Builder|null
+     */
     public function query(Builder $query = null): ?Builder
     {
         if ($query) {
@@ -27,23 +33,43 @@ trait HasRecords
         return $this->query;
     }
 
+    /**
+     * Check if the table has a query.
+     * 
+     * @return bool
+     */
     public function hasQuery(): bool
     {
         return ! empty($this->query);
     }
 
+    /**
+     * Perform the pipeline and retrieve the data
+     * 
+     * @return mixed
+     */
     public function pipelineWithData(): mixed 
     {
         $this->pipeline();
         return $this->cachedData;
     }
 
+    /**
+     * Perform the pipeline and retrieve the metadata
+     * 
+     * @return mixed
+     */
     public function pipelineWithMeta(): mixed
     {
         $this->pipeline();
         return $this->cachedMeta;
     }
 
+    /**
+     * Perform the pipeline by executing the query, applying the refinements and paginating the data.
+     * 
+     * @return void
+     */
     protected function pipeline(): void
     {
         if (! $this->hasQuery()) { 
@@ -69,6 +95,11 @@ trait HasRecords
         $this->applyColumns();
     }
 
+    /**
+     * Apply the columns to the data.
+     * 
+     * @return void
+     */
     protected function applyColumns(): void
     {
         $this->cachedData = collect($this->cachedData)->map(function ($row) {
@@ -80,6 +111,11 @@ trait HasRecords
         });      
     }
 
+    /**
+     * Perform length aware pagination on the data.
+     * 
+     * @return void
+     */
     private function handlePaginate(): void
     {
         $paginatedData = $this->query->paginate(...$this->unpackPaginateToArray())->withQueryString();
@@ -87,6 +123,11 @@ trait HasRecords
         $this->cachedMeta = $this->generatePaginatorMeta($paginatedData);
     }
 
+    /**
+     * Perform cursor pagination on the data.
+     * 
+     * @return void
+     */
     private function handleCursorPaginate(): void
     {
         $cursorPaginatedData = $this->query->cursorPaginate(...$this->unpackPaginateToArray())->withQueryString();
@@ -94,12 +135,23 @@ trait HasRecords
         $this->cachedMeta = $this->generateCursorPaginatorMeta($cursorPaginatedData);
     }
 
+    /**
+     * Handle the case where the data is not paginated.
+     * 
+     * @return void
+     */
     private function handleUnpaginated(): void
     {
         $this->cachedData = $this->query->get()->withQueryString();
         $this->cachedMeta = $this->generateUnpaginatedMeta($this->cachedData);
     }
 
+    /**
+     * Generate the metadata for an unpaginated collection.
+     * 
+     * @param Collection $collection
+     * @return array
+     */
     private function generateUnpaginatedMeta(Collection $collection): array
     {
         return [
@@ -108,6 +160,12 @@ trait HasRecords
         ];
     }
 
+    /**
+     * Generate the metadata for a cursor paginated collection.
+     * 
+     * @param CursorPaginator $paginator
+     * @return array
+     */
     private function generateCursorPaginatorMeta(CursorPaginator $paginator): array
     {
         return [
@@ -121,6 +179,12 @@ trait HasRecords
         ];
     }
 
+    /**
+     * Generate the metadata for a length aware paginated collection.
+     * 
+     * @param LengthAwarePaginator $paginator
+     * @return array
+     */
     private function generatePaginatorMeta(LengthAwarePaginator $paginator): array
     {
         return [
@@ -140,12 +204,21 @@ trait HasRecords
         ];
     }
 
-
+    /**
+     * Retrieve the records from the table.
+     * 
+     * @return mixed
+     */
     public function getRecords(): mixed
     {
         return $cachedData ??= $this->pipelineWithData();
     }
 
+    /**
+     * Retrieve the metadata from the table.
+     * 
+     * @return array
+     */
     public function getMeta(): array
     {
         return $cachedMeta ??= $this->pipelineWithMeta();
