@@ -23,17 +23,17 @@ abstract class BaseFilter extends Refinement implements Filters
         
         $this->value($request->query($this->getName()));
 
-        // Then there's no need to apply the filter
         if ($this->getValue() === null) {
             return;
         }
 
-        // If the filter is only and the value is not in the options, we don't apply it
-        if ($this->isOnly() && !in_array($this->getValue(), $this->getOptions())) {
+        if ($this->isOnly() && !$this->inOptions($this->getValue())) {
             return;
         }
+
+        // Find and set the option to active
+        $this->setActiveOption($this->getValue());
         
-        // We apply it here
         try {
             $this->apply($builder, $this->getProperty(), $this->getValue());
         } catch (\Exception $e) {

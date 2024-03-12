@@ -19,12 +19,12 @@ abstract class Refinement extends Primitive implements Refines
     use HasName;
     use HasLabel;
     use HasMetadata;
-    use IsIncludable;
-    use Configurable;
     use HasType;
     use HasValue;
     use HasProperty;
     use HasDefault;
+    use Configurable;
+    use IsIncludable;
 
     public function __construct(string $property, ?string $name = null) {
         $this->property($property);

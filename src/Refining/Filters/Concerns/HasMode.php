@@ -14,7 +14,7 @@ trait HasMode
             $this->mode = $mode;
         } else {
             try {
-                $this->mode = FilterMode::tryFrom($mode);
+                $this->mode = FilterMode::from($mode);
             } catch (\Exception $e) {
                 throw new \InvalidArgumentException('Invalid mode');
             }

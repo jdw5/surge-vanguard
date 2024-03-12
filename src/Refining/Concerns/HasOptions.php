@@ -2,25 +2,28 @@
 
 namespace Jdw5\Vanguard\Refining\Concerns;
 
+use Illuminate\Support\Collection;
+use Jdw5\Vanguard\Refining\Options\Option;
+
 trait HasOptions
 {
-    protected array $options = [];
+    protected Collection $options;
     protected bool $only = false;
 
-    public function options(array $options): static
+    public function options(...$options): static
     {
-        $this->options = $options;
+        $this->options = collect($options)->flatten();
         return $this;
     }
 
-    public function getOptions(): array
+    public function getOptions(): Collection
     {
         return $this->options;
     }
 
     public function hasOptions(): bool
     {
-        return count($this->options) > 0;
+        return isset($this->options) && $this->options->isNotEmpty();
     }
 
     public function only(): static
@@ -34,4 +37,13 @@ trait HasOptions
         return $this->only;
     }
 
+    public function inOptions(mixed $value): bool
+    {
+        return $this->getOptions()->map(fn($option) => $option->value)->contains($value);
+    }
+
+    public function setActiveOption(mixed $value): void
+    {
+        $this->options->each(fn (Option $option) => $option->active($option->getValue() == $value));
+    }
 }

@@ -11,7 +11,7 @@ trait HasSort
 
     public function sort(?string $name = null, ?string $property = null): static
     {
-        $this->sort = ToggleSort::make($property ?? ($name ?? $this->getName()), $name ?? $this->getName());
+        $this->sort = ToggleSort::make($property ?? $this->getName(), $name ?? $this->getName());
         return $this;
     }
 

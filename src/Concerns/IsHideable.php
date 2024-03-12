@@ -70,7 +70,7 @@ trait IsHideable
 
     public function breakpoint(Breakpoint|string $breakpoint): static
     {
-        $this->breakpoint = $breakpoint instanceof Breakpoint ? $breakpoint : Breakpoint::tryFrom($breakpoint);
+        $this->breakpoint = $breakpoint instanceof Breakpoint ? $breakpoint : Breakpoint::from($breakpoint);
         return $this;
     }
 

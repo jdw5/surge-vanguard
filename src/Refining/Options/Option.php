@@ -5,8 +5,6 @@ namespace Jdw5\Vanguard\Refining\Options;
 use Jdw5\Vanguard\Concerns\Configurable;
 use Jdw5\Vanguard\Concerns\HasLabel;
 use Jdw5\Vanguard\Concerns\HasMetadata;
-use Jdw5\Vanguard\Concerns\HasName;
-use Jdw5\Vanguard\Concerns\HasType;
 use Jdw5\Vanguard\Concerns\IsActive;
 use Jdw5\Vanguard\Concerns\IsIncludable;
 use Jdw5\Vanguard\Primitive;
@@ -22,6 +20,7 @@ class Option extends Primitive implements JsonSerializable
     use HasMetadata;
     use Configurable;
     use IsActive;
+    use IsIncludable;
 
     public function __construct(mixed $value, ?string $label = null) { 
         $this->value(str($value)->replace('.', '_'));
@@ -39,9 +38,10 @@ class Option extends Primitive implements JsonSerializable
         return $collection->map(fn ($item) => static::make($item[$valueField], $item[$labelField]))->toArray();
     }
 
-    public static function enum(array $enum, ?string $method = null): array
+    public static function enum(string $enum, ?string $labelMethodName = null): array
     {
-        return collect($enum)->map(fn (BackedEnum $item) => static::make($item->value, $method !== null ? $item->{$method}() : null))->toArray();
+        // $enum = 
+        return collect($enum::cases())->map(fn (BackedEnum $item) => static::make($item->value, !is_null($labelMethodName) ? $item->{$labelMethodName}() : null))->toArray();
     }
 
     public function jsonSerialize(): array
@@ -53,8 +53,4 @@ class Option extends Primitive implements JsonSerializable
             'active' => $this->isActive(),
         ];
     }
-    // public static function only()
-    // {
-    //     // Enforce only these values
-    // }
 }
