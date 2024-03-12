@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Jdw5\Vanguard\Refining\Sorts\BaseSort;
 use Jdw5\Vanguard\Refining\Sorts\Concerns\HasActiveDirection;
 use Illuminate\Database\Eloquent\Builder;
+use Jdw5\Vanguard\Refining\Sorts\Concerns\SortConstants;
 
 class ToggleSort extends BaseSort
 {
@@ -16,8 +17,8 @@ class ToggleSort extends BaseSort
         if (is_null($request)) $request = request();
         
         /** Set the sort field */
-        $this->value($request->query(self::SORT_FIELD));
-        $this->direction($request->query(self::ORDER_FIELD));
+        $this->value($request->query(SortConstants::SORT_FIELD));
+        $this->direction($request->query(SortConstants::ORDER_FIELD));
 
         $this->nextDirection($this->getDirection());
 

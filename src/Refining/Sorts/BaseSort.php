@@ -12,8 +12,6 @@ use Illuminate\Database\Eloquent\Builder;
 abstract class BaseSort extends Refinement implements Sorts
 {
     use HasDirection;
-    use SortConstants;
-
     public static function make(string $property, ?string $name = null): static
     {
         return resolve(static::class, compact('property', 'name'));
@@ -23,7 +21,7 @@ abstract class BaseSort extends Refinement implements Sorts
     {
         if (is_null($request)) $request = request();
         
-        $this->value($request->query(self::SORT_FIELD));
+        $this->value($request->query(SortConstants::SORT_FIELD));
 
         if (! $this->isActive()) return;
         

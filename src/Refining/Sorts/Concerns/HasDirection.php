@@ -5,9 +5,7 @@ namespace Jdw5\Vanguard\Refining\Sorts\Concerns;
 use Jdw5\Vanguard\Refining\Sorts\InvalidSortDirection;
 
 trait HasDirection
-{
-    private const DEFAULT = 'asc';
-    
+{    
     public ?string $direction = null;
     // protected ?string $activeDirection = null;
 
@@ -24,7 +22,7 @@ trait HasDirection
 
     public function getDirection(): string
     {
-        return $this->direction ?? self::DEFAULT;
+        return $this->direction ?? 'asc';
     }
 
     public function desc(): static
