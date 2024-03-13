@@ -78,7 +78,7 @@ abstract class Table extends Primitive implements Tables
             'actions' => [
                 'inline' => $this->getInlineActions()->values(),
                 'bulk' => $this->getBulkActions()->values(),
-                'page' => $this->getPageActions(),
+                'page' => $this->getPageActions()->values(),
                 'default' => $this->getDefaultAction(),
             ],
             'recordKey' => $this->tableKey(),
