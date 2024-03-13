@@ -18,19 +18,19 @@ trait HasActions
             ->filter(static fn (BaseAction $action): bool => !$action->isExcluded());
     }
 
-    public function getInlineActions(bool $showHidden = false): Collection
+    public function getInlineActions(): Collection
     {
-        return $this->getActions($showHidden)->filter(static fn (BaseAction $action): bool => $action instanceof InlineAction);
+        return $this->getActions()->filter(static fn (BaseAction $action): bool => $action instanceof InlineAction);
     }
 
-    public function getBulkActions(bool $showHidden = false): Collection
+    public function getBulkActions(): Collection
     {
-        return $this->getActions($showHidden)->filter(static fn (BaseAction $action): bool => $action instanceof BulkAction);
+        return $this->getActions()->filter(static fn (BaseAction $action): bool => $action instanceof BulkAction);
     }
 
-    public function getPageActions(bool $showHidden = false): Collection
+    public function getPageActions(): Collection
     {
-        return $this->getActions($showHidden)->filter(static fn (BaseAction $action): bool => $action instanceof PageAction);
+        return $this->getActions()->filter(static fn (BaseAction $action): bool => $action instanceof PageAction);
     }
 
     public function getDefaultAction(): ?BaseAction

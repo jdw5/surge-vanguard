@@ -50,6 +50,7 @@ abstract class BaseColumn extends Primitive
             'fallback' => $this->getFallback(),
             'hidden' => $this->isHidden(),
             'breakpoint' => $this->getBreakpoint(),
+            'sr_only' => $this->isSrOnly(),
 
             'has_sort' => $this->hasSort(),
             'active' => $this->isSorting(),

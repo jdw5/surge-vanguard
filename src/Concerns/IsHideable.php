@@ -7,6 +7,7 @@ use Jdw5\Vanguard\Enums\Breakpoint;
 trait IsHideable
 {
     protected bool $show = true;
+    protected bool $sr_only = false;
     protected ?Breakpoint $breakpoint = null;
 
     /**
@@ -19,6 +20,27 @@ trait IsHideable
     {
         $this->show = $condition;      
         return $this;
+    }
+
+    /**
+     * Set the visibility of the column to screen reader only
+     * 
+     * @return static
+     */
+    public function srOnly(): static
+    {
+        $this->sr_only = true;   
+        return $this;
+    }
+
+    /**
+     * Check if the column is screen reader only
+     * 
+     * @return bool
+     */
+    public function isSrOnly(): bool
+    {
+        return $this->sr_only;
     }
 
     /**

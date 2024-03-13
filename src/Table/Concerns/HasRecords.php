@@ -105,7 +105,7 @@ trait HasRecords
         $this->cachedData = collect($this->cachedData)->map(function ($row) {
             return $this->getTableColumns()->reduce(function ($carry, Column $column) use ($row) {
                 $name = $column->getName();
-                $carry[$name] = $column->transformUsing($row[$name] ?? $column->getFallback());
+                $carry[$name] = empty($row[$name]) ? $column->getFallback() : $column->transformUsing($row[$name]);
                 return $carry;
             }, []);
         });      
