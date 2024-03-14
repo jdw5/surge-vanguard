@@ -48,6 +48,5 @@ class SelectFilter extends Filter
 
         $builder->{$booleanMethod}($property, $this->getOperator(), $value);
         return;
-        
     }
 }
