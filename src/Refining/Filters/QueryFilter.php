@@ -3,16 +3,18 @@
 namespace Jdw5\Vanguard\Refining\Filters;
 
 use Illuminate\Http\Request;
+use Jdw5\Vanguard\Refining\Refinement;
 use Illuminate\Database\Eloquent\Builder;
+use Jdw5\Vanguard\Refining\Contracts\Filters;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasQuery;
 
 class QueryFilter extends BaseFilter
 {
     use HasQuery;
 
-    public static function make(string $name, ?\Closure $query): static
+    protected function setUp(): void
     {
-        return resolve(static::class, compact('name', 'query'));
+        $this->type('query');
     }
 
     public function refine(Builder $builder, ?Request $request = null): void
@@ -21,13 +23,15 @@ class QueryFilter extends BaseFilter
         
         $this->value($request->query($this->getName()));
 
-        $builder->when(! is_null($this->getValue()), function ($builder) {
-            $this->getQuery()($builder, $this->getValue());
+        $this->apply($builder, $this->getName(), $this->getValue());
+
+        return;        
+    }
+
+    public function apply(Builder $builder, string $property, mixed $value): void
+    {
+        $builder->when(! is_null($value), function ($builder) use ($value) {
+            $this->getQuery()($builder, $value);
         });
-
-        return;
-
-
-        
     }
 }

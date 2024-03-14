@@ -19,6 +19,8 @@ trait HasDynamicPagination
     protected $showKey;
     /** Default and fallback number to paginate by */
     protected $defaultCount = 10;
+    /** Active pagination */
+    private $activePagination = $this->defaultCount;
 
     /**
      * Set the options for the dynamic pagination. Should be overriden
@@ -33,6 +35,20 @@ trait HasDynamicPagination
             50,
             100
         ];
+    }
+
+    public function activePagination(?int $count = null): void
+    {
+        if (! is_null($count)) {
+            $this->activePagination = $count;
+        } else {
+            $this->activePagination = $this->getDefaultCount();
+        }
+    }
+
+    public function isActive(int $count): bool
+    {
+        return $this->activePagination === $count;
     }
 
     /**
@@ -73,12 +89,25 @@ trait HasDynamicPagination
     public function getCount(?Request $request): int
     {
         if (!$request) $request = request();
-        $count = $request->query($this->getDynamicPaginationKey(), $this->getDefaultCount());
+        $this->activePagination($request->query($this->getDynamicPaginationKey(), $this->getDefaultCount()));
 
-        if (!in_array($count, $this->paginationOptions())) {
+        if (!in_array($this->activePagination, $this->paginationOptions())) {
             $count = $this->getDefaultCount();
         }
         return $count;
+    }
+
+    public function getPaginationOptions(): array
+    {
+        $this->activePagination(request()->query($this->getDynamicPaginationKey(), $this->getDefaultCount()));
+        
+        return collect($this->paginationOptions())->map(function ($option) {
+            return [
+                'value' => $option,
+                'label' => $option,
+                'active' => $this->isActive($option)
+            ];
+        })->toArray();
     }
 
 

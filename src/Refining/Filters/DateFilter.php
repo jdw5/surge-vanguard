@@ -6,11 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasOperator;
 
-class SelectFilter extends Filter
+class DateFilter extends Filter
 {
-
-    use HasOperator;
-
     protected function setUp(): void
     {
         $this->type('date');

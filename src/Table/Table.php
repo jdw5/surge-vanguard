@@ -12,6 +12,7 @@ use Jdw5\Vanguard\Table\Contracts\Tables;
 use Jdw5\Vanguard\Concerns\HasRefinements;
 use Jdw5\Vanguard\Table\Concerns\HasModel;
 use Jdw5\Vanguard\Table\Concerns\HasColumns;
+use Jdw5\Vanguard\Table\Concerns\HasDynamicPagination;
 use Jdw5\Vanguard\Table\Concerns\HasRecords;
 use Jdw5\Vanguard\Table\Concerns\HasPagination;
 use Jdw5\Vanguard\Table\Concerns\UsesPreferences;
@@ -29,6 +30,7 @@ abstract class Table extends Primitive implements Tables
     use HasRefinements;
     use HasKey;
     use UsesPreferences;
+    use HasDynamicPagination;
 
     public function __construct(?Builder $data = null)
     {
@@ -69,7 +71,9 @@ abstract class Table extends Primitive implements Tables
      */
     public function jsonSerialize(): array
     {
-        return [
+        $show = $this->hasDynamicPagination() ? ['show' => $this->getActivePagination()] : [];
+
+        return array_merge([
             'meta' => $this->getMeta(),
             'rows' => $this->getRecords(),
             'cols' => $this->getTableColumns()->values(),
@@ -84,6 +88,6 @@ abstract class Table extends Primitive implements Tables
                 'default' => $this->getDefaultAction(),
             ],
             'recordKey' => $this->tableKey(),
-        ];
+        ], $show);
     }   
 }

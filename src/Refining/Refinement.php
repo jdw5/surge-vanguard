@@ -16,12 +16,12 @@ use Jdw5\Vanguard\Refining\Concerns\HasProperty;
 
 abstract class Refinement extends Primitive implements Refines
 {
+    use HasProperty;
     use HasName;
     use HasLabel;
     use HasMetadata;
     use HasType;
     use HasValue;
-    use HasProperty;
     use HasDefault;
     use Configurable;
     use IsIncludable;
