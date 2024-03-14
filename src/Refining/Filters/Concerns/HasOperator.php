@@ -12,6 +12,42 @@ trait HasOperator
         return $this;
     }
 
+    public function gt(): static
+    {
+        $this->operator = '>';
+        return $this;
+    }
+
+    public function gte(): static
+    {
+        $this->operator = '>=';
+        return $this;
+    }
+
+    public function lt(): static
+    {
+        $this->operator = '<';
+        return $this;
+    }
+
+    public function lte(): static
+    {
+        $this->operator = '<=';
+        return $this;
+    }
+
+    public function eq(): static
+    {
+        $this->operator = '=';
+        return $this;
+    }
+
+    public function neq(): static
+    {
+        $this->operator = '!=';
+        return $this;
+    }
+
     public function getOperator(): string
     {
         return $this->operator;
@@ -21,6 +57,10 @@ trait HasOperator
     {
         $this->operator = match ($this->operator) {
             '!=' => '=',
+            '>' => '<=',
+            '>=' => '<',
+            '<' => '>=',
+            '<=' => '>',
             default => '!='
         };
         
