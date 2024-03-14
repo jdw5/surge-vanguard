@@ -28,11 +28,16 @@ trait HasPreferences
 
     public function isPreference(): bool
     {
-        return $this->isPreference;
+        return $this->evaluate($this->isPreference);
     }
 
     public function getDefault(): bool
     {
-        return $this->default;
+        return $this->evaluate($this->default);
+    }
+
+    public function preferenceActive(): bool
+    {
+        return $this->hasPreference() && $this->isPreference();
     }
 }

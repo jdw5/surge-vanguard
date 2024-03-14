@@ -5,7 +5,6 @@ namespace Jdw5\Vanguard\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Concerns\HasId;
-use Jdw5\Vanguard\Concerns\HasScope;
 use Jdw5\Vanguard\Concerns\HasActions;
 use Jdw5\Vanguard\Table\Concerns\HasKey;
 use Jdw5\Vanguard\Table\Contracts\Tables;
@@ -22,7 +21,6 @@ abstract class Table extends Primitive implements Tables
 {
     use HasColumns;
     use HasActions;
-    use HasScope;
     use HasId;
     use HasModel;
     use HasPagination;

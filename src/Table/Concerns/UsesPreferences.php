@@ -2,29 +2,34 @@
 
 namespace Jdw5\Vanguard\Table\Concerns;
 
+use Illuminate\Http\Request;
+use Jdw5\Vanguard\Table\Columns\Column;
+
 trait UsesPreferences
 {
     protected $preferences;
-    protected $cookieName;
+    protected $preferencesName = 'cols';
+    protected $cachedPreferences = null;
 
     public function hasPreferences(): bool
     {
-        return isset($this->preferences);
+        return isset($this->preferences) && $this->preferences;
     }
 
-    // Needs to set a cookie with the preferences if one doesn't exist
-    // If one doesn't exist, we use the default preferences
-    // Need to reduce the columns based on the preferences
-
-    public function cookieName()
+    public function updatePreferences(?Request $request = null): array
     {
-        if (!isset($this->cookieName)) {
-            // $this->cookieName = 
+        if (\is_null($request)) {
+            $request = request();
         }
 
-        return str(static::class)
-            ->classBasename();
+        if ($request->has($this->preferencesName)) {
+            return explode(',', $request->get($this->preferencesName));
+        }
+        return [];
     }
 
-
+    public function getPreferences(): array
+    {
+        return $this->cachedPreferences ??= $this->updatePreferences();
+    }
 }

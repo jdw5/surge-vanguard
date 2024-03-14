@@ -8,7 +8,6 @@ use Jdw5\Vanguard\Refining\Filters\Concerns\HasOperator;
 
 class SelectFilter extends Filter
 {
-
     use HasOperator;
 
     protected function setUp(): void

@@ -6,15 +6,32 @@ use Jdw5\Vanguard\Table\Exceptions\TableModelNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Trait HasModel
+ * 
+ * Apply a model class for the table
+ * 
+ * @property \Closure|null $getModelClassesUsing
+ */
 trait HasModel
 {
     protected static ?\Closure $getModelClassesUsing = null;
 
+    /**
+     * Set the callback to use for getting the model class
+     * 
+     * @param \Closure $callback
+     */
     public static function getModelClassesUsing(\Closure $callback): void
     {
         static::$getModelClassesUsing = $callback;
     }
 
+    /**
+     * Retrieve the model for the table
+     * 
+     * @return Model
+     */
     public function getModel(): Model
     {
         $model = $this->getModelClass();
@@ -30,6 +47,11 @@ trait HasModel
         return new $model();
     }
 
+    /**
+     * Retrieve the model class for the table
+     * 
+     * @return string
+     */
     public function getModelClass(): string
     {
         if (isset($this->model)) {
@@ -48,11 +70,21 @@ trait HasModel
             ->toString();
     }
 
+    /**
+     * Retrieve the key name for the model
+     * 
+     * @return string
+     */
     public function getKeyName(): string
     {
         return $this->getModel()->getKeyName();
     }
 
+    /**
+     * Define the query for the table
+     * 
+     * @return Builder
+     */
     protected function defineQuery(): Builder
     {
         return $this->getModel()->query();

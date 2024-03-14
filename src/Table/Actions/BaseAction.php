@@ -7,7 +7,6 @@ use Jdw5\Vanguard\Concerns\HasName;
 use Jdw5\Vanguard\Concerns\HasLabel;
 use Jdw5\Vanguard\Concerns\IsIncludable;
 use Jdw5\Vanguard\Concerns\HasMetadata;
-use Jdw5\Vanguard\Table\Actions\Concerns\HasEndpoint;
 
 abstract class BaseAction extends Primitive
 {
@@ -25,7 +24,7 @@ abstract class BaseAction extends Primitive
 
     public static function make(string $name): static
     {
-        return resolve(static::class, ['name' => $name]);
+        return resolve(static::class, compact('name'));
     }
 
     public function jsonSerialize(): mixed
