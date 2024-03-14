@@ -17,7 +17,6 @@ trait IsKey
         return $this;
     }
 
-    // Alias
     public function asKey(): static
     {
         return $this->key();

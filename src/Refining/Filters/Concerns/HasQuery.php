@@ -2,6 +2,8 @@
 
 namespace Jdw5\Vanguard\Refining\Filters\Concerns;
 
+use Jdw5\Vanguard\Refining\Filters\InvalidQueryException;
+
 trait HasQuery
 {
     protected \Closure $query;
@@ -14,6 +16,9 @@ trait HasQuery
 
     public function getQuery(): \Closure
     {
+        if (!isset($this->query)) {
+            throw InvalidQueryException::invalid();
+        }
         return $this->query;
     }
 }

@@ -14,6 +14,7 @@ use Jdw5\Vanguard\Table\Concerns\HasModel;
 use Jdw5\Vanguard\Table\Concerns\HasColumns;
 use Jdw5\Vanguard\Table\Concerns\HasRecords;
 use Jdw5\Vanguard\Table\Concerns\HasPagination;
+use Jdw5\Vanguard\Table\Concerns\UsesPreferences;
 use Jdw5\Vanguard\Table\Exceptions\InvalidKeyException;
 
 abstract class Table extends Primitive implements Tables
@@ -27,6 +28,7 @@ abstract class Table extends Primitive implements Tables
     use HasRecords;
     use HasRefinements;
     use HasKey;
+    use UsesPreferences;
 
     public function __construct(?Builder $data = null)
     {
