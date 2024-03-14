@@ -41,12 +41,7 @@ class SelectFilter extends Filter
             default => 'whereIn',
         };
 
-        $booleanMethod = match ($this->getQueryBoolean()) {
-            'or' => 'or' . str($method)->ucfirst(),
-            default => $method,
-        };
-
-        $builder->{$booleanMethod}($property, $this->getOperator(), $value);
+        $builder->{$method}($property, $this->getOperator(), $value, $this->getQueryBoolean());
         return;
         
     }

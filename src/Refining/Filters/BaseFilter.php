@@ -46,6 +46,7 @@ abstract class BaseFilter extends Refinement implements Filters
         return [
             'name' => $this->getName(),
             'label' => $this->getLabel(),
+            'type' => $this->getType(),
             'metadata' => $this->getMetadata(),
             'default' => $this->getDefaultValue(),
             'active' => $this->isActive(),

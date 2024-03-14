@@ -2,7 +2,13 @@
 
 namespace Jdw5\Vanguard\Table\Columns\Concerns;
 
-/** @mixin Component */
+/**
+ * Trait HasTransform
+ * 
+ * Set a transform property on a class
+ * 
+ * @property \Closure|null $getValueUsing
+ */
 trait HasTransform
 {
     protected null|\Closure $getValueUsing = null;

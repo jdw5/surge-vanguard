@@ -4,8 +4,8 @@ namespace Jdw5\Vanguard\Table\Actions\Exceptions;
 
 class InvalidEndpointMethod extends \Exception
 {
-    public function __construct(string $method)
+    public static function invalid(string $method): self
     {
-        parent::__construct("Invalid endpoint method: {$method}");
+        return new static("The method {$method} is not a valid endpoint method");
     }
 }

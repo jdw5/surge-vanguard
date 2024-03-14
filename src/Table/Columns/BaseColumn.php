@@ -15,6 +15,18 @@ use Jdw5\Vanguard\Table\Columns\Concerns\HasFallback;
 use Jdw5\Vanguard\Table\Columns\Concerns\HasTransform;
 use Jdw5\Vanguard\Table\Concerns\Columns\HasPreferences;
 
+/**
+ * Class BaseColumn
+ * 
+ * Defines the required properties for a column
+ * 
+ * @property string $name
+ * @property string $label
+ * @property string $type
+ * @property mixed $metadata
+ * @property string $fallback
+ * 
+ */
 abstract class BaseColumn extends Primitive
 {
     use HasName;
@@ -37,12 +49,20 @@ abstract class BaseColumn extends Primitive
         $this->setUp();
     }
 
+    /**
+     * Statically create the column
+     */
     public static function make(string $name): static
     {
         return new static($name);
     }
 
-    public function jsonSerialize(): mixed
+    /**
+     * Serialize the column for JSON
+     * 
+     * @return array
+     */
+    public function jsonSerialize(): array
     {
         return [
             /** Column information */

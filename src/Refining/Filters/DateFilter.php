@@ -8,6 +8,9 @@ use Jdw5\Vanguard\Refining\Filters\Concerns\HasOperator;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasQueryBoolean;
 use Jdw5\Vanguard\Refining\Options\Option;
 
+/**
+ * Date filtering.
+ */
 class DateFilter extends Filter
 {
     use HasQueryBoolean;
@@ -24,6 +27,12 @@ class DateFilter extends Filter
         $builder->{$this->getDateOperator()}($property, $this->getOperator(), $value, $this->getQueryBoolean());
     }
 
+    /**
+     * Get the month number from the given value.
+     * 
+     * @param string $value
+     * @return string
+     */
     public function getMonthNumber(string $value): string
     {
         return match (strtolower($value)) {
@@ -41,9 +50,13 @@ class DateFilter extends Filter
             'dec', 'december' => '12',
             default => null,
         };
-
     }
 
+    /**
+     * Parse the query value to ensure it is valid.
+     * 
+     * @param mixed $value
+     */
     public function parseQuery(mixed $value): mixed
     {
         switch ($this->getDateOperator())
@@ -86,11 +99,16 @@ class DateFilter extends Filter
             }
 
             default: {
-                throw new \Exception("Invalid date operator [{$this->getDateOperator()}] provided for [{$this->getName()}] filter.");
+                throw InvalidDateOperator::invalid($this->getDateOperator(), $this->getName());
             }
         }
     }
     
+    /**
+     * Generate a list of day options to attach as filter options.
+     * 
+     * @return static
+     */
     public function dayOptions(): static
     {
         $options = [];
@@ -100,6 +118,12 @@ class DateFilter extends Filter
         return $this->options($options); 
     }
 
+    /**
+     * Generate a list of month options to attach as filter options.
+     * 
+     * @param bool $numeric
+     * @return static
+     */
     public function monthOptions(bool $numeric = false): static
     {
         $options = [];
