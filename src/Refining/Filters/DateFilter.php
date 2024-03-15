@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Jdw5\Vanguard\Refining\Options\Option;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasQueryBoolean;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasDateOperations;
+use Jdw5\Vanguard\Refining\Filters\Exceptions\InvalidDateOperator;
 
 /**
  * Date filtering.
