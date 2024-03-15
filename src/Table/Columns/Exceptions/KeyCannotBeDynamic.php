@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Exceptions;
+namespace Jdw5\Vanguard\Table\Columns\Exceptions;
 
-class KeyCannotBePreference extends \Exception
+class KeyCannotBeDynamic extends \Exception
 {
     public static function invalid(): self
     {

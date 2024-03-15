@@ -13,7 +13,7 @@ use Jdw5\Vanguard\Table\Columns\Concerns\IsKey;
 use Jdw5\Vanguard\Table\Columns\Concerns\HasSort;
 use Jdw5\Vanguard\Table\Columns\Concerns\HasFallback;
 use Jdw5\Vanguard\Table\Columns\Concerns\HasTransform;
-use Jdw5\Vanguard\Table\Concerns\Columns\HasPreferences;
+use Jdw5\Vanguard\Table\Concerns\Columns\IsDynamic;
 
 /**
  * Class BaseColumn
@@ -36,7 +36,7 @@ abstract class BaseColumn extends Primitive
     use HasTransform;
     use HasSort;
     use HasType;
-    use HasPreferences;
+    use IsDynamic;
     use IsIncludable;
     use IsHideable;
     use IsKey;
@@ -64,7 +64,12 @@ abstract class BaseColumn extends Primitive
      */
     public function jsonSerialize(): array
     {
-        return [
+        $dynamics = $this->dynamicEnabled() ? [
+            'dynamic' => $this->dynamicEnabled(),
+            'dynamic_active' => $this->getDynamicActive(),
+        ] : [];
+        
+        return array_merge([
             /** Column information */
             'name' => $this->getName(),
             'type' => $this->getType(),
@@ -83,10 +88,6 @@ abstract class BaseColumn extends Primitive
             'direction' => $this->getDirection(),
             'next_direction' => $this->getNextDirection(),
             'sort_field' => $this->getSortName(),
-
-            /** Preferencing */
-            'is_preference' => $this->hasPreference(),
-            'preference' => $this->getPreference(),
-        ];
+        ], $dynamics);
     }
 }
