@@ -2,11 +2,10 @@
 
 namespace Jdw5\Vanguard\Refining\Filters;
 
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Refining\Filters\Concerns\HasOperator;
-use Jdw5\Vanguard\Refining\Filters\Concerns\HasQueryBoolean;
 use Jdw5\Vanguard\Refining\Options\Option;
+use Jdw5\Vanguard\Refining\Filters\Concerns\HasQueryBoolean;
+use Jdw5\Vanguard\Refining\Filters\Concerns\HasDateOperations;
 
 /**
  * Date filtering.

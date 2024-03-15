@@ -4,16 +4,16 @@ namespace Jdw5\Vanguard\Table\Columns;
 
 use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Concerns\HasName;
-use Jdw5\Vanguard\Concerns\HasLabel;
-use Jdw5\Vanguard\Concerns\IsIncludable;
-use Jdw5\Vanguard\Concerns\HasMetadata;
 use Jdw5\Vanguard\Concerns\HasType;
+use Jdw5\Vanguard\Concerns\HasLabel;
 use Jdw5\Vanguard\Concerns\IsHideable;
+use Jdw5\Vanguard\Concerns\HasMetadata;
+use Jdw5\Vanguard\Concerns\IsIncludable;
 use Jdw5\Vanguard\Table\Columns\Concerns\IsKey;
 use Jdw5\Vanguard\Table\Columns\Concerns\HasSort;
+use Jdw5\Vanguard\Table\Columns\Concerns\IsDynamic;
 use Jdw5\Vanguard\Table\Columns\Concerns\HasFallback;
 use Jdw5\Vanguard\Table\Columns\Concerns\HasTransform;
-use Jdw5\Vanguard\Table\Concerns\Columns\IsDynamic;
 
 /**
  * Class BaseColumn
@@ -68,7 +68,7 @@ abstract class BaseColumn extends Primitive
             'dynamic' => $this->dynamicEnabled(),
             'dynamic_active' => $this->getDynamicActive(),
         ] : [];
-        
+
         return array_merge([
             /** Column information */
             'name' => $this->getName(),

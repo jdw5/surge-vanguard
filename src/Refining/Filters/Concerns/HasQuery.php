@@ -3,7 +3,7 @@
 namespace Jdw5\Vanguard\Refining\Filters\Concerns;
 
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Refining\Filters\InvalidQueryException;
+use Jdw5\Vanguard\Refining\Filters\Exceptions\InvalidQueryException;
 
 trait HasQuery
 {

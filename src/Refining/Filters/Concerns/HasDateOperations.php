@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining\Filters;
+namespace Jdw5\Vanguard\Refining\Filters\Concerns;
 
 trait HasDateOperations
 {

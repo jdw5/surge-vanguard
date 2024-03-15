@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Concerns\Columns;
+namespace Jdw5\Vanguard\Table\Columns\Concerns;
 
 use Jdw5\Vanguard\Table\Columns\Exceptions\KeyCannotBeDynamic;
 

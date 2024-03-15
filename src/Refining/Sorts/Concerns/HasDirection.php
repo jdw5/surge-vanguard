@@ -2,8 +2,6 @@
 
 namespace Jdw5\Vanguard\Refining\Sorts\Concerns;
 
-use Jdw5\Vanguard\Refining\Sorts\InvalidSortDirection;
-
 trait HasDirection
 {    
     public ?string $direction = null;
@@ -12,7 +10,7 @@ trait HasDirection
     public function direction(?string $direction = null): static
     {
         if (! in_array($direction, ['asc', 'desc', null]) ) {
-            throw new InvalidSortDirection($direction);
+            $direction = 'asc';
         }
 
         $this->direction = $direction;

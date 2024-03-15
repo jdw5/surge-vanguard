@@ -34,10 +34,14 @@ trait HasColumns
      */
     protected function getTableColumns(): Collection
     {
-        $hasDynamics = $this->hasDynamicCols();
+        if ($this->hasDynamicCols()) {
+            return $this->cachedColumns ??= collect($this->defineColumns())
+                ->filter(static fn (Column $column): bool => !$column->isExcluded() && $column->shouldBeDynamicallyShown()
+            );
+        }
 
         return $this->cachedColumns ??= collect($this->defineColumns())
-            ->filter(static fn (Column $column): bool => !$column->isExcluded() && (!$hasDynamics || $column->shouldBeDynamicallyShown())
+            ->filter(static fn (Column $column): bool => !$column->isExcluded()
         );
     }
 
