@@ -86,6 +86,9 @@ trait HasRecords
         );
 
 
+        // Handle dynamic pagination here
+
+        // Else
         match ($this->paginateType()) {
             'paginate' => $this->handlePaginate(),
             'cursor' => $this->handleCursorPaginate(),

@@ -69,7 +69,10 @@ abstract class Table extends Primitive implements Tables
      */
     public function jsonSerialize(): array
     {
-        $show = $this->hasDynamicPagination() ? ['show' => $this->getActivePagination()] : [];
+        $show = $this->hasDynamicPagination() ? [
+            'show' => $this->getActivePagination(),
+            'pagination_options' => $this->getPaginationOptions()
+        ] : [];
 
         return array_merge([
             'meta' => $this->getMeta(),
