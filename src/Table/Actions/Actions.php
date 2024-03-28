@@ -2,8 +2,9 @@
 
 namespace Jdw5\Vanguard\Table\Actions;
 
-use Jdw5\Vanguard\Concerns\HasActions;
 use Jdw5\Vanguard\Primitive;
+use Jdw5\Vanguard\Concerns\HasActions;
+use Jdw5\Vanguard\Table\Actions\BaseAction;
 
 class Actions extends Primitive
 {   
@@ -17,21 +18,32 @@ class Actions extends Primitive
      * @param array $actions
      * @return static
      */
-    public function make(array $actions): static
+    public static function make(array $actions): static
     {
         return resolve(static::class, compact('actions'));
     }
 
     /**
-     * Retrieve the actions and filter them.
+     * Add an action to the actions.
+     * 
+     * @param BaseAction $action
+     * @return static
+     */
+    public function add(BaseAction $action): static
+    {
+        $this->actions[] = $action;
+        return $this;
+    }
+
+    /**
+     * Retrieve the actions.
      * 
      * @return array
      */
-    public function getActions(): array
+    public function defineActions(): array
     {
-        return $this->cachedActions ??= collect($this->actions)
-            ->filter(static fn (BaseAction $action): bool => !$action->isExcluded());
-    }    
+        return $this->actions;
+    }
 
     /**
      * Serialize the actions.

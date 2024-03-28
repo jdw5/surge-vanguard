@@ -10,7 +10,6 @@ use Jdw5\Vanguard\Refining\Filters\BaseFilter;
 trait HasRefinements
 {
     private mixed $cachedRefinements = null;
-    protected array $addedRefinements = [];
 
     protected function getRefinements(): Collection
     {
