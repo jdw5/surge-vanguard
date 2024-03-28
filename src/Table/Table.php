@@ -35,6 +35,7 @@ abstract class Table extends Primitive implements Tables
 
     private mixed $cachedMeta = null;
     private mixed $cachedData = null;
+    protected bool $applyColumns = true;
 
     public function __construct(mixed $data = null)
     {
@@ -47,7 +48,7 @@ abstract class Table extends Primitive implements Tables
      * @param Builder|null $data
      * @return static
      */
-    public static function make(?Builder $data = null): static
+    public static function make(mixed $data = null): static
     {
         return new static($data);
     }
@@ -75,7 +76,7 @@ abstract class Table extends Primitive implements Tables
      */
     public function jsonSerialize(): array
     {
-        return [
+        $core = [
             'meta' => $this->getMeta(),
             'rows' => $this->getRecords(),
             'cols' => $this->getTableColumns()->values(),
@@ -91,6 +92,16 @@ abstract class Table extends Primitive implements Tables
             ],
             'recordKey' => $this->tableKey(),
         ];
+
+        $pagination = $this->hasDynamicPagination() ? 
+        [
+            'pagination' => [
+                'options' => $this->getPaginationOptions(),
+                'term' => $this->showKey()
+            ]
+        ] : [];
+
+        return array_merge($core, $pagination);
         // $show = $this->hasDynamicPagination() ? [
         //     'show' => $this->getActivePagination(),
         //     'pagination_options' => $this->getPaginationOptions()
@@ -179,38 +190,36 @@ abstract class Table extends Primitive implements Tables
 
         switch ($this->paginateType())
         {
-            case 'paginate':
-                $paginatedData = $this->query->paginate(...$this->unpackPaginateToArray())->withQueryString();
-                $this->cachedData = $paginatedData->items();
-                $this->cachedMeta = $this->generatePaginatorMeta($paginatedData);
-                break;
+            // case 'paginate':
+            //     $paginatedData = $this->query->paginate(...$this->getPagination())->withQueryString();
+            //     $this->cachedData = $paginatedData->items();
+            //     $this->cachedMeta = $this->generatePaginatorMeta($paginatedData);
+            //     break;
             case 'cursor':
-                $cursorPaginatedData = $this->query->cursorPaginate(...$this->unpackPaginateToArray())->withQueryString();
+                $cursorPaginatedData = $this->query->cursorPaginate(...$this->getPagination())->withQueryString();
                 $this->cachedData = $cursorPaginatedData->items();
                 $this->cachedMeta = $this->generateCursorPaginatorMeta($cursorPaginatedData);
                 break;
+            case 'get':
+                $this->cachedData = $this->query->get()->withQueryString();
+                $this->cachedMeta = $this->generateUnpaginatedMeta($this->cachedData);
+                break;
             default:
-            $this->cachedData = $this->query->get()->withQueryString();
-            $this->cachedMeta = $this->generateUnpaginatedMeta($this->cachedData);
+                $paginatedData = $this->query->paginate(...$this->getPagination())->withQueryString();
+                $this->cachedData = $paginatedData->items();
+                $this->cachedMeta = $this->generatePaginatorMeta($paginatedData);
                 break;
         }
 
-        $this->applyColumns();
-    }
-
-    /**
-     * Apply the columns to the data.
-     * 
-     * @return void
-     */
-    protected function applyColumns(): void
-    {
-        $this->cachedData = collect($this->cachedData)->map(function ($row) {
-            return $this->getTableColumns()->reduce(function ($carry, Column $column) use ($row) {
-                $name = $column->getName();
-                $carry[$name] = empty($row[$name]) ? $column->getFallback() : $column->transformUsing($row[$name]);
-                return $carry;
-            }, []);
-        });      
+        if ($this->applyColumns)
+        {
+            $this->cachedData = collect($this->cachedData)->map(function ($row) {
+                return $this->getTableColumns()->reduce(function ($carry, Column $column) use ($row) {
+                    $name = $column->getName();
+                    $carry[$name] = empty($row[$name]) ? $column->getFallback() : $column->transformUsing($row[$name]);
+                    return $carry;
+                }, []);
+            });      
+        }
     }
 }

@@ -16,15 +16,16 @@ trait HasPagination
     protected null|PaginateConfiguration $paginateConfig = null;
     
     /** New API */
-    protected $perPage = null;
+    private $perPage = null;
+    private $activeDynamicOption;
+    
     protected $pageName = 'page';
     protected $page = null;
     protected $columns = ['*'];
-
-    private bool $set = false;
     protected $defaultPerPage = 10;
     protected $paginateType = null;
     protected $showKey = 'show';
+
 
     /**
      * Set the pagination configuration for standard
@@ -42,7 +43,6 @@ trait HasPagination
         $this->pageName = $pageName;
         $this->page = $page;
         $this->paginateType = 'paginate';
-        $this->set();
         return $this;
     }
     /**
@@ -61,39 +61,26 @@ trait HasPagination
         $this->pageName = $cursorName;
         $this->page = $cursor;
         $this->paginateType = 'paginate';
-        $this->set();
         return $this;
     }
 
     public function get(): static
     {
-        $this->paginateType = null;
-        $this->set();
+        $this->paginateType = 'get';
         return $this;
     }
-
     
     public function dynamicPaginate(array $perPages, string $showKey = 'show'): static
     {
         $this->perPage = $perPages;
         $this->showKey = $showKey;
         $this->paginateType = 'dynamic';
-        $this->set();
         return $this;
     }
-    
-    private function set(): void
+
+    public function hasDynamicPagination(): bool
     {
-        $this->set = true;
-    }
-    /**
-     * Check if the table is paginated
-     * 
-     * @return bool
-     */
-    public function hasPagination(): bool 
-    {
-        return !\is_null($this->paginateType) && $this->set;
+        return $this->paginateType === 'dynamic' || is_array($this->definePagination());
     }
 
     /**
@@ -121,46 +108,93 @@ trait HasPagination
         ];
     }
 
-    public function getDynamicPerPage()
+    public function showKey(): string
     {
-        $request = request();
+        return $this->showKey;
+    }
+
+    private function hasBeenOverriden(): bool
+    {
+        return !\is_null($this->paginateType());
+    }
+
+    public function getDynamicPerPage(): int
+    {
+        $value = request()->query($this->showKey);
+        $this->activeDynamicOption = $value;
         // Retrieve the show search query parameter
 
-        // Verify it's in perPages; prevent users from controlling. If it isn't, then, return the defaultPerPage
+        if (\is_null($value) || !in_array($value, $this->perPage)) {
+            return $this->defaultPerPage;
+        }
+        return $value;
 
     }
 
-    public function perPage()
+    public function perPage(): int
     {
-
-        if ($this->set() && $this->paginateType() !== 'dynamic') {
-            return $this->perPage;
+        if ($this->hasBeenOverriden()) {
+            return $this->paginateType() !== 'dynamic' ? $this->perPage : $this->getDynamicPerPage();
         }
-        if ($this->paginateType() === 'dynamic') {
+
+        // Otherwise, use the definePagination to determine the type
+        $this->perPage = $this->definePagination();
+
+        if (!is_array($this->perPage)) {
             return $this->getDynamicPerPage();
         }
         return $this->perPage;
+
+    }
+
+    public function pageName(): string
+    {
+        return $this->pageName;
+    }
+
+    public function page(): mixed
+    {
+        return $this->page;
+    }
+
+    public function columns(): array
+    {
+        return $this->columns;
     }
 
     public function getPagination(): array
     {
         // The application defaults to pagination with the defaultPerPage if nothing is provided
         return [
-            'perPage' => $this->perPage,
-            'pageName' => $this->pageName,
-            'page' => $this->page,
-            'columns' => $this->columns,
+            'perPage' => $this->perPage(),
+            'pageName' => $this->pageName(),
+            'page' => $this->page(),
+            'columns' => $this->columns(),
         ];
     }
 
     /**
      * Should be used to override the perPage metric
+     * 
+     * @return int|array
      */
-    public function definePagination(): mixed
+    public function definePagination()
     {
         return 10;
     }
 
+    public function getPaginationOptions(): array
+    {
+        $options = $this->paginateType() === 'dynamic' ? $this->perPage : $this->definePagination();
 
-    
+        if (!isset($this->activeDynamicOption)) $this->getDynamicPerPage();
+
+        return collect($options)->map(function ($value) {
+            return [
+                'value' => $value,
+                'label' => $value,
+                'active' => $value === $this->activeDynamicOption,
+            ];
+        })->values()->toArray();
+    }   
 }
