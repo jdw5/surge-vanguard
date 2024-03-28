@@ -1,8 +1,6 @@
 # Vanguard
 Vanguard is a fullstack datatable and search query builder package for Laravel, with a companion Vue frontend composable using the InertiaJS HTTP protocol specification. It provides an elegant API to define tables, columns, actions and refiners for your data.
 
-Inspired by hybridly.
-
 ## Table of Contents
 - [Installation](#installation)
 - [Frontend Companion](#frontend-companion)
@@ -102,6 +100,23 @@ The table is a concrete Tables can be generated from the command line using `php
 |-----------------|-----------------|-----------------|
 | model | string | The model class to use for the table. |
 | table | string | The table name to use for the table. |
+
+- Set pageName with attribute protected $pageName = 'pageName';
+- Set page with attribute protected $page = null;
+- Set cols with attribute protected $pageCols = ['*']
+- Set number with method
+
+```php
+public function definePagination(): int|array
+{
+    return [
+        5,
+        10, 
+        20,
+        50
+    ];
+}
+```
 
 
 ##### Methods

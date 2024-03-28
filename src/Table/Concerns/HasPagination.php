@@ -14,6 +14,14 @@ use Jdw5\Vanguard\Table\Pagination\PaginateConfiguration;
 trait HasPagination
 {
     protected null|PaginateConfiguration $paginateConfig = null;
+    
+    /** New API */
+    protected $perPage = null;
+    protected $pageName = 'page';
+    protected $page = null;
+    protected $columns = ['*'];
+
+    protected $showKey = 'show';
 
     /**
      * Set the pagination configuration for standard
@@ -88,7 +96,13 @@ trait HasPagination
             'page' => $this->paginateConfig->page,
             'columns' => $this->paginateConfig->columns,
         ];
-    } 
+    }
+
+    // public function 
+    public function definePagination(): mixed
+    {
+        return 10;
+    }
 
 
     
