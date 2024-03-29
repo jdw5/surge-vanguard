@@ -8,10 +8,13 @@ use Jdw5\Vanguard\Refining\Contracts\Sorts;
 use Jdw5\Vanguard\Refining\Sorts\Concerns\HasDirection;
 use Jdw5\Vanguard\Refining\Sorts\Concerns\SortConstants;
 use Illuminate\Database\Eloquent\Builder;
+use Jdw5\Vanguard\Concerns\IsDefault;
 
 abstract class BaseSort extends Refinement implements Sorts
 {
     use HasDirection;
+    use IsDefault;
+    
     public static function make(string $property, ?string $name = null): static
     {
         return resolve(static::class, compact('property', 'name'));
@@ -23,9 +26,11 @@ abstract class BaseSort extends Refinement implements Sorts
         
         $this->value($request->query(SortConstants::SORT_FIELD));
 
-        if (! $this->isActive()) return;
+        if ($this->isActive() || (is_null($this->getValue()) && $this->isDefault())) {
+            $this->apply($builder, $this->getProperty(), $this->getDirection());
+        } 
         
-        $this->apply($builder, $this->getProperty(), $this->getDirection());
+        return;
     }
 
     public function apply(Builder $builder, string $property, ?string $direction = self::DEFAULT_DIRECTION): void
@@ -38,11 +43,21 @@ abstract class BaseSort extends Refinement implements Sorts
 
     public function isActive(): bool
     {
-        return $this->sortIsActive();
+        return $this->isActiveSort();
     }
 
-    public function sortIsActive(): bool
+    public function isActiveSort(): bool
     {
-        return $this->getValue() === $this->getName();
+        return ($this->getValue() === $this->getName()) || ($this->isDefault() && \is_null($this->getValue()));
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'name' => $this->getName(),
+            'label' => $this->getLabel(),
+            'metadata' => $this->getMetadata(),
+            'active' => $this->isActive(),
+        ];
     }
 }

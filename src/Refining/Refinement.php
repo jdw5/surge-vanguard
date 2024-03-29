@@ -11,7 +11,6 @@ use Jdw5\Vanguard\Concerns\HasMetadata;
 use Jdw5\Vanguard\Concerns\Configurable;
 use Jdw5\Vanguard\Refining\Concerns\HasValue;
 use Jdw5\Vanguard\Refining\Contracts\Refines;
-use Jdw5\Vanguard\Refining\Concerns\HasDefault;
 use Jdw5\Vanguard\Refining\Concerns\HasProperty;
 
 abstract class Refinement extends Primitive implements Refines
@@ -22,7 +21,6 @@ abstract class Refinement extends Primitive implements Refines
     use HasMetadata;
     use HasType;
     use HasValue;
-    use HasDefault;
     use Configurable;
     use IsIncludable;
 
@@ -36,7 +34,7 @@ abstract class Refinement extends Primitive implements Refines
 
     public function isActive(): bool
     {
-        return !is_null($this->getValue());
+        return !\is_null($this->getValue());
     }
     
     public function jsonSerialize(): array

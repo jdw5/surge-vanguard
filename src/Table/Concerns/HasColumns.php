@@ -40,7 +40,12 @@ trait HasColumns
             );
         }
 
-        return $this->cachedColumns ??= collect($this->defineColumns())
+        return $this->cachedColumns ??= $this->getUncachedTableColumns();
+    }
+
+    protected function getUncachedTableColumns(): Collection
+    {
+        return collect($this->defineColumns())
             ->filter(static fn (Column $column): bool => !$column->isExcluded()
         );
     }

@@ -99,7 +99,12 @@ abstract class Table extends Primitive implements Tables
             ]
         ] : [];
 
-        return array_merge($core, $pagination);
+        $preferences = $this->hasPreferences() ?
+        [
+            'preference_cols' => $this->getPreferenceColumns($this->getUncachedTableColumns())
+        ] : [];
+
+        return array_merge($core, $pagination, $preferences);
         // $show = $this->hasDynamicPagination() ? [
         //     'show' => $this->getActivePagination(),
         //     'pagination_options' => $this->getPaginationOptions()

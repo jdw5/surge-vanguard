@@ -3,6 +3,7 @@
 namespace Jdw5\Vanguard\Table\Concerns;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cookie;
 
 /**
@@ -85,5 +86,14 @@ trait HasPreferences
     public function getPreferences(): array
     {
         return $this->cachedPreferences ??= $this->getUpdatedPreferences();
+    }
+
+    public function getPreferenceColumns(Collection $cols): array
+    {
+        return $cols->map(static fn ($column) => [
+            'name' => $column->getName(),
+            'label' => $column->getLabel(),
+            'active' => in_array($column->getName(), $this->getPreferences()),
+        ])->values()->toArray();
     }
 }

@@ -22,10 +22,8 @@ class ToggleSort extends BaseSort
 
         $this->nextDirection($this->getDirection());
 
-        // dd($this->getProperty(), $this->getDirection(), $this->isActive());
-        if (! $this->isActive()) {
-            return;
-        }
+        if (! $this->isActive()) return;
+        
         $this->apply($builder, $this->getProperty(), $this->getDirection());
     }
 
