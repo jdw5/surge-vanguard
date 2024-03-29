@@ -79,8 +79,8 @@ abstract class Table extends Primitive implements Tables
             'rows' => $this->getRecords(),
             'cols' => $this->getTableColumns($this->hasPreferences(), $this->getPreferences())->values(),
             'refinements' => [
-                'sorts' => $this->getSorts()->values(),
-                'filters' => $this->getFilters()->values(),
+                'sorts' => $this->getSorts(),
+                'filters' => $this->getFilters(),
             ],
             'actions' => [
                 'inline' => $this->getInlineActions()->values(),

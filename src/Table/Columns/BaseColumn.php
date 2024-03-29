@@ -64,12 +64,7 @@ abstract class BaseColumn extends Primitive
      */
     public function jsonSerialize(): array
     {
-        $dynamics = $this->dynamicEnabled() ? [
-            'dynamic' => $this->dynamicEnabled(),
-            'dynamic_active' => $this->getDynamicActive(),
-        ] : [];
-
-        return array_merge([
+        return [
             /** Column information */
             'name' => $this->getName(),
             'type' => $this->getType(),
@@ -88,6 +83,6 @@ abstract class BaseColumn extends Primitive
             'direction' => $this->getDirection(),
             'next_direction' => $this->getNextDirection(),
             'sort_field' => $this->getSortName(),
-        ], $dynamics);
+        ];
     }
 }

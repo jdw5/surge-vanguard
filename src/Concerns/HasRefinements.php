@@ -17,15 +17,25 @@ trait HasRefinements
             ->filter(static fn (Refinement $refinement): bool => !$refinement->isExcluded());
     }
 
-    // This should be an associative array with the key being the name of the refiner, not a regular array
-    protected function getFilters(): Collection
+    protected function getFilters(): array
     {
-        return $this->getRefinements()->filter(static fn (Refinement $refinement): bool => $refinement instanceof BaseFilter);
+        return $this->getRefinements()->mapWithKeys(function (Refinement $refinement) {
+            if ($refinement instanceof BaseFilter) {
+                return [$refinement->getName() => $refinement];
+            }
+            return [];
+        })->toArray();
     }
 
-    protected function getSorts(): Collection
+
+    protected function getSorts(): array
     {
-        return $this->getRefinements()->filter(static fn (Refinement $refinement): bool => $refinement instanceof BaseSort);
+        return $this->getRefinements()->mapWithKeys(function (Refinement $refinement) {
+            if ($refinement instanceof BaseSort) {
+                return [$refinement->getName() => $refinement];
+            }
+            return [];
+        })->toArray();
     }
 
     protected function defineRefinements(): array

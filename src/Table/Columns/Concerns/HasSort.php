@@ -65,7 +65,7 @@ trait HasSort
      */
     public function isSorting(): bool
     {
-        return $this->hasSort() && $this->sort->sortIsActive();
+        return $this->hasSort() && $this->sort->isActiveSort();
     }
 
     /**

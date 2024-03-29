@@ -54,8 +54,8 @@ class Refiners extends Primitive
     public function jsonSerialize(): array
     {
         return [
-            'sorts' => $this->getSorts()->values(),
-            'filters' => $this->getFilters()->values(),
+            'sorts' => $this->getSorts(),
+            'filters' => $this->getFilters(),
         ];
     }
 }

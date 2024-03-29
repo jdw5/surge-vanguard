@@ -21,8 +21,15 @@ trait HasPreferences
     protected $preferenceCookie = null;
     private $cachedPreferences = [];
 
-    public abstract function definePreferenceKey(): string;
-    public abstract function definePreferenceCookie(): string;
+    public function definePreferenceKey()
+    {
+        return null;
+    }
+
+    public function definePreferenceCookie()
+    {
+        return null;
+    }
 
     /**
      * Check if the table has dynamic columns
@@ -44,7 +51,7 @@ trait HasPreferences
      * 
      * @return string
      */
-    public function preferences(): string
+    public function preferences(): ?string
     {
         return $this->evaluate($this->preferences ?? $this->definePreferenceKey());
     }

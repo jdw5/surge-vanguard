@@ -120,14 +120,16 @@ trait HasPagination
 
     public function getDynamicPerPage(): int
     {
+        if (isset($this->activeDynamicOption)) return $this->activeDynamicOption;
         $value = request()->query($this->showKey);
-        $this->activeDynamicOption = $value;
-        // Retrieve the show search query parameter
 
-        if (\is_null($value) || !in_array($value, $this->perPage)) {
-            return $this->defaultPerPage;
+        $this->activeDynamicOption = intval($value);
+
+        // dd(\is_null($this->activeDynamicOption), !in_array($this->activeDynamicOption, $this->definePagination()));
+        if (\is_null($this->activeDynamicOption) || !in_array($this->activeDynamicOption, $this->definePagination())) {
+            $this->activeDynamicOption = $this->defaultPerPage;
         }
-        return $value;
+        return $this->activeDynamicOption;
 
     }
 
@@ -140,7 +142,7 @@ trait HasPagination
         // Otherwise, use the definePagination to determine the type
         $this->perPage = $this->definePagination();
 
-        if (!is_array($this->perPage)) {
+        if (!\is_array($this->perPage)) {
             return $this->getDynamicPerPage();
         }
         return $this->perPage;
@@ -187,13 +189,11 @@ trait HasPagination
     {
         $options = $this->paginateType() === 'dynamic' ? $this->perPage : $this->definePagination();
 
-        if (!isset($this->activeDynamicOption)) $this->getDynamicPerPage();
-
         return collect($options)->map(function ($value) {
             return [
                 'value' => $value,
                 'label' => $value,
-                'active' => $value === $this->activeDynamicOption,
+                'active' => $value ===  $this->getDynamicPerPage(),
             ];
         })->values()->toArray();
     }   
