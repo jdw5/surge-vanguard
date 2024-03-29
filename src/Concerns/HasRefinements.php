@@ -17,6 +17,7 @@ trait HasRefinements
             ->filter(static fn (Refinement $refinement): bool => !$refinement->isExcluded());
     }
 
+    // This should be an associative array with the key being the name of the refiner, not a regular array
     protected function getFilters(): Collection
     {
         return $this->getRefinements()->filter(static fn (Refinement $refinement): bool => $refinement instanceof BaseFilter);

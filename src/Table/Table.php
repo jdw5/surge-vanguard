@@ -14,9 +14,8 @@ use Jdw5\Vanguard\Concerns\HasRefinements;
 use Jdw5\Vanguard\Table\Concerns\HasModel;
 use Jdw5\Vanguard\Table\Concerns\HasQuery;
 use Jdw5\Vanguard\Table\Concerns\HasColumns;
-use Jdw5\Vanguard\Table\Concerns\HasDynamics;
 use Jdw5\Vanguard\Table\Concerns\HasPagination;
-use Jdw5\Vanguard\Table\Concerns\HasDynamicPagination;
+use Jdw5\Vanguard\Table\Concerns\HasPreferences;
 use Jdw5\Vanguard\Table\Exceptions\InvalidKeyException;
 
 abstract class Table extends Primitive implements Tables
@@ -30,8 +29,7 @@ abstract class Table extends Primitive implements Tables
     use HasKey;
     use HasQuery;
     use HasMeta;
-    // use HasDynamics;
-    // use HasDynamicPagination;
+    use HasPreferences;
 
     private mixed $cachedMeta = null;
     private mixed $cachedData = null;
@@ -79,7 +77,7 @@ abstract class Table extends Primitive implements Tables
         $core = [
             'meta' => $this->getMeta(),
             'rows' => $this->getRecords(),
-            'cols' => $this->getTableColumns()->values(),
+            'cols' => $this->getTableColumns($this->hasPreferences(), $this->getPreferences())->values(),
             'refinements' => [
                 'sorts' => $this->getSorts()->values(),
                 'filters' => $this->getFilters()->values(),
@@ -145,8 +143,7 @@ abstract class Table extends Primitive implements Tables
         return $cachedMeta ??= $this->pipelineWithMeta();
     }
 
-
-        /**
+    /**
      * Perform the pipeline and retrieve the data
      * 
      * @return mixed

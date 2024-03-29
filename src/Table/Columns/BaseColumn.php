@@ -11,9 +11,9 @@ use Jdw5\Vanguard\Concerns\HasMetadata;
 use Jdw5\Vanguard\Concerns\IsIncludable;
 use Jdw5\Vanguard\Table\Columns\Concerns\IsKey;
 use Jdw5\Vanguard\Table\Columns\Concerns\HasSort;
-use Jdw5\Vanguard\Table\Columns\Concerns\IsDynamic;
 use Jdw5\Vanguard\Table\Columns\Concerns\HasFallback;
 use Jdw5\Vanguard\Table\Columns\Concerns\HasTransform;
+use Jdw5\Vanguard\Table\Columns\Concerns\IsPreferable;
 
 /**
  * Class BaseColumn
@@ -36,10 +36,10 @@ abstract class BaseColumn extends Primitive
     use HasTransform;
     use HasSort;
     use HasType;
-    use IsDynamic;
     use IsIncludable;
     use IsHideable;
     use IsKey;
+    use IsPreferable;
 
     public function __construct(string $name)
     {

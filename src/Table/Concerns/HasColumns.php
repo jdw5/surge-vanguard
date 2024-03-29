@@ -32,11 +32,11 @@ trait HasColumns
      * 
      * @return Collection
      */
-    protected function getTableColumns(): Collection
+    protected function getTableColumns(bool $usePreferencedCols = false, array $preferencedCols = null): Collection
     {
-        if ($this->hasDynamicCols()) {
+        if ($usePreferencedCols) {
             return $this->cachedColumns ??= collect($this->defineColumns())
-                ->filter(static fn (Column $column): bool => !$column->isExcluded() && $column->shouldBeDynamicallyShown()
+                ->filter(static fn (Column $column): bool => !$column->isExcluded() && $column->shouldBeDynamicallyShown($preferencedCols)
             );
         }
 
