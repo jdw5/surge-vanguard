@@ -27,7 +27,7 @@ abstract class BaseFilter extends Refinement implements Filters
             return;
         }
 
-        if ($this->isOnly() && !$this->inOptions($this->getValue())) {
+        if ($this->validOnly() && !$this->isValidOption($this->getValue())) {
             return;
         }
 

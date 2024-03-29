@@ -32,12 +32,12 @@ trait HasOptions
         return $this;
     }
 
-    public function isOnly(): bool
+    public function validOnly(): bool
     {
         return $this->only;
     }
 
-    public function inOptions(mixed $value): bool
+    public function isValidOption(mixed $value): bool
     {
         return $this->getOptions()->map(fn($option) => $option->value)->contains($value);
     }

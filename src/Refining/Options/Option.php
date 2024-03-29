@@ -11,9 +11,8 @@ use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Refining\Concerns\HasValue;
 use BackedEnum;
 use Illuminate\Database\Eloquent\Collection;
-use JsonSerializable;
 
-class Option extends Primitive implements JsonSerializable
+class Option extends Primitive
 {
     use HasLabel;
     use HasValue;
@@ -28,21 +27,33 @@ class Option extends Primitive implements JsonSerializable
     }
     
 
-    public static function make(string $value, ?string $label = null): static
+    public static function make(string $value, string $label = null): static
     {
         return resolve(static::class, compact('value', 'label'));
     }
 
-    public static function collection(Collection $collection, string $valueField, ?string $labelField = null): array
+    public static function collection(Collection $collection, string|callable $asValue = 'value', string|callable $asLabel = null): array
     {
-        return $collection->map(fn ($item) => static::make($item[$valueField], $item[$labelField]))->toArray();
+        return $collection->map(function ($item) use ($asValue, $asLabel) {
+            $value = is_callable($asValue) ? $asValue($item) : $item[$asValue];
+            $label = is_callable($asLabel) ? $asLabel($item) : (\is_null($asLabel) ? null : $item[$asLabel]);
+            return static::make($value, $label);
+        })->toArray();
     }
 
-    public static function enum(string $enum, ?string $labelMethodName = null): array
+    public static function array(array $array, string|callable $asValue = 'value', string|callable $asLabel = null): array
     {
-        // $enum = 
-        return collect($enum::cases())->map(fn (BackedEnum $item) => static::make($item->value, !is_null($labelMethodName) ? $item->{$labelMethodName}() : null))->toArray();
+        return Option::collection(collect($array), $asValue, $asLabel);
     }
+
+    public static function enum(string $enum, string|callable $asLabel = null): array
+    {
+        return collect($enum::cases())->map(function (BackedEnum $item) use ($asLabel) {
+            $label = is_callable($asLabel) ? $asLabel($item) : (\is_null($asLabel) ? null : $item->{$asLabel}());
+            return static::make($item->value, $label);
+        })->toArray();
+    }
+
 
     public function jsonSerialize(): array
     {

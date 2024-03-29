@@ -33,7 +33,7 @@ abstract class Table extends Primitive implements Tables
 
     private mixed $cachedMeta = null;
     private mixed $cachedData = null;
-    protected bool $applyColumns = true;
+    protected $applyColumns = true;
 
     public function __construct(mixed $data = null)
     {
@@ -93,7 +93,7 @@ abstract class Table extends Primitive implements Tables
 
         $pagination = $this->hasDynamicPagination() ? 
         [
-            'pagination' => [
+            'paging_options' => [
                 'options' => $this->getPaginationOptions(),
                 'term' => $this->showKey()
             ]
@@ -105,27 +105,6 @@ abstract class Table extends Primitive implements Tables
         ] : [];
 
         return array_merge($core, $pagination, $preferences);
-        // $show = $this->hasDynamicPagination() ? [
-        //     'show' => $this->getActivePagination(),
-        //     'pagination_options' => $this->getPaginationOptions()
-        // ] : [];
-
-        // return array_merge([
-        //     'meta' => $this->getMeta(),
-        //     'rows' => $this->getRecords(),
-        //     'cols' => $this->getTableColumns()->values(),
-        //     'refinements' => [
-        //         'sorts' => $this->getSorts()->values(),
-        //         'filters' => $this->getFilters()->values(),
-        //     ],
-        //     'actions' => [
-        //         'inline' => $this->getInlineActions()->values(),
-        //         'bulk' => $this->getBulkActions()->values(),
-        //         'page' => $this->getPageActions()->values(),
-        //         'default' => $this->getDefaultAction(),
-        //     ],
-        //     'recordKey' => $this->tableKey(),
-        // ], $show);
     }
 
     /**
