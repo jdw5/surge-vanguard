@@ -43,14 +43,9 @@ abstract class BaseFilter extends Refinement implements Filters
 
     public function jsonSerialize(): array
     {
-        return [
-            'name' => $this->getName(),
-            'label' => $this->getLabel(),
-            'type' => $this->getType(),
-            'metadata' => $this->getMetadata(),
-            'active' => $this->isActive(),
+        return array_merge(parent::jsonSerialize(), [
             'value' => $this->getValue(),
-            'options' => $this->hasOptions() ? $this->getOptions() : null,
-        ];
+            'options' => $this->hasOptions() ? $this->getOptions() : [],
+        ]);
     }
 }

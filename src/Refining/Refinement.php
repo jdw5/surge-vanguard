@@ -42,6 +42,7 @@ abstract class Refinement extends Primitive implements Refines
         return [
             'name' => $this->getName(),
             'label' => $this->getLabel(),
+            'type' => $this->getType(),
             'metadata' => $this->getMetadata(),
             'active' => $this->isActive(),
         ];

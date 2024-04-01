@@ -50,14 +50,4 @@ abstract class BaseSort extends Refinement implements Sorts
     {
         return ($this->getValue() === $this->getName()) || ($this->isDefault() && \is_null($this->getValue()));
     }
-
-    public function jsonSerialize(): array
-    {
-        return [
-            'name' => $this->getName(),
-            'label' => $this->getLabel(),
-            'metadata' => $this->getMetadata(),
-            'active' => $this->isActive(),
-        ];
-    }
 }

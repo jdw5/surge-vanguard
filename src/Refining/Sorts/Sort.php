@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Sort extends BaseSort
 {
+
+    protected function setUp(): void
+    {
+        $this->type('sort');
+    }
+
     public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), [

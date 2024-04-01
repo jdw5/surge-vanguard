@@ -12,6 +12,11 @@ class ToggleSort extends BaseSort
 {
     public ?string $nextDirection = null;
 
+    protected function setUp(): void
+    {
+        $this->type('toggleSort');
+    }
+
     public function refine(Builder $builder, ?Request $request = null): void
     {
         if (is_null($request)) $request = request();
