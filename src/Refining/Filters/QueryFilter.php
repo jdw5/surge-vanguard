@@ -2,6 +2,7 @@
 
 namespace Jdw5\Vanguard\Refining\Filters;
 
+use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
 use Illuminate\Http\Request;
 use Jdw5\Vanguard\Refining\Refinement;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,7 +18,7 @@ class QueryFilter extends BaseFilter
         $this->type('query');
     }
 
-    public function refine(Builder $builder, ?Request $request = null): void
+    public function refine(Builder|QueryBuilder $builder, ?Request $request = null): void
     {
         if (is_null($request)) $request = request();
         
@@ -28,7 +29,7 @@ class QueryFilter extends BaseFilter
         return;        
     }
 
-    public function apply(Builder $builder, string $property, mixed $value): void
+    public function apply(Builder|QueryBuilder $builder, string $property, mixed $value): void
     {
         $builder->when(! is_null($value), function ($builder) use ($value) {
             $this->getQuery()($builder, $value);

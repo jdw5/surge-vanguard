@@ -3,6 +3,7 @@
 namespace Jdw5\Vanguard\Refining\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Refining\Options\Option;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasQueryBoolean;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasDateOperations;
@@ -21,7 +22,7 @@ class DateFilter extends Filter
         $this->type('date');
     }
 
-    public function apply(Builder $builder, string $property, mixed $value): void
+    public function apply(Builder|QueryBuilder $builder, string $property, mixed $value): void
     {
         $value = $this->parseQuery($value);
         $builder->{$this->getDateOperator()}($property, $this->getOperator(), $value, $this->getQueryBoolean());

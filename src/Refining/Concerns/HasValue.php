@@ -13,7 +13,7 @@ trait HasValue
         return $this;
     }
 
-    protected function getValue(): mixed
+    public function getValue(): mixed
     {
         return $this->evaluate($this->value);
     }

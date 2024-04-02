@@ -3,7 +3,6 @@
 namespace Jdw5\Vanguard\Table\Concerns;
 
 use Jdw5\Vanguard\Table\Exceptions\TableModelNotFoundException;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -62,6 +61,10 @@ trait HasModel
             return self::$getModelClassesUsing->call($this, static::class);
         }
 
+        // if (isset($this->table)) {
+        //     return $this->table;
+        // }
+
         return str(static::class)
             ->classBasename()
             ->beforeLast('Table')
@@ -83,9 +86,9 @@ trait HasModel
     /**
      * Define the query for the table
      * 
-     * @return Builder
+     * @return Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder
      */
-    protected function defineQuery(): Builder
+    protected function defineQuery()
     {
         return $this->getModel()->query();
     }

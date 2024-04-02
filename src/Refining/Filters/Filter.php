@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Jdw5\Vanguard\Refining\Concerns\HasEnum;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasMode;
 use Jdw5\Vanguard\Refining\Filters\Enums\FilterMode;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasOperator;
@@ -22,7 +23,7 @@ class Filter extends BaseFilter
         $this->type('filter');
     }
 
-    public function apply(Builder $builder, string $property, mixed $value): void
+    public function apply(Builder|QueryBuilder $builder, string $property, mixed $value): void
     {
         if ($this->getMode() === FilterMode::EXACT) {
             $queryMethod = ($this->getQueryBoolean() === 'or') ? 'orWhere' : 'where';

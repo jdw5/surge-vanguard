@@ -7,6 +7,7 @@ use Jdw5\Vanguard\Refining\Refinement;
 use Jdw5\Vanguard\Refining\Contracts\Filters;
 use Jdw5\Vanguard\Refining\Concerns\HasOptions;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
 abstract class BaseFilter extends Refinement implements Filters
 {
@@ -17,20 +18,20 @@ abstract class BaseFilter extends Refinement implements Filters
         return resolve(static::class, compact('property', 'name'));
     }
 
-    public function refine(Builder $builder, ?Request $request = null): void
+    public function refine(Builder|QueryBuilder $builder, ?Request $request = null): void
     {
         if (is_null($request)) $request = request();
         
         $this->value($request->query($this->getName()));
-
+        
         if ($this->getValue() === null) {
             return;
         }
-
+        
         if ($this->validOnly() && !$this->isValidOption($this->getValue())) {
             return;
         }
-
+        
         // Find and set the option to active
         $this->setActiveOption($this->getValue());
         
@@ -43,9 +44,14 @@ abstract class BaseFilter extends Refinement implements Filters
 
     public function jsonSerialize(): array
     {
-        return array_merge(parent::jsonSerialize(), [
+        return [
+            'name' => $this->getName(),
+            'label' => $this->getLabel(),
+            'type' => $this->getType(),
+            'metadata' => $this->getMetadata(),
+            'active' => $this->isActive(),
             'value' => $this->getValue(),
-            'options' => $this->hasOptions() ? $this->getOptions() : [],
-        ]);
+            'options' => $this->hasOptions() ? $this->getOptions() : null,
+        ];
     }
 }

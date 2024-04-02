@@ -4,6 +4,7 @@ namespace Jdw5\Vanguard\Refining\Filters;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasOperator;
 
 class SelectFilter extends Filter
@@ -15,7 +16,7 @@ class SelectFilter extends Filter
         $this->type('select');
     }
 
-    public function refine(Builder $builder, ?Request $request = null): void
+    public function refine(Builder|QueryBuilder $builder, ?Request $request = null): void
     {
         if (is_null($request)) $request = request();
         
@@ -33,7 +34,7 @@ class SelectFilter extends Filter
         }
     }
 
-    public function apply(Builder $builder, string $property, mixed $value): void
+    public function apply(Builder|QueryBuilder $builder, string $property, mixed $value): void
     {
         $method = match ($this->getOperator()) {
             '!=' => 'whereNotIn',

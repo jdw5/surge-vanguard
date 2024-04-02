@@ -6,18 +6,14 @@ use Illuminate\Http\Request;
 use Jdw5\Vanguard\Refining\Sorts\BaseSort;
 use Jdw5\Vanguard\Refining\Sorts\Concerns\HasActiveDirection;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Refining\Sorts\Concerns\SortConstants;
 
 class ToggleSort extends BaseSort
 {
     public ?string $nextDirection = null;
 
-    protected function setUp(): void
-    {
-        $this->type('toggleSort');
-    }
-
-    public function refine(Builder $builder, ?Request $request = null): void
+    public function refine(Builder|QueryBuilder $builder, ?Request $request = null): void
     {
         if (is_null($request)) $request = request();
         

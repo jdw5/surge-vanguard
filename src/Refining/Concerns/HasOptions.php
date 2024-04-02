@@ -7,12 +7,17 @@ use Jdw5\Vanguard\Refining\Options\Option;
 
 trait HasOptions
 {
-    protected Collection $options;
+    protected ?Collection $options = null;
     protected bool $only = false;
 
     public function options(...$options): static
     {
-        $this->options = collect($options)->flatten();
+        $this->options = collect($options)->map(function ($option) {
+            if ($option instanceof Option) return $option;            
+            return Option::make($option);
+        })->flatten();
+
+        // dd($this->options);
         return $this;
     }
 
@@ -39,11 +44,14 @@ trait HasOptions
 
     public function isValidOption(mixed $value): bool
     {
-        return $this->getOptions()->map(fn($option) => $option->value)->contains($value);
+        if (!$this->hasOptions()) return true;
+        return $this->getOptions()->map(fn (Option $option) => $option->getValue())->contains($value);
     }
 
     public function setActiveOption(mixed $value): void
     {
-        $this->options->each(fn (Option $option) => $option->active($option->getValue() == $value));
+        if (!$this->hasOptions()) return;
+        // dd($this->getOptions()->each(fn (Option $option) => dd($option)));
+        $this->getOptions()->each(fn (Option $option) => $option->active($option->getValue() == $value));
     }
 }

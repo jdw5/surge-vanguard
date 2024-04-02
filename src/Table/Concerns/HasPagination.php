@@ -125,7 +125,6 @@ trait HasPagination
 
         $this->activeDynamicOption = intval($value);
 
-        // dd(\is_null($this->activeDynamicOption), !in_array($this->activeDynamicOption, $this->definePagination()));
         if (\is_null($this->activeDynamicOption) || !in_array($this->activeDynamicOption, $this->definePagination())) {
             $this->activeDynamicOption = $this->defaultPerPage;
         }
@@ -142,7 +141,7 @@ trait HasPagination
         // Otherwise, use the definePagination to determine the type
         $this->perPage = $this->definePagination();
 
-        if (!\is_array($this->perPage)) {
+        if (\is_array($this->perPage)) {
             return $this->getDynamicPerPage();
         }
         return $this->perPage;

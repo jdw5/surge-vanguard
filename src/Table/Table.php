@@ -8,6 +8,7 @@ use Jdw5\Vanguard\Concerns\HasActions;
 use Jdw5\Vanguard\Table\Columns\Column;
 use Jdw5\Vanguard\Table\Concerns\HasKey;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Jdw5\Vanguard\Table\Concerns\HasMeta;
 use Jdw5\Vanguard\Table\Contracts\Tables;
 use Jdw5\Vanguard\Concerns\HasRefinements;
@@ -156,7 +157,9 @@ abstract class Table extends Primitive implements Tables
      */
     protected function pipeline(): void
     {
-        if (! $this->hasQuery()) { 
+        if (!\is_null($this->cachedData)) return;
+
+        if (!$this->hasQuery()) { 
             $this->query = $this->defineQuery();
         }
         
@@ -197,7 +200,11 @@ abstract class Table extends Primitive implements Tables
             $this->cachedData = collect($this->cachedData)->map(function ($row) {
                 return $this->getTableColumns()->reduce(function ($carry, Column $column) use ($row) {
                     $name = $column->getName();
-                    $carry[$name] = empty($row[$name]) ? $column->getFallback() : $column->transformUsing($row[$name]);
+                    if ($row instanceof Model) {
+                        $carry[$name] = empty($row[$name]) ? $column->getFallback() : $column->transformUsing($row[$name]);
+                    } else {
+                        $carry[$name] = empty($row->{$name}) ? $column->getFallback() : $column->transformUsing($row->{$name});
+                    }
                     return $carry;
                 }, []);
             });      
