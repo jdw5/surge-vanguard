@@ -16,7 +16,6 @@ class Filter extends BaseFilter
 {
     use HasMode;
     use HasOperator;
-    use HasQueryBoolean;
 
     protected function setUp(): void
     {

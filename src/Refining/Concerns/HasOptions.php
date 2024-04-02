@@ -51,7 +51,6 @@ trait HasOptions
     public function setActiveOption(mixed $value): void
     {
         if (!$this->hasOptions()) return;
-        // dd($this->getOptions()->each(fn (Option $option) => dd($option)));
         $this->getOptions()->each(fn (Option $option) => $option->active($option->getValue() == $value));
     }
 }

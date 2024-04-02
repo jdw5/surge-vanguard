@@ -4,14 +4,16 @@ namespace Jdw5\Vanguard\Refining\Filters;
 
 use Illuminate\Http\Request;
 use Jdw5\Vanguard\Refining\Refinement;
+use Illuminate\Database\Eloquent\Builder;
 use Jdw5\Vanguard\Refining\Contracts\Filters;
 use Jdw5\Vanguard\Refining\Concerns\HasOptions;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Jdw5\Vanguard\Refining\Filters\Concerns\HasQueryBoolean;
 
 abstract class BaseFilter extends Refinement implements Filters
 {
     use HasOptions;
+    use HasQueryBoolean;
 
     public static function make(mixed $property, ?string $name = null): static
     {

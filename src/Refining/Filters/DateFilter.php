@@ -3,8 +3,9 @@
 namespace Jdw5\Vanguard\Refining\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Refining\Options\Option;
+use Jdw5\Vanguard\Refining\Filters\BaseFilter;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasQueryBoolean;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasDateOperations;
 use Jdw5\Vanguard\Refining\Filters\Exceptions\InvalidDateOperator;
@@ -12,9 +13,8 @@ use Jdw5\Vanguard\Refining\Filters\Exceptions\InvalidDateOperator;
 /**
  * Date filtering.
  */
-class DateFilter extends Filter
+class DateFilter extends BaseFilter
 {
-    use HasQueryBoolean;
     use HasDateOperations;
 
     protected function setUp(): void

@@ -4,10 +4,11 @@ namespace Jdw5\Vanguard\Refining\Filters;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Jdw5\Vanguard\Refining\Filters\BaseFilter;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasOperator;
 
-class SelectFilter extends Filter
+class SelectFilter extends BaseFilter
 {
     use HasOperator;
 
@@ -16,21 +17,12 @@ class SelectFilter extends Filter
         $this->type('select');
     }
 
-    public function refine(Builder|QueryBuilder $builder, ?Request $request = null): void
+    public function setActiveOption(mixed $value): void
     {
-        if (is_null($request)) $request = request();
-        
-        $this->value(explode(',', $request->query($this->getName())));
+        $this->value(explode(',', $value));
 
-        // Then there's no need to apply the filter
-        if (empty($this->getValue())) {
-            return;
-        }
-        
-        try {
-            $this->apply($builder, $this->getValue(), $this->getProperty());
-        } catch (\Exception $e) {
-            throw new \Exception("Failed to apply filter {$this->getName()}: {$e->getMessage()}");
+        if ($this->hasOptions()) {
+            $this->setActiveOptions($this->getOptions()->filter(fn ($option) => in_array($option->getValue(), $this->getValue())));
         }
     }
 
@@ -40,9 +32,7 @@ class SelectFilter extends Filter
             '!=' => 'whereNotIn',
             default => 'whereIn',
         };
-
         $builder->{$method}($property, $this->getOperator(), $value, $this->getQueryBoolean());
-        return;
-        
+        return;        
     }
 }
