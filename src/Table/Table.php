@@ -122,7 +122,7 @@ abstract class Table extends Primitive implements Tables
     /**
      * 
      */
-    protected function afterQuery(Builder|QueryBuilder $query) 
+    protected function beforeFetch(Builder|QueryBuilder $query) 
     {
         return $query;
     }

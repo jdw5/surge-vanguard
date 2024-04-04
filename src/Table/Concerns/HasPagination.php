@@ -16,13 +16,13 @@ trait HasPagination
     protected null|PaginateConfiguration $paginateConfig = null;
     
     /** New API */
-    private $perPage = null;
     private $activeDynamicOption;
+    protected $defaultPerPage = 10;
     
+    protected $perPage = null;
     protected $pageName = 'page';
     protected $page = null;
     protected $columns = ['*'];
-    protected $defaultPerPage = 10;
     protected $paginateType = null;
     protected $showKey = 'show';
 
@@ -60,7 +60,7 @@ trait HasPagination
         $this->columns = $columns;
         $this->pageName = $cursorName;
         $this->page = $cursor;
-        $this->paginateType = 'paginate';
+        $this->paginateType = 'cursor';
         return $this;
     }
 

@@ -21,12 +21,12 @@ trait HasPreferences
     protected $preferenceCookie = null;
     private $cachedPreferences = null;
 
-    public function definePreferenceKey()
+    protected function definePreferenceKey()
     {
         return null;
     }
 
-    public function definePreferenceCookie()
+    protected function definePreferenceCookie()
     {
         return null;
     }

@@ -16,7 +16,7 @@ final class {{ class }} extends Table
 {
     protected $applyColumns = true;
 
-    protected function defineQuery(): Builder
+    protected function defineQuery()
     {
         // return Model::query()
     }
