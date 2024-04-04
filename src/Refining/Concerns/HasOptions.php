@@ -17,7 +17,6 @@ trait HasOptions
             return Option::make($option);
         })->flatten();
 
-        // dd($this->options);
         return $this;
     }
 
