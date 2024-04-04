@@ -19,7 +19,7 @@ class Refiners extends Primitive
      * @param array $actions
      * @return static
      */
-    public static function make(array $refiners): static
+    public static function make(...$refiners): static
     {
         return resolve(static::class, compact('refiners'));
     }

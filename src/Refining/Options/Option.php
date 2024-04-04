@@ -21,13 +21,12 @@ class Option extends Primitive
     use IsIncludable;
 
     public function __construct(mixed $value, ?string $label = null) { 
-        dd($value);
         $this->value(str($value)->replace('.', '_'));
         $this->label($label ?? str($this->getValue())->headline()->lower()->ucfirst());
     }
     
 
-    public static function make(string $value, string $label = null): static
+    public static function make(string $value, ?string $label = null): static
     {
         return resolve(static::class, compact('value', 'label'));
     }
@@ -36,7 +35,7 @@ class Option extends Primitive
     {
         return $collection->map(function ($item) use ($asValue, $asLabel) {
             $value = is_callable($asValue) ? $asValue($item) : $item[$asValue];
-            $label = is_callable($asLabel) ? $asLabel($item) : (\is_null($asLabel) ? null : $item[$asLabel]);
+            $label = is_callable($asLabel) ? $asLabel($item) : (\is_null($asLabel) ? $value : $item[$asLabel]);
             return static::make($value, $label);
         })->toArray();
     }
@@ -49,7 +48,7 @@ class Option extends Primitive
     public static function enum(string $enum, string|callable $asLabel = null): array
     {
         return collect($enum::cases())->map(function (\BackedEnum $item) use ($asLabel) {
-            $label = is_callable($asLabel) ? $asLabel($item) : (\is_null($asLabel) ? null : $item->{$asLabel}());
+            $label = is_callable($asLabel) ? $asLabel($item) : (\is_null($asLabel) ? $item->value : $item->{$asLabel}());
             return static::make($item->value, $label);
         })->toArray();
     }

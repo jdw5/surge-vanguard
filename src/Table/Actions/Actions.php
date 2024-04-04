@@ -18,7 +18,7 @@ class Actions extends Primitive
      * @param array $actions
      * @return static
      */
-    public static function make(array $actions): static
+    public static function make(...$actions): static
     {
         return resolve(static::class, compact('actions'));
     }
