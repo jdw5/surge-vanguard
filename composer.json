@@ -1,8 +1,9 @@
 {
     "name": "jdw5/vanguard",
-    "description": "Extend filters, models and table data for your Laravel applications.",
+    "description": "Extend filters, actions and table data for your Laravel applications.",
     "keywords": [
         "laravel",
+        "laravel-vanguard",
         "laravel-tables",
         "laravel-filters",
         "laravel-refiners"
@@ -10,8 +11,7 @@
     "type": "library",
     "license": "MIT",
     "authors": [
-        {
-            
+        {   
             "name": "Joshua Wallace",
             "email": "josh@joshua-wallace.com",
             "homepage": "https://joshua-wallace.com"
@@ -24,9 +24,9 @@
     },
     "require": {
         "php": "^8.0",
-        "illuminate/support": "^10.0",
-        "illuminate/console": "^10.0",
-        "illuminate/database": "^10.0"
+        "illuminate/support": "~10.0",
+        "illuminate/console": "~10.0",
+        "illuminate/database": "~10.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

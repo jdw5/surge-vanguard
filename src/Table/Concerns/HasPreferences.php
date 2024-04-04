@@ -19,7 +19,7 @@ trait HasPreferences
     /** Set the name of the query param */
     protected $preferences = null;
     protected $preferenceCookie = null;
-    private $cachedPreferences = [];
+    private $cachedPreferences = null;
 
     public function definePreferenceKey()
     {
@@ -71,20 +71,20 @@ trait HasPreferences
     {
         if (\is_null($request)) $request = request();
         
-        $preferencedColumns = $request->query($this->dynamicName());
+        $preferencedColumns = $request->query($this->preferences());
         
         if (!\is_null($preferencedColumns)) $preferencedColumns = str_getcsv($preferencedColumns);
-        
-        if ($this->usesPreferenceCookie() && $request->hasCookie($this->preferenceCookie()) && is_null($preferencedColumns)) {
-            $preferencedColumns = $request->cookie($this->preferenceCookie());
-        } else if (count($preferencedColumns) > 0) {
-            Cookie::queue($this->preferenceCookie(), $preferencedColumns, 60 * 24 * 30);
-        } else {
-            $preferencedColumns = [];
-        }
+        else $preferencedColumns = [];
 
+
+        if ($this->usesPreferenceCookie() && $request->hasCookie($this->preferenceCookie()) && is_null($preferencedColumns)) {
+            $preferencedColumns = json_decode($request->cookie($this->preferenceCookie()));
+        } else if (count($preferencedColumns) > 0) {
+            Cookie::queue($this->preferenceCookie(), json_encode($preferencedColumns), 60 * 24 * 30);
+        }
         return $preferencedColumns;
     }
+    
     /**
      * Get the dynamic columns
      * 
@@ -97,7 +97,7 @@ trait HasPreferences
 
     public function getPreferenceColumns(Collection $cols): array
     {
-        return $cols->map(static fn ($column) => [
+        return $cols->map(fn ($column) => [
             'name' => $column->getName(),
             'label' => $column->getLabel(),
             'active' => in_array($column->getName(), $this->getPreferences()),

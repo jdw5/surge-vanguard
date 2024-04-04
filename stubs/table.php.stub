@@ -34,7 +34,7 @@ final class {{ class }} extends Table
         return 10;
     }
 
-    protected function defineRefiners(): array
+    protected function defineRefinements(): array
     {
         return [
 

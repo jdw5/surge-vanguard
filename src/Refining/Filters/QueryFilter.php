@@ -31,7 +31,7 @@ class QueryFilter extends BaseFilter
 
     public function apply(Builder|QueryBuilder $builder, string $property, mixed $value): void
     {
-        $builder->when(! is_null($value), function ($builder) use ($value) {
+        $builder->when(!\is_null($value), function ($builder) use ($value) {
             $this->getQuery()($builder, $value);
         });
     }

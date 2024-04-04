@@ -4,6 +4,7 @@ namespace Jdw5\Vanguard\Refining\Filters;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Jdw5\Vanguard\Refining\Options\Option;
 use Jdw5\Vanguard\Refining\Filters\BaseFilter;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasOperator;
@@ -22,7 +23,7 @@ class SelectFilter extends BaseFilter
         $this->value(explode(',', $value));
 
         if ($this->hasOptions()) {
-            $this->setActiveOptions($this->getOptions()->filter(fn ($option) => in_array($option->getValue(), $this->getValue())));
+            $this->getOptions()->each(fn (Option $option) => $option->active(in_array($option->getValue(), $this->getValue())));
         }
     }
 
@@ -32,7 +33,8 @@ class SelectFilter extends BaseFilter
             '!=' => 'whereNotIn',
             default => 'whereIn',
         };
-        $builder->{$method}($property, $this->getOperator(), $value, $this->getQueryBoolean());
+
+        $builder->{$method}($property, $value, $this->getQueryBoolean());
         return;        
     }
 }

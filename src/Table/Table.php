@@ -9,6 +9,7 @@ use Jdw5\Vanguard\Table\Columns\Column;
 use Jdw5\Vanguard\Table\Concerns\HasKey;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Table\Concerns\HasMeta;
 use Jdw5\Vanguard\Table\Contracts\Tables;
 use Jdw5\Vanguard\Concerns\HasRefinements;
@@ -119,6 +120,14 @@ abstract class Table extends Primitive implements Tables
     }
 
     /**
+     * 
+     */
+    protected function afterQuery(Builder|QueryBuilder $query) 
+    {
+        return $query;
+    }
+
+    /**
      * Retrieve the metadata from the table.
      * 
      * @return array
@@ -171,6 +180,9 @@ abstract class Table extends Primitive implements Tables
                 ->toArray()
             )
         );
+
+        // Apply afterQuery
+        $this->query($this->afterQuery($this->query));
 
         switch ($this->paginateType())
         {

@@ -26,6 +26,7 @@ abstract class BaseFilter extends Refinement implements Filters
         
         $this->value($request->query($this->getName()));
         
+
         if ($this->getValue() === null) {
             return;
         }

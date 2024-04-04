@@ -179,7 +179,7 @@ trait HasPagination
      * 
      * @return int|array
      */
-    public function definePagination()
+    protected function definePagination()
     {
         return 10;
     }
