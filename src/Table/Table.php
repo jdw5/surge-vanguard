@@ -182,7 +182,7 @@ abstract class Table extends Primitive implements Tables
         );
 
         // Apply afterQuery
-        $this->query($this->afterQuery($this->query));
+        if (method_exists($this, 'afterQuery')) $this->query($this->afterQuery($this->query));
 
         switch ($this->paginateType())
         {

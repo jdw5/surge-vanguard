@@ -56,7 +56,7 @@ trait HasPreferences
         return $this->evaluate($this->preferences ?? $this->definePreferenceKey());
     }
 
-    public function preferenceCookie(): string
+    public function preferenceCookie(): string|null
     {
         return $this->evaluate($this->preferenceCookie ?? $this->definePreferenceCookie());
     }
@@ -73,7 +73,9 @@ trait HasPreferences
         
         $preferencedColumns = $request->query($this->preferences());
         
-        if (!\is_null($preferencedColumns)) $preferencedColumns = str_getcsv($preferencedColumns);
+        if (!empty($preferencedColumns)) {
+            $preferencedColumns = str_getcsv($preferencedColumns);
+        }
         else $preferencedColumns = [];
 
 
