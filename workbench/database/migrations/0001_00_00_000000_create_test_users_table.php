@@ -7,7 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Workbench\App\Enums\TestRole;
 
-class CreateTestUsersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -34,4 +34,4 @@ class CreateTestUsersTable extends Migration
     {
         Schema::drop('test_users');
     }
-}
+};
