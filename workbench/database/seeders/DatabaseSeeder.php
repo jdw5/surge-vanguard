@@ -2,8 +2,8 @@
 
 namespace Workbench\Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Workbench\Database\Factories\TestUserFactory;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,6 +12,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        TestUserFactory::new()->count(1000)->create();
     }
 }

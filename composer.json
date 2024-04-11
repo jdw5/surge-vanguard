@@ -60,7 +60,9 @@
         ],
         "lint": [
             "@php vendor/bin/phpstan analyse"
-        ]
+        ],
+        "test" : "vendor/bin/phpunit",
+        "analyse" : "vendor/bin/phpstan analyse"
     },
     "extra": {
         "laravel": {

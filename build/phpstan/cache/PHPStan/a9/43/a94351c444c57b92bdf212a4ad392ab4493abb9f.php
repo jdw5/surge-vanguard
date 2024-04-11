@@ -1,0 +1,7 @@
+<?php declare(strict_types = 1);
+
+// variadic-method-Illuminate\Pagination\AbstractCursorPaginator-previousPageUrl-/home/josh/code/vanguard/vendor/composer/../laravel/framework/src/Illuminate/Pagination/AbstractCursorPaginator.php
+return \PHPStan\Cache\CacheItem::__set_state(array(
+   'variableKey' => '1709052414-v4',
+   'data' => false,
+));

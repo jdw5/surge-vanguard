@@ -3,6 +3,8 @@
 namespace Jdw5\Vanguard\Tests;
 
 use Illuminate\Contracts\Config\Repository;
+use Jdw5\Vanguard\VanguardServiceProvider;
+
 use function Orchestra\Testbench\workbench_path;
 use Orchestra\Testbench\TestCase as TestbenchTestCase;
 
@@ -24,7 +26,7 @@ class TestCase extends TestbenchTestCase
     protected function getPackageProviders($app)
     {
         return [
-            'Jdw5\Vanguard\VanguardServiceProvider',
+            VanguardServiceProvider::class,
         ];
     }
 
@@ -36,5 +38,15 @@ class TestCase extends TestbenchTestCase
     protected function defineDatabaseMigrations()
     {
         $this->loadMigrationsFrom(workbench_path('database/migrations'));
+    }
+
+    public function getEnvironmentSetUp($app)
+    {
+        config()->set('database.default', 'testing');
+
+        /*
+        $migration = include __DIR__.'/../database/migrations/create_skeleton_table.php.stub';
+        $migration->up();
+        */
     }
 }

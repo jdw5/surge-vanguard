@@ -5,6 +5,7 @@ namespace Workbench\Database\Migrations;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Workbench\App\Enums\TestRole;
 
 class CreateTestUsersTable extends Migration
 {
@@ -20,7 +21,7 @@ class CreateTestUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->unsignedTinyInteger('role')->default(0);
+            $table->unsignedTinyInteger('role')->default(TestRole::USER->value);
             $table->rememberToken();
             $table->timestamps();
         });

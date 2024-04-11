@@ -10,12 +10,15 @@ seeders:
 workbench:
   start: '/'
   install: true
+  guard: web
   discovers:
     web: true
     api: false
     commands: false
     components: false
     views: false
-  build: []
+  build: 
+    - 'create-sqlite-db'
+    - 'migrate:fresh --seed'
   assets: []
   sync: []
