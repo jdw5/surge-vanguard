@@ -87,6 +87,8 @@ class VanguardServiceProvider extends ServiceProvider
 
     public function provides()
     {
-        return [TableMakeCommand::class];
+        return [
+            TableMakeCommand::class
+        ];
     }
 }
