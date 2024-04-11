@@ -30,4 +30,9 @@ trait HasQuery
     {
         return !\is_null($this->query);
     }
+
+    public function getQuery(): EloquentBuilder|QueryBuilder
+    {
+        return $this->query;
+    }
 }

@@ -119,6 +119,11 @@ abstract class Table extends Primitive implements Tables
         return $cachedData ??= $this->pipelineWithData();
     }
 
+    public function getFirstRecord(): mixed
+    {
+        return $this->getRecords()->first();
+    }
+
     /**
      * 
      */
@@ -184,7 +189,7 @@ abstract class Table extends Primitive implements Tables
         // Apply afterQuery
         if (method_exists($this, 'afterQuery')) $this->query($this->afterQuery($this->query));
 
-        switch ($this->paginateType())
+        switch ($this->getPaginateType())
         {
             // case 'paginate':
             //     $paginatedData = $this->query->paginate(...$this->getPagination())->withQueryString();
@@ -192,12 +197,12 @@ abstract class Table extends Primitive implements Tables
             //     $this->cachedMeta = $this->generatePaginatorMeta($paginatedData);
             //     break;
             case 'cursor':
-                $cursorPaginatedData = $this->query->cursorPaginate(...$this->getPagination())->withQueryString();
+                $cursorPaginatedData = $this->query->cursorPaginate(...\array_values($this->getPagination()))->withQueryString();
                 $this->cachedData = $cursorPaginatedData->items();
                 $this->cachedMeta = $this->generateCursorPaginatorMeta($cursorPaginatedData);
                 break;
             case 'get':
-                $this->cachedData = $this->query->get()->withQueryString();
+                $this->cachedData = $this->query->get();
                 $this->cachedMeta = $this->generateUnpaginatedMeta($this->cachedData);
                 break;
             default:

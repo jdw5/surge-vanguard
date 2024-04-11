@@ -88,7 +88,7 @@ trait HasPagination
      * 
      * @return PaginateConfiguration|null
      */
-    public function paginateType(): string|null
+    public function getPaginateType(): string|null
     {
         return $this->paginateType;
     }
@@ -115,7 +115,7 @@ trait HasPagination
 
     private function hasBeenOverriden(): bool
     {
-        return !\is_null($this->paginateType());
+        return !\is_null($this->getPaginateType());
     }
 
     public function getDynamicPerPage(): int
@@ -135,7 +135,7 @@ trait HasPagination
     public function perPage(): int
     {
         if ($this->hasBeenOverriden()) {
-            return $this->paginateType() !== 'dynamic' ? $this->perPage : $this->getDynamicPerPage();
+            return $this->getPaginateType() !== 'dynamic' ? $this->perPage : $this->getDynamicPerPage();
         }
 
         // Otherwise, use the definePagination to determine the type
@@ -186,7 +186,7 @@ trait HasPagination
 
     public function getPaginationOptions(): array
     {
-        $options = $this->paginateType() === 'dynamic' ? $this->perPage : $this->definePagination();
+        $options = $this->getPaginateType() === 'dynamic' ? $this->perPage : $this->definePagination();
 
         return collect($options)->map(function ($value) {
             return [
