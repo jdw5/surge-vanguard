@@ -13,13 +13,22 @@ trait IsHideable
     /**
      * Set the visibility of the column to hidden
      * 
-     * @param bool $condition
      * @return static
      */
-    public function hide(bool $condition = false): static
+    public function hide(): static
     {
-        $this->show = $condition;      
+        $this->show = false;      
         return $this;
+    }
+
+    /**
+     * Set the visibility of the column to hidden
+     * 
+     * @return static
+     */
+    public function hidden(): static
+    {
+        return $this->hide();
     }
 
     /**

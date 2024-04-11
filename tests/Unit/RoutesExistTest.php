@@ -8,6 +8,6 @@ class RoutesExistTest extends TestCase
 {
     public function test_routes_exist()
     {
-        $this->get('/')->assertStatus(200);
+        $this->get('/basic')->assertStatus(200);
     }
 }

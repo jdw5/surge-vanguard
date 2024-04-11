@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Workbench\App\Http\Controllers\TestUserIndexController;
+use Workbench\App\Http\Controllers\BasicTableIndexController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,4 +14,5 @@ use Workbench\App\Http\Controllers\TestUserIndexController;
 |
 */
 
-Route::get('/', TestUserIndexController::class)->name('test_users.index');
+Route::get('/basic', BasicTableIndexController::class)->name('test_users.index');
+// Route::get('/basic', BasicTableIndexController::class)->name('test_users.index');
