@@ -311,3 +311,17 @@ From a collection, such as performing a database query, `Option::collection(Coll
 From an array, such as a list of options, `Option::array(array $array, string\|callable $asValue, string\|callable $asLabel)` can be used. This uses the same API as the collection method, but for an array.
 
 Finally, enums can be used to generate options using `Option::enum(string $enum, string\|callable $asLabel)`. This will check for a `BackedEnum` at the given enum string, the value is taken as the enum value. The label is then generated from a function, with an instance of `BackedEnum` sent to it or using a method defined on the enum if a string is passed.
+
+## Testing
+Before testing ensure that your environment or container has the PHP Sqlite adapter, on Linux:
+- `sudo apt-get install php-sqlite3`
+
+Perform a `composer install` to retrieve the required packages. Tests can then be executed as:
+```console
+vendor/bin/phpunit
+```
+
+Specify a testsuite as such:
+```console
+vendor/bin/phpunit --testsuite=Feature
+```
