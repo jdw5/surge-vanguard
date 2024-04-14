@@ -2,8 +2,6 @@
 
 namespace Jdw5\Vanguard\Table\Concerns;
 
-use Jdw5\Vanguard\Table\Pagination\PaginateConfiguration;
-
 /**
  * Trait HasPagination
  * 
@@ -13,7 +11,7 @@ use Jdw5\Vanguard\Table\Pagination\PaginateConfiguration;
  */
 trait HasPagination
 {
-    protected null|PaginateConfiguration $paginateConfig = null;
+    protected mixed $paginateConfig = null;
     
     /** New API */
     private $activeDynamicOption;
@@ -86,7 +84,7 @@ trait HasPagination
     /**
      * Get the pagination configuration
      * 
-     * @return PaginateConfiguration|null
+     * @return string|null
      */
     public function getPaginateType(): string|null
     {

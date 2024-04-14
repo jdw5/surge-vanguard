@@ -12,9 +12,7 @@ class TestUser extends Model
 
     protected $factory = TestUserFactory::class;
 
-    protected $guarded = [
-
-    ];
+    protected $guarded = [];
 
     protected $casts = [
 

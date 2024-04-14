@@ -70,7 +70,8 @@ trait HasPreferences
     public function getUpdatedPreferences(?Request $request = null): array
     {
         if (\is_null($request)) $request = request();
-        
+        if (!$this->hasPreferences()) return [];
+
         $preferencedColumns = $request->query($this->preferences());
         
         if (!empty($preferencedColumns)) {

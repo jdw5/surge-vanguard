@@ -40,12 +40,11 @@ class BasicTable extends Table
     {
         return [
             Filter::make('name')->loose(),
-            SelectFilter::make('role')->options(Option::enum(TestRole::class, 'label')),
-            // QueryFilter::make('id')->query(fn (Builder $builder, $value) => $builder->where('id', '>', $value))
+            SelectFilter::make('role', 'type')->options(Option::enum(TestRole::class, 'label')),
+            QueryFilter::make('id')->query(fn (Builder $builder, $value) => $builder->where('id', '<', $value)),
            
             Sort::make('created_at', 'newest')->desc()->default(),
             Sort::make('created_at', 'oldest')->asc(),   
-            
         ];
     }
 
