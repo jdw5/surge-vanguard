@@ -12,7 +12,7 @@ trait HasOptions
 
     public function options(...$options): static
     {
-        $this->options = collect($options)->map(function ($option) {
+        $this->options = collect($options)->flatten()->map(function ($option) {
             if ($option instanceof Option) return $option;            
             return Option::make($option);
         })->flatten();

@@ -4,16 +4,16 @@ namespace Jdw5\Vanguard\Concerns;
 
 trait HasLabel
 {
-    protected string|\Closure $label;
+    protected mixed $label;
 
-    public function label(string|\Closure $label): static
+    public function label(mixed $label): static
     {
         $this->label = $label;
 
         return $this;
     }
 
-    public function getLabel(): string
+    public function getLabel(): mixed
     {
         return $this->evaluate($this->label);
     }

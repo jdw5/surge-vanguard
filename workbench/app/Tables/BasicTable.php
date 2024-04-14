@@ -3,17 +3,18 @@
 namespace Workbench\App\Tables;
 
 use Jdw5\Vanguard\Table\Table;
+use Workbench\App\Enums\TestRole;
 use Workbench\App\Models\TestUser;
 use Jdw5\Vanguard\Refining\Sorts\Sort;
 use Jdw5\Vanguard\Table\Columns\Column;
+use Illuminate\Database\Eloquent\Builder;
 use Jdw5\Vanguard\Refining\Filters\Filter;
-use Jdw5\Vanguard\Refining\Filters\QueryFilter;
-use Jdw5\Vanguard\Refining\Filters\SelectFilter;
 use Jdw5\Vanguard\Refining\Options\Option;
 use Jdw5\Vanguard\Table\Actions\BulkAction;
 use Jdw5\Vanguard\Table\Actions\PageAction;
 use Jdw5\Vanguard\Table\Actions\InlineAction;
-use Workbench\App\Enums\TestRole;
+use Jdw5\Vanguard\Refining\Filters\QueryFilter;
+use Jdw5\Vanguard\Refining\Filters\SelectFilter;
 
 class BasicTable extends Table
 {
@@ -38,13 +39,13 @@ class BasicTable extends Table
     protected function defineRefinements(): array
     {
         return [
+            Filter::make('name')->loose(),
+            SelectFilter::make('role')->options(Option::enum(TestRole::class, 'label')),
+            // QueryFilter::make('id')->query(fn (Builder $builder, $value) => $builder->where('id', '>', $value))
+           
             Sort::make('created_at', 'newest')->desc()->default(),
             Sort::make('created_at', 'oldest')->asc(),   
             
-            Filter::make('name')->loose(),
-            // SelectFilter::make('role')->options(Option::enum(TestRole::class, 'label')),
-            SelectFilter::make('authority')->options(1, 2)
-            // QueryFilter::make('id')->query(fn ($builder, $value) => $builder->where('id', '>', $value))
         ];
     }
 
