@@ -97,7 +97,7 @@ abstract class Table extends Primitive implements Tables
         [
             'paging_options' => [
                 'options' => $this->getPaginationOptions(),
-                'term' => $this->showKey()
+                'key' => $this->showKey()
             ]
         ] : [];
 

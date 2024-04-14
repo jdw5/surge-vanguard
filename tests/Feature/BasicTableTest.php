@@ -3,8 +3,6 @@
 namespace Jdw5\Vanguard\Tests\Feature;
 
 use Jdw5\Vanguard\Tests\Testcase;
-use Workbench\App\Models\TestUser;
-use Workbench\App\Tables\BasicTable;
 
 class BasicTableTest extends Testcase
 {

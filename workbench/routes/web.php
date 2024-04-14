@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Workbench\App\Http\Controllers\BasicTableIndexController;
+use Workbench\App\Http\Controllers\PaginatedTableIndexController;
+use Workbench\App\Http\Controllers\PreferenceTableIndexController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +16,6 @@ use Workbench\App\Http\Controllers\BasicTableIndexController;
 |
 */
 
-Route::get('/basic', BasicTableIndexController::class)->name('test_users.index');
-// Route::get('/basic', BasicTableIndexController::class)->name('test_users.index');
+Route::get('/basic', BasicTableIndexController::class)->name('basic.index');
+Route::get('/paginated', PaginatedTableIndexController::class)->name('paginated.index');
+Route::get('/preference', PreferenceTableIndexController::class)->name('preference.index');

@@ -16,10 +16,10 @@ use Jdw5\Vanguard\Table\Actions\InlineAction;
 use Jdw5\Vanguard\Refining\Filters\QueryFilter;
 use Jdw5\Vanguard\Refining\Filters\SelectFilter;
 
-class PaginatedTable extends Table
+class PreferenceTable extends Table
 {
-    protected $defaultPerPage = 5;
-    protected $showKey = 'count';
+    protected $defaultPerPage = 10;
+    protected $showKey = 'show';
 
     protected function definePagination()
     {
@@ -31,19 +31,25 @@ class PaginatedTable extends Table
         ];
     }
 
+    protected function definePreferenceKey()
+    {
+        return 'cols';
+    }
+
     protected function defineQuery()
     {
         return TestUser::query()
-            ->select('id', 'name', 'email', 'created_at', 'role as type');
+            ->select('id', 'name', 'email', 'created_at', 'updated_at', 'role');
     }
 
     protected function defineColumns(): array
     {
         return [
             Column::make('id')->asKey()->hide(),
-            Column::make('name')->sort(),
-            Column::make('email')->fallback('No email')->sort(),
-            Column::make('created_at')->transform(fn ($value) => $value->format('d/m/Y H:i:s')),
+            Column::make('name')->preference()->sort(),
+            Column::make('email')->preference(true)->fallback('No email')->sort(),
+            Column::make('created_at')->preference(true)->transform(fn ($value) => $value->format('d/m/Y H:i:s')),
+            Column::make('updated_at')->preference()->transform(fn ($value) => $value->format('d/m/Y H:i:s')),
             Column::make('role')->label('User Role')
         ];
     }
