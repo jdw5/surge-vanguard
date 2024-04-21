@@ -16,6 +16,7 @@ use Jdw5\Vanguard\Concerns\HasRefinements;
 use Jdw5\Vanguard\Table\Concerns\HasModel;
 use Jdw5\Vanguard\Table\Concerns\HasQuery;
 use Jdw5\Vanguard\Table\Concerns\HasColumns;
+use Jdw5\Vanguard\Table\Concerns\HasConfiguration;
 use Jdw5\Vanguard\Table\Concerns\HasPagination;
 use Jdw5\Vanguard\Table\Concerns\HasPreferences;
 use Jdw5\Vanguard\Table\Exceptions\InvalidKeyException;
@@ -32,10 +33,10 @@ abstract class Table extends Primitive implements Tables
     use HasQuery;
     use HasMeta;
     use HasPreferences;
+    use HasConfiguration;
 
     private mixed $cachedMeta = null;
     private mixed $cachedData = null;
-    protected $applyColumns = true;
 
     public function __construct(mixed $data = null)
     {
@@ -191,7 +192,7 @@ abstract class Table extends Primitive implements Tables
         if (\method_exists($this, 'afterRetrieval')) {
             $this->query = $this->query->afterRetrieval([$this, 'afterRetrieval']);
         }
-        
+
         // Perform the pagination/get now the collection is retrieval
         switch ($this->getPaginateType())
         {

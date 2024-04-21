@@ -6,19 +6,30 @@ use Jdw5\Vanguard\Tests\Testcase;
 
 class PreferenceTableTest extends Testcase
 {
-    protected $preferences = [
+    protected $notPreferenced = [
+        'id',
+        'role'
+    ];
+
+    protected $notDefaultPreferences = [
         'name',
-        'email',
-        'created_at',
         'updated_at'
     ];
 
     protected $defaultPreferences = [
-        'name',
         'email',
         'created_at',
-        'updated_at'
     ];
+
+    protected function preferences()
+    {
+        return array_merge($this->notDefaultPreferences, $this->defaultPreferences);
+    }
+
+    protected function activeOnNone()
+    {
+        return array_merge($this->notPreferenced, $this->defaultPreferences);
+    }
     
     public function test_load_table()
     {
@@ -44,4 +55,37 @@ class PreferenceTableTest extends Testcase
         }
     }
 
+    public function test_table_has_correct_defaults()
+    {
+        $content = $this->get('/preference')->assertStatus(200)->getContent();
+        $table = json_decode($content)->table;
+
+        foreach ($table->preference_cols as $pref) {
+            if (in_array($pref->name, $this->activeOnNone())) {
+                $this->assertTrue($pref->active);
+            }
+            else {
+                $this->assertFalse($pref->active);
+            }
+        }
+    }
+
+    public function test_table_has_preference()
+    {
+        $key = 'name';
+        $content = $this->get("/preference?prefs=$key")->assertStatus(200)->getContent();
+        $table = json_decode($content)->table;
+
+        foreach ($table->preference_cols as $pref) {
+            if (in_array($pref->name, $this->notPreferenced)) {
+                $this->assertTrue($pref->active);
+            }
+            else if ($pref->name === $key) {
+                $this->assertTrue($pref->active);
+            }
+            else {
+                $this->assertFalse($pref->active);
+            }
+        }
+    }
 }
