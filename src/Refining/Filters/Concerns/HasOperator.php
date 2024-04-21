@@ -12,6 +12,12 @@ trait HasOperator
         return $this;
     }
 
+    public function setOperator(string|\Closure $operator): static
+    {
+        $this->operator = $operator;
+        return $this;
+    }
+
     public function gt(): static
     {
         $this->operator = '>';
