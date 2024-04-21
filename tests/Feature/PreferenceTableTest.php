@@ -6,6 +6,20 @@ use Jdw5\Vanguard\Tests\Testcase;
 
 class PreferenceTableTest extends Testcase
 {
+    protected $preferences = [
+        'name',
+        'email',
+        'created_at',
+        'updated_at'
+    ];
+
+    protected $defaultPreferences = [
+        'name',
+        'email',
+        'created_at',
+        'updated_at'
+    ];
+    
     public function test_load_table()
     {
         /** All tests are performed as endpoints, not making */
@@ -13,7 +27,7 @@ class PreferenceTableTest extends Testcase
 
         $this->assertJson($content);
         $table = json_decode($content)->table;
-        
+
         $this->assertEquals($table->meta->per_page, 10);
         $this->assertEquals($table->recordKey, 'id');
         $this->assertEquals(count($table->actions->inline), 3);

@@ -5,6 +5,7 @@ namespace Jdw5\Vanguard\Table\Concerns;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cookie;
+use Jdw5\Vanguard\Table\Columns\Column;
 
 /**
  * Trait HasPreferences
@@ -20,6 +21,7 @@ trait HasPreferences
     protected $preferences = null;
     protected $preferenceCookie = null;
     private $cachedPreferences = null;
+    protected $cookieDuration = 60 * 24 * 30;
 
     protected function definePreferenceKey()
     {
@@ -43,7 +45,7 @@ trait HasPreferences
 
     public function usesPreferenceCookie(): bool
     {
-        return !\is_null($this->preferenceCookie());
+        return !\is_null($this->getPreferenceCookie());
     }
 
     /**
@@ -56,10 +58,18 @@ trait HasPreferences
         return $this->evaluate($this->preferences ?? $this->definePreferenceKey());
     }
 
-    public function preferenceCookie(): string|null
+    public function getPreferenceCookie(): string|null
     {
         return $this->evaluate($this->preferenceCookie ?? $this->definePreferenceCookie());
     }
+
+    protected function getCookie(Request $request): ?string
+    {
+        if ($this->usesPreferenceCookie() && $request->hasCookie($this->getPreferenceCookie())) {
+            return $request->cookie($this->getPreferenceCookie());
+        }
+        return null;
+    } 
 
     /**
      * Update the dynamic actives from search query
@@ -71,20 +81,19 @@ trait HasPreferences
     {
         if (\is_null($request)) $request = request();
         if (!$this->hasPreferences()) return [];
-
+        
         $preferencedColumns = $request->query($this->preferences());
         
-        if (!empty($preferencedColumns)) {
-            $preferencedColumns = str_getcsv($preferencedColumns);
-        }
+        if (!empty($preferencedColumns)) $preferencedColumns = str_getcsv($preferencedColumns);
         else $preferencedColumns = [];
 
-
-        if ($this->usesPreferenceCookie() && $request->hasCookie($this->preferenceCookie()) && is_null($preferencedColumns)) {
-            $preferencedColumns = json_decode($request->cookie($this->preferenceCookie()));
-        } else if (count($preferencedColumns) > 0) {
-            Cookie::queue($this->preferenceCookie(), json_encode($preferencedColumns), 60 * 24 * 30);
+        if ($this->usesPreferenceCookie() && $request->hasCookie($this->getPreferenceCookie()) && \is_null($preferencedColumns)) {
+            $preferencedColumns = json_decode($request->cookie($this->getPreferenceCookie()));
+        } else if ($this->usesPreferenceCookie() && count($preferencedColumns) > 0) {
+            Cookie::queue($this->preferenceCookie(), json_encode($preferencedColumns), $this->cookieDuration);
         }
+        
+        /** It should then find the defaults */
         return $preferencedColumns;
     }
     
@@ -100,10 +109,10 @@ trait HasPreferences
 
     public function getPreferenceColumns(Collection $cols): array
     {
-        return $cols->map(fn ($column) => [
-            'name' => $column->getName(),
-            'label' => $column->getLabel(),
-            'active' => in_array($column->getName(), $this->getPreferences()),
+        return $cols->map(fn ($col) => [
+            'name' => $col->getName(),
+            'label' => $col->getLabel(),
+            'active' => $col->shouldBeDynamicallyShown($this->getPreferences())
         ])->values()->toArray();
     }
 }

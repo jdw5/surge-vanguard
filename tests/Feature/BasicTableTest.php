@@ -114,4 +114,15 @@ class BasicTableTest extends Testcase
         $this->assertEquals($table->meta->total, 3);
         $this->assertEquals($table->meta->empty, false);
     }
+
+    public function test_paginates()
+    {
+        $content = $this->get('/basic?page=2')->assertStatus(200)->getContent();
+        $table = json_decode($content)->table;
+        $this->assertEquals($table->meta->current_page, 2);
+        $this->assertEquals($table->meta->from, 11);
+        $this->assertEquals($table->meta->to, 12);
+        $this->assertEquals($table->meta->per_page, 10);
+        $this->assertEquals($table->meta->total, 12);
+    }
 }

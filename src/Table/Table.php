@@ -64,7 +64,8 @@ abstract class Table extends Primitive implements Tables
     {
         try { 
             return $this->getKey();
-        } catch (InvalidKeyException $e) {
+        } 
+        catch (InvalidKeyException $e) {
             return $this->findKeyColumn()?->getName() ?? throw $e;
         }
     }
@@ -186,16 +187,14 @@ abstract class Table extends Primitive implements Tables
             )
         );
 
-        // Apply afterQuery
-        if (method_exists($this, 'afterQuery')) $this->query($this->afterQuery($this->query));
-
+        // Check if the afterRetrieval method exists
+        if (\method_exists($this, 'afterRetrieval')) {
+            $this->query = $this->query->afterRetrieval([$this, 'afterRetrieval']);
+        }
+        
+        // Perform the pagination/get now the collection is retrieval
         switch ($this->getPaginateType())
         {
-            // case 'paginate':
-            //     $paginatedData = $this->query->paginate(...$this->getPagination())->withQueryString();
-            //     $this->cachedData = $paginatedData->items();
-            //     $this->cachedMeta = $this->generatePaginatorMeta($paginatedData);
-            //     break;
             case 'cursor':
                 $cursorPaginatedData = $this->query->cursorPaginate(...\array_values($this->getPagination()))->withQueryString();
                 $this->cachedData = $cursorPaginatedData->items();

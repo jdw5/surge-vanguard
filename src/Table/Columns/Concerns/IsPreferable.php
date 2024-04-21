@@ -67,7 +67,7 @@ trait IsPreferable
     public function shouldBeDynamicallyShown(array $cols): bool
     {
         if (!$this->isPreferable()) return true;
-        if (count($cols) === 0) return $this->isDefaultPreference();
+        if (empty($cols)) return $this->isDefaultPreference();
 
         return in_array($this->getName(), $cols);
     }

@@ -32,7 +32,7 @@ trait HasColumns
      * 
      * @return Collection
      */
-    protected function getTableColumns(bool $usePreferencedCols = false, array $preferencedCols = null): Collection
+    protected function getTableColumns(bool $usePreferencedCols = false, array $preferencedCols = []): Collection
     {
         if ($usePreferencedCols) {
             return $this->cachedColumns ??= collect($this->defineColumns())

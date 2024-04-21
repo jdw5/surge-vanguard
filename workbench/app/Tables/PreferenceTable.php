@@ -33,7 +33,7 @@ class PreferenceTable extends Table
 
     protected function definePreferenceKey()
     {
-        return 'cols';
+        return 'prefs';
     }
 
     protected function defineQuery()
