@@ -15,6 +15,7 @@ trait HasRoute
 {
     protected string $route;
     protected array|\Closure $parameters;
+    protected bool $named = true;
 
     /**
      * Set the route for the action and parameters (recommended)
@@ -51,6 +52,17 @@ trait HasRoute
     public function routeParameters(array|\Closure $parameters): static
     {
         $this->setRouteParameters($parameters);
+        return $this;
+    }
+
+    /**
+     * Set the route to not be named
+     * 
+     * @return static
+     */
+    public function unnamed(): static
+    {
+        $this->setNamed(false);
         return $this;
     }
 
@@ -116,6 +128,28 @@ trait HasRoute
     }
 
     /**
+     * Set whether this is a named route or not.
+     * Default is true.
+     * 
+     * @param bool $named
+     * @return void
+     */
+    private function setNamed(bool $named): void
+    {
+        $this->named = $named;
+    }
+
+    /**
+     * Get whether this is a named route or not
+     * 
+     * @return bool
+     */
+    private function getNamed(): bool
+    {
+        return $this->named;
+    }
+
+    /**
      * Resolve the endpoint for the action given a record
      * 
      * @return string if the endpoint could be resolved
@@ -126,6 +160,10 @@ trait HasRoute
         // Ensure the route is set
         if (!$this->hasRoute()) {
             return null;
+        }
+
+        if (!$this->getNamed()) {
+            return $this->getRoute();
         }
 
         // The endpoint does not depend on the record
