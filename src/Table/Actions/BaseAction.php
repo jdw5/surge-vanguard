@@ -7,6 +7,8 @@ use Jdw5\Vanguard\Concerns\HasName;
 use Jdw5\Vanguard\Concerns\HasLabel;
 use Jdw5\Vanguard\Concerns\IsIncludable;
 use Jdw5\Vanguard\Concerns\HasMetadata;
+use Jdw5\Vanguard\Table\Actions\Concerns\DependsOn;
+use Jdw5\Vanguard\Table\Actions\Concerns\HasEndpoint;
 
 abstract class BaseAction extends Primitive
 {
@@ -14,6 +16,7 @@ abstract class BaseAction extends Primitive
     use HasMetadata;
     use HasName;
     use IsIncludable;
+    use HasEndpoint;
 
     final public function __construct(string $name)
     {

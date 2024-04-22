@@ -102,6 +102,7 @@ The table requires a query to fetch data from. This can be supplied in a number 
 - Setting the property `protected $getModelClassesUsing` to be a function to resolve the model class
 - It will attempt to resolve the model class from the table name if none of the above are provided
 
+**DEPRECATED**
 To modify the query between the query you provide and the data being fetched, you can add another method `protected function beforeFetch(Builder|QueryBuilder $query)` to apply any additional constraints or modifications, most notably for changing sort orders.
 
 You should also define a unique key for each row in the table. This can be done by setting the property `protected $key` to the column name, or by chaining the method `asKey()` onto a column when defining it.

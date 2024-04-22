@@ -16,6 +16,18 @@ trait HasMethod
     protected string $method = 'post';
 
     /**
+     * Set the method for the endpoint
+     * 
+     * @param string $method
+     * @return static
+     */
+    public function method(string $method): static
+    {
+        $this->setMethod($method);
+        return $this;
+    }
+
+    /**
      * Get the method for the endpoint
      * 
      * @return string
@@ -26,19 +38,18 @@ trait HasMethod
     }
 
     /**
-     * Set the method for the endpoint
+     * Set the method for the endpoint quietly
      * 
      * @param string $method
-     * @return static
+     * @return void
      * @throws InvalidEndpointMethod
      */
-    public function setMethod(string $method): static
+    protected function setMethod(string $method): void
     {
         if (!\in_array($method, ['get', 'post', 'put', 'patch', 'delete'])) {
             throw InvalidEndpointMethod::invalid($method);
         }
         $this->method = $method;
-        return $this;
     }
     
 
@@ -49,7 +60,7 @@ trait HasMethod
      */
     public function get(): static
     {
-        return $this->setMethod('get');
+        return $this->method('get');
     }
 
     /**
@@ -59,7 +70,7 @@ trait HasMethod
      */
     public function post(): static
     {
-        return $this->setMethod('post');
+        return $this->method('post');
     }
 
     /**
@@ -69,7 +80,7 @@ trait HasMethod
      */
     public function put(): static
     {
-        return $this->setMethod('put');
+        return $this->method('put');
     }
 
     /**
@@ -79,7 +90,7 @@ trait HasMethod
      */
     public function patch(): static
     {
-        return $this->setMethod('patch');
+        return $this->method('patch');
     }
 
     /**
@@ -89,6 +100,6 @@ trait HasMethod
      */
     public function delete(): static
     {
-        return $this->setMethod('delete');
+        return $this->method('delete');
     }
 }

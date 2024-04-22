@@ -95,13 +95,7 @@ abstract class Table extends Primitive implements Tables
             'recordKey' => $this->tableKey(),
         ];
 
-        $pagination = $this->hasDynamicPagination() ? 
-        [
-            'paging_options' => [
-                'options' => $this->getPaginationOptions(),
-                'key' => $this->showKey()
-            ]
-        ] : [];
+        $pagination = $this->serializePagination();
 
         $preferences = $this->hasPreferences() ?
         [
@@ -124,14 +118,6 @@ abstract class Table extends Primitive implements Tables
     public function getFirstRecord(): mixed
     {
         return $this->getRecords()->first();
-    }
-
-    /**
-     * 
-     */
-    protected function beforeFetch(Builder|QueryBuilder $query) 
-    {
-        return $query;
     }
 
     /**

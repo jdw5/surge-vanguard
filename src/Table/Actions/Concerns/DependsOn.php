@@ -15,7 +15,8 @@ use Jdw5\Vanguard\Refining\Filters\Concerns\HasOperator;
 trait DependsOn
 {
     use HasOperator;
-    protected string $col = null;
+    
+    protected string $col;
     protected mixed $value = null;
     protected bool $dependsOn = false;
     protected bool $disabledOn = false;
@@ -55,12 +56,42 @@ trait DependsOn
     }
 
     /**
+     * Check if the action is dependent
+     * 
+     * @return bool
+     */
+    public function isDependent(): bool
+    {
+        return $this->evaluate($this->dependsOn);
+    }
+
+    /**
+     * Check if the action is disabled
+     * 
+     * @return bool
+     */
+    public function isDisabled(): bool
+    {
+        return $this->evaluate($this->disabledOn);
+    }
+
+    /**
+     * Check if the action has a conditional
+     * 
+     * @return bool
+     */
+    public function hasConditional(): bool
+    {
+        return $this->isDependent() || $this->isDisabled();
+    }
+
+    /**
      * Set the column to be used for the condition
      * 
      * @param string $colName
      * @return void
      */
-    protected function setCol(string $colName): void
+    private function setCol(string $colName): void
     {
         $this->col = $colName;
     }
@@ -81,7 +112,7 @@ trait DependsOn
      * @param mixed $value
      * @return void
      */
-    protected function setValue(mixed $value): void
+    private function setValue(mixed $value): void
     {
         $this->value = $value;
     }
@@ -114,36 +145,6 @@ trait DependsOn
     protected function disabled(): void
     {
         $this->disabledOn = true;
-    }
-
-    /**
-     * Check if the action is dependent
-     * 
-     * @return bool
-     */
-    public function isDependent(): bool
-    {
-        return $this->evaluate($this->dependsOn);
-    }
-
-    /**
-     * Check if the action is disabled
-     * 
-     * @return bool
-     */
-    public function isDisabled(): bool
-    {
-        return $this->evaluate($this->disabledOn);
-    }
-
-    /**
-     * Check if the action has a conditional
-     * 
-     * @return bool
-     */
-    public function hasConditional(): bool
-    {
-        return $this->isDependent() || $this->isDisabled();
     }
 
     /**

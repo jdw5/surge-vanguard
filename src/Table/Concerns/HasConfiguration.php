@@ -11,5 +11,11 @@ trait HasConfiguration
 {
     protected $applyColumns = true;
     protected $applyActions = true;
+    // Provide a method to applyColumns without dropping
+
+    protected $recordReservedTerms = [
+        'method',
+        'action',
+    ];
 }
 
