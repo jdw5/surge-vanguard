@@ -18,42 +18,90 @@ trait Applies
     protected $applyActionDependency = true;
     protected $applyActionRouting = true;
 
+    public function applyCases()
+    {
+        return decbin($this->applyColumns + $this->applyActionDependency * 2 + $this->applyActionRouting * 4);
+    }
+
     /**
-     * Apply the parameters to the records once to ensure iteration is not repeated
+     * Apply a column transformation to a single record
+     * 
+     * @param Column $column
+     * @param mixed $record
+     * @return mixed
      */
-    private function applyColumn(Column $column, mixed $record)
+    private function applyColumn(Column $column, mixed $record): mixed
     {
         $name = $column->getName();
         $field = $record instanceof Model ? $record[$name] : $record->{$name};
         return empty($field) ? $column->getFallback() : $column->transformUsing($field);
     }
 
-    public function applyColumns(array &$records, Collection $cols)
+    /**
+     * Add actions to a record based on conditional logic
+     * 
+     * @param mixed $record
+     * @param Collection $inlineActions
+     * @return Collection
+     */
+    private function applyConditional(mixed $record, Collection $inlineActions): Collection
     {
-        foreach ($records as &$row) {
-            foreach ($cols->toArray() as $col) {
-                $name = $col->getName();
-                $row[$name] = $this->applyColumn($col, $row);
-            }
+        return $inlineActions->filter(function (BaseAction $action) use ($record) {
+            return $action->evaluateConditional($record);
+        });
+    }
+
+    /**
+     * Add routing to the actions based on the record
+     * 
+     * @param mixed $record
+     * @param Collection $inlineActions
+     * @return Collection
+     */
+    private function applyRouting(mixed $record, Collection $inlineActions): Collection
+    {
+        return $inlineActions->map(function (BaseAction $action) use ($record) {
+            return array_merge($action->jsonSerialize(), $action->resolveEndpoint($record) ?? []);
+        });
+    }
+
+    /**
+     * Apply columns to the record (inplace)
+     * 
+     * @param array $record
+     * @param Collection $cols
+     * @return void
+     */
+    public function applyColumns(array &$record, Collection $cols): void
+    {
+        foreach ($cols->toArray() as $col) {
+            $name = $col->getName();
+            $record[$name] = $this->applyColumn($col, $record);
         }
     }
 
-    public function applyActionDependency(array &$records, Collection $inlineActions)
+    /**
+     * Apply action dependency to the record (inplace)
+     * 
+     * @param array $record
+     * @param Collection $inlineActions
+     * @return void
+     */
+    public function applyActionDependency(array &$record, Collection $inlineActions): void
     {
-        foreach ($records as &$record) {
-            $record['actions'] = $inlineActions->filter(function (BaseAction $action) use ($record) {
-                return $action->evaluateConditional($record);
-            });
-        }
+        $record['actions'] = $this->applyConditional($record, $inlineActions);
     }
 
-    public function applyActionRouting(array &$records, Collection $inlineActions)
+    /**
+     * Apply the action routing to the record (inplace)
+     * 
+     * @param array $record
+     * @param Collection $inlineActions
+     * @return void
+     */
+    public function applyActionRouting(array &$record, Collection $inlineActions): void
     {
-        foreach ($records as &$record) {
-            $record['actions'] = $inlineActions->map(function (BaseAction $action) use ($record) {
-                return array_merge($action->jsonSerialize(), $action->resolveEndpoint($record) ?? []);
-            });
-        }
+        $record['actions'] = $this->applyRouting($record, $inlineActions);
     }
 }
 
