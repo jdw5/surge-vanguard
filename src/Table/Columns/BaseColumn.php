@@ -22,7 +22,6 @@ use Jdw5\Vanguard\Table\Columns\Concerns\IsPreferable;
  * 
  * @property string $name
  * @property string $label
- * @property string $type
  * @property mixed $metadata
  * @property string $fallback
  * 
@@ -35,17 +34,23 @@ abstract class BaseColumn extends Primitive
     use HasFallback;
     use HasTransform;
     use HasSort;
-    use HasType;
     use IsIncludable;
     use IsHideable;
     use IsKey;
     use IsPreferable;
 
+    const RESERVED = [
+        'method',
+        'action',
+    ];
+
     public function __construct(string $name)
     {
+        if (in_array($name, static::RESERVED)) {
+            throw new \Exception("Column name '{$name}' is reserved and cannot be used.");
+        }
         $this->name($name);
         $this->label(str($name)->afterLast('.')->headline()->lower()->ucfirst());
-        $this->type('data');
         $this->setUp();
     }
 
@@ -67,7 +72,6 @@ abstract class BaseColumn extends Primitive
         return [
             /** Column information */
             'name' => $this->getName(),
-            'type' => $this->getType(),
             'label' => $this->getLabel(),
             'metadata' => $this->getMetadata(),
             'fallback' => $this->getFallback(),

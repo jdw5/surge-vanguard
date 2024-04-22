@@ -9,14 +9,13 @@ use Jdw5\Vanguard\Table\Columns\Column;
 use Jdw5\Vanguard\Table\Concerns\HasKey;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Table\Concerns\HasMeta;
 use Jdw5\Vanguard\Table\Contracts\Tables;
 use Jdw5\Vanguard\Concerns\HasRefinements;
 use Jdw5\Vanguard\Table\Concerns\HasModel;
 use Jdw5\Vanguard\Table\Concerns\HasQuery;
 use Jdw5\Vanguard\Table\Concerns\HasColumns;
-use Jdw5\Vanguard\Table\Concerns\HasConfiguration;
+use Jdw5\Vanguard\Table\Concerns\Applies;
 use Jdw5\Vanguard\Table\Concerns\HasPagination;
 use Jdw5\Vanguard\Table\Concerns\HasPreferences;
 use Jdw5\Vanguard\Table\Exceptions\InvalidKeyException;
@@ -33,7 +32,7 @@ abstract class Table extends Primitive implements Tables
     use HasQuery;
     use HasMeta;
     use HasPreferences;
-    use HasConfiguration;
+    use Applies;
 
     private mixed $cachedMeta = null;
     private mixed $cachedData = null;
@@ -176,7 +175,7 @@ abstract class Table extends Primitive implements Tables
 
         // Check if the afterRetrieval method exists
         if (\method_exists($this, 'afterRetrieval')) {
-            $this->query = $this->query->afterRetrieval([$this, 'afterRetrieval']);
+            $this->query = $this->query->afterRetrieval();
         }
 
         // Perform the pagination/get now the collection is retrieval

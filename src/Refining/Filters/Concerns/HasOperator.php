@@ -8,14 +8,13 @@ trait HasOperator
 
     public function operator(string|\Closure $operator): static
     {
-        $this->operator = $operator;
+        $this->setOperator($operator);
         return $this;
     }
 
-    public function setOperator(string|\Closure $operator): static
+    public function setOperator(string|\Closure $operator): void
     {
         $this->operator = $operator;
-        return $this;
     }
 
     public function gt(): static

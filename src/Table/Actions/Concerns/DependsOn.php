@@ -2,6 +2,7 @@
 
 namespace Jdw5\Vanguard\Table\Actions\Concerns;
 
+use Illuminate\Database\Eloquent\Model;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasOperator;
 
 /**
@@ -156,5 +157,48 @@ trait DependsOn
     protected function setMode(bool $mode): void
     {
         $this->dependsOn = $mode;
+    }
+
+    /**
+     * Evaluate whether to show or hide the action for the given record
+     * 
+     * @param mixed $record
+     * @return bool
+     */
+    public function evaluateConditional(mixed $record): bool
+    {
+        if (!$this->hasConditional()) {
+            return true;
+        }
+
+        return $this->dependsOn ? $this->evaluateDependency($record) : !$this->evaluateDependency($record);
+    }
+
+    /**
+     * Evaluate the dependent condition
+     * 
+     * @param mixed $record
+     * @return bool
+     * @throws \InvalidArgumentException
+     */
+    protected function evaluateDependency(mixed $record): bool
+    {
+        $field = $record instanceof Model ? $record[$this->getCol()] : $record->{$this->getCol()};
+        switch ($this->getOperator()) {
+            case '=':
+                return $field == $this->getValue();
+            case '!=':
+                return $field != $this->getValue();
+            case '>':
+                return $field > $this->getValue();
+            case '>=':
+                return $field >= $this->getValue();
+            case '<':
+                return $field < $this->getValue();
+            case '<=':
+                return $field <= $this->getValue();
+            default:
+                throw new \InvalidArgumentException("Unsupported operator: " . $this->getOperator());
+        }
     }
 }
