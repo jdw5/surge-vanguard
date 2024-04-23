@@ -20,7 +20,7 @@ trait Applies
 
     public function applyCases()
     {
-        return decbin($this->applyColumns + $this->applyActionDependency * 2 + $this->applyActionRouting * 4);
+        return $this->applyColumns + $this->applyActionDependency * 2 + $this->applyActionRouting * 4;
     }
 
     /**
@@ -30,9 +30,10 @@ trait Applies
      * @param mixed $record
      * @return mixed
      */
-    private function applyColumn(Column $column, mixed $record): mixed
+    protected function applyColumn(Column $column, mixed $record): mixed
     {
         $name = $column->getName();
+        // dd($record, $column->getName());
         $field = $record instanceof Model ? $record[$name] : $record->{$name};
         return empty($field) ? $column->getFallback() : $column->transformUsing($field);
     }
@@ -44,7 +45,7 @@ trait Applies
      * @param Collection $inlineActions
      * @return Collection
      */
-    private function applyConditional(mixed $record, Collection $inlineActions): Collection
+    protected function applyActionConditional(mixed $record, Collection $inlineActions): Collection
     {
         return $inlineActions->filter(function (BaseAction $action) use ($record) {
             return $action->evaluateConditional($record);
@@ -58,7 +59,7 @@ trait Applies
      * @param Collection $inlineActions
      * @return Collection
      */
-    private function applyRouting(mixed $record, Collection $inlineActions): Collection
+    protected function applyRouting(mixed $record, Collection $inlineActions): Collection
     {
         return $inlineActions->map(function (BaseAction $action) use ($record) {
             return array_merge($action->jsonSerialize(), $action->resolveEndpoint($record) ?? []);
@@ -72,7 +73,7 @@ trait Applies
      * @param Collection $cols
      * @return void
      */
-    public function applyColumns(array &$record, Collection $cols): void
+    public function applyColumns(mixed &$record, Collection $cols): void
     {
         foreach ($cols->toArray() as $col) {
             $name = $col->getName();
@@ -87,9 +88,9 @@ trait Applies
      * @param Collection $inlineActions
      * @return void
      */
-    public function applyActionDependency(array &$record, Collection $inlineActions): void
+    public function applyActionDependency(mixed &$record, Collection $inlineActions): void
     {
-        $record['actions'] = $this->applyConditional($record, $inlineActions);
+        $record['actions'] = $this->applyActionConditional($record, $inlineActions);
     }
 
     /**
@@ -99,7 +100,7 @@ trait Applies
      * @param Collection $inlineActions
      * @return void
      */
-    public function applyActionRouting(array &$record, Collection $inlineActions): void
+    public function applyActionRouting(mixed &$record, Collection $inlineActions): void
     {
         $record['actions'] = $this->applyRouting($record, $inlineActions);
     }

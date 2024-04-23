@@ -5,19 +5,20 @@ namespace Jdw5\Vanguard\Table;
 use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Concerns\HasId;
 use Jdw5\Vanguard\Concerns\HasActions;
+use Illuminate\Database\Eloquent\Model;
 use Jdw5\Vanguard\Table\Columns\Column;
 use Jdw5\Vanguard\Table\Concerns\HasKey;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Jdw5\Vanguard\Table\Concerns\Applies;
 use Jdw5\Vanguard\Table\Concerns\HasMeta;
 use Jdw5\Vanguard\Table\Contracts\Tables;
 use Jdw5\Vanguard\Concerns\HasRefinements;
 use Jdw5\Vanguard\Table\Concerns\HasModel;
-use Jdw5\Vanguard\Table\Concerns\HasQuery;
+use Jdw5\Vanguard\Table\Concerns\HasDatabaseQuery;
 use Jdw5\Vanguard\Table\Concerns\HasColumns;
-use Jdw5\Vanguard\Table\Concerns\Applies;
 use Jdw5\Vanguard\Table\Concerns\HasPagination;
 use Jdw5\Vanguard\Table\Concerns\HasPreferences;
+use Jdw5\Vanguard\Table\Concerns\HasRecords;
 use Jdw5\Vanguard\Table\Exceptions\InvalidKeyException;
 
 abstract class Table extends Primitive implements Tables
@@ -29,17 +30,18 @@ abstract class Table extends Primitive implements Tables
     use HasPagination;
     use HasRefinements;
     use HasKey;
-    use HasQuery;
+    use HasDatabaseQuery;
     use HasMeta;
     use HasPreferences;
     use Applies;
+    use HasRecords;
 
     private mixed $cachedMeta = null;
     private mixed $cachedData = null;
 
     public function __construct(mixed $data = null)
     {
-        $this->query($data);
+        $this->setQuery($data);
     }
 
     /**
@@ -111,7 +113,7 @@ abstract class Table extends Primitive implements Tables
      */
     public function getRecords(): mixed
     {
-        return $cachedData ??= $this->pipelineWithData();
+        return $this->cachedData ??= $this->pipelineWithData();
     }
 
     public function getFirstRecord(): mixed
@@ -126,7 +128,7 @@ abstract class Table extends Primitive implements Tables
      */
     public function getMeta(): array
     {
-        return $cachedMeta ??= $this->pipelineWithMeta();
+        return $this->cachedMeta ??= $this->pipelineWithMeta();
     }
 
     /**
@@ -179,37 +181,82 @@ abstract class Table extends Primitive implements Tables
         }
 
         // Perform the pagination/get now the collection is retrieval
-        switch ($this->getPaginateType())
-        {
-            case 'cursor':
-                $cursorPaginatedData = $this->query->cursorPaginate(...\array_values($this->getPagination()))->withQueryString();
-                $this->cachedData = $cursorPaginatedData->items();
-                $this->cachedMeta = $this->generateCursorPaginatorMeta($cursorPaginatedData);
-                break;
-            case 'get':
-                $this->cachedData = $this->query->get();
-                $this->cachedMeta = $this->generateUnpaginatedMeta($this->cachedData);
-                break;
-            default:
-                $paginatedData = $this->query->paginate(...$this->getPagination())->withQueryString();
-                $this->cachedData = $paginatedData->items();
-                $this->cachedMeta = $this->generatePaginatorMeta($paginatedData);
-                break;
-        }
+        // switch ($this->getPaginateType())
+        // {
+        //     case 'cursor':
+        //         $cursorPaginatedData = $this->query->cursorPaginate(...\array_values($this->getPagination()))->withQueryString();
+        //         $this->cachedData = $cursorPaginatedData->items();
+        //         $this->cachedMeta = $this->generateCursorPaginatorMeta($cursorPaginatedData);
+        //         break;
+        //     case 'get':
+        //         $this->cachedData = $this->query->get();
+        //         $this->cachedMeta = $this->generateUnpaginatedMeta($this->cachedData);
+        //         break;
+        //     default:
+        //         $paginatedData = $this->query->paginate(...$this->getPagination())->withQueryString();
+        //         $this->cachedData = $paginatedData->items();
+        //         $this->cachedMeta = $this->generatePaginatorMeta($paginatedData);
+        //         break;
+        // }
 
-        if ($this->applyColumns)
-        {
-            $this->cachedData = collect($this->cachedData)->map(function ($row) {
-                return $this->getTableColumns()->reduce(function ($carry, Column $column) use ($row) {
-                    $name = $column->getName();
-                    if ($row instanceof Model) {
-                        $carry[$name] = empty($row[$name]) ? $column->getFallback() : $column->transformUsing($row[$name]);
-                    } else {
-                        $carry[$name] = empty($row->{$name}) ? $column->getFallback() : $column->transformUsing($row->{$name});
-                    }
-                    return $carry;
-                }, []);
-            });      
-        }
+        // if ($this->applyColumns)
+        // {
+        //     $this->cachedData = collect($this->cachedData)->map(function ($row) {
+        //         return $this->getTableColumns()->reduce(function ($carry, Column $column) use ($row) {
+        //             $name = $column->getName();
+        //             if ($row instanceof Model) {
+        //                 $carry[$name] = empty($row[$name]) ? $column->getFallback() : $column->transformUsing($row[$name]);
+        //             } else {
+        //                 $carry[$name] = empty($row->{$name}) ? $column->getFallback() : $column->transformUsing($row->{$name});
+        //             }
+        //             return $carry;
+        //         }, []);
+        //     });      
+        // }
+
+        // switch ($this->applyCases()) {
+        //     # All three 
+        //     case 0b111:
+        //         foreach ($this->cachedData as $record) {
+        //             $this->applyColumns($record, $this->getTableColumns());
+        //             $this->applyActionRouting($record, $this->applyActionConditional($record, $this->getInlineActions()->values()));
+        //         }
+        //         break;
+        //     case 0b110:
+        //         foreach ($this->cachedData as $record) {
+        //             $this->applyActionRouting($record, $this->applyActionConditional($record, $this->getInlineActions()->values()));
+        //         }
+        //         break;
+        //     case 0b101:
+        //         foreach ($this->cachedData as $record) {
+        //             $this->applyColumns($record, $this->getTableColumns());
+        //             $this->applyActionRouting($record, $this->getInlineActions()->values());
+        //         }
+        //         break;
+        //     case 0b011:
+        //         foreach ($this->cachedData as $record) {
+        //             $this->applyColumns($record, $this->getTableColumns());
+        //             $this->applyActionDependency($record, $this->getInlineActions()->values());
+        //         }
+        //         break;
+
+        //     case 0b100:
+        //         foreach ($this->cachedData as $record) {
+        //             $this->applyActionRouting($record, $this->getInlineActions()->values());
+        //         }
+        //         break;
+        //     case 0b010:
+        //         foreach ($this->cachedData as $record) {
+        //             $this->applyActionDependency($record, $this->getInlineActions()->values());
+        //         }
+        //         break;
+        //     case 0b001:
+        //         foreach ($this->cachedData as $record) {
+        //             $this->applyColumns($record, $this->getTableColumns());
+        //         }
+        //         break;
+        // }
+
+        // dd($this->cachedData);
     }
 }

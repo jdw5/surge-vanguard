@@ -4,8 +4,9 @@ namespace Jdw5\Vanguard\Table\Concerns;
 
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Collection;
 
-trait HasQuery
+trait HasDatabaseQuery
 {
     private mixed $query = null;
 
@@ -31,8 +32,18 @@ trait HasQuery
         return !\is_null($this->query);
     }
 
-    public function getQuery(): EloquentBuilder|QueryBuilder
+    public function getQuery(): mixed
     {
         return $this->query;
+    }
+
+    protected function setQuery(EloquentBuilder|QueryBuilder $query): void
+    {
+        $this->query = $query;
+    }
+
+    public function refineQuery(Collection $refiners): void
+    {
+        $this->query->withRefinements($refiners);
     }
 }
