@@ -34,7 +34,7 @@ trait HasDatabaseQuery
 
     public function getQuery(): mixed
     {
-        return $this->query;
+        return $this->evaluate($this->query);
     }
 
     protected function setQuery(mixed $query): void
@@ -44,6 +44,24 @@ trait HasDatabaseQuery
 
     public function refineQuery(Collection $refiners): void
     {
-        $this->query->withRefinements($refiners);
+        $this->setQuery($this->query->withRefinements($refiners));
+    }
+
+    public function isEloquentBuilder(): bool
+    {
+        return $this->query instanceof EloquentBuilder;
+    }
+
+    public function isQueryBuilder(): bool
+    {
+        return $this->query instanceof QueryBuilder;
+    }
+
+    /**
+     * Set the query to null, allowing it to be garbage collected.
+     */
+    public function freeQuery(): void
+    {
+        $this->query = null;
     }
 }

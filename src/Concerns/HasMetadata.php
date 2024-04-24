@@ -8,9 +8,13 @@ trait HasMetadata
 
     public function metadata(array|\Closure $metadata): static
     {
-        $this->metadata = $metadata;
-
+        $this->setMetadata($metadata);
         return $this;
+    }
+
+    protected function setMetadata(array|\Closure $metadata): void
+    {
+        $this->metadata = $metadata;
     }
 
     public function getMetadata(): array

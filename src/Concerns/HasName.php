@@ -8,9 +8,13 @@ trait HasName
 
     public function name(string|\Closure $name): static
     {
-        $this->name = $name;
-
+        $this->setName($name);
         return $this;
+    }
+
+    protected function setName(string|\Closure $name): void
+    {
+        $this->name = $name;
     }
 
     public function getName(): string

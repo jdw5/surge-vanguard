@@ -9,11 +9,16 @@ use Jdw5\Vanguard\Refining\Filters\BaseFilter;
 
 trait HasRefinements
 {
-    private mixed $cachedRefinements = null;
+    private mixed $refinements = null;
+
+    protected function defineRefinements(): array
+    {
+        return [];
+    }
 
     protected function getRefinements(): Collection
     {
-        return $this->cachedRefinements ??= collect($this->defineRefinements())
+        return $this->refinements ??= collect($this->defineRefinements())
             ->filter(static fn (Refinement $refinement): bool => !$refinement->isExcluded());
     }
 
@@ -36,10 +41,5 @@ trait HasRefinements
             }
             return [];
         })->toArray();
-    }
-
-    protected function defineRefinements(): array
-    {
-        return [];
     }
 }

@@ -11,10 +11,8 @@ trait HasRecords
      * 
      * @return mixed
      */
-    public function getRecords(): mixed
-    {
-        return $this->records ??= $this->pipelineWithData();
-    }
+    
+    abstract public function getRecords(): array;
 
     /**
      * Get the first record from the table.
@@ -25,6 +23,4 @@ trait HasRecords
     {
         return $this->getRecords()->first();
     }
-
-    abstract protected function pipelineWithData(): mixed;
 }

@@ -26,10 +26,10 @@ trait Applies
     /** Scope the action endpoints to the records */
     // protected bool $scopeEndpoints = true;
 
-    public function applyCases()
-    {
-        return $this->applyColumns + $this->applyActionDependency * 2 + $this->applyActionRouting * 4;
-    }
+    // public function applyCases()
+    // {
+    //     return $this->applyColumns + $this->applyActionDependency * 2 + $this->applyActionRouting * 4;
+    // }
 
     /**
      * Apply a column transformation to a single record

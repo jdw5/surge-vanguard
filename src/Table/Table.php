@@ -18,6 +18,7 @@ use Jdw5\Vanguard\Table\Concerns\HasDatabaseQuery;
 use Jdw5\Vanguard\Table\Concerns\HasColumns;
 use Jdw5\Vanguard\Table\Concerns\HasPagination;
 use Jdw5\Vanguard\Table\Concerns\HasPreferences;
+use Jdw5\Vanguard\Table\Concerns\HasProcess;
 use Jdw5\Vanguard\Table\Concerns\HasRecords;
 use Jdw5\Vanguard\Table\Exceptions\InvalidKeyException;
 
@@ -35,11 +36,9 @@ abstract class Table extends Primitive implements Tables
     use HasPreferences;
     use Applies;
     use HasRecords;
+    use HasProcess;
 
-    private mixed $cachedMeta = null;
-    private mixed $cachedData = null;
-
-    public function __construct(mixed $data = null)
+    public function __construct($data = null)
     {
         $this->setQuery($data);
     }
@@ -50,7 +49,7 @@ abstract class Table extends Primitive implements Tables
      * @param Builder|null $data
      * @return static
      */
-    public static function make(mixed $data = null): static
+    public static function make($data = null): static
     {
         return new static($data);
     }
@@ -116,21 +115,12 @@ abstract class Table extends Primitive implements Tables
     /**
      * Retrieve the records from the table.
      * 
-     * @return mixed
+     * @return array
      */
-    public function getRecords(): mixed
+    public function getRecords(): array
     {
-        return $this->cachedData ??= $this->pipelineWithData();
-    }
-
-    /**
-     * Retrieve the first record from the table.
-     * 
-     * @return mixed
-     */
-    public function getFirstRecord(): mixed
-    {
-        return $this->getRecords()->first();
+        $this->process();
+        return $this->records;
     }
 
     /**
@@ -140,29 +130,8 @@ abstract class Table extends Primitive implements Tables
      */
     public function getMeta(): array
     {
-        return $this->cachedMeta ??= $this->pipelineWithMeta();
-    }
-
-    /**
-     * Perform the pipeline and retrieve the data
-     * 
-     * @return mixed
-     */
-    public function pipelineWithData(): mixed 
-    {
-        $this->pipeline();
-        return $this->cachedData;
-    }
-
-    /**
-     * Perform the pipeline and retrieve the metadata
-     * 
-     * @return mixed
-     */
-    public function pipelineWithMeta(): mixed
-    {
-        $this->pipeline();
-        return $this->cachedMeta;
+        $this->process();
+        return $this->meta;
     }
 
     /**
@@ -170,109 +139,30 @@ abstract class Table extends Primitive implements Tables
      * 
      * @return void
      */
-    protected function pipeline(): void
+    public function tablePipeline(): void
     {
-        # Should be removed
-        if (!\is_null($this->cachedData)) return;
-
-        if (!$this->hasQuery()) { 
-            $this->query = $this->defineQuery();
+        if (! $this->hasQuery()) { 
+            $this->setQuery($this->defineQuery());
         }
         
         # Apply the default refiners
+        $this->refineQuery($this->getRefinements());
 
         # Apply the sorts from sortable columns
-        $this->query($this->query
-            ->withRefinements($this->getRefinements())
-            ->withRefinements($this->getSortableColumns()->map
-                ->getSort()
-                ->filter()
-                ->toArray()
-            )
-        );
+        $this->refineQuery($this->getSortableColumns()->map->getSort()->filter());
 
-        // Check if the afterRetrieval method exists
-        // if (\method_exists($this, 'afterRetrieval')) {
-        //     $this->query = $this->query->afterRetrieval();
-        // }
+        [$this->records, $this->meta] = $this->retrieveRecords($this->getQuery());
 
-        // Perform the pagination/get now the collection is retrieval
-        switch ($this->getPaginateType())
-        {
-            case 'cursor':
-                $cursorPaginatedData = $this->query->cursorPaginate(...\array_values($this->getPagination()))->withQueryString();
-                $this->cachedData = $cursorPaginatedData->items();
-                $this->cachedMeta = $this->generateCursorPaginatorMeta($cursorPaginatedData);
-                break;
-            case 'get':
-                $this->cachedData = $this->query->get();
-                $this->cachedMeta = $this->generateUnpaginatedMeta($this->cachedData);
-                break;
-            default:
-                $paginatedData = $this->query->paginate(...$this->getPagination())->withQueryString();
-                $this->cachedData = $paginatedData->items();
-                $this->cachedMeta = $this->generatePaginatorMeta($paginatedData);
-                break;
-        }
+        // Free the query
+        $this->freeQuery();
+        
+        // Apply the scopes
+        // First scope is whether or not to drop non-cols
+        // 
+        // Next scope is whether or not to apply the column information
 
-        // if ($this->applyColumns)
-        // {
-        //     $this->cachedData = collect($this->cachedData)->map(function ($row) {
-        //         return $this->getTableColumns()->reduce(function ($carry, Column $column) use ($row) {
-        //             $name = $column->getName();
-        //             if ($row instanceof Model) {
-        //                 $carry[$name] = empty($row[$name]) ? $column->getFallback() : $column->transformUsing($row[$name]);
-        //             } else {
-        //                 $carry[$name] = empty($row->{$name}) ? $column->getFallback() : $column->transformUsing($row->{$name});
-        //             }
-        //             return $carry;
-        //         }, []);
-        //     });      
-        // }
+        // Next scope is to scope the actions to records
 
-        // switch ($this->applyCases()) {
-        //     # All three 
-        //     case 0b111:
-        //         foreach ($this->cachedData as $record) {
-        //             $this->applyColumns($record, $this->getTableColumns());
-        //             $this->applyActionRouting($record, $this->applyActionConditional($record, $this->getInlineActions()->values()));
-        //         }
-        //         break;
-        //     case 0b110:
-        //         foreach ($this->cachedData as $record) {
-        //             $this->applyActionRouting($record, $this->applyActionConditional($record, $this->getInlineActions()->values()));
-        //         }
-        //         break;
-        //     case 0b101:
-        //         foreach ($this->cachedData as $record) {
-        //             $this->applyColumns($record, $this->getTableColumns());
-        //             $this->applyActionRouting($record, $this->getInlineActions()->values());
-        //         }
-        //         break;
-        //     case 0b011:
-        //         foreach ($this->cachedData as $record) {
-        //             $this->applyColumns($record, $this->getTableColumns());
-        //             $this->applyActionDependency($record, $this->getInlineActions()->values());
-        //         }
-        //         break;
-
-        //     case 0b100:
-        //         foreach ($this->cachedData as $record) {
-        //             $this->applyActionRouting($record, $this->getInlineActions()->values());
-        //         }
-        //         break;
-        //     case 0b010:
-        //         foreach ($this->cachedData as $record) {
-        //             $this->applyActionDependency($record, $this->getInlineActions()->values());
-        //         }
-        //         break;
-        //     case 0b001:
-        //         foreach ($this->cachedData as $record) {
-        //             $this->applyColumns($record, $this->getTableColumns());
-        //         }
-        //         break;
-        // }
-
-        // dd($this->cachedData);
+        // Next scope is to scope the routing of the actions
     }
 }

@@ -10,11 +10,21 @@ use Illuminate\Support\Collection;
 
 trait HasActions
 {
-    protected mixed $cachedActions = null;
+    protected mixed $actions = null;
+
+    /**
+     * Define the actions for the table.
+     * 
+     * @return array
+     */
+    protected function defineActions(): array
+    {
+        return [];
+    }
 
     public function getActions(): Collection
     {
-        return $this->cachedActions ??= collect($this->defineActions())
+        return $this->actions ??= collect($this->defineActions())
             ->filter(static fn (BaseAction $action): bool => !$action->isExcluded());
     }
 
@@ -36,10 +46,5 @@ trait HasActions
     public function getDefaultAction(): ?BaseAction
     {
         return $this->getActions()->first(static fn (BaseAction $action): bool => $action instanceof InlineAction && $action->isDefault());
-    }
-
-    protected function defineActions(): array
-    {
-        return [];
     }
 }
