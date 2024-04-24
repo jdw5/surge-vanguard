@@ -19,9 +19,12 @@ trait Applies
     protected bool $applyActionRouting = true;
 
     // New
+    /** Scope the columns and reduce to only take those which are defined */
     // protected bool $scopeColumns = true;
+    /** Scope the actions to the records */
     // protected bool $scopeActions = true;
-    // protected bool $routeActions = true;
+    /** Scope the action endpoints to the records */
+    // protected bool $scopeEndpoints = true;
 
     public function applyCases()
     {
