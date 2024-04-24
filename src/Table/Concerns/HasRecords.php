@@ -6,18 +6,25 @@ trait HasRecords
 {
     protected mixed $records = null;
 
-    public function getRecords(bool $force = false): mixed
+    /**
+     * Get the records for the table, if they have not been set, set them.
+     * 
+     * @return mixed
+     */
+    public function getRecords(): mixed
     {
-        if ($force) {
-            $this->records = $this->pipelineWithRecords();
-        }
-        return $this->records ??= $this->pipelineWithRecords();
+        return $this->records ??= $this->pipelineWithData();
     }
 
+    /**
+     * Get the first record from the table.
+     * 
+     * @return mixed
+     */
     public function getFirstRecord(): mixed
     {
         return $this->getRecords()->first();
     }
 
-    abstract protected function pipelineWithRecords(): mixed;
+    abstract protected function pipelineWithData(): mixed;
 }

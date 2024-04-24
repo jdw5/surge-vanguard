@@ -14,9 +14,14 @@ use Jdw5\Vanguard\Table\Columns\Column;
  */
 trait Applies
 {
-    protected $applyColumns = true;
-    protected $applyActionDependency = true;
-    protected $applyActionRouting = true;
+    protected bool $applyColumns = true;
+    protected bool $applyActionDependency = true;
+    protected bool $applyActionRouting = true;
+
+    // New
+    // protected bool $scopeColumns = true;
+    // protected bool $scopeActions = true;
+    // protected bool $routeActions = true;
 
     public function applyCases()
     {

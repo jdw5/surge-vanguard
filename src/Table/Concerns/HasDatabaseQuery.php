@@ -16,7 +16,7 @@ trait HasDatabaseQuery
      * @param Builder|null $query
      * @return Builder|null
      */
-    public function query(EloquentBuilder|QueryBuilder $query = null): mixed
+    public function query(mixed $query = null): mixed
     {
         if ($query) $this->query = $query;
         return $this->query;
@@ -37,7 +37,7 @@ trait HasDatabaseQuery
         return $this->query;
     }
 
-    protected function setQuery(EloquentBuilder|QueryBuilder $query): void
+    protected function setQuery(mixed $query): void
     {
         $this->query = $query;
     }

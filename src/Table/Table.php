@@ -73,6 +73,13 @@ abstract class Table extends Primitive implements Tables
     }
 
     /**
+     * Retrieve the table as an array
+     */
+    public function toArray(): array
+    {
+        return $this->jsonSerialize();
+    }
+    /**
      * Serialize the table to JSON.
      * 
      * @return array
@@ -116,6 +123,11 @@ abstract class Table extends Primitive implements Tables
         return $this->cachedData ??= $this->pipelineWithData();
     }
 
+    /**
+     * Retrieve the first record from the table.
+     * 
+     * @return mixed
+     */
     public function getFirstRecord(): mixed
     {
         return $this->getRecords()->first();
@@ -160,12 +172,16 @@ abstract class Table extends Primitive implements Tables
      */
     protected function pipeline(): void
     {
+        # Should be removed
         if (!\is_null($this->cachedData)) return;
 
         if (!$this->hasQuery()) { 
             $this->query = $this->defineQuery();
         }
         
+        # Apply the default refiners
+
+        # Apply the sorts from sortable columns
         $this->query($this->query
             ->withRefinements($this->getRefinements())
             ->withRefinements($this->getSortableColumns()->map
@@ -176,28 +192,28 @@ abstract class Table extends Primitive implements Tables
         );
 
         // Check if the afterRetrieval method exists
-        if (\method_exists($this, 'afterRetrieval')) {
-            $this->query = $this->query->afterRetrieval();
-        }
+        // if (\method_exists($this, 'afterRetrieval')) {
+        //     $this->query = $this->query->afterRetrieval();
+        // }
 
         // Perform the pagination/get now the collection is retrieval
-        // switch ($this->getPaginateType())
-        // {
-        //     case 'cursor':
-        //         $cursorPaginatedData = $this->query->cursorPaginate(...\array_values($this->getPagination()))->withQueryString();
-        //         $this->cachedData = $cursorPaginatedData->items();
-        //         $this->cachedMeta = $this->generateCursorPaginatorMeta($cursorPaginatedData);
-        //         break;
-        //     case 'get':
-        //         $this->cachedData = $this->query->get();
-        //         $this->cachedMeta = $this->generateUnpaginatedMeta($this->cachedData);
-        //         break;
-        //     default:
-        //         $paginatedData = $this->query->paginate(...$this->getPagination())->withQueryString();
-        //         $this->cachedData = $paginatedData->items();
-        //         $this->cachedMeta = $this->generatePaginatorMeta($paginatedData);
-        //         break;
-        // }
+        switch ($this->getPaginateType())
+        {
+            case 'cursor':
+                $cursorPaginatedData = $this->query->cursorPaginate(...\array_values($this->getPagination()))->withQueryString();
+                $this->cachedData = $cursorPaginatedData->items();
+                $this->cachedMeta = $this->generateCursorPaginatorMeta($cursorPaginatedData);
+                break;
+            case 'get':
+                $this->cachedData = $this->query->get();
+                $this->cachedMeta = $this->generateUnpaginatedMeta($this->cachedData);
+                break;
+            default:
+                $paginatedData = $this->query->paginate(...$this->getPagination())->withQueryString();
+                $this->cachedData = $paginatedData->items();
+                $this->cachedMeta = $this->generatePaginatorMeta($paginatedData);
+                break;
+        }
 
         // if ($this->applyColumns)
         // {

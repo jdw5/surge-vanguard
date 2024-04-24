@@ -10,6 +10,13 @@ trait HasEndpoint
     use HasMethod;
     use HasRoute;
 
+    public function endpoint(string $method, ...$args): static
+    {
+        $this->setMethod($method);
+        $this->route(...$args);
+        return $this;
+    }
+    
     public function hasEndpoint(): bool
     {
         return $this->hasRoute();

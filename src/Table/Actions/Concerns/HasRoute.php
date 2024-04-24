@@ -18,7 +18,7 @@ trait HasRoute
     protected bool $named = true;
 
     /**
-     * Set the route for the action and parameters (recommended)
+     * Set the route for the action and the parameters to be used
      * 
      * @param string $route
      * @param array|\Closure $params

@@ -5,54 +5,52 @@ namespace Jdw5\Vanguard\Table\Actions\Concerns;
 use Illuminate\Database\Eloquent\Model;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasOperator;
 
-/**
- * Trait IsIncludable
- * 
- * Adds the ability to provide conditions to include classes
- * 
- * @property bool|\Closure $isExcluded
- * @property bool|\Closure $isIncluded
- */
-trait DependsOn
+trait HasRecordDependency
 {
     use HasOperator;
     
-    protected string $col;
-    protected mixed $value = null;
-    protected bool $dependsOn = false;
-    protected bool $disabledOn = false;
+    protected $evaluateBy;
+    protected mixed $col;
+    protected mixed $value;
+    private bool $conditional;
 
     /**
-     * Set a column to conditionally display this action
+     * Set the presence of an action to be dependent on condition
      * 
-     * @param string $colName
+     * @param string|\Closure $condition
      * @param string $operator
      * @param mixed $value
      * @return static
      */
-    public function dependsOn(string $colName, string $operator = '=', $value): static
+    public function whenRecord($condition, $operator = '=', $value = null): static
     {
-        $this->setCol($colName);
+        $this->affirmConditional();
+        $this->setEvaluateBy($condition);
+        if ($condition instanceof \Closure && count(func_get_args()) === 1) {
+            return $this;
+        }
         $this->setOperator($operator);
         $this->setValue($value);
-        $this->dependent();
         return $this;
     }
 
     /**
-     * Set a column to conditionally not display this action
+     * Set the presence of an action to be dependent on a negated condition
      * 
-     * @param string $colName
+     * @param string|\Closure $condition
      * @param string $operator
      * @param mixed $value
      * @return static
      */
-    public function disabledOn(string $colName, string $operator = '=', $value): static
+    public function whenNotRecord($condition, $operator = null, $value = null): static
     {
-        $this->setCol($colName);
+        $this->negateConditional();
+        $this->setEvaluateBy($condition);
+        if ($condition instanceof \Closure && count(func_get_args()) === 1) {
+            return $this;
+        }
         $this->setOperator($operator);
         $this->setValue($value);
-        $this->disabled();
         return $this;
     }
 
@@ -83,28 +81,39 @@ trait DependsOn
      */
     public function hasConditional(): bool
     {
-        return $this->isDependent() || $this->isDisabled();
+        return isset($this->conditional);
     }
 
     /**
-     * Set the column to be used for the condition
+     * Get the conditional value if it exists
      * 
-     * @param string $colName
-     * @return void
+     * @return bool|null
      */
-    private function setCol(string $colName): void
+    public function getConditional(): ?bool
     {
-        $this->col = $colName;
+        if (!$this->hasConditional()) {
+            return null;
+        }
+
+        return $this->conditional;
     }
 
-    /**
-     * Get the column to be used for the condition
-     * 
-     * @return string
-     */
-    protected function getCol(): string
+    protected function evaluatesByClosure(): bool
     {
-        return $this->evaluate($this->col);
+        return $this->getEvaluateBy() instanceof \Closure;
+    }
+
+    private function setEvaluateBy(string|\Closure $evaluateBy): void
+    {
+        $this->evaluateBy = $evaluateBy;
+    }
+
+    protected function getEvaluateBy(): mixed
+    {
+        if (!isset($this->evaluateBy)) {
+            return null;
+        }
+        return $this->evaluateBy;
     }
     
     /**
@@ -133,9 +142,9 @@ trait DependsOn
      * 
      * @return void
      */
-    protected function dependent(): void
+    protected function affirmConditional(): void
     {
-        $this->dependsOn = true;
+        $this->conditional = true;
     }
 
     /**
@@ -143,9 +152,9 @@ trait DependsOn
      * 
      * @return void
      */
-    protected function disabled(): void
+    protected function negateConditional(): void
     {
-        $this->disabledOn = true;
+        $this->conditional = false;
     }
 
     /**
@@ -154,9 +163,9 @@ trait DependsOn
      * @param bool $mode
      * @return void
      */
-    protected function setMode(bool $mode): void
+    protected function setConditional(bool $mode): void
     {
-        $this->dependsOn = $mode;
+        $this->conditional = $mode;
     }
 
     /**
@@ -167,11 +176,15 @@ trait DependsOn
      */
     public function evaluateConditional(mixed $record): bool
     {
-        if (!$this->hasConditional()) {
+        if (! $this->hasConditional()) {
             return true;
         }
 
-        return $this->dependsOn ? $this->evaluateDependency($record) : !$this->evaluateDependency($record);
+        if ($this->evaluatesByClosure()) {
+            return $this->evaluate($this->getEvaluateBy(), $record);
+        }
+
+        return $this->getConditional() ? $this->evaluateByKey($record) : !$this->evaluateByKey($record);
     }
 
     /**
@@ -181,9 +194,9 @@ trait DependsOn
      * @return bool
      * @throws \InvalidArgumentException
      */
-    protected function evaluateDependency(mixed $record): bool
+    protected function evaluateByKey(mixed $record): bool
     {
-        $field = $record instanceof Model ? $record[$this->getCol()] : $record->{$this->getCol()};
+        $field = $record instanceof Model ? $record[$this->getEvaluateBy()] : $record->{$this->getEvaluateBy()};
         switch ($this->getOperator()) {
             case '=':
                 return $field == $this->getValue();
