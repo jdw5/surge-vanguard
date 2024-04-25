@@ -44,10 +44,10 @@ trait HasMethod
      * @return void
      * @throws InvalidEndpointMethod
      */
-    protected function setMethod(string $method): void
+    protected function setMethod(string|\Closure $method): void
     {
-        if (!\in_array($method, ['get', 'post', 'put', 'patch', 'delete'])) {
-            throw InvalidEndpointMethod::invalid($method);
+        if (\is_string($method) && ! \in_array($method, ['get', 'post', 'put', 'patch', 'delete'])) {
+            throw InvalidEndpointMethod::with($method);
         }
         $this->method = $method;
     }

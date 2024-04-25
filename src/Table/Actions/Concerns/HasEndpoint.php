@@ -10,24 +10,55 @@ trait HasEndpoint
     use HasMethod;
     use HasRoute;
 
-    public function endpoint(string $method, ...$args): static
+    /**
+     * Define the endpoint for the action.
+     * 
+     * @param string|\Closure $method
+     * @param \Closure|string $route
+     * @param mixed $parameters Optional
+     */
+    public function endpoint(string|\Closure $method, ...$args): static
     {
         $this->setMethod($method);
         $this->route(...$args);
         return $this;
     }
     
+    /**
+     * Check if the action has an endpoint
+     * 
+     * @return bool
+     */
     public function hasEndpoint(): bool
     {
         return $this->hasRoute();
     }
 
-    public function resolveEndpoint(mixed $record): ?array
+    /**
+     * Resolve the endpoint for the action
+     * 
+     * @param mixed $record
+     * @return array|null
+     */
+    public function resolveEndpoint($record): ?array
     {
         return $this->hasEndpoint() ? 
             [
                 'method' => $this->getMethod(),
                 'route' => $this->resolveRoute($record),
             ] : null;
+    }
+
+    /** 
+     * Serialize the endpoint for the action where they are not dependent on records
+     * 
+     * @return array
+     */
+    public function serializeStaticEndpoint(): array
+    {
+        return [
+            'has_endpoint' => $this->hasEndpoint(),
+            'endpoint' => $this->resolveEndpoint(null),
+        ];
     }
 }

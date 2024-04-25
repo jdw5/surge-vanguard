@@ -2,7 +2,7 @@
 
 namespace Jdw5\Vanguard\Table\Actions\Concerns;
 
-use Jdw5\Vanguard\Table\Actions\Exceptions\InvalidEndpointMethod;
+use Jdw5\Vanguard\Table\Record\Concerns\WrapsRecord;
 
 /**
  * Trait HasEndpoint
@@ -13,21 +13,28 @@ use Jdw5\Vanguard\Table\Actions\Exceptions\InvalidEndpointMethod;
  */
 trait HasRoute
 {
-    protected string $route;
+    use WrapsRecord;
+
+    /**
+     * Routes need to be resolvable by a function based on the record, and allow for the parameters to vary based on record
+     */
+    protected string|\Closure $route;
     protected array|\Closure $parameters;
     protected bool $named = true;
 
     /**
      * Set the route for the action and the parameters to be used
      * 
-     * @param string $route
+     * @param string|\Closure $route
      * @param array|\Closure $params
      * @return static
      */
-    public function route(string $route, array|\Closure $params): static
+    public function route(string|\Closure $route, $params = null): static
     {
         $this->setRoute($route);
-        $this->setParameters($params);
+
+        if (!\is_null($params)) $this->setParameters($params);
+
         return $this;
     }
 
@@ -37,7 +44,7 @@ trait HasRoute
      * @param string $route
      * @return static
      */
-    public function routeName(string $route): static
+    public function routeName(string|\Closure $route): static
     {
         $this->setRoute($route);
         return $this;
@@ -67,6 +74,17 @@ trait HasRoute
     }
 
     /**
+     * Set the route to be named
+     * 
+     * @return static
+     */
+    public function named(): static
+    {
+        $this->setNamed(true);
+        return $this;
+    }
+
+    /**
      * Retrieve the route name
      * 
      * @return string
@@ -74,6 +92,16 @@ trait HasRoute
     public function getRoute(): string
     {
         return $this->evaluate($this->route);
+    }
+
+    /**
+     * Check if the route resolves by closure
+     * 
+     * @return bool
+     */
+    public function isFunctionalRoute(): bool
+    {
+        return $this->getRoute() instanceof \Closure;
     }
 
     /**
@@ -89,11 +117,21 @@ trait HasRoute
     /**
      * Retrieve the parameters for the route
      * 
-     * @return array|\Closure
+     * @return array|\Closure|null
      */
-    public function getParameters(): array|\Closure
+    public function getParameters(): array|\Closure|null
     {
         return $this->evaluate($this->parameters);
+    }
+
+    /**
+     * Check if the parameters are a closure
+     * 
+     * @return bool
+     */
+    public function isFunctionalParameters(): bool
+    {
+        return $this->getParameters() instanceof \Closure;
     }
 
     /**
@@ -103,7 +141,7 @@ trait HasRoute
      */
     public function hasParameters(): bool
     {
-        return isset($this->parameters);
+        return isset($this->parameters) && !\is_null($this->parameters);
     }
 
     /**
@@ -134,7 +172,7 @@ trait HasRoute
      * @param bool $named
      * @return void
      */
-    private function setNamed(bool $named): void
+    protected function setNamed(bool $named): void
     {
         $this->named = $named;
     }
@@ -144,9 +182,9 @@ trait HasRoute
      * 
      * @return bool
      */
-    private function getNamed(): bool
+    protected function getNamed(): bool
     {
-        return $this->named;
+        return $this->evaluate($this->named);
     }
 
     /**
@@ -158,27 +196,27 @@ trait HasRoute
     private function resolveRoute(mixed $record): ?string
     {
         // Ensure the route is set
-        if (!$this->hasRoute()) {
-            return null;
-        }
+        if (!$this->hasRoute()) return null;
 
-        if (!$this->getNamed()) {
-            return $this->getRoute();
-        }
+        $record = $this->wrapRecord($record);
+        
+        $route = $this->getRoute();
+
+        if ($this->isFunctionalRoute()) $route = $route($record);
+        
+        // Named routes cannot have parameters
+        if (! $this->getNamed()) return $route;
 
         // The endpoint does not depend on the record
-        if (!$this->hasParameters()) {
-            return route($this->getRoute());
-        }
+        if (!$this->hasParameters() || \is_null($record)) return route($route);
 
         // If the parameters are a closure, resolve them
         $parameters = $this->getParameters();
-        if ($parameters instanceof \Closure) {
-            $parameters = $parameters($record);
-        } 
+
+        if ($this->isFunctionalParameters()) $parameters = $parameters($record); 
 
         // Ziggy should handle the hard work here, and resolve the array, associative array or single value
         // into a valid route
-        return route($this->getRoute(), $parameters);
+        return route($route, $parameters);
     }  
 }

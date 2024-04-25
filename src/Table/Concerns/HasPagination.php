@@ -133,7 +133,7 @@ trait HasPagination
         })->values()->toArray();
     }   
 
-    public function serializePagination(): ?array
+    public function serializePagination(): array
     {
         return $this->hasDynamicPagination() ? 
             [

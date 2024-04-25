@@ -111,7 +111,7 @@ abstract class Table extends Primitive implements Tables
      */
     public function toArray(): array
     {
-        $core = [
+        $table = [
             'meta' => $this->getMeta(),
             'rows' => $this->getRecords(),
             'cols' => $this->hasPreferences() ? $this->getPreferencedTableColumns($this->getPreferences()) : $this->getTableColumns(),
@@ -132,7 +132,7 @@ abstract class Table extends Primitive implements Tables
 
         $preferences = $this->hasPreferences() ? ['preference_cols' => $this->getColumnsWithPreferences($this->getUncachedTableColumns())] : [];
 
-        return array_merge($core, $pagination, $preferences);
+        return array_merge($table, $pagination, $preferences);
     }
 
     /**
