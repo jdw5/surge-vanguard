@@ -47,7 +47,7 @@ trait HasMethod
     protected function setMethod(string|\Closure $method): void
     {
         if (\is_string($method) && ! \in_array($method, ['get', 'post', 'put', 'patch', 'delete'])) {
-            throw InvalidEndpointMethod::with($method);
+            throw InvalidEndpointMethod::make($method);
         }
         $this->method = $method;
     }

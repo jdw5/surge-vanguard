@@ -3,18 +3,14 @@
 namespace Jdw5\Vanguard\Table\Columns\Concerns;
 
 /**
- * Trait HasFallback
- * 
- * Set a fallback/backup property for a column
- * 
- * @property mixed $fallback
+ * Set a fallback/backup property for a class.
  */
 trait HasFallback
 {
-    protected mixed $fallback = null;
+    protected mixed $fallback;
 
     /**
-     * Set the fallback value for the column
+     * Set the fallback value, chainable.
      * 
      * @param mixed $fallback
      * @return static
@@ -22,27 +18,38 @@ trait HasFallback
      */
     public function fallback(mixed $fallback): static
     {
-        $this->fallback = $fallback;
+        $this->setFallback($fallback);
         return $this;
     }
 
     /**
-     * Check if the column has a fallback value
+     * Set the fallback value quietly.
+     * 
+     * @param mixed $fallback
+     * @return void
+     */
+    protected function setFallback(mixed $fallback): void
+    {
+        $this->fallback = $fallback;
+    }
+
+    /**
+     * Check if a fallback value exists.
      * 
      * @return bool
      */
     public function hasFallback(): bool
     {
-        return !\is_null($this->fallback);
+        return isset($this->fallback);
     }
 
     /**
-     * Get the fallback value for the column
+     * Get the fallback value.
      * 
      * @return mixed
      */
     public function getFallback(): mixed
     {
-        return $this->fallback;
+        return $this->evaluate($this->fallback);
     }
 }

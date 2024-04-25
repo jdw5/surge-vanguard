@@ -46,11 +46,11 @@ class Actions extends Primitive
     }
 
     /**
-     * Serialize the actions.
+     * Retrieve the actions as an array.
      * 
      * @return array
      */
-    public function jsonSerialize(): array
+    public function toArray(): array
     {
         return [
             'inline' => $this->getInlineActions(),
@@ -58,5 +58,15 @@ class Actions extends Primitive
             'page' => $this->getPageActions(),
             'default' => $this->getDefaultAction(),
         ];
+    }
+
+    /**
+     * Serialize the actions.
+     * 
+     * @return array
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

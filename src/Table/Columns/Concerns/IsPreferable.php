@@ -22,7 +22,7 @@ trait IsPreferable
     public function preference(bool $default = false): static
     {
         if ($this->isKey()) {
-            throw KeyCannotBeDynamic::invalid();
+            throw KeyCannotBeDynamic::make();
         }
         $this->setPreference(true);
         $this->setDefaultPreference($default);

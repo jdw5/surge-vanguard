@@ -7,8 +7,6 @@ use Jdw5\Vanguard\Concerns\HasName;
 use Jdw5\Vanguard\Concerns\HasLabel;
 use Jdw5\Vanguard\Concerns\IsIncludable;
 use Jdw5\Vanguard\Concerns\HasMetadata;
-use Jdw5\Vanguard\Concerns\SetsLabel;
-use Jdw5\Vanguard\Table\Actions\Concerns\DependsOn;
 use Jdw5\Vanguard\Table\Actions\Concerns\HasEndpoint;
 
 abstract class BaseAction extends Primitive
@@ -18,12 +16,11 @@ abstract class BaseAction extends Primitive
     use HasName;
     use IsIncludable;
     use HasEndpoint;
-    use SetsLabel;
 
     final public function __construct(string $name)
     {
-        $this->name($name);
-        $this->label($this->nameToLabel($name));
+        $this->setName($name);
+        $this->setLabel($this->labelise($name));
         $this->setUp();
     }
 
@@ -32,6 +29,11 @@ abstract class BaseAction extends Primitive
         return resolve(static::class, compact('name'));
     }
 
+    /**
+     * Retrieve the action as an array.
+     * 
+     * @return array
+     */
     public function toArray(): array
     {
         return [
@@ -41,6 +43,11 @@ abstract class BaseAction extends Primitive
         ];
     }
 
+    /**
+     * Serialize the action to JSON.
+     * 
+     * @return array
+     */
     public function jsonSerialize(): array
     {
         return $this->toArray();
