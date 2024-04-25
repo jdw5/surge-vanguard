@@ -183,12 +183,19 @@ trait HasPreferences
         return $this->cachedPreferences ??= $this->getUpdatedPreferences();
     }
 
-    public function getPreferenceColumns(Collection $cols): array
+    /**
+     * Get the columns with preference status
+     * 
+     * @param Collection $allCols
+     * @return array
+     */
+    public function getColumnsWithPreferences(Collection $allCols): array
     {
-        return $cols->map(fn ($col) => [
+        return $allCols->map(fn ($col) => [
             'name' => $col->getName(),
             'label' => $col->getLabel(),
-            'active' => $col->shouldBeDynamicallyShown($this->getPreferences())
+            'active' => $col->shouldBeDynamicallyShown($this->getPreferences()),
+            'default' => $col->isDefaultPreference(),
         ])->values()->toArray();
     }
 }

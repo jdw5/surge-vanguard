@@ -30,17 +30,17 @@ trait HasActions
 
     public function getInlineActions(): Collection
     {
-        return $this->getActions()->filter(static fn (BaseAction $action): bool => $action instanceof InlineAction);
+        return $this->getActions()->filter(static fn (BaseAction $action): bool => $action instanceof InlineAction)->values();
     }
 
     public function getBulkActions(): Collection
     {
-        return $this->getActions()->filter(static fn (BaseAction $action): bool => $action instanceof BulkAction);
+        return $this->getActions()->filter(static fn (BaseAction $action): bool => $action instanceof BulkAction)->values();
     }
 
     public function getPageActions(): Collection
     {
-        return $this->getActions()->filter(static fn (BaseAction $action): bool => $action instanceof PageAction);
+        return $this->getActions()->filter(static fn (BaseAction $action): bool => $action instanceof PageAction)->values();
     }
 
     public function getDefaultAction(): ?BaseAction

@@ -53,9 +53,9 @@ class Actions extends Primitive
     public function jsonSerialize(): array
     {
         return [
-            'inline' => $this->getInlineActions()->values(),
-            'bulk' => $this->getBulkActions()->values(),
-            'page' => $this->getPageActions()->values(),
+            'inline' => $this->getInlineActions(),
+            'bulk' => $this->getBulkActions(),
+            'page' => $this->getPageActions(),
             'default' => $this->getDefaultAction(),
         ];
     }

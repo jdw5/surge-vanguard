@@ -9,7 +9,8 @@ use Jdw5\Vanguard\Concerns\HasActions;
 use Illuminate\Database\Eloquent\Model;
 use Jdw5\Vanguard\Table\Columns\Column;
 use Jdw5\Vanguard\Table\Concerns\HasKey;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Table\Concerns\HasMeta;
 use Jdw5\Vanguard\Table\Contracts\Tables;
 use Jdw5\Vanguard\Concerns\HasRefinements;
@@ -20,7 +21,7 @@ use Jdw5\Vanguard\Table\Concerns\HasProcess;
 use Jdw5\Vanguard\Table\Concerns\HasRecords;
 use Jdw5\Vanguard\Table\Concerns\HasPagination;
 use Jdw5\Vanguard\Table\Concerns\HasPreferences;
-use Jdw5\Vanguard\Table\Concerns\HasDatabaseQuery;
+use Jdw5\Vanguard\Table\Concerns\HasBuilder;
 use Jdw5\Vanguard\Table\Exceptions\InvalidKeyException;
 
 abstract class Table extends Primitive implements Tables
@@ -32,7 +33,7 @@ abstract class Table extends Primitive implements Tables
     use HasPagination;
     use HasRefinements;
     use HasKey;
-    use HasDatabaseQuery;
+    use HasBuilder;
     use HasMeta;
     use HasPreferences;
     use HasScopes;
@@ -43,16 +44,37 @@ abstract class Table extends Primitive implements Tables
     {
         $this->setQuery($data);
     }
-
+    
     /**
      * Create a new table instance.
      * 
-     * @param Builder|null $data
+     * @param EloquentBuilder|QueryBuilder|null $data
      * @return static
      */
     public static function make($data = null): static
     {
         return new static($data);
+    }
+
+    /** 
+     * Create a new table instance (alias)
+     * 
+     * @param EloquentBuilder|QueryBuilder|null $data
+     */
+    public static function from($data): static
+    {
+        return static::make($data);
+    }
+
+    /**
+     * Create a new table instance from a model.
+     * 
+     * @param Model $model
+     * @return static
+     */
+    public static function fromModel(Model $model): static
+    {
+        return static::make($model->newQuery());
     }
 
     /**
@@ -73,33 +95,34 @@ abstract class Table extends Primitive implements Tables
     }
 
     /**
-     * Retrieve the table as an array
-     * 
-     * @return array
-     */
-    public function toArray(): array
-    {
-        return $this->jsonSerialize();
-    }
-    /**
      * Serialize the table to JSON.
      * 
      * @return array
      */
     public function jsonSerialize(): array
     {
+        return $this->toArray();
+    }
+    
+    /**
+     * Retrieve the table as an array
+     * 
+     * @return array
+     */
+    public function toArray(): array
+    {
         $core = [
             'meta' => $this->getMeta(),
             'rows' => $this->getRecords(),
-            'cols' => $this->getTableColumns($this->hasPreferences(), $this->getPreferences())->values(),
+            'cols' => $this->hasPreferences() ? $this->getPreferencedTableColumns($this->getPreferences()) : $this->getTableColumns(),
             'refinements' => [
                 'sorts' => $this->getSorts(),
                 'filters' => $this->getFilters(),
             ],
             'actions' => [
-                'inline' => $this->getInlineActions()->values(),
-                'bulk' => $this->getBulkActions()->values(),
-                'page' => $this->getPageActions()->values(),
+                'inline' => $this->getInlineActions(),
+                'bulk' => $this->getBulkActions(),
+                'page' => $this->getPageActions(),
                 'default' => $this->getDefaultAction(),
             ],
             'recordKey' => $this->tableKey(),
@@ -107,10 +130,7 @@ abstract class Table extends Primitive implements Tables
 
         $pagination = $this->serializePagination();
 
-        $preferences = $this->hasPreferences() ?
-        [
-            'preference_cols' => $this->getPreferenceColumns($this->getUncachedTableColumns())
-        ] : [];
+        $preferences = $this->hasPreferences() ? ['preference_cols' => $this->getColumnsWithPreferences($this->getUncachedTableColumns())] : [];
 
         return array_merge($core, $pagination, $preferences);
     }
@@ -154,6 +174,6 @@ abstract class Table extends Primitive implements Tables
 
         $this->freeQuery();
 
-        $this->applyScopes($this->records, $this->getTableColumns(), $this->getInlineActions()->values());
+        $this->applyScopes($this->records, $this->getTableColumns(), $this->getInlineActions());
     }
 }

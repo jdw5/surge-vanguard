@@ -20,11 +20,6 @@ use Jdw5\Vanguard\Table\Columns\Concerns\IsPreferable;
  * 
  * Defines the required properties for a column
  * 
- * @property string $name
- * @property string $label
- * @property mixed $metadata
- * @property string $fallback
- * 
  */
 abstract class BaseColumn extends Primitive
 {

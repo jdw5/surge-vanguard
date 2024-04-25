@@ -32,22 +32,28 @@ trait HasColumns
      * 
      * @return Collection
      */
-    protected function getTableColumns(bool $usePreferencedCols = false, array $preferencedCols = []): Collection
+    protected function getTableColumns(): Collection
     {
-        if ($usePreferencedCols) {
-            return $this->cachedColumns ??= collect($this->defineColumns())
-                ->filter(static fn (Column $column): bool => !$column->isExcluded() && $column->shouldBeDynamicallyShown($preferencedCols)
-            );
-        }
-
         return $this->cachedColumns ??= $this->getUncachedTableColumns();
+    }
+
+    /**
+     * Retrieve the valid columns for the table based on preferences
+     * 
+     * @param array $preferences An array of column names to show
+     */
+    protected function getPreferencedTableColumns(array $preferences): Collection
+    {
+        return $this->cachedColumns ??= collect($this->defineColumns())
+            ->filter(static fn (Column $column): bool => !$column->isExcluded() && $column->shouldBeDynamicallyShown($preferences)
+        )->values();
     }
 
     protected function getUncachedTableColumns(): Collection
     {
         return collect($this->defineColumns())
             ->filter(static fn (Column $column): bool => !$column->isExcluded()
-        );
+        )->values();
     }
 
     /**
