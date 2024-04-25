@@ -4,6 +4,7 @@ namespace Workbench\App\Tables;
 
 use Carbon\Carbon;
 use Jdw5\Vanguard\Table\Table;
+use Jdw5\Vanguard\Table\Record\Record;
 use Workbench\App\Enums\TestRole;
 use Workbench\App\Models\TestUser;
 use Jdw5\Vanguard\Refining\Sorts\Sort;
@@ -56,10 +57,8 @@ class ActionTable extends Table
 
             BulkAction::make('delete')->label('Delete Users'),
 
-            InlineAction::make('view')->label('View User')->default()->whenRecord(function ($record) {
-                return $record->id > 1;
-            }),
-            InlineAction::make('edit')->label('Edit User'),
+            InlineAction::make('view')->label('View User')->default()->whenRecord(fn (Record $record) => $record->id > 1),
+            InlineAction::make('edit')->label('Edit User')->default()->whenRecord('name', '!=', 'admin'),
             InlineAction::make('delete')->label('Delete User')
 
         ];

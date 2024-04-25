@@ -1,13 +1,16 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Actions\Concerns;
+namespace Jdw5\Vanguard\Table\Record\Concerns;
 
 use Illuminate\Database\Eloquent\Model;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasOperator;
+use Jdw5\Vanguard\Table\Record\Concerns\WrapsRecord;
+use Jdw5\Vanguard\Table\Record\Record;
 
 trait HasRecordDependency
 {
     use HasOperator;
+    use WrapsRecord;
     
     protected $evaluateBy;
     protected mixed $col;
@@ -180,6 +183,9 @@ trait HasRecordDependency
             return true;
         }
 
+        /** Wrap record */
+        $record = $this->wrapRecord($record);
+
         if ($this->evaluatesByClosure()) {
             return $this->evaluateByClosure($record);
         }
@@ -187,20 +193,20 @@ trait HasRecordDependency
         return $this->getConditional() ? $this->evaluateByKey($record) : !$this->evaluateByKey($record);
     }
 
-    protected function evaluateByClosure(mixed $record): bool
+    protected function evaluateByClosure(Record $record): bool
     {
         return $this->getEvaluateBy()($record);
     }
     /**
      * Evaluate the dependent condition
      * 
-     * @param mixed $record
+     * @param Record $record
      * @return bool
      * @throws \InvalidArgumentException
      */
-    protected function evaluateByKey(mixed $record): bool
+    protected function evaluateByKey(Record $record): bool
     {
-        $field = $record instanceof Model ? $record[$this->getEvaluateBy()] : $record->{$this->getEvaluateBy()};
+        $field = $record->{$this->getEvaluateBy()};
         switch ($this->getOperator()) {
             case '=':
                 return $field == $this->getValue();
