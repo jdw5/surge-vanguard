@@ -16,6 +16,12 @@ class VanguardServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        /**
+         * Vanguard functions through macros to generate the builders by looping
+         * over provided refinements.
+         * 
+         * This is applied to both Eloquent and Query builders.
+         */
         Builder::macro('withRefinements', function (array|Collection|null $refinements = []) 
         {
             if ($refinements instanceof Collection) {

@@ -12,9 +12,11 @@ trait HasRecordDependency
     use HasOperator;
     use WrapsRecord;
     
+    /** The key or closure to evaluate against */
     protected $evaluateBy;
-    protected mixed $col;
+    /** The value to compare the key against */
     protected mixed $value;
+    /** Whether the condition is when or unless */
     private bool $conditional;
 
     /**
@@ -101,22 +103,38 @@ trait HasRecordDependency
         return $this->conditional;
     }
 
+    /**
+     * Check if the condition is evaluated by a closure
+     * 
+     * @return bool
+     */
     protected function evaluatesByClosure(): bool
     {
         return $this->getEvaluateBy() instanceof \Closure;
     }
 
+    /**
+     * Set the key or closure to evaluate against
+     * 
+     * @param string|\Closure $evaluateBy
+     * @return void
+     */
     private function setEvaluateBy(string|\Closure $evaluateBy): void
     {
         $this->evaluateBy = $evaluateBy;
     }
 
+    /**
+     * Get the key or closure to evaluate against
+     * 
+     * @return string|\Closure
+     */
     protected function getEvaluateBy(): mixed
     {
         if (!isset($this->evaluateBy)) {
             return null;
         }
-        return $this->evaluateBy;
+        return $this->evaluate($this->evaluateBy);
     }
     
     /**
@@ -183,7 +201,7 @@ trait HasRecordDependency
             return true;
         }
 
-        /** Wrap record */
+        /** Wrap record to allow for global accessors */
         $record = $this->wrapRecord($record);
 
         if ($this->evaluatesByClosure()) {
@@ -193,12 +211,19 @@ trait HasRecordDependency
         return $this->getConditional() ? $this->evaluateByKey($record) : !$this->evaluateByKey($record);
     }
 
+    /**
+     * Evaluate the condition as a closure
+     * 
+     * @param Record $record
+     * @return bool
+     */
     protected function evaluateByClosure(Record $record): bool
     {
         return $this->getEvaluateBy()($record);
     }
+
     /**
-     * Evaluate the dependent condition
+     * Evaluate the condition using the key, operator and value
      * 
      * @param Record $record
      * @return bool

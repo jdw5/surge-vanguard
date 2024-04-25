@@ -2,7 +2,11 @@
 
 namespace Jdw5\Vanguard\Table\Record;
 
-
+/**
+ * Class Record
+ * 
+ * Wraps the data in a record object, to normalize accessors
+ */
 class Record implements \ArrayAccess
 {
     private $data;

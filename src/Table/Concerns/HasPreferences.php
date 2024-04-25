@@ -23,11 +23,21 @@ trait HasPreferences
     private $cachedPreferences = null;
     protected $cookieDuration = 60 * 24 * 30;
 
+    /**
+     * Define the key for the dynamic columns in the query parameters
+     * 
+     * @return string
+     */
     protected function definePreferenceKey()
     {
         return null;
     }
 
+    /**
+     * Define the unique cookie name if you intend on storing user preferences
+     * 
+     * @return string
+     */
     protected function definePreferenceCookie()
     {
         return null;
@@ -43,6 +53,11 @@ trait HasPreferences
         return !\is_null($this->preferences());
     }
 
+    /**
+     * Check if the table uses a preference cookie
+     * 
+     * @return bool
+     */
     public function usesPreferenceCookie(): bool
     {
         return !\is_null($this->getPreferenceCookie());
@@ -58,6 +73,9 @@ trait HasPreferences
         return $this->evaluate($this->preferences ?? $this->definePreferenceKey());
     }
 
+    /**
+     * Get the name of the cookie if it exists
+     */
     public function getPreferenceCookie(): string|null
     {
         return $this->evaluate($this->preferenceCookie ?? $this->definePreferenceCookie());

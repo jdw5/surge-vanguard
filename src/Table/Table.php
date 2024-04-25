@@ -74,6 +74,8 @@ abstract class Table extends Primitive implements Tables
 
     /**
      * Retrieve the table as an array
+     * 
+     * @return array
      */
     public function toArray(): array
     {
@@ -142,9 +144,7 @@ abstract class Table extends Primitive implements Tables
      */
     public function tablePipeline(): void
     {
-        if (! $this->hasQuery()) { 
-            $this->setQuery($this->defineQuery());
-        }
+        if (! $this->hasQuery()) $this->setQuery($this->defineQuery());
         
         $this->refineQuery($this->getRefinements());
 
@@ -154,9 +154,6 @@ abstract class Table extends Primitive implements Tables
 
         $this->freeQuery();
 
-        // dd($this->records);
-
         $this->applyScopes($this->records, $this->getTableColumns(), $this->getInlineActions()->values());
-        // dd($this->records);
     }
 }

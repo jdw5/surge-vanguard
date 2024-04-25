@@ -9,10 +9,10 @@ trait WrapsRecord
     /**
      * Wrap the given data in a record.
      * 
-     * @param array $data
+     * @param mixed $data
      * @return Record
      */
-    public function wrapRecord(array $data): Record
+    public function wrapRecord(mixed $data): Record
     {
         return new Record($data);
     }

@@ -3,18 +3,21 @@
 namespace {{ namespace }};
 
 use Jdw5\Vanguard\Table\Table;
-use Jdw5\Vanguard\Refining\Sorts\Sort;
 use Jdw5\Vanguard\Table\Columns\Column;
+use Jdw5\Vanguard\Refining\Sorts\Sort;
 use Jdw5\Vanguard\Refining\Filters\Filter;
 use Jdw5\Vanguard\Table\Actions\BulkAction;
 use Jdw5\Vanguard\Table\Actions\PageAction;
 use Jdw5\Vanguard\Table\Actions\InlineAction;
-use Illuminate\Database\Eloquent\Builder;
+use Jdw5\Vanguard\Table\Record\Record;
 use Illuminate\Support\Collection;
 
 final class {{ class }} extends Table
 {
-    protected $applyColumns = true;
+    protected bool $scopeTransform = true;
+    protected bool $scopeColumns = true;
+    protected bool $scopeActions = true;
+    protected bool $scopeEndpoints = true;
 
     protected function defineQuery()
     {
@@ -25,7 +28,6 @@ final class {{ class }} extends Table
     {
         return [
             Column::make('id')->hide()->asKey(),
-
         ];
     }
 

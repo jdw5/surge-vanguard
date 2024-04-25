@@ -80,14 +80,14 @@ trait HasScopes
             if ($this->scopesAndRoutesActions()) {
                 $record['actions'] = $actions->reduce(function (array $carry, InlineAction $action) use ($record) {
                     if ($action->evaluateConditional($record)) {
-                        array_push($carry, $action);
+                        \array_push($carry, $action);
                     }
                     return $carry;
                 }, []);
             } else if ($this->scopeActions) {
                 $record['actions'] = $actions->reduce(function (array $carry, InlineAction $action) use ($record) {
                     if ($action->evaluateConditional($record)) {
-                        array_push($carry, $action);
+                        \array_push($carry, $action);
                     }
                     return $carry;
                 }, []);

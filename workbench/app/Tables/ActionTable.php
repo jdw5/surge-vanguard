@@ -58,7 +58,7 @@ class ActionTable extends Table
             BulkAction::make('delete')->label('Delete Users'),
 
             InlineAction::make('view')->label('View User')->default()->whenRecord(fn (Record $record) => $record->id > 1),
-            InlineAction::make('edit')->label('Edit User')->default()->whenRecord('name', '!=', 'admin'),
+            InlineAction::make('edit')->label('Edit User')->default()->whenRecord('name', '!=', 'xxxxx'),
             InlineAction::make('delete')->label('Delete User')
 
         ];

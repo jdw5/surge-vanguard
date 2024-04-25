@@ -13,7 +13,6 @@ trait HasRecords
      * 
      * @return mixed
      */
-
     abstract public function getRecords(): Collection;
 
     /**
