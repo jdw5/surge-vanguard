@@ -6,8 +6,11 @@ use Jdw5\Vanguard\Enums\Breakpoint;
 
 trait IsHideable
 {
+    /** Whether this column shown be shown */
     protected bool $show = true;
+    /** Whether this column should only be displayed for screen readers */
     protected bool $sr_only = false;
+    /** The breakpoint it should display at */
     protected ?Breakpoint $breakpoint = null;
 
     /**
@@ -22,7 +25,7 @@ trait IsHideable
     }
 
     /**
-     * Set the visibility of the column to hidden
+     * Set the visibility of the column to hidden (alias)
      * 
      * @return static
      */

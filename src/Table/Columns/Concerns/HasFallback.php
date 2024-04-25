@@ -7,7 +7,7 @@ namespace Jdw5\Vanguard\Table\Columns\Concerns;
  */
 trait HasFallback
 {
-    protected mixed $fallback;
+    protected mixed $fallback = null;
 
     /**
      * Set the fallback value, chainable.
@@ -40,7 +40,7 @@ trait HasFallback
      */
     public function hasFallback(): bool
     {
-        return isset($this->fallback);
+        return \is_null($this->getFallback());
     }
 
     /**
