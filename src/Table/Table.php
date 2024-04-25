@@ -4,22 +4,23 @@ namespace Jdw5\Vanguard\Table;
 
 use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Concerns\HasId;
+use Illuminate\Support\Collection;
 use Jdw5\Vanguard\Concerns\HasActions;
 use Illuminate\Database\Eloquent\Model;
 use Jdw5\Vanguard\Table\Columns\Column;
 use Jdw5\Vanguard\Table\Concerns\HasKey;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Table\Concerns\Applies;
 use Jdw5\Vanguard\Table\Concerns\HasMeta;
 use Jdw5\Vanguard\Table\Contracts\Tables;
 use Jdw5\Vanguard\Concerns\HasRefinements;
 use Jdw5\Vanguard\Table\Concerns\HasModel;
-use Jdw5\Vanguard\Table\Concerns\HasDatabaseQuery;
+use Jdw5\Vanguard\Table\Concerns\HasScopes;
 use Jdw5\Vanguard\Table\Concerns\HasColumns;
-use Jdw5\Vanguard\Table\Concerns\HasPagination;
-use Jdw5\Vanguard\Table\Concerns\HasPreferences;
 use Jdw5\Vanguard\Table\Concerns\HasProcess;
 use Jdw5\Vanguard\Table\Concerns\HasRecords;
+use Jdw5\Vanguard\Table\Concerns\HasPagination;
+use Jdw5\Vanguard\Table\Concerns\HasPreferences;
+use Jdw5\Vanguard\Table\Concerns\HasDatabaseQuery;
 use Jdw5\Vanguard\Table\Exceptions\InvalidKeyException;
 
 abstract class Table extends Primitive implements Tables
@@ -34,7 +35,7 @@ abstract class Table extends Primitive implements Tables
     use HasDatabaseQuery;
     use HasMeta;
     use HasPreferences;
-    use Applies;
+    use HasScopes;
     use HasRecords;
     use HasProcess;
 
@@ -117,7 +118,7 @@ abstract class Table extends Primitive implements Tables
      * 
      * @return array
      */
-    public function getRecords(): array
+    public function getRecords(): Collection
     {
         $this->process();
         return $this->records;
@@ -145,24 +146,17 @@ abstract class Table extends Primitive implements Tables
             $this->setQuery($this->defineQuery());
         }
         
-        # Apply the default refiners
         $this->refineQuery($this->getRefinements());
 
-        # Apply the sorts from sortable columns
         $this->refineQuery($this->getSortableColumns()->map->getSort()->filter());
 
         [$this->records, $this->meta] = $this->retrieveRecords($this->getQuery());
 
-        // Free the query
         $this->freeQuery();
-        
-        // Apply the scopes
-        // First scope is whether or not to drop non-cols
-        // 
-        // Next scope is whether or not to apply the column information
 
-        // Next scope is to scope the actions to records
+        // dd($this->records);
 
-        // Next scope is to scope the routing of the actions
+        $this->applyScopes($this->records, $this->getTableColumns(), $this->getInlineActions()->values());
+        // dd($this->records);
     }
 }

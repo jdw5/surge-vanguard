@@ -2,6 +2,8 @@
 
 namespace Jdw5\Vanguard\Table\Concerns;
 
+use Illuminate\Support\Collection;
+
 trait HasRecords
 {
     protected mixed $records = null;
@@ -11,8 +13,8 @@ trait HasRecords
      * 
      * @return mixed
      */
-    
-    abstract public function getRecords(): array;
+
+    abstract public function getRecords(): Collection;
 
     /**
      * Get the first record from the table.
@@ -22,5 +24,15 @@ trait HasRecords
     public function getFirstRecord(): mixed
     {
         return $this->getRecords()->first();
+    }
+
+    /**
+     * Set the records for the table.
+     * 
+     * @param array $records
+     */
+    protected function setRecords(array $records): void
+    {
+        $this->records = $records;
     }
 }

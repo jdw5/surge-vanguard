@@ -181,12 +181,16 @@ trait HasRecordDependency
         }
 
         if ($this->evaluatesByClosure()) {
-            return $this->evaluate($this->getEvaluateBy(), $record);
+            return $this->evaluateByClosure($record);
         }
 
         return $this->getConditional() ? $this->evaluateByKey($record) : !$this->evaluateByKey($record);
     }
 
+    protected function evaluateByClosure(mixed $record): bool
+    {
+        return $this->getEvaluateBy()($record);
+    }
     /**
      * Evaluate the dependent condition
      * 

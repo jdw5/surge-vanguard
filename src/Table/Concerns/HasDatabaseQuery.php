@@ -29,7 +29,7 @@ trait HasDatabaseQuery
      */
     public function hasQuery(): bool
     {
-        return !\is_null($this->query);
+        return !\is_null($this->getQuery());
     }
 
     public function getQuery(): mixed

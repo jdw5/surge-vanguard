@@ -15,7 +15,7 @@ trait HasProcess
         }
 
         $this->tablePipeline();
-
+        
         $this->processed = true;
     }
 

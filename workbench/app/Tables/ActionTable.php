@@ -2,6 +2,7 @@
 
 namespace Workbench\App\Tables;
 
+use Carbon\Carbon;
 use Jdw5\Vanguard\Table\Table;
 use Workbench\App\Enums\TestRole;
 use Workbench\App\Models\TestUser;
@@ -29,10 +30,10 @@ class ActionTable extends Table
     {
         return [
             Column::make('id')->asKey()->hide(),
-            Column::make('name')->sort(),
+            Column::make('name')->sort()->transform(fn ($value) => strtoupper($value)),
             Column::make('email')->fallback('No email')->sort(),
-            Column::make('created_at')->transform(fn ($value) => $value->format('d/m/Y H:i:s')),
-            Column::make('role')->label('User Role')
+            Column::make('created_at')->transform(fn (?Carbon $value) => $value?->format('d/m/Y')),
+            Column::make('role')->label('User Role')->fallback('No role')
         ];
     }
 

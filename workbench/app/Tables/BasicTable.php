@@ -32,7 +32,8 @@ class BasicTable extends Table
             Column::make('name')->sort(),
             Column::make('email')->fallback('No email')->sort(),
             Column::make('created_at')->transform(fn ($value) => $value->format('d/m/Y H:i:s')),
-            Column::make('role')->label('User Role')
+            Column::make('role')->label('User Role'),
+            Column::make('non_existent')->fallback('Fake')
         ];
     }
 

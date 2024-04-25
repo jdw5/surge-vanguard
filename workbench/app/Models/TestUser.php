@@ -15,6 +15,8 @@ class TestUser extends Model
     protected $guarded = [];
 
     protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
 
     ];
 }

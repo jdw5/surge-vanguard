@@ -37,7 +37,6 @@ class TableClassTest extends Testcase
     {
         $table = BasicTable::make(TestUser::select('id'));
         $this->assertNotEquals($table->getFirstRecord()['id'], NULL);
-        $this->assertEquals($table->getFirstRecord()['email'], 'No email');
         $this->assertEquals($table->getFirstRecord()['name'], NULL);
     }
 

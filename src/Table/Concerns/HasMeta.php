@@ -22,13 +22,13 @@ trait HasMeta
         {
             case 'cursor':
                 $data = $this->query->cursorPaginate(...\array_values($this->getPagination()))->withQueryString();
-                return [$data->items(), $this->generateCursorPaginatorMeta($data)];
+                return [$data->getCollection(), $this->generateCursorPaginatorMeta($data)];
             case 'get':
                 $data = $builder->get();
                 return [$data, $this->generateUnpaginatedMeta($data)];
             default:
                 $data = $this->query->paginate(...$this->getPagination())->withQueryString();
-                return [$data->items(), $this->generatePaginatorMeta($data)];
+                return [$data->getCollection(), $this->generatePaginatorMeta($data)];
         }
     }
 
