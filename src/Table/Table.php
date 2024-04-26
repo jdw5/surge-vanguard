@@ -41,7 +41,7 @@ abstract class Table extends Primitive implements Tables
 
     public function __construct($data = null)
     {
-        $this->setQuery($data);
+        $this->setBuilder($data);
     }
     
     /**
@@ -161,18 +161,40 @@ abstract class Table extends Primitive implements Tables
      * 
      * @return void
      */
-    public function tablePipeline(): void
+    public function pipeline(): void
     {
-        if (! $this->hasQuery()) $this->setQuery($this->defineQuery());
+        if (! $this->hasBuilder()) $this->setBuilder($this->defineQuery());
         
-        $this->refineQuery($this->getRefinements());
+        $this->refineBuilder($this->getRefinements());
 
-        $this->refineQuery($this->getSortableColumns()->map->getSort()->filter());
+        $this->refineBuilder($this->getSortableColumns()->map->getSort()->filter());
 
-        [$this->records, $this->meta] = $this->retrieveRecords($this->getQuery());
+        [$this->records, $this->meta] = $this->retrieveRecords($this->getBuilder());
 
-        $this->freeQuery();
+        $this->freeBuilder();
 
         $this->applyScopes($this->records, $this->getTableColumns(), $this->getInlineActions());
+    }
+
+    /**
+     * Retrieve the records from the builder instance and generate metadata.
+     * 
+     * @param EloquentBuilder|QueryBuilder $builder
+     * @return array
+     */
+    private function retrieveRecords(EloquentBuilder|QueryBuilder $builder): array
+    {
+        switch ($this->getPaginateType())
+        {
+            case 'cursor':
+                $data = $this->getBuilder()->cursorPaginate(...\array_values($this->getPagination()))->withQueryString();
+                return [$data->getCollection(), $this->generateCursorPaginatorMeta($data)];
+            case 'get':
+                $data = $builder->get();
+                return [$data, $this->generateUnpaginatedMeta($data)];
+            default:
+                $data = $this->getBuilder()->paginate(...$this->getPagination())->withQueryString();
+                return [$data->getCollection(), $this->generatePaginatorMeta($data)];
+        }
     }
 }

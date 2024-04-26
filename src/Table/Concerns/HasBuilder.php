@@ -8,18 +8,17 @@ use Illuminate\Support\Collection;
 
 trait HasBuilder
 {
-    private mixed $query = null;
+    private mixed $builder = null;
 
     /**
      * Define the query to be used for the table.
      * 
-     * @param Builder|null $query
-     * @return Builder|null
+     * @param EloquentBuilder|QueryBuilder|null $query
+     * @return EloquentBuilder|QueryBuilder|null
      */
-    public function query(mixed $query = null): mixed
+    public function setBuilder($builder = null): void
     {
-        if ($query) $this->query = $query;
-        return $this->query;
+        if (!\is_null($builder)) $this->_setBuilder($builder);
     }
 
     /**
@@ -27,41 +26,41 @@ trait HasBuilder
      * 
      * @return bool
      */
-    public function hasQuery(): bool
+    public function hasBuilder(): bool
     {
-        return !\is_null($this->getQuery());
+        return !\is_null($this->getBuilder());
     }
 
-    public function getQuery(): mixed
+    public function getBuilder(): mixed
     {
-        return $this->evaluate($this->query);
+        return $this->builder;
     }
 
-    protected function setQuery(mixed $query): void
+    protected function _setBuilder(EloquentBuilder|QueryBuilder $builder): void
     {
-        $this->query = $query;
+        $this->builder = $builder;
     }
 
-    public function refineQuery(Collection $refiners): void
+    public function refineBuilder(Collection $refiners): void
     {
-        $this->setQuery($this->query->withRefinements($refiners));
+        $this->setBuilder($this->builder->withRefinements($refiners));
     }
 
     public function isEloquentBuilder(): bool
     {
-        return $this->query instanceof EloquentBuilder;
+        return $this->builder instanceof EloquentBuilder;
     }
 
     public function isQueryBuilder(): bool
     {
-        return $this->query instanceof QueryBuilder;
+        return $this->builder instanceof QueryBuilder;
     }
 
     /**
      * Set the query to null, allowing it to be garbage collected.
      */
-    public function freeQuery(): void
+    public function freeBuilder(): void
     {
-        $this->query = null;
+        $this->builder = null;
     }
 }

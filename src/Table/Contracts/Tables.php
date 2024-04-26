@@ -9,7 +9,7 @@ interface Tables
 {
     public static function make($data = null): static;
 
-    public function tablePipeline(): void;
+    public function pipeline(): void;
 
     public function getMeta(): array;
 

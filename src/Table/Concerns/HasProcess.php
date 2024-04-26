@@ -7,7 +7,7 @@ trait HasProcess
     /** Determine whether the process has been completed */
     private bool $processed = false;
 
-    abstract public function tablePipeline(): void;
+    abstract public function pipeline(): void;
 
     /**
      * Process the table
@@ -20,7 +20,7 @@ trait HasProcess
             return;
         }
 
-        $this->tablePipeline();
+        $this->pipeline();
         
         $this->processed = true;
     }

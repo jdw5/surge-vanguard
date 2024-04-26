@@ -2,8 +2,6 @@
 
 namespace Jdw5\Vanguard\Table\Concerns;
 
-use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -11,26 +9,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 trait HasMeta
 {
     private mixed $meta = null;
-
-    abstract public function getMeta(): array;
-    abstract function getPagination(): array;
-    abstract function getPaginateType(): ?string;
-
-    public function retrieveRecords(Builder|QueryBuilder $builder): array
-    {
-        switch ($this->getPaginateType())
-        {
-            case 'cursor':
-                $data = $this->query->cursorPaginate(...\array_values($this->getPagination()))->withQueryString();
-                return [$data->getCollection(), $this->generateCursorPaginatorMeta($data)];
-            case 'get':
-                $data = $builder->get();
-                return [$data, $this->generateUnpaginatedMeta($data)];
-            default:
-                $data = $this->query->paginate(...$this->getPagination())->withQueryString();
-                return [$data->getCollection(), $this->generatePaginatorMeta($data)];
-        }
-    }
 
     /**
      * Generate the metadata for an unpaginated collection.
