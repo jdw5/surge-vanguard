@@ -60,26 +60,6 @@ trait HasRecordDependency
     }
 
     /**
-     * Check if the action is dependent
-     * 
-     * @return bool
-     */
-    public function isDependent(): bool
-    {
-        return $this->evaluate($this->dependsOn);
-    }
-
-    /**
-     * Check if the action is disabled
-     * 
-     * @return bool
-     */
-    public function isDisabled(): bool
-    {
-        return $this->evaluate($this->disabledOn);
-    }
-
-    /**
      * Check if the action has a conditional
      * 
      * @return bool

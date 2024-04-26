@@ -195,7 +195,7 @@ trait HasPreferences
             'name' => $col->getName(),
             'label' => $col->getLabel(),
             'active' => $col->shouldBeDynamicallyShown($this->getPreferences()),
-            'default' => $col->isDefaultPreference(),
+            'fixed' => $col->isPreferable(),
         ])->values()->toArray();
     }
 }

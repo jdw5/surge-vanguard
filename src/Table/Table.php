@@ -113,7 +113,7 @@ abstract class Table extends Primitive implements Tables
         $table = [
             'meta' => $this->getMeta(),
             'rows' => $this->getRecords(),
-            'cols' => $this->hasPreferences() ? $this->getPreferencedTableColumns($this->getPreferences()) : $this->getTableColumns(),
+            'cols' => $this->getTableColumns(),
             'refinements' => [
                 'sorts' => $this->getSorts(),
                 'filters' => $this->getFilters(),

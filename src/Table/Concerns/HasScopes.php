@@ -52,7 +52,7 @@ trait HasScopes
             return;
         }
        
-        $records->map(function ($record) use ($cols, $actions) {
+        $records = $records->map(function ($record) use ($cols, $actions) {
             // Apply the columns
             if ($this->scopesAndTransformsColumns()) {
                 $record = $cols->reduce(function ($carry, Column $col) use ($record) {

@@ -231,6 +231,11 @@ trait HasPagination
         return isset($this->showKey) ? $this->showKey : null;
     }
 
+    protected function setShowKey(string $showKey): void
+    {
+        $this->showKey = $showKey;
+    }
+
     /**
      * Set the columns to be selected for pagination
      * 

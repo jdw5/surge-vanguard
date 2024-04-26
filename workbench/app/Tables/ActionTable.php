@@ -20,13 +20,6 @@ use Jdw5\Vanguard\Refining\Filters\SelectFilter;
 
 class ActionTable extends Table
 {
-    // protected function definePagination()
-    // {
-    //     return 10;
-    // }
-
-    protected $model = TestUser::class;
-
     protected function defineColumns(): array
     {
         return [
@@ -41,12 +34,6 @@ class ActionTable extends Table
     protected function defineRefinements(): array
     {
         return [
-            Filter::make('name')->loose(),
-            SelectFilter::make('role', 'type')->options(Option::enum(TestRole::class, 'label')),
-            QueryFilter::make('id')->query(fn (Builder $builder, $value) => $builder->where('id', '<', $value)),
-           
-            Sort::make('created_at', 'newest')->desc()->default(),
-            Sort::make('created_at', 'oldest')->asc(),   
         ];
     }
 
@@ -55,7 +42,7 @@ class ActionTable extends Table
         return [
             PageAction::make('add')->label('Add User'),
 
-            BulkAction::make('delete')->label('Delete Users'),
+            // BulkAction::make('delete')->label('Delete Users')->endpoint('delete', ),
 
             InlineAction::make('view')->label('View User')->default()->whenRecord(fn (Record $record) => $record->id > 1),
             InlineAction::make('edit')->label('Edit User')->default()->whenRecord('name', '!=', 'xxxxx'),

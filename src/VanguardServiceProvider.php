@@ -55,11 +55,7 @@ class VanguardServiceProvider extends ServiceProvider
             }
 
             if (empty($refinements)) {
-                try {
-                    $refinements = $this->getModel()->getRefinements();
-                } catch (\Exception $e) {
-                    return $this;
-                }
+                return $this;
             }
 
             foreach ($refinements as $refinement) {

@@ -14,6 +14,11 @@ use Illuminate\Support\Collection;
  */
 trait HasColumns
 {
+
+    // Dependency on HasPreferences methods
+    abstract public function getPreferences(): array;
+    abstract public function hasPreferences(): bool;
+
     /** Columns are cached to prevent recalculations */
     private mixed $cachedColumns = null;
 
@@ -34,7 +39,10 @@ trait HasColumns
      */
     protected function getTableColumns(): Collection
     {
-        return $this->cachedColumns ??= $this->getUncachedTableColumns();
+        return $this->cachedColumns ??= $this->hasPreferences() ? 
+            $this->getUncachedPreferencedTableColumns($this->getPreferences()) 
+            : 
+            $this->getUncachedTableColumns();
     }
 
     /**
@@ -42,14 +50,14 @@ trait HasColumns
      * 
      * @param array $preferences An array of column names to show
      */
-    protected function getPreferencedTableColumns(array $preferences): Collection
+    private function getUncachedPreferencedTableColumns(array $preferences): Collection
     {
-        return $this->cachedColumns ??= collect($this->defineColumns())
+        return collect($this->defineColumns())
             ->filter(static fn (Column $column): bool => !$column->isExcluded() && $column->shouldBeDynamicallyShown($preferences)
         )->values();
     }
 
-    protected function getUncachedTableColumns(): Collection
+    private function getUncachedTableColumns(): Collection
     {
         return collect($this->defineColumns())
             ->filter(static fn (Column $column): bool => !$column->isExcluded()
