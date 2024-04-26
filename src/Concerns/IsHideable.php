@@ -2,16 +2,12 @@
 
 namespace Jdw5\Vanguard\Concerns;
 
-use Jdw5\Vanguard\Enums\Breakpoint;
-
 trait IsHideable
 {
     /** Whether this column shown be shown */
     protected bool $show = true;
     /** Whether this column should only be displayed for screen readers */
     protected bool $sr_only = false;
-    /** The breakpoint it should display at */
-    protected ?Breakpoint $breakpoint = null;
 
     /**
      * Set the visibility of the column to hidden
@@ -65,52 +61,6 @@ trait IsHideable
     {
         $this->show = $condition;
         return $this;
-    }
-
-    /**
-     * Set the visibility of the column to hidden on extra small screens or larger
-     * 
-     * @return static
-     */
-    public function xs(): static
-    {
-        return $this->breakpoint(Breakpoint::XS);
-    }
-
-    public function sm(): static
-    {
-        return $this->breakpoint(Breakpoint::SM);
-    }
-
-    public function md(): static
-    {
-        return $this->breakpoint(Breakpoint::MD);
-    }
-
-    public function lg(): static
-    {
-        return $this->breakpoint(Breakpoint::LG);
-    }
-
-    public function xl(): static
-    {
-        return $this->breakpoint(Breakpoint::XL);
-    }
-
-    public function xxl(): static
-    {
-        return $this->breakpoint(Breakpoint::XXL);
-    }
-
-    public function breakpoint(Breakpoint|string $breakpoint): static
-    {
-        $this->breakpoint = $breakpoint instanceof Breakpoint ? $breakpoint : Breakpoint::from($breakpoint);
-        return $this;
-    }
-
-    public function getBreakpoint(): string|null
-    {
-        return $this->breakpoint->value ?? null;
     }
 
     public function isShown(): bool

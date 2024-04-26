@@ -2,6 +2,7 @@
 
 namespace Jdw5\Vanguard\Table\Columns;
 
+use Jdw5\Vanguard\Concerns\HasBreakpoints;
 use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Concerns\HasName;
 use Jdw5\Vanguard\Concerns\HasType;
@@ -32,6 +33,7 @@ abstract class BaseColumn extends Primitive
     use HasSort;
     use IsIncludable;
     use IsHideable;
+    use HasBreakpoints;
     use IsKey;
     use IsPreferable;
 
