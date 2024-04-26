@@ -8,20 +8,20 @@ use Illuminate\Support\Collection;
 use Jdw5\Vanguard\Concerns\HasActions;
 use Illuminate\Database\Eloquent\Model;
 use Jdw5\Vanguard\Table\Concerns\HasKey;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Table\Concerns\HasMeta;
 use Jdw5\Vanguard\Table\Contracts\Tables;
 use Jdw5\Vanguard\Concerns\HasRefinements;
 use Jdw5\Vanguard\Table\Concerns\HasModel;
 use Jdw5\Vanguard\Table\Concerns\HasScopes;
+use Jdw5\Vanguard\Table\Concerns\HasBuilder;
 use Jdw5\Vanguard\Table\Concerns\HasColumns;
 use Jdw5\Vanguard\Table\Concerns\HasProcess;
 use Jdw5\Vanguard\Table\Concerns\HasRecords;
 use Jdw5\Vanguard\Table\Concerns\HasPagination;
 use Jdw5\Vanguard\Table\Concerns\HasPreferences;
-use Jdw5\Vanguard\Table\Concerns\HasBuilder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Table\Exceptions\InvalidKeyException;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
 abstract class Table extends Primitive implements Tables
 {

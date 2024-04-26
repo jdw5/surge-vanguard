@@ -2,7 +2,6 @@
 
 namespace Jdw5\Vanguard\Table\Contracts;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 interface Tables

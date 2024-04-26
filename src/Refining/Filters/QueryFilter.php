@@ -15,14 +15,14 @@ class QueryFilter extends BaseFilter
 
     protected function setUp(): void
     {
-        $this->type('query');
+        $this->setType('query');
     }
 
     public function refine(Builder|QueryBuilder $builder, ?Request $request = null): void
     {
-        if (is_null($request)) $request = request();
+        if (\is_null($request)) $request = request();
         
-        $this->value($request->query($this->getName()));
+        $this->setValue($request->query($this->getName()));
 
         $this->apply($builder, $this->getName(), $this->getValue());
 

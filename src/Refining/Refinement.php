@@ -25,18 +25,23 @@ abstract class Refinement extends Primitive implements Refines
     use IsIncludable;
 
     public function __construct(string $property, ?string $name = null) {
-        $this->property($property);
-        $this->name(str($name ?? $property)->replace('.', '_'));
-        $this->label($this->labelise($this->getName()));
+        $this->setProperty($property);
+        $this->setName(str($name ?? $property)->replace('.', '_'));
+        $this->setLabel($this->labelise($this->getName()));
         $this->configure();
     }
 
     public function isActive(): bool
     {
-        return !\is_null($this->getValue());
+        return ! \is_null($this->getValue());
     }
-    
-    public function jsonSerialize(): array
+
+    /**
+     * Convert the refinement to an array representation
+     * 
+     * @return array
+     */
+    public function toArray(): array
     {
         return [
             'name' => $this->getName(),
@@ -45,5 +50,15 @@ abstract class Refinement extends Primitive implements Refines
             'metadata' => $this->getMetadata(),
             'active' => $this->isActive(),
         ];
+    }
+    
+    /**
+     * Serialise the refinement to JSON
+     * 
+     * @return array
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

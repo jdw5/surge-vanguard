@@ -15,15 +15,15 @@ class SelectFilter extends BaseFilter
 
     protected function setUp(): void
     {
-        $this->type('select');
+        $this->setType('select');
     }
 
-    public function setActiveOption(mixed $value): void
+    public function updateOptionActivity(mixed $value): void
     {
-        $this->value(explode(',', $value));
+        $this->setValue(explode(',', $value));
 
         if ($this->hasOptions()) {
-            $this->getOptions()->each(fn (Option $option) => $option->active(in_array($option->getValue(), $this->getValue())));
+            $this->getOptions()->each(fn (Option $option) => $option->active(\in_array($option->getValue(), $this->getValue())));
         }
     }
 

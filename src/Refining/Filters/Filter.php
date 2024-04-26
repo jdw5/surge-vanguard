@@ -16,7 +16,7 @@ class Filter extends BaseFilter
 
     protected function setUp(): void
     {
-        $this->type('filter');
+        $this->setType('filter');
     }
 
     public function apply(Builder|QueryBuilder $builder, string $property, mixed $value): void

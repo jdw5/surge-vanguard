@@ -3,11 +3,7 @@
 namespace Jdw5\Vanguard\Concerns;
 
 /**
- * Trait HasType
- * 
  * Set a type property on a class
- * 
- * @property string|\Closure $type
  */
 trait HasType
 {
@@ -21,8 +17,19 @@ trait HasType
      */
     public function type(string|\Closure $type): static
     {
-        $this->type = $type;
+        $this->setType($type);
         return $this;
+    }
+
+    /**
+     * Set the type property quietly.
+     * 
+     * @param string|\Closure $type
+     * @return void
+     */
+    protected function setType(string|\Closure $type): void
+    {
+        $this->type = $type;
     }
 
     /**

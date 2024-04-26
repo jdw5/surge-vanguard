@@ -45,6 +45,11 @@ abstract class BaseSort extends Refinement implements Sorts
         return $this->isActiveSort();
     }
 
+    /**
+     * Compute whether the sort is active
+     * 
+     * @return bool
+     */
     public function isActiveSort(): bool
     {
         return ($this->getValue() === $this->getName()) || ($this->isDefault() && \is_null($this->getValue()));
