@@ -4,20 +4,41 @@ namespace Jdw5\Vanguard\Refining\Filters\Concerns;
 
 trait HasQueryBoolean
 {
-    protected string $queryBoolean = 'and';
+    /** The query boolean to be used for SQL clauses. Should resolve to 'and' or 'or' */
+    protected string|\Closure $queryBoolean = 'and';
 
-    public function queryBoolean(string $boolean): static
+    /**
+     * Set the query boolean to be used.
+     * 
+     * @param string $boolean
+     * @return static
+     */
+    public function queryBoolean(string|\Closure $boolean): static
     {
-        $this->queryBoolean = $boolean;
-
+        $this->setQueryBoolean($boolean);
         return $this;
     }
 
+    protected function setQueryBoolean(string|\Closure $boolean): void
+    {
+        $this->queryBoolean = $boolean;
+    }
+
+    /**
+     * Set the query boolean to be 'or'.
+     * 
+     * @return static
+     */
     public function or(): static
     {
         return $this->queryBoolean('or');
     }
 
+    /**
+     * Set the query boolean to be 'and'.
+     * 
+     * @return static
+     */
     public function and(): static
     {
         return $this->queryBoolean('and');
@@ -25,6 +46,6 @@ trait HasQueryBoolean
 
     public function getQueryBoolean(): string
     {
-        return $this->queryBoolean;
+        return $this->evaluate($this->queryBoolean);
     }
 }

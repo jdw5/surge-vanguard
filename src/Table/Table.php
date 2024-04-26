@@ -7,7 +7,6 @@ use Jdw5\Vanguard\Concerns\HasId;
 use Illuminate\Support\Collection;
 use Jdw5\Vanguard\Concerns\HasActions;
 use Illuminate\Database\Eloquent\Model;
-use Jdw5\Vanguard\Table\Columns\Column;
 use Jdw5\Vanguard\Table\Concerns\HasKey;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;

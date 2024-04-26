@@ -27,8 +27,7 @@ abstract class Refinement extends Primitive implements Refines
     public function __construct(string $property, ?string $name = null) {
         $this->property($property);
         $this->name(str($name ?? $property)->replace('.', '_'));
-        $this->label(str($this->getName())->headline()->lower()->ucfirst());
-
+        $this->label($this->labelise($this->getName()));
         $this->configure();
     }
 

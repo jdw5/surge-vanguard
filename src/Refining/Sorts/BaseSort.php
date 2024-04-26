@@ -16,7 +16,7 @@ abstract class BaseSort extends Refinement implements Sorts
     use HasDirection;
     use IsDefault;
     
-    public static function make(string $property, ?string $name = null): static
+    public static function make(string $property, string $name = null): static
     {
         return resolve(static::class, compact('property', 'name'));
     }
@@ -29,9 +29,7 @@ abstract class BaseSort extends Refinement implements Sorts
 
         if ($this->isActive() || (is_null($this->getValue()) && $this->isDefault())) {
             $this->apply($builder, $this->getProperty(), $this->getDirection());
-        } 
-        
-        return;
+        }         
     }
 
     public function apply(Builder|QueryBuilder $builder, string $property, ?string $direction = self::DEFAULT_DIRECTION): void

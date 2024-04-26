@@ -3,42 +3,63 @@
 namespace Jdw5\Vanguard\Table\Columns\Concerns;
 
 /**
- * Trait HasTransform
- * 
  * Set a transform property on a class
- * 
- * @property \Closure|null $getValueUsing
  */
 trait HasTransform
 {
-    protected null|\Closure $getValueUsing = null;
+    /** Closure to perform transform */
+    protected null|\Closure $transform = null;
 
     /**
-     * Transforms the value of the column using the given callback.
+     * Set the transformation function for a given value, chainable
      */
     public function transform(\Closure $callback): static
     {
-        $this->getValueUsing = $callback;
-
+        $this->setTransform($callback);
         return $this;
     }
 
-    public function canTransform(): bool
+    /**
+     * Set the transformation function for a given value quietly.
+     * 
+     * @param \Closure $callback
+     * @return void
+     */
+    protected function setTransform(\Closure $callback): void
     {
-        return !\is_null($this->getValueUsing);
+        $this->transform = $callback;
     }
 
+    /**
+     * Determine if the column has a transform.
+     * 
+     * @return bool
+     */
+    public function hasTransform(): bool
+    {
+        return !\is_null($this->transform);
+    }
+
+    /**
+     * Transform the value using the given callback.
+     * 
+     * @param mixed $value
+     * @return mixed
+     */
     public function transformUsing(mixed $value): mixed
     {
-        if (! $this->canTransform()) {
-            return $value;
-        }
-
+        if (! $this->hasTransform()) return $value;
         return $this->getTransformed($value);
     }
 
+    /**
+     * Get the transformed value.
+     * 
+     * @param mixed $value
+     * @return mixed
+     */
     public function getTransformed(mixed $value): mixed
     {
-        return ($this->getValueUsing)($value);
+        return ($this->transform)($value);
     }
 }

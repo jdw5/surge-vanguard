@@ -5,11 +5,7 @@ namespace Jdw5\Vanguard\Table\Columns\Concerns;
 use Jdw5\Vanguard\Refining\Sorts\ToggleSort;
 
 /**
- * Trait HasSort
- * 
  * Define whether a column should have toggle sorting enabled.
- * 
- * @property \Jdw5\Vanguard\Refining\Sorts\ToggleSort|null $sort
  */
 trait HasSort
 {
@@ -22,10 +18,22 @@ trait HasSort
      * @param string|null $property
      * @return static
      */
-    public function sort(?string $name = null, ?string $property = null): static
+    public function sort(string $name = null, string $property = null): static
     {
         $this->sort = ToggleSort::make($property ?? $this->getName(), $name ?? $this->getName());
         return $this;
+    }
+
+    /**
+     * Alias for sort
+     * 
+     * @param string|null $name
+     * @param string|null $property
+     * @return static
+     */
+    public function sortable(string $name = null, string $property = null): static
+    {
+        return $this->sort($name, $property);
     }
 
     /**

@@ -14,6 +14,7 @@ use Jdw5\Vanguard\Table\Columns\Concerns\HasSort;
 use Jdw5\Vanguard\Table\Columns\Concerns\HasFallback;
 use Jdw5\Vanguard\Table\Columns\Concerns\HasTransform;
 use Jdw5\Vanguard\Table\Columns\Concerns\IsPreferable;
+use Jdw5\Vanguard\Table\Columns\Exceptions\ReservedColumnName;
 
 /**
  * Class BaseColumn
@@ -35,17 +36,17 @@ abstract class BaseColumn extends Primitive
     use IsPreferable;
 
     const RESERVED = [
-        'method',
-        'action',
+        'key',
+        'actions',
     ];
 
     public function __construct(string $name)
     {
         if (in_array($name, static::RESERVED)) {
-            throw new \Exception("Column name '{$name}' is reserved and cannot be used.");
+            throw ReservedColumnName::make($name);
         }
-        $this->name($name);
-        $this->label(str($name)->afterLast('.')->headline()->lower()->ucfirst());
+        $this->setName($name);
+        $this->setLabel($this->labelise($this->getName()));
         $this->setUp();
     }
 
@@ -58,11 +59,11 @@ abstract class BaseColumn extends Primitive
     }
 
     /**
-     * Serialize the column for JSON
+     * Convert the column to an array
      * 
      * @return array
      */
-    public function jsonSerialize(): array
+    public function toArray(): array
     {
         return [
             /** Column information */
@@ -83,5 +84,15 @@ abstract class BaseColumn extends Primitive
             'next_direction' => $this->getNextDirection(),
             'sort_field' => $this->getSortName(),
         ];
+    }
+
+    /**
+     * Serialize the column for JSON
+     * 
+     * @return array
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

@@ -5,6 +5,9 @@ namespace Jdw5\Vanguard\Refining\Concerns;
 use Illuminate\Support\Collection;
 use Jdw5\Vanguard\Refining\Options\Option;
 
+/**
+ * Define options on a class to be used for refinement
+ */
 trait HasOptions
 {
     protected ?Collection $options = null;

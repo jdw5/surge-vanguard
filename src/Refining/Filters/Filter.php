@@ -3,14 +3,11 @@
 namespace Jdw5\Vanguard\Refining\Filters;
 
 use Closure;
-use Illuminate\Http\Request;
-use Jdw5\Vanguard\Refining\Concerns\HasEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasMode;
 use Jdw5\Vanguard\Refining\Filters\Enums\FilterMode;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasOperator;
-use Jdw5\Vanguard\Refining\Filters\Concerns\HasQueryBoolean;
 
 class Filter extends BaseFilter
 {

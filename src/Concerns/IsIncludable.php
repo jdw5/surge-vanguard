@@ -3,12 +3,7 @@
 namespace Jdw5\Vanguard\Concerns;
 
 /**
- * Trait IsIncludable
- * 
  * Adds the ability to provide conditions to include classes
- * 
- * @property bool|\Closure $isExcluded
- * @property bool|\Closure $isIncluded
  */
 trait IsIncludable
 {

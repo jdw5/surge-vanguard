@@ -21,7 +21,7 @@ final class {{ class }} extends Table
 
     protected function defineQuery()
     {
-        // return Model::query()
+        // return Model::query();
     }
 
     protected function defineColumns(): array
@@ -48,5 +48,16 @@ final class {{ class }} extends Table
         return [
 
         ];
+    }
+
+    // Set these if you want to add preferencing (dynamic columns)
+    protected function definePreferenceKey()
+    {
+        return null;
+    }
+
+    protected function definePreferenceCookie()
+    {
+        return null;
     }
 }

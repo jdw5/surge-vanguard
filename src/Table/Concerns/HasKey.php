@@ -25,7 +25,7 @@ trait HasKey
     public function getKey(): string
     {
         if (!isset($this->key) || empty($this->key)) {
-            throw InvalidKeyException::invalid();
+            throw InvalidKeyException::make();
         }
         return $this->key;
     }
