@@ -21,7 +21,7 @@ abstract class BaseFilter extends Refinement implements Filters
      * 
      * @param mixed $property
      * @param string $name
-     * @return void
+     * @return static
      */
     public static function make(mixed $property, string $name = null): static
     {

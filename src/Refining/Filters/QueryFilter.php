@@ -13,6 +13,8 @@ class QueryFilter extends BaseFilter
 {
     use HasQuery;
 
+    // Use a different 'make' method to reflect no need for property: just name
+
     protected function setUp(): void
     {
         $this->setType('query');
