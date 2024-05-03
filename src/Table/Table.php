@@ -27,7 +27,6 @@ abstract class Table extends Primitive implements Tables
 {
     use HasColumns;
     use HasActions;
-    use HasId;
     use HasModel;
     use HasPagination;
     use HasRefinements;

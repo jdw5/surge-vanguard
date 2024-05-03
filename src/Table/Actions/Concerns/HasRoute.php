@@ -149,7 +149,7 @@ trait HasRoute
      * 
      * @param string|\Closure $route
      */
-    protected function setRoute(string $route): void
+    protected function setRoute(string|\Closure $route): void
     {
         $this->route = $route;
     }
@@ -198,7 +198,7 @@ trait HasRoute
         // Ensure the route is set
         if (!$this->hasRoute()) return null;
 
-        $record = $this->wrapRecord($record);
+        if (!\is_null($record)) $record = $this->wrapRecord($record);
         
         $route = $this->getRoute();
 
