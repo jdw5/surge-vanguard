@@ -40,11 +40,20 @@ abstract class Table extends Primitive implements Tables
     // HasExport
     // HasFilters
 
+    protected Collection $records;
+
     public function __construct(
         EloquentBuilder|QueryBuilder $data = null,
-
+        array $columns = null,
+        array $actions = null,
+        array $filters = null,
+        array $sorts = null,
+        array $search = null,
+        array $pagination = null,
+        array $exports = null
     )
     {
+        $this->records = collect();
         $this->setBuilder($data);
     }
     

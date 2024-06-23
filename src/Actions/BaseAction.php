@@ -17,16 +17,15 @@ abstract class BaseAction extends Primitive
     use IsIncludable;
     use HasEndpoint;
 
-    final public function __construct(string $name)
+    public function __construct(string $name)
     {
         $this->setName($name);
         $this->setLabel($this->labelise($name));
-        $this->setUp();
     }
 
     public static function make(string $name): static
     {
-        return resolve(static::class, compact('name'));
+        return new static($name);
     }
 
     /**

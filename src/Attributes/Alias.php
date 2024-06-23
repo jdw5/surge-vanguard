@@ -2,8 +2,9 @@
 
 namespace Jdw5\Vanguard\Attributes;
 
+use Attribute;
 
-#[Attribute]
-class Alias {
+class Alias extends Attribute
+{
     public function __construct(public string $name) {}
 }

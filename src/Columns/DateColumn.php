@@ -1,10 +1,8 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Columns;
+namespace Jdw5\Vanguard\Columns;
 
-use Jdw5\Vanguard\Table\Columns\BaseColumn;
-
-class Column extends BaseColumn
+class DateColumn extends Column
 {
 
 }

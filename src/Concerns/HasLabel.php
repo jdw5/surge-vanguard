@@ -42,7 +42,7 @@ trait HasLabel
         return $this->evaluate($this->label);
     }
 
-    protected function labelise(string $name): string
+    protected function makeLabel(string $name): string
     {
         return str($name)->headline()->lower()->ucfirst();
     }

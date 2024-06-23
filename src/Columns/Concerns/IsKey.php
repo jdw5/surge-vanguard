@@ -1,14 +1,7 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Columns\Concerns;
+namespace Jdw5\Vanguard\Columns\Concerns;
 
-/**
- * Trait IsKey
- * 
- * Set a key property on a class
- * 
- * @property bool $key
- */
 trait IsKey
 {
     protected bool $key = false;

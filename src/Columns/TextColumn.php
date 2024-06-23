@@ -1,8 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Columns;
-
-use Jdw5\Vanguard\Table\Columns\Column;
+namespace Jdw5\Vanguard\Columns;
 
 class TextColumn extends Column
 {
