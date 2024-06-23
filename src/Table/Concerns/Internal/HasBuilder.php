@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Concerns;
+namespace Jdw5\Vanguard\Table\Concerns\Internal;
 
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;

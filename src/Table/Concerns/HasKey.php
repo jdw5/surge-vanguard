@@ -13,10 +13,6 @@ use Jdw5\Vanguard\Table\Exceptions\InvalidKeyException;
  */
 trait HasKey
 {
-
-    /** The key field */
-    protected $key;
-
     /**
      * Retrieve the key property
      * 
@@ -24,9 +20,14 @@ trait HasKey
      */
     public function getKey(): string
     {
-        if (!isset($this->key) || empty($this->key)) {
-            throw InvalidKeyException::make();
+        if (isset($this->key) && is_string($this->key)) {
+            return $this->key;
         }
-        return $this->key;
+
+        if (function_exists('key')) {
+            return $this->key();
+        }
+        
+        throw InvalidKeyException::make();
     }
 }

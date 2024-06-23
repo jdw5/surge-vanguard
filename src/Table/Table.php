@@ -40,7 +40,10 @@ abstract class Table extends Primitive implements Tables
     // HasExport
     // HasFilters
 
-    public function __construct($data = null)
+    public function __construct(
+        EloquentBuilder|QueryBuilder $data = null,
+
+    )
     {
         $this->setBuilder($data);
     }
@@ -56,27 +59,6 @@ abstract class Table extends Primitive implements Tables
     ): static
     {
         return new static($data);
-    }
-
-    /** 
-     * Create a new table instance (alias)
-     * 
-     * @param EloquentBuilder|QueryBuilder|null $data
-     */
-    public static function from($data): static
-    {
-        return static::make($data);
-    }
-
-    /**
-     * Create a new table instance from a model.
-     * 
-     * @param Model $model
-     * @return static
-     */
-    public static function fromModel(Model $model): static
-    {
-        return static::make($model->newQuery());
     }
 
     /**
