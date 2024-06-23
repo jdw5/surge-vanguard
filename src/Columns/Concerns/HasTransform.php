@@ -2,30 +2,47 @@
 
 namespace Jdw5\Vanguard\Table\Columns\Concerns;
 
+use Closure;
+
 /**
  * Set a transform property on a class
  */
 trait HasTransform
 {
     /** Closure to perform transform */
-    protected null|\Closure $transform = null;
+    protected Closure $transform = null;
 
     /**
      * Set the transformation function for a given value, chainable
      */
-    public function transform(\Closure $callback): static
+    public function transform(Closure $callback): static
     {
         $this->setTransform($callback);
         return $this;
     }
 
+    public function cast(Closure $callback): static
+    {
+        return $this->transform($callback);
+    }
+
+    public function as(Closure $callback): static
+    {
+        return $this->transform($callback);
+    }
+
+    public function format(Closure $callback): static
+    {
+        return $this->transform($callback);
+    }
+
     /**
      * Set the transformation function for a given value quietly.
      * 
-     * @param \Closure $callback
+     * @param Closure $callback
      * @return void
      */
-    protected function setTransform(\Closure $callback): void
+    protected function setTransform(Closure $callback): void
     {
         $this->transform = $callback;
     }
@@ -37,7 +54,7 @@ trait HasTransform
      */
     public function hasTransform(): bool
     {
-        return !\is_null($this->transform);
+        return !is_null($this->transform);
     }
 
     /**
@@ -48,8 +65,8 @@ trait HasTransform
      */
     public function transformUsing(mixed $value): mixed
     {
-        if (! $this->hasTransform()) return $value;
-        return $this->getTransformed($value);
+        if (!$this->hasTransform()) return $value;
+        return $this->performTransform($value);
     }
 
     /**
@@ -58,7 +75,7 @@ trait HasTransform
      * @param mixed $value
      * @return mixed
      */
-    public function getTransformed(mixed $value): mixed
+    public function performTransform(mixed $value): mixed
     {
         return ($this->transform)($value);
     }

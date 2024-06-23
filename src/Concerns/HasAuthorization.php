@@ -37,4 +37,40 @@ trait HasAuthorization
     {
         return $this->evaluate($this->authorized);
     }
+
+    /** Aliases */
+    public function allowed(): bool
+    {
+        return $this->authorized();
+    }
+
+    public function isAuthorized(): bool
+    {
+        return $this->authorized();
+    }
+
+    public function isAllowed(): bool
+    {
+        return $this->authorized();
+    }
+
+    public function authorised(): bool
+    {
+        return $this->authorized();
+    }
+
+    public function isAuthorised(): bool
+    {
+        return $this->authorized();
+    }
+
+    public function authorise(bool|\Closure $condition = true)
+    {
+        return $this->authorize($condition);
+    }
+
+    public function when(bool|\Closure $condition = true)
+    {
+        return $this->authorize($condition);
+    }
 }

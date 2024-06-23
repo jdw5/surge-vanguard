@@ -6,8 +6,11 @@ trait IsHideable
 {
     /** Whether this column shown be shown */
     protected bool $show = true;
-    /** Whether this column should only be displayed for screen readers */
-    protected bool $sr_only = false;
+
+    protected function setShow(bool $show): void
+    {
+        $this->show = $show;
+    }
 
     /**
      * Set the visibility of the column to hidden
@@ -16,39 +19,18 @@ trait IsHideable
      */
     public function hide(): static
     {
-        $this->show = false;      
+        $this->setShow(false);    
         return $this;
     }
 
-    /**
-     * Set the visibility of the column to hidden (alias)
-     * 
-     * @return static
-     */
     public function hidden(): static
     {
         return $this->hide();
     }
 
-    /**
-     * Set the visibility of the column to screen reader only
-     * 
-     * @return static
-     */
-    public function srOnly(): static
+    public function dontDisplay(): static
     {
-        $this->sr_only = true;   
-        return $this;
-    }
-
-    /**
-     * Check if the column is screen reader only
-     * 
-     * @return bool
-     */
-    public function isSrOnly(): bool
-    {
-        return $this->sr_only;
+        return $this->hide();
     }
 
     /**
@@ -59,8 +41,18 @@ trait IsHideable
      */
     public function show(bool $condition = true): static
     {
-        $this->show = $condition;
+        $this->setShow($condition);
         return $this;
+    }
+
+    public function shown(): static
+    {
+        return $this->show(true);
+    }
+
+    public function display(bool $condition = true): static
+    {
+        return $this->show(true);
     }
 
     public function isShown(): bool
@@ -70,6 +62,6 @@ trait IsHideable
 
     public function isHidden(): bool
     {
-        return ! $this->show;
+        return !$this->show;
     }
 }

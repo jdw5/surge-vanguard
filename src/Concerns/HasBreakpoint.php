@@ -7,7 +7,7 @@ use Jdw5\Vanguard\Enums\Breakpoint;
 /**
  * Disable a Tailwind-style breakpoint to show the class at.
  */
-trait HasBreakpoints
+trait HasBreakpoint
 {
     /** The breakpoint it should display at */
     protected ?Breakpoint $breakpoint = null;

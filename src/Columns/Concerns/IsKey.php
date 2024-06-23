@@ -16,6 +16,11 @@ trait IsKey
         return $this->key;
     }
 
+    public function isPrimaryKey(): bool
+    {
+        return $this->isKey();
+    }
+
     /**
      * Set the column as the key
      * 
@@ -23,7 +28,7 @@ trait IsKey
      */
     public function key(): static
     {
-        $this->key = true;
+        $this->setKey(true);
         return $this;
     }
 
@@ -35,5 +40,31 @@ trait IsKey
     public function asKey(): static
     {
         return $this->key();
+    }
+
+    public function primaryKey(): static
+    {
+        return $this->key();
+    }
+
+    public function notKey(): static
+    {
+        $this->setKey(false);
+        return $this;
+    }
+
+    public function notPrimaryKey(): static
+    {
+        return $this->notKey();
+    }
+
+    public function notAsKey(): static
+    {
+        return $this->notKey();
+    }
+
+    protected function setKey(bool $key): void
+    {
+        $this->key = $key;
     }
 }
