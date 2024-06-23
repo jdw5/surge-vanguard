@@ -15,6 +15,7 @@ use Jdw5\Vanguard\Table\Actions\PageAction;
 use Jdw5\Vanguard\Table\Actions\InlineAction;
 use Jdw5\Vanguard\Refining\Filters\QueryFilter;
 use Jdw5\Vanguard\Refining\Filters\SelectFilter;
+use Jdw5\Vanguard\Table\Actions\BaseAction;
 
 class BasicTable extends Table
 {
@@ -43,9 +44,9 @@ class BasicTable extends Table
             Filter::make('name')->loose(),
             SelectFilter::make('role', 'type')->options(Option::enum(TestRole::class, 'label')),
             QueryFilter::make('id')->query(fn (Builder $builder, $value) => $builder->where('id', '<', $value)),
-           
+            
             Sort::make('created_at', 'newest')->desc()->default(),
-            Sort::make('created_at', 'oldest')->asc(),   
+            Sort::make('created_at', 'oldest')->asc(),
         ];
     }
 

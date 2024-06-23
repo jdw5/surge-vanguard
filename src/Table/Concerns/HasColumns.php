@@ -14,7 +14,6 @@ use Illuminate\Support\Collection;
  */
 trait HasColumns
 {
-
     // Dependency on HasPreferences methods
     abstract public function getPreferences(): array;
     abstract public function hasPreferences(): bool;

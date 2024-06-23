@@ -3,7 +3,6 @@
 namespace Jdw5\Vanguard\Table;
 
 use Jdw5\Vanguard\Primitive;
-use Jdw5\Vanguard\Concerns\HasId;
 use Illuminate\Support\Collection;
 use Jdw5\Vanguard\Concerns\HasActions;
 use Illuminate\Database\Eloquent\Model;
@@ -38,6 +37,9 @@ abstract class Table extends Primitive implements Tables
     use HasRecords;
     use HasProcess;
 
+    // HasExport
+    // HasFilters
+
     public function __construct($data = null)
     {
         $this->setBuilder($data);
@@ -49,7 +51,9 @@ abstract class Table extends Primitive implements Tables
      * @param EloquentBuilder|QueryBuilder|null $data
      * @return static
      */
-    public static function make($data = null): static
+    public static function make(
+        EloquentBuilder|QueryBuilder $data = null,        
+    ): static
     {
         return new static($data);
     }

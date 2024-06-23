@@ -3,15 +3,10 @@
 namespace Jdw5\Vanguard\Console\Commands;
 
 use InvalidArgumentException;
-use function Laravel\Prompts\confirm;
-use function Laravel\Prompts\suggest;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputInterface;
-
 use Illuminate\Console\Concerns\CreatesMatchingTest;
-use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: 'make:table')]
 class TableMakeCommand extends GeneratorCommand
