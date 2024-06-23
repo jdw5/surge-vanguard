@@ -21,13 +21,31 @@ trait HasPagination
     
     protected $columns = ['*'];
 
+    protected int|array $pagination;
+    
+    /** Create a registered method which defines default at root */
+
+    protected function setPagination(int|array|null $pagination): void
+    {
+        if (is_null($pagination)) return;
+        $this->pagination = $pagination;
+    }
+
     /**
      * Should be used to override the perPage metric
      * 
      * @return int|array
      */
-    protected function definePagination()
+    protected function getRawPagination()
     {
+        if (isset($this->pagination)) {
+            return $this->pagination;
+        }
+
+        if (function_exists('pagination')) {
+            return $this->pagination();
+        }
+
         return 10;
     }
 

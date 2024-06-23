@@ -4,10 +4,18 @@ namespace Jdw5\Vanguard\Table\Concerns;
 
 trait HasSearch
 {
+    protected array $search;
+
+    protected function setSearch(string|array|null $search): void
+    {
+        if (is_null($search)) return;
+        $this->search = $search;
+    }
+
     public function getSearch(): array
     {
         if (isset($this->search)) {
-            return $this->search;
+            return is_array($this->search) ? $this->search : [$this->search];
         }
 
         if (function_exists('search')) {
@@ -41,5 +49,10 @@ trait HasSearch
         }
 
         return false;
+    }
+
+    public function applySearch($query, string $term)
+    {
+
     }
 }

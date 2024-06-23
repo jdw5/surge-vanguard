@@ -63,6 +63,7 @@ class TableMakeCommand extends GeneratorCommand
     {
         return [
             ['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the table already exists'],
+            ['model', 'm', InputOption::VALUE_OPTIONAL, 'Create a new model for the table']
         ];
     }
 }

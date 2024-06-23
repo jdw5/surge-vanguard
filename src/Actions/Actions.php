@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Actions;
+namespace Jdw5\Vanguard\Actions;
 
 use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Concerns\HasActions;

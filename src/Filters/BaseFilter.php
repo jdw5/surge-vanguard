@@ -3,7 +3,6 @@
 namespace Jdw5\Vanguard\Refining\Filters;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Jdw5\Vanguard\Refining\Refinement;
 use Illuminate\Database\Eloquent\Builder;
 use Jdw5\Vanguard\Refining\Contracts\Filters;
@@ -44,14 +43,7 @@ abstract class BaseFilter extends Refinement implements Filters
         // Find and set the option to active
         $this->updateOptionActivity($this->getValue());
         
-        try {
-            $this->apply($builder, $this->getProperty(), $this->getValue());
-        } catch (\Exception $e) {
-            // Suppress if in production
-            if (App::environment('local')) {
-                throw new \Exception("Failed to apply filter {$this->getName()}: {$e->getMessage()}");
-            }
-        }
+        $this->apply($builder, $this->getProperty(), $this->getValue());
     }
 
     /**

@@ -1,7 +1,8 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Actions;
+namespace Jdw5\Vanguard\Actions;
 
+use Jdw5\Vanguard\Concerns\HasAuthorization;
 use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Concerns\HasName;
 use Jdw5\Vanguard\Concerns\HasLabel;
@@ -12,15 +13,20 @@ use Jdw5\Vanguard\Table\Actions\Concerns\HasEndpoint;
 abstract class BaseAction extends Primitive
 {
     use HasLabel;
-    use HasMetadata;
     use HasName;
-    use IsIncludable;
+    use HasMetadata;
+    use HasAuthorization;
     use HasEndpoint;
 
-    public function __construct(string $name)
-    {
-        $this->setName($name);
-        $this->setLabel($this->labelise($name));
+    public function __construct(
+        string $label, 
+        string $name = null,
+        \Closure|bool $authorize = null
+    ) {
+        $this->setLabel($label);
+        $this->setName($name ?? str()->slug($label));
+        $this->setAuthorize($authorize);
+        
     }
 
     public static function make(string $name): static

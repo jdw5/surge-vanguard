@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Actions\Concerns;
+namespace Jdw5\Vanguard\Actions\Concerns;
 
 use Jdw5\Vanguard\Table\Actions\Concerns\HasRoute;
 use Jdw5\Vanguard\Table\Actions\Concerns\HasMethod;

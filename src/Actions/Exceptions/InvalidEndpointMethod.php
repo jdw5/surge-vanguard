@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Actions\Exceptions;
+namespace Jdw5\Vanguard\Actions\Exceptions;
 
 class InvalidEndpointMethod extends \Exception
 {

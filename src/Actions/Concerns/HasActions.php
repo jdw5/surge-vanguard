@@ -13,14 +13,22 @@ use Illuminate\Support\Collection;
  */
 trait HasActions
 {
-    private Collection $retrievedActions = null;
+    private Collection $cachedActions;
+
+    protected array $actions;
+
+    protected function setActions(array|null $actions = null): void
+    {
+        if (is_null($actions)) return;
+        $this->actions = $actions;
+    }
 
     /**
      * Define the actions for the class.
      * 
      * @return array
      */
-    protected function getActions(): array
+    protected function getRawActions(): array
     {
         if (isset($this->actions)) {
             return $this->actions;
@@ -38,9 +46,9 @@ trait HasActions
      * 
      * @return Collection
      */
-    public function allActions(): Collection
+    public function getActions(): Collection
     {
-        return $this->retrievedActions ??= collect($this->getActions())
+        return $this->cachedActions ??= collect($this->getRawActions())
             ->filter(static fn (BaseAction $action): bool => !$action->authorized());
     }
 
@@ -49,9 +57,9 @@ trait HasActions
      * 
      * @return Collection
      */
-    public function inlineActions(): Collection
+    public function getRowActions(): Collection
     {
-        return $this->allActions()
+        return $this->getActions()
             ->filter(static fn (BaseAction $action): bool => $action instanceof InlineAction)->values();
     }
 
@@ -60,9 +68,9 @@ trait HasActions
      * 
      * @return Collection
      */
-    public function bulkActions(): Collection
+    public function getBulkActions(): Collection
     {
-        return $this->allActions()
+        return $this->getActions()
             ->filter(static fn (BaseAction $action): bool => $action instanceof BulkAction)->values();
     }
 
@@ -71,9 +79,9 @@ trait HasActions
      * 
      * @return Collection
      */
-    public function pageActions(): Collection
+    public function getPageActions(): Collection
     {
-        return $this->allActions()
+        return $this->getActions()
             ->filter(static fn (BaseAction $action): bool => $action instanceof PageAction)->values();
     }
 
@@ -85,7 +93,7 @@ trait HasActions
      */
     public function getDefaultAction(): ?BaseAction
     {
-        return $this->allActions()
+        return $this->getActions()
             ->first(static fn (BaseAction $action): bool => $action instanceof InlineAction && $action->isDefault());
     }
 }

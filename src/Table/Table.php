@@ -10,9 +10,10 @@ use Jdw5\Vanguard\Table\Concerns\HasKey;
 use Jdw5\Vanguard\Table\Concerns\HasMeta;
 use Jdw5\Vanguard\Table\Contracts\Tables;
 use Jdw5\Vanguard\Concerns\HasRefinements;
+use Jdw5\Vanguard\Sorts\Concerns\HasSorts;
 use Jdw5\Vanguard\Table\Concerns\HasModel;
 use Jdw5\Vanguard\Table\Concerns\HasScopes;
-use Jdw5\Vanguard\Table\Concerns\HasBuilder;
+use Jdw5\Vanguard\Table\Concerns\Internal\HasBuilder;
 use Jdw5\Vanguard\Table\Concerns\HasColumns;
 use Jdw5\Vanguard\Table\Concerns\HasProcess;
 use Jdw5\Vanguard\Table\Concerns\HasRecords;
@@ -21,6 +22,9 @@ use Jdw5\Vanguard\Table\Concerns\HasPreferences;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Table\Exceptions\InvalidKeyException;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Jdw5\Vanguard\Filters\Concerns\HasFilters;
+use Jdw5\Vanguard\Table\Concerns\HasExports;
+use Jdw5\Vanguard\Table\Concerns\HasResource;
 
 abstract class Table extends Primitive implements Tables
 {
@@ -37,8 +41,10 @@ abstract class Table extends Primitive implements Tables
     use HasRecords;
     use HasProcess;
 
-    // HasExport
-    // HasFilters
+    use HasSorts;
+    use HasFilters;
+    use HasResource;
+    use HasExports;
 
     protected Collection $records;
 
@@ -48,26 +54,43 @@ abstract class Table extends Primitive implements Tables
         array $actions = null,
         array $filters = null,
         array $sorts = null,
-        array $search = null,
-        array $pagination = null,
+        array|string $search = null,
+        array|int $pagination = null,
         array $exports = null
     )
     {
         $this->records = collect();
-        $this->setBuilder($data);
+        $this->setResource($data);
+        $this->setColumns($columns);
+        $this->setActions($actions);
+        $this->setFilters($filters);
+        $this->setSorts($sorts);
+        $this->setSearch($search);
+        $this->setPagination($pagination);
+        $this->setExports($exports);
     }
     
     /**
      * Create a new table instance.
      * 
-     * @param EloquentBuilder|QueryBuilder|null $data
+     * @param EloquentBuilder|QueryBuilder $data
      * @return static
      */
+    /** 
+     * Todo: Alias for build, new
+     * */
     public static function make(
-        EloquentBuilder|QueryBuilder $data = null,        
+        EloquentBuilder|QueryBuilder $resource = null,
+        array $columns = null,
+        array $actions = null,
+        array $filters = null,
+        array $sorts = null,
+        array|string $search = null,
+        array|int $pagination = null,
+        array $exports = null
     ): static
     {
-        return new static($data);
+        return new static($resource, $columns, $actions, $filters, $sorts, $search, $pagination, $exports);
     }
 
     /**
@@ -77,7 +100,7 @@ abstract class Table extends Primitive implements Tables
      * @throws InvalidKeyException
      * @return string
      */
-    protected function tableKey(): string 
+    protected function getTableKey(): string 
     {
         try { 
             return $this->getKey();
@@ -105,20 +128,20 @@ abstract class Table extends Primitive implements Tables
     public function toArray(): array
     {
         $table = [
+            'key' => $this->getTableKey(),
+            'records' => $this->getRecords(),
+            'columns' => $this->getTableColumns(),
             'meta' => $this->getMeta(),
-            'rows' => $this->getRecords(),
-            'cols' => $this->getTableColumns(),
-            'refinements' => [
-                'sorts' => $this->getSorts(),
-                'filters' => $this->getFilters(),
-            ],
+            'sorts' => $this->getSorts(),
+            'filters' => $this->getFilters(),
             'actions' => [
-                'inline' => $this->getInlineActions(),
+                'row' => $this->getRowActions(),
                 'bulk' => $this->getBulkActions(),
                 'page' => $this->getPageActions(),
                 'default' => $this->getDefaultAction(),
             ],
-            'recordKey' => $this->tableKey(),
+            // 'toggles'
+            // 'pages' =>
         ];
 
         $pagination = $this->serializePagination();

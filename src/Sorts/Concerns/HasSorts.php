@@ -1,10 +1,16 @@
 <?php
 
-namespace Jdw5\Vanguard\Concerns;
+namespace Jdw5\Vanguard\Sorts\Concerns;
 
-trait HasSort
+trait HasSorts
 {
-    // Check if $defaultSort is defined
+    protected array $sorts;
+
+    protected function setSorts(array|null $sorts): void
+    {
+        if (is_null($sorts)) return;
+        $this->sorts = $sorts;
+    }
     
     public function getSorts()
     {

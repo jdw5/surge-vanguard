@@ -1,33 +1,37 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Concerns;
+namespace Jdw5\Vanguard\Columns\Concerns;
 
 use Jdw5\Vanguard\Table\Columns\Column;
 use Illuminate\Support\Collection;
 
-/**
- * Trait HasColumns
- * 
- * Adds methods to retrieve and define columns from the table.
- * 
- * @property mixed $cachedColumns
- */
 trait HasColumns
 {
-    // Dependency on HasPreferences methods
-    abstract public function getPreferences(): array;
-    abstract public function hasPreferences(): bool;
+    private Collection $cachedColumns;
 
-    /** Columns are cached to prevent recalculations */
-    private mixed $cachedColumns = null;
+    protected array $columns;
+
+    protected function setColumns(array|null $columns): void
+    {
+        if (is_null($columns)) return;
+        $this->columns = $columns;
+    }
 
     /**
      * Define the columns for the table.
      * 
      * @return array
      */
-    protected function defineColumns(): array
+    protected function getColumns(): array
     {
+        if (isset($this->columns)) {
+            return $this->columns;
+        }
+
+        if (function_exists('columns')) {
+            return $this->columns();
+        }
+
         return [];
     }
 
@@ -38,10 +42,7 @@ trait HasColumns
      */
     protected function getTableColumns(): Collection
     {
-        return $this->cachedColumns ??= $this->hasPreferences() ? 
-            $this->getUncachedPreferencedTableColumns($this->getPreferences()) 
-            : 
-            $this->getUncachedTableColumns();
+        return $this->cachedColumns ??= $this->getUncachedTableColumns();
     }
 
     /**
