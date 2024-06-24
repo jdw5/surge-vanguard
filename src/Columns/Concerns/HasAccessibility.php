@@ -2,7 +2,7 @@
 
 namespace Jdw5\Vanguard\Columns\Concerns;
 
-trait HasScreenReaders
+trait HasAccessibility
 {
     protected bool $srOnly = false;
     

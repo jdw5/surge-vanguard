@@ -3,37 +3,27 @@
 namespace Jdw5\Vanguard\Columns;
 
 use Closure;
-use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Concerns\HasName;
-use Jdw5\Vanguard\Concerns\HasType;
-use Jdw5\Vanguard\Concerns\HasLabel;
 use Jdw5\Vanguard\Concerns\HasDisplay;
 use Jdw5\Vanguard\Concerns\HasMetadata;
-use Jdw5\Vanguard\Concerns\IsIncludable;
 use Jdw5\Vanguard\Columns\Concerns\IsKey;
-use Jdw5\Vanguard\Concerns\HasBreakpoints;
 use Jdw5\Vanguard\Columns\Concerns\HasSort;
 use Jdw5\Vanguard\Columns\Concerns\HasFallback;
 use Jdw5\Vanguard\Columns\Concerns\HasTransform;
-use Jdw5\Vanguard\Columns\Concerns\IsPreferable;
-use Jdw5\Vanguard\Columns\Concerns\HasBreakpoint;
 use Jdw5\Vanguard\Columns\Concerns\IsSearchable;
 use Jdw5\Vanguard\Columns\Concerns\IsSortable;
 use Jdw5\Vanguard\Columns\Concerns\IsToggleable;
-use Jdw5\Vanguard\Columns\Exceptions\ReservedColumnName;
 use Jdw5\Vanguard\Concerns\HasAuthorization;
 use Jdw5\Vanguard\Enums\Breakpoint;
 
-class Column extends Primitive
+class Column extends BaseColumn
 {
     use HasName;
-    use HasLabel;
     use HasMetadata;
     use HasFallback;
     use HasTransform;
     use HasSort;
     use HasAuthorization;
-    use HasBreakpoint;
     use IsKey;
     use HasDisplay;
     use IsSortable;
@@ -50,7 +40,8 @@ class Column extends Primitive
         Closure|bool $authorize = null,
         mixed $fallback = null,
         bool $asHeading = true,
-        bool $onlyScreenReaders = false,
+        bool $srOnly = false,
+        Closure $transform = null,
     ) {
         $this->setName($name);
         $this->setLabel($label ?? $this->toLabel($this->getName()));
@@ -61,7 +52,9 @@ class Column extends Primitive
         $this->setAuthorize($authorize);
         $this->setFallback($fallback);
         $this->setShow($asHeading);
-        $this->setSrOnly($onlyScreenReaders);
+        $this->setSrOnly($srOnly);
+        $this->setTransform($transform);
+        $this->setType('col:');
     }
 
     /**
@@ -77,9 +70,10 @@ class Column extends Primitive
         Closure|bool $authorize = null,
         mixed $fallback = null,
         bool $asHeading = true,
-        bool $onlyScreenReaders = false,
+        bool $srOnly = false,
+        Closure $transform = null,
     ): static {
-        return new static($name, $label, $sortable, $searchable, $toggleable, $breakpoint, $authorize, $fallback, $asHeading, $onlyScreenReaders);
+        return new static($name, $label, $sortable, $searchable, $toggleable, $breakpoint, $authorize, $fallback, $asHeading, $srOnly, $transform);
     }
 
     /**
@@ -118,5 +112,12 @@ class Column extends Primitive
     public function jsonSerialize(): array
     {
         return $this->toArray();
+    }
+
+    public function apply(mixed $value): mixed
+    {
+        if (is_null($value)) return $this->getFallback();
+        if ($this->hasTransform()) return $this->transformUsing($value);
+        return $value;
     }
 }

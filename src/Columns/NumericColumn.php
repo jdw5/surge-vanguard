@@ -15,12 +15,12 @@ class DateColumn extends Column
         bool $toggleable = false,
         string|Breakpoint $breakpoint = Breakpoint::NONE,
         bool|Closure $authorize = null,
-        mixed $fallback = '-',
+        mixed $fallback = 0,
         bool $asHeading = true,
         bool $srOnly = false,
         Closure $transform = null,
     ) {
         parent::__construct($name, $label, $sortable, $searchable, $toggleable, $breakpoint, $authorize, $fallback, $asHeading, $srOnly, $transform);
-        $this->setType('col:text');
+        $this->setType('col:numeric');
     }
 }

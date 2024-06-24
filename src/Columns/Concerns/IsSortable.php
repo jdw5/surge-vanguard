@@ -7,6 +7,7 @@ use Jdw5\Vanguard\Concerns\HasProperty;
 
 trait IsSortable
 {
+    /** Shares property with search */
     use HasProperty;
 
     protected bool $sortable = false;

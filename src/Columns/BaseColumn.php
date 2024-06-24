@@ -6,33 +6,16 @@ use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Concerns\HasType;
 use Jdw5\Vanguard\Enums\Breakpoint;
 use Jdw5\Vanguard\Concerns\HasLabel;
+use Jdw5\Vanguard\Columns\Contracts\Columns;
 use Jdw5\Vanguard\Columns\Concerns\HasBreakpoint;
-use Jdw5\Vanguard\Columns\Concerns\HasScreenReaders;
+use Jdw5\Vanguard\Columns\Concerns\HasAccessibility;
 
-abstract class BaseColumn extends Primitive
+abstract class BaseColumn extends Primitive implements Columns
 {
     use HasLabel;
-    use HasScreenReaders;
+    use HasAccessibility;
     use HasBreakpoint;
     use HasType;
-
-    public function __construct(
-        string $label,
-        bool $srOnly = false,
-        Breakpoint|string $breakpoint = Breakpoint::NONE,
-    ) {
-        $this->setLabel($label);
-        $this->setScreenReader($srOnly);
-        $this->setBreakpoint($breakpoint);
-    }
-
-    public static function make(
-        string $label,
-        bool $srOnly = false,
-        Breakpoint|string $breakpoint = Breakpoint::NONE,
-    ): static {
-        return new static($label, $srOnly, $breakpoint);
-    }
 
     public function toArray(): array
     {
