@@ -7,7 +7,7 @@ use Jdw5\Vanguard\Refining\Contracts\Sorts;
 trait HasDirection
 {    
     /** Can be asc, desc or null */
-    public ?string $direction = null;
+    public string $direction = null;
 
     /**
      * Set the direction

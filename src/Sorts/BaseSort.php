@@ -1,43 +1,45 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining\Sorts;
+namespace Jdw5\Vanguard\Sorts;
 
+use Closure;
 use Illuminate\Http\Request;
-use Jdw5\Vanguard\Refining\Refinement;
-use Jdw5\Vanguard\Refining\Contracts\Sorts;
-use Jdw5\Vanguard\Refining\Sorts\Concerns\HasDirection;
-use Jdw5\Vanguard\Refining\Sorts\Concerns\SortConstants;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Builder as QueryBuilder;
+use Jdw5\Vanguard\Refiner\Refiner;
 use Jdw5\Vanguard\Concerns\IsDefault;
+use Jdw5\Vanguard\Sorts\Contracts\Sorts;
+use Illuminate\Database\Eloquent\Builder;
+use Jdw5\Vanguard\Sorts\Concerns\HasSortKey;
+use Jdw5\Vanguard\Sorts\Concerns\HasOrderKey;
+use Jdw5\Vanguard\Sorts\Sorts\Concerns\HasDirection;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Jdw5\Vanguard\Refining\Sorts\Concerns\SortConstants;
 
-abstract class BaseSort extends Refinement implements Sorts
+abstract class BaseSort extends Refiner implements Sorts
 {
-    use HasDirection;
-    use IsDefault;
+    use HasSortKey;
+    use HasOrderKey;
     
-    public static function make(string $property, string $name = null): static
-    {
-        return resolve(static::class, compact('property', 'name'));
+    public static function make(
+            string|Closure $property, 
+            string|Closure $name = null,
+            string|Closure $label = null,
+            bool|Closure $authorize = null,
+    ): static {
+        return new static($property, $name, $label, $authorize);
     }
 
-    public function refine(Builder|QueryBuilder $builder, ?Request $request = null): void
-    {
-        if (is_null($request)) $request = request();
-        
+    public function apply(Builder|QueryBuilder $builder): void
+    {        
+        // Doesn't need
         $this->value($request->query(SortConstants::SORT_FIELD));
 
         if ($this->isActive() || (is_null($this->getValue()) && $this->isDefault())) {
             $this->apply($builder, $this->getProperty(), $this->getDirection());
+            $builder->orderBy(
+                column: $builder->qualifyColumn($property),
+                direction: $direction,
+            );
         }         
-    }
-
-    public function apply(Builder|QueryBuilder $builder, string $property, ?string $direction = self::DEFAULT_DIRECTION): void
-    {
-        $builder->orderBy(
-            column: $builder->qualifyColumn($property),
-            direction: $direction,
-        );
     }
 
     public function isActive(): bool

@@ -18,5 +18,5 @@ interface Sorts
      * @param string|null $direction
      * @return void
      */
-    public function apply(Builder|QueryBuilder $builder, string $property, string $direction): void;
+    public function apply(Builder|QueryBuilder $builder): void;
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining\Concerns;
+namespace Jdw5\Vanguard\Options\Concerns;
 
 use Illuminate\Support\Collection;
-use Jdw5\Vanguard\Refining\Options\Option;
+use Jdw5\Vanguard\Options\Option;
 
 /**
  * Define options on a class to be used for refinement

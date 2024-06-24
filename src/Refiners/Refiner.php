@@ -1,34 +1,37 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining;
+namespace Jdw5\Vanguard\Refiner;
 
+use Closure;
+use Jdw5\Vanguard\Concerns\HasAuthorization;
 use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Concerns\HasName;
 use Jdw5\Vanguard\Concerns\HasType;
 use Jdw5\Vanguard\Concerns\HasLabel;
-use Jdw5\Vanguard\Concerns\IsIncludable;
 use Jdw5\Vanguard\Concerns\HasMetadata;
-use Jdw5\Vanguard\Concerns\Configurable;
-use Jdw5\Vanguard\Refining\Concerns\HasValue;
-use Jdw5\Vanguard\Refining\Contracts\Refines;
-use Jdw5\Vanguard\Refining\Concerns\HasProperty;
+use Jdw5\Vanguard\Concerns\IsActive;
+use Jdw5\Vanguard\Concerns\HasProperty;
 
-abstract class Refinement extends Primitive implements Refines
+abstract class Refiner extends Primitive
 {
     use HasProperty;
     use HasName;
     use HasLabel;
     use HasMetadata;
     use HasType;
-    use HasValue;
-    use Configurable;
-    use IsIncludable;
+    use HasAuthorization;
+    use IsActive;
 
-    public function __construct(string $property, ?string $name = null) {
+    public function __construct(
+        string|Closure $property, 
+        string|Closure $name = null,
+        string|Closure $label = null,
+        bool|Closure $authorize = null, 
+    ) {
         $this->setProperty($property);
-        $this->setName(str($name ?? $property)->replace('.', '_'));
-        $this->setLabel($this->toLabel($this->getName()));
-        $this->configure();
+        $this->setName($name ?? $this->toName($property));
+        $this->setLabel($label ?? $this->toLabel($this->getName()));
+        $this->setAuthorize($authorize);
     }
 
     public function isActive(): bool
