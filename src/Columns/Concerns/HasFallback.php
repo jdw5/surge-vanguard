@@ -7,7 +7,7 @@ namespace Jdw5\Vanguard\Columns\Concerns;
  */
 trait HasFallback
 {
-    protected $fallback;
+    protected mixed $fallback = null;
 
     /**
      * Set the fallback value, chainable.
@@ -16,13 +16,13 @@ trait HasFallback
      * @return static
      
      */
-    public function fallback($fallback): static
+    public function fallback(mixed $fallback): static
     {
         $this->setFallback($fallback);
         return $this;
     }
 
-    public function ifNull($fallback): static
+    public function ifNull(mixed $fallback): static
     {
         return $this->fallback($fallback);
     }
@@ -45,7 +45,7 @@ trait HasFallback
      */
     public function hasFallback(): bool
     {
-        return isset($this->fallback);
+        return !is_null($this->fallback);
     }
 
     /**
@@ -55,6 +55,6 @@ trait HasFallback
      */
     public function getFallback(): mixed
     {
-        return $this->fallback;
+        return $this->evaluate($this->fallback);
     }
 }
