@@ -2,20 +2,55 @@
 
 namespace Jdw5\Vanguard\Refining\Filters;
 
+use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Refining\Options\Option;
-use Jdw5\Vanguard\Refining\Filters\BaseFilter;
+use Jdw5\Vanguard\Options\Option;
+use Jdw5\Vanguard\Options\Concerns\HasOptions;
+use Jdw5\Vanguard\Filters\BaseFilter;
+use Jdw5\Vanguard\Filters\Concerns\HasMultiple;
+use Jdw5\Vanguard\Filters\IsRestrictable;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Jdw5\Vanguard\Refining\Filters\Concerns\HasOperator;
 
 class SelectFilter extends BaseFilter
 {
-    use HasOperator;
+    use HasMultiple;
+    use HasOptions;
+    use IsRestrictable;
 
-    protected function setUp(): void
+    public function __construct(
+        string|Closure $property, 
+        string|Closure $name = null,
+        string|Closure $label = null,
+        bool|Closure $authorize = null,
+        bool|Closure $multiple = null,
+        array $options = [],
+        bool|Closure $restrict = null,
+    ) {
+        parent::__construct($property, $name, $label, $authorize);
+        $this->setMultiple($multiple);
+        $this->setOptions($options);
+        $this->setRestrict($restrict);
+    }
+
+    public static function make(
+        string|Closure $property, 
+        string|Closure $name = null,
+        string|Closure $label = null,
+        bool|Closure $authorize = null,
+        bool|Closure $multiple = null,
+        array $options = [],
+        bool|Closure $restrict = null,
+    ): static {
+        return new static($property, $name, $label, $authorize, $multiple, $options, $restrict);
+    }
+
+    public function toArray(): array
     {
-        $this->setType('select');
+        return array_merge(parent::toArray(), [
+            'multiple' => $this->isMultiple(),
+            'options' => $this->getOptions(),
+        ]);
     }
 
     public function updateOptionActivity(mixed $value): void
@@ -27,7 +62,7 @@ class SelectFilter extends BaseFilter
         }
     }
 
-    public function apply(Builder|QueryBuilder $builder, string $property, mixed $value): void
+    public function apply(Builder|QueryBuilder $builder): void
     {
         $method = match ($this->getOperator()) {
             '!=' => 'whereNotIn',

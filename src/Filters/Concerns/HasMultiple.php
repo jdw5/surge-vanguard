@@ -24,13 +24,18 @@ trait HasMultiple
         $this->multiple = $multiple;
     }
 
+    public function getMultiple(): bool
+    {
+        return $this->evaluate($this->multiple);
+    }
+
     public function isMultiple(): bool
     {
-        return $this->multiple;
+        return $this->getMultiple();
     }
 
     public function hasMultiple(): bool
     {
-        return $this->isMultiple();
+        return $this->getMultiple();
     }
 }

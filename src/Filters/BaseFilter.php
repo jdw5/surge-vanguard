@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining\Filters;
+namespace Jdw5\Vanguard\Filters;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -11,12 +11,10 @@ use Jdw5\Vanguard\Options\Concerns\HasOptions;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Concerns\HasValue;
 use Jdw5\Vanguard\Filters\Concerns\HasValidator;
-use Jdw5\Vanguard\Refining\Filters\Concerns\HasQueryBoolean;
 
 abstract class BaseFilter extends Refiner implements Filters
 {
     use HasOptions;
-    use HasQueryBoolean;
     use HasValue;
     use HasValidator;
 

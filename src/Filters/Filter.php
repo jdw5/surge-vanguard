@@ -11,18 +11,13 @@ use Jdw5\Vanguard\Refining\Filters\Concerns\HasOperator;
 
 class Filter extends BaseFilter
 {
-    use HasMode;
+    use HasClause;
     use HasOperator;
-
-    protected function setUp(): void
-    {
-        $this->setType('filter');
-    }
 
     public function apply(Builder|QueryBuilder $builder): void
     {
         if ($this->getMode() === FilterMode::EXACT) {
-            $queryMethod = ($this->getQueryBoolean() === 'or') ? 'orWhere' : 'where';
+            $queryMethod = 'where';
             $builder->{$queryMethod}($property, $this->getOperator(), $value);
             return;
         }
