@@ -2,20 +2,22 @@
 
 namespace Jdw5\Vanguard\Concerns;
 
+use Closure;
+
 /**
  * Set a label for a class.
  */
 trait HasLabel
 {
-    protected mixed $label;
+    protected string|Closure $label;
 
     /**
      * Set the label, chainable.
      * 
-     * @param mixed $label
+     * @param string|Closure $label
      * @return static
      */
-    public function label(mixed $label): static
+    public function label(string|Closure $label): static
     {
         $this->setLabel($label);
         return $this;
@@ -24,10 +26,10 @@ trait HasLabel
     /**
      * Set the label quietly.
      * 
-     * @param mixed $label
+     * @param string|Closure $label
      * @return void
      */
-    protected function setLabel(mixed $label): void
+    protected function setLabel(string|Closure $label): void
     {
         $this->label = $label;
     }
@@ -35,15 +37,15 @@ trait HasLabel
     /**
      * Get the label.
      * 
-     * @return mixed
+     * @return string
      */
-    public function getLabel(): mixed
+    public function getLabel(): string
     {
         return $this->evaluate($this->label);
     }
 
-    protected function makeLabel(string $name): string
+    public function toLabel(string|Closure $name): string
     {
-        return str($name)->headline()->lower()->ucfirst();
+        return str($this->evaluate($name))->headline()->lower()->ucfirst();
     }
 }

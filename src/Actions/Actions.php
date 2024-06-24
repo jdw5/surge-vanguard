@@ -3,8 +3,8 @@
 namespace Jdw5\Vanguard\Actions;
 
 use Jdw5\Vanguard\Primitive;
-use Jdw5\Vanguard\Concerns\HasActions;
-use Jdw5\Vanguard\Table\Actions\BaseAction;
+use Jdw5\Vanguard\Actions\Concerns\HasActions;
+use Jdw5\Vanguard\Actions\BaseAction;
 
 class Actions extends Primitive
 {   

@@ -4,7 +4,7 @@ namespace Jdw5\Vanguard\Table;
 
 use Jdw5\Vanguard\Primitive;
 use Illuminate\Support\Collection;
-use Jdw5\Vanguard\Concerns\HasActions;
+use Jdw5\Vanguard\Actions\Concerns\HasActions;
 use Illuminate\Database\Eloquent\Model;
 use Jdw5\Vanguard\Table\Concerns\HasKey;
 use Jdw5\Vanguard\Table\Concerns\HasMeta;
@@ -14,7 +14,7 @@ use Jdw5\Vanguard\Sorts\Concerns\HasSorts;
 use Jdw5\Vanguard\Table\Concerns\HasModel;
 use Jdw5\Vanguard\Table\Concerns\HasScopes;
 use Jdw5\Vanguard\Table\Concerns\Internal\HasBuilder;
-use Jdw5\Vanguard\Table\Concerns\HasColumns;
+use Jdw5\Vanguard\Columns\Concerns\HasColumns;
 use Jdw5\Vanguard\Table\Concerns\HasProcess;
 use Jdw5\Vanguard\Table\Concerns\HasRecords;
 use Jdw5\Vanguard\Table\Concerns\HasPagination;
@@ -22,6 +22,7 @@ use Jdw5\Vanguard\Table\Concerns\HasPreferences;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Table\Exceptions\InvalidKeyException;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Http\Request;
 use Jdw5\Vanguard\Filters\Concerns\HasFilters;
 use Jdw5\Vanguard\Table\Concerns\HasExports;
 use Jdw5\Vanguard\Table\Concerns\HasResource;
@@ -30,17 +31,14 @@ abstract class Table extends Primitive implements Tables
 {
     use HasColumns;
     use HasActions;
-    use HasModel;
     use HasPagination;
     use HasRefinements;
     use HasKey;
     use HasBuilder;
     use HasMeta;
-    use HasPreferences;
-    use HasScopes;
-    use HasRecords;
+    // use HasPreferences;
+    // use HasScopes;
     use HasProcess;
-
     use HasSorts;
     use HasFilters;
     use HasResource;
@@ -213,5 +211,10 @@ abstract class Table extends Primitive implements Tables
                 $data = $this->getBuilder()->paginate(...$this->getPagination())->withQueryString();
                 return [$data->getCollection(), $this->generatePaginatorMeta($data)];
         }
+    }
+
+    public function handleRequest(Request $request)
+    {
+        // Check each action
     }
 }

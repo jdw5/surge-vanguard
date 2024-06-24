@@ -33,15 +33,15 @@ trait IsSortable
         return $this->dontSort();
     }
 
-    protected function setSortability(bool $searchable, string|Closure $property = null): void
+    protected function setSortability(bool $sortable, string|Closure $property = null): void
     {
-        $this->searchable = $searchable;
+        $this->sortable = $sortable;
         $this->setProperty($property);
     }
 
     public function isSortable(): bool
     {
-        return $this->searchable;
+        return $this->sortable;
     }
 
     public function sorts(): bool

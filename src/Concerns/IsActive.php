@@ -16,7 +16,7 @@ trait IsActive
      * @param bool $active
      * @return static
      */
-    public function active(bool $active = true): static
+    public function active(bool $active): static
     {
         $this->setActive($active);
         return $this;
@@ -27,8 +27,9 @@ trait IsActive
      * 
      * @param bool $active
      */
-    protected function setActive(bool $active): void
+    protected function setActive(bool|null $active): void
     {
+        if (is_null($active)) return;
         $this->active = $active;
     }
 

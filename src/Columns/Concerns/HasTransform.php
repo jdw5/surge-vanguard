@@ -31,11 +31,6 @@ trait HasTransform
         return $this->transform($callback);
     }
 
-    public function format(Closure $callback): static
-    {
-        return $this->transform($callback);
-    }
-
     /**
      * Set the transformation function for a given value quietly.
      * 

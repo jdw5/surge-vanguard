@@ -18,10 +18,13 @@ trait HasPagination
     protected $perPage = null;
     protected $page = null;
     protected $paginateType = null;
-    
     protected $columns = ['*'];
-
     protected int|array $pagination;
+
+    public static function setGlobalPagination(int|array $pagination): void
+    {
+        static::$pagination = $pagination;
+    }
     
     /** Create a registered method which defines default at root */
 

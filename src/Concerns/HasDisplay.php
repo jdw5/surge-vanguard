@@ -2,7 +2,7 @@
 
 namespace Jdw5\Vanguard\Concerns;
 
-trait IsHideable
+trait HasDisplay
 {
     /** Whether this column shown be shown */
     protected bool $show = true;

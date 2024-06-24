@@ -2,13 +2,11 @@
 
 namespace Jdw5\Vanguard\Refining\Options;
 
-use Jdw5\Vanguard\Concerns\Configurable;
 use Jdw5\Vanguard\Concerns\HasLabel;
 use Jdw5\Vanguard\Concerns\HasMetadata;
 use Jdw5\Vanguard\Concerns\IsActive;
-use Jdw5\Vanguard\Concerns\IsIncludable;
 use Jdw5\Vanguard\Primitive;
-use Jdw5\Vanguard\Refining\Concerns\HasValue;
+use Jdw5\Vanguard\Concerns\HasValue;
 use Illuminate\Database\Eloquent\Collection;
 
 class Option extends Primitive
@@ -16,17 +14,14 @@ class Option extends Primitive
     use HasLabel;
     use HasValue;
     use HasMetadata;
-    use Configurable;
     use IsActive;
-    use IsIncludable;
 
-    public function __construct(mixed $value, ?string $label = null) { 
-        if (is_string($value)) {
-            $value = str($value)->replace('.', '_');
-        }
-        $this->value($value);
+    public function __construct(mixed $value, string $label = null) { 
+        if (is_string($value)) $value = str($value)->slug();
         
-        $this->label($label ?? str($this->getValue())->headline()->lower()->ucfirst());
+        $this->setValue($value);
+        
+        $this->setLabel($label ?? $this->toLabel($value));
     }
     
     /**
@@ -35,9 +30,9 @@ class Option extends Primitive
      * @param mixed $value
      * @param string|null $label
      */
-    public static function make(mixed $value, ?string $label = null): static
+    public static function make(mixed $value, string $label = null): static
     {
-        return resolve(static::class, compact('value', 'label'));
+        return new static($value, $label);
     }
 
     /**
@@ -85,12 +80,7 @@ class Option extends Primitive
         })->toArray();
     }
 
-    /**
-     * Convert the object to its JSON representation.
-     * 
-     * @return array
-     */
-    public function jsonSerialize(): array
+    public function toArray(): array
     {
         return [
             'label' => $this->getLabel(),
@@ -98,5 +88,15 @@ class Option extends Primitive
             'metadata' => $this->getMetadata(),
             'active' => $this->isActive(),
         ];
+    }
+
+    /**
+     * Convert the object to its JSON representation.
+     * 
+     * @return array
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

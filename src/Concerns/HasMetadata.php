@@ -2,13 +2,15 @@
 
 namespace Jdw5\Vanguard\Concerns;
 
+use Closure;
+
 /**
  * Set metadata properties on a class
  */
 trait HasMetadata
 {
     /** Metadata are non-uniform properties for the class */
-    protected array|\Closure $metadata = [];
+    protected array|Closure $metadata = [];
 
     /** 
      * Set the metadata, chainable.
@@ -16,7 +18,7 @@ trait HasMetadata
      * @param array|\Closure $metadata
      * @return static
      */
-    public function metadata(array|\Closure $metadata): static
+    public function metadata(array|Closure $metadata): static
     {
         $this->setMetadata($metadata);
         return $this;
@@ -28,7 +30,7 @@ trait HasMetadata
      * @param array|\Closure $metadata
      * @return void
      */
-    protected function setMetadata(array|\Closure $metadata): void
+    protected function setMetadata(array|Closure $metadata): void
     {
         $this->metadata = $metadata;
     }

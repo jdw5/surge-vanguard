@@ -2,11 +2,12 @@
 
 namespace Jdw5\Vanguard\Columns;
 
+use Closure;
 use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Concerns\HasName;
 use Jdw5\Vanguard\Concerns\HasType;
 use Jdw5\Vanguard\Concerns\HasLabel;
-use Jdw5\Vanguard\Concerns\IsHideable;
+use Jdw5\Vanguard\Concerns\HasDisplay;
 use Jdw5\Vanguard\Concerns\HasMetadata;
 use Jdw5\Vanguard\Concerns\IsIncludable;
 use Jdw5\Vanguard\Columns\Concerns\IsKey;
@@ -16,8 +17,12 @@ use Jdw5\Vanguard\Columns\Concerns\HasFallback;
 use Jdw5\Vanguard\Columns\Concerns\HasTransform;
 use Jdw5\Vanguard\Columns\Concerns\IsPreferable;
 use Jdw5\Vanguard\Columns\Concerns\HasBreakpoint;
+use Jdw5\Vanguard\Columns\Concerns\IsSearchable;
+use Jdw5\Vanguard\Columns\Concerns\IsSortable;
+use Jdw5\Vanguard\Columns\Concerns\IsToggleable;
 use Jdw5\Vanguard\Columns\Exceptions\ReservedColumnName;
 use Jdw5\Vanguard\Concerns\HasAuthorization;
+use Jdw5\Vanguard\Enums\Breakpoint;
 
 class Column extends Primitive
 {
@@ -27,34 +32,54 @@ class Column extends Primitive
     use HasFallback;
     use HasTransform;
     use HasSort;
-    // use IsIncludable;
     use HasAuthorization;
-    use IsHideable;
     use HasBreakpoint;
     use IsKey;
-    use IsPreferable;
+    use HasDisplay;
+    use IsSortable;
+    use IsSearchable;
+    use IsToggleable;
 
-    const RESERVED = [
-        'key',
-        'actions',
-    ];
-
-    public function __construct(string $name, string $label = null)
-    {
-        if (\in_array($name, static::RESERVED)) {
-            throw ReservedColumnName::make($name);
-        }
-        
+    public function __construct(
+        string|Closure $name, 
+        string|Closure $label = null,
+        bool $sortable = false,
+        bool $searchable = false,
+        bool $toggleable = false,
+        Breakpoint|string $breakpoint = Breakpoint::NONE,
+        Closure|bool $authorize = null,
+        mixed $fallback = null,
+        bool $asHeading = true,
+        bool $onlyScreenReaders = false,
+    ) {
         $this->setName($name);
-        $this->setLabel($label ?? $this->makeLabel($this->getName()));
+        $this->setLabel($label ?? $this->toLabel($this->getName()));
+        $this->setSortability($sortable);
+        $this->setSearchability($searchable);
+        $this->setToggleability($toggleable);
+        $this->setBreakpoint($breakpoint);
+        $this->setAuthorize($authorize);
+        $this->setFallback($fallback);
+        $this->setShow($asHeading);
+        $this->setSrOnly($onlyScreenReaders);
     }
 
     /**
      * Statically create the column
      */
-    public static function make(string $name, string $label = null ): static
-    {
-        return new static($name, $label);
+    public static function make(
+        string $name, 
+        string $label = null,
+        bool $sortable = false,
+        bool $searchable = false,
+        bool $toggleable = false,
+        Breakpoint|string $breakpoint = Breakpoint::NONE,
+        Closure|bool $authorize = null,
+        mixed $fallback = null,
+        bool $asHeading = true,
+        bool $onlyScreenReaders = false,
+    ): static {
+        return new static($name, $label, $sortable, $searchable, $toggleable, $breakpoint, $authorize, $fallback, $asHeading, $onlyScreenReaders);
     }
 
     /**
@@ -72,9 +97,9 @@ class Column extends Primitive
             'fallback' => $this->getFallback(),
 
             /** Display options for frontend */
-            'hidden' => $this->isHidden(),
+            'display' => $this->isShown(),
             'breakpoint' => $this->getBreakpoint(),
-            'sr_only' => $this->isSrOnly(),
+            'srOnly' => $this->isSrOnly(),
 
             /** Sorting options */
             'has_sort' => $this->hasSort(),

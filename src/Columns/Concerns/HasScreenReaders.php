@@ -5,8 +5,8 @@ namespace Jdw5\Vanguard\Columns\Concerns;
 trait HasScreenReaders
 {
     protected bool $srOnly = false;
-
-    protected function setScreenReader(bool $srOnly): void
+    
+    protected function setSrOnly(bool $srOnly): void
     {
         $this->srOnly = $srOnly;
     }
@@ -18,7 +18,7 @@ trait HasScreenReaders
      */
     public function srOnly(): static
     {
-        $this->setScreenReader(true);
+        $this->setSrOnly(true);
         return $this;
     }
 
@@ -34,7 +34,7 @@ trait HasScreenReaders
 
     public function notSrOnly(): static
     {
-        $this->setScreenReader(false);
+        $this->setSrOnly(false);
         return $this;
     }
 
@@ -53,7 +53,7 @@ trait HasScreenReaders
         return $this->srOnly;
     }
 
-    public function isScreenReader(): bool
+    public function isScreenReaderOnly(): bool
     {
         return $this->srOnly;
     }

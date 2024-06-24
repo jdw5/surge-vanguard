@@ -25,14 +25,8 @@ trait HasSorts
         return [];
     }
 
-    public function applySorts($query)
+    protected function applySorts(mixed $query): void
     {
-        $sorts = $this->getSorts();
-
-        foreach ($sorts as $sort) {
-            $query->orderBy($sort['column'], $sort['direction']);
-        }
-
-        return $query;
+        
     }
 }

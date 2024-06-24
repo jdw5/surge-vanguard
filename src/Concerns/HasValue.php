@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining\Concerns;
+namespace Jdw5\Vanguard\Concerns;
 
 /**
  * Sets a value on a class

@@ -2,10 +2,12 @@
 
 namespace Jdw5\Vanguard\Actions\Concerns;
 
+use Closure;
+
 trait HasConfirmation
 {
-    protected bool $confirm = false;
-    protected string|\Closure $confirmMessage = 'Are you sure you want to do this?';
+    protected bool|Closure $confirm = false;
+    protected string|Closure $confirmMessage = 'Are you sure you want to do this?';
 
     protected function setConfirm(bool $confirm): void
     {
@@ -20,7 +22,7 @@ trait HasConfirmation
 
     public function requiresConfirm(): bool
     {
-        return $this->confirm;
+        return $this->evaluate($this->confirm);
     }
 
     protected function setConfirmMessage(string $message): void

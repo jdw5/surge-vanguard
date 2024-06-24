@@ -2,7 +2,7 @@
 
 namespace Jdw5\Vanguard\Columns\Concerns;
 
-use Jdw5\Vanguard\Table\Columns\Column;
+use Jdw5\Vanguard\Columns\Column;
 use Illuminate\Support\Collection;
 
 trait HasColumns
@@ -35,31 +35,9 @@ trait HasColumns
         return [];
     }
 
-    /**
-     * Retrieve the valid columns for the table
-     * 
-     * @return Collection
-     */
-    protected function getTableColumns(): Collection
+    private function getTableColumns(): Collection
     {
-        return $this->cachedColumns ??= $this->getUncachedTableColumns();
-    }
-
-    /**
-     * Retrieve the valid columns for the table based on preferences
-     * 
-     * @param array $preferences An array of column names to show
-     */
-    private function getUncachedPreferencedTableColumns(array $preferences): Collection
-    {
-        return collect($this->defineColumns())
-            ->filter(static fn (Column $column): bool => !$column->isExcluded() && $column->shouldBeDynamicallyShown($preferences)
-        )->values();
-    }
-
-    private function getUncachedTableColumns(): Collection
-    {
-        return collect($this->defineColumns())
+        return $this->cachedColumns ??= collect($this->defineColumns())
             ->filter(static fn (Column $column): bool => !$column->isExcluded()
         )->values();
     }

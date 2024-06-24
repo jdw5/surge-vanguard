@@ -2,10 +2,10 @@
 
 namespace Jdw5\Vanguard\Actions\Concerns;
 
-use Jdw5\Vanguard\Table\Actions\BaseAction;
-use Jdw5\Vanguard\Table\Actions\BulkAction;
-use Jdw5\Vanguard\Table\Actions\PageAction;
-use Jdw5\Vanguard\Table\Actions\InlineAction;
+use Jdw5\Vanguard\Actions\BaseAction;
+use Jdw5\Vanguard\Actions\BulkAction;
+use Jdw5\Vanguard\Actions\PageAction;
+use Jdw5\Vanguard\Actions\RowAction;
 use Illuminate\Support\Collection;
 
 /**
@@ -17,7 +17,7 @@ trait HasActions
 
     protected array $actions;
 
-    protected function setActions(array|null $actions = null): void
+    protected function setActions(array|null $actions): void
     {
         if (is_null($actions)) return;
         $this->actions = $actions;
@@ -49,7 +49,7 @@ trait HasActions
     public function getActions(): Collection
     {
         return $this->cachedActions ??= collect($this->getRawActions())
-            ->filter(static fn (BaseAction $action): bool => !$action->authorized());
+            ->filter(static fn (BaseAction $action): bool => $action->authorized());
     }
 
     /**
@@ -60,7 +60,7 @@ trait HasActions
     public function getRowActions(): Collection
     {
         return $this->getActions()
-            ->filter(static fn (BaseAction $action): bool => $action instanceof InlineAction)->values();
+            ->filter(static fn (BaseAction $action): bool => $action instanceof RowAction)->values();
     }
 
     /**
@@ -94,6 +94,12 @@ trait HasActions
     public function getDefaultAction(): ?BaseAction
     {
         return $this->getActions()
-            ->first(static fn (BaseAction $action): bool => $action instanceof InlineAction && $action->isDefault());
+            ->first(static fn (BaseAction $action): bool => $action instanceof RowAction && $action->isDefault());
+    }
+
+    public function addAction(BaseAction $action): static
+    {
+        $this->actions[] = $action;
+        return $this;
     }
 }

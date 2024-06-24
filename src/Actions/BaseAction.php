@@ -2,13 +2,14 @@
 
 namespace Jdw5\Vanguard\Actions;
 
-use Jdw5\Vanguard\Concerns\HasAuthorization;
+use Closure;
 use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Concerns\HasName;
 use Jdw5\Vanguard\Concerns\HasLabel;
-use Jdw5\Vanguard\Concerns\IsIncludable;
 use Jdw5\Vanguard\Concerns\HasMetadata;
-use Jdw5\Vanguard\Table\Actions\Concerns\HasEndpoint;
+use Jdw5\Vanguard\Concerns\HasAuthorization;
+use Jdw5\Vanguard\Actions\Concerns\HasEndpoint;
+use Jdw5\Vanguard\Concerns\HasType;
 
 abstract class BaseAction extends Primitive
 {
@@ -17,21 +18,25 @@ abstract class BaseAction extends Primitive
     use HasMetadata;
     use HasAuthorization;
     use HasEndpoint;
+    use HasType;
 
     public function __construct(
         string $label, 
         string $name = null,
-        \Closure|bool $authorize = null
+        Closure|bool $authorize = null
     ) {
         $this->setLabel($label);
-        $this->setName($name ?? str()->slug($label));
+        $this->setName($name ?? $this->toName($label));
         $this->setAuthorize($authorize);
-        
     }
 
-    public static function make(string $name): static
+    public static function make(
+        string $label,
+        string $name = null,
+        Closure|bool $authorize = null
+    ): static
     {
-        return new static($name);
+        return new static($name, $label, $authorize);
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace Jdw5\Vanguard\Actions\Concerns;
 
 use Closure;
+use Illuminate\Http\Request;
+use Jdw5\Vanguard\Actions\ActionType;
 use ReflectionFunction;
 
 trait HasHandler
@@ -17,6 +19,7 @@ trait HasHandler
 
     protected function setRedirect(string|Closure $redirect): void
     {
+        if (is_null($redirect)) return;
         $this->redirect = $redirect;
     }
 
