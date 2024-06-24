@@ -2,7 +2,6 @@
 
 namespace Jdw5\Vanguard\Columns;
 
-use Jdw5\Vanguard\Concerns\HasBreakpoints;
 use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Concerns\HasName;
 use Jdw5\Vanguard\Concerns\HasType;
@@ -10,12 +9,15 @@ use Jdw5\Vanguard\Concerns\HasLabel;
 use Jdw5\Vanguard\Concerns\IsHideable;
 use Jdw5\Vanguard\Concerns\HasMetadata;
 use Jdw5\Vanguard\Concerns\IsIncludable;
-use Jdw5\Vanguard\Table\Columns\Concerns\IsKey;
-use Jdw5\Vanguard\Table\Columns\Concerns\HasSort;
-use Jdw5\Vanguard\Table\Columns\Concerns\HasFallback;
-use Jdw5\Vanguard\Table\Columns\Concerns\HasTransform;
-use Jdw5\Vanguard\Table\Columns\Concerns\IsPreferable;
-use Jdw5\Vanguard\Table\Columns\Exceptions\ReservedColumnName;
+use Jdw5\Vanguard\Columns\Concerns\IsKey;
+use Jdw5\Vanguard\Concerns\HasBreakpoints;
+use Jdw5\Vanguard\Columns\Concerns\HasSort;
+use Jdw5\Vanguard\Columns\Concerns\HasFallback;
+use Jdw5\Vanguard\Columns\Concerns\HasTransform;
+use Jdw5\Vanguard\Columns\Concerns\IsPreferable;
+use Jdw5\Vanguard\Columns\Concerns\HasBreakpoint;
+use Jdw5\Vanguard\Columns\Exceptions\ReservedColumnName;
+use Jdw5\Vanguard\Concerns\HasAuthorization;
 
 class Column extends Primitive
 {
@@ -25,9 +27,10 @@ class Column extends Primitive
     use HasFallback;
     use HasTransform;
     use HasSort;
-    use IsIncludable;
+    // use IsIncludable;
+    use HasAuthorization;
     use IsHideable;
-    use HasBreakpoints;
+    use HasBreakpoint;
     use IsKey;
     use IsPreferable;
 

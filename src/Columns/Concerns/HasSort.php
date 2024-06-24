@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Columns\Concerns;
+namespace Jdw5\Vanguard\Columns\Concerns;
 
 use Jdw5\Vanguard\Refining\Sorts\ToggleSort;
 

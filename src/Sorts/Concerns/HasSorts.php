@@ -24,4 +24,15 @@ trait HasSorts
 
         return [];
     }
+
+    public function applySorts($query)
+    {
+        $sorts = $this->getSorts();
+
+        foreach ($sorts as $sort) {
+            $query->orderBy($sort['column'], $sort['direction']);
+        }
+
+        return $query;
+    }
 }

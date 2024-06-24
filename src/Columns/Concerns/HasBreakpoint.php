@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Concerns;
+namespace Jdw5\Vanguard\Columns\Concerns;
 
 use Jdw5\Vanguard\Enums\Breakpoint;
 

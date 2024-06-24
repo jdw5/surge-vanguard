@@ -17,9 +17,30 @@ trait IsToggleable
         $this->setToggleability(false);
         return $this;
     }
+
+    public function toggle(): static
+    {
+        return $this->toggleable();
+    }
+
+    public function dontToggle(): static
+    {
+        return $this->notToggleable();
+    }
     
     protected function setToggleability(bool $toggleable): void
     {
         $this->toggleable = $toggleable;
     }
+
+    public function toggles(): bool
+    {
+        return $this->toggleable;
+    }
+    
+    public function isToggleable(): bool
+    {
+        return $this->isToggleable();
+    }
+    
 }

@@ -1,11 +1,13 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining\Concerns;
+namespace Jdw5\Vanguard\Concerns;
+
+use Closure;
 
 trait HasProperty
 {
     /** Must resolve to a string */
-    protected string|\Closure $property;
+    protected string|Closure $property = null;
 
     /**
      * Set the property to be used.
@@ -13,7 +15,7 @@ trait HasProperty
      * @param string|\Closure $property
      * @return static
      */
-    public function property(string|\Closure $property): static
+    public function property(string|Closure $property): static
     {
         $this->setProperty($property);
         return $this;
@@ -25,7 +27,7 @@ trait HasProperty
      * @param string|\Closure $property
      * @return void
      */
-    protected function setProperty(string|\Closure $property): void
+    protected function setProperty(string|Closure $property): void
     {
         $this->property = $property;
     }
@@ -38,5 +40,10 @@ trait HasProperty
     public function getProperty(): string
     {
         return $this->evaluate($this->property);
+    }
+
+    public function hasProperty(): bool
+    {
+        return !is_null($this->property);
     }
 }
