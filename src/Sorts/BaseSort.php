@@ -19,45 +19,43 @@ abstract class BaseSort extends Refiner implements Sorts
     use HasSortKey;
     use HasOrderKey;
     
-    public static function make(
+    public function __construct(
             string|Closure $property, 
             string|Closure $name = null,
             string|Closure $label = null,
             bool|Closure $authorize = null,
-    ): static {
-        return new static($property, $name, $label, $authorize);
+    ) {
+        $this->setProperty($property);
+        $this->setName($name ?? $this->toName($property));
+        $this->setLabel($label ?? $this->toLabel($this->getName()));
+        $this->setAuthorize($authorize);
     }
 
     public function apply(Builder|QueryBuilder $builder): void
-    {        
-        // Doesn't need
-        $this->value($request->query(SortConstants::SORT_FIELD));
-
-        if ($this->isActive() || (is_null($this->getValue()) && $this->isDefault())) {
-            $this->apply($builder, $this->getProperty(), $this->getDirection());
-            $builder->orderBy(
-                column: $builder->qualifyColumn($property),
-                direction: $direction,
-            );
-        }         
-    }
-
-    public function isActive(): bool
     {
-        return $this->isActiveSort();
+        $request = request();
+        
+        $this->setActive($this->sorting($request));
+        
+        $builder->when(
+            $this->isActive(),
+            function (Builder|QueryBuilder $builder) use ($request) {
+                $builder->orderBy(
+                    column: $builder->qualifyColumn($this->getProperty()),
+                    direction: $this->sanitiseOrder($request->query($this->getOrderKey())),
+                );
+            }
+        );  
     }
 
-    /**
-     * Compute whether the sort is active
-     * 
-     * @return bool
-     */
-    public function isActiveSort(): bool
+    protected function sorting(Request $request): bool
     {
-        return ($this->getValue() === $this->getName()) || ($this->isDefault() && \is_null($this->getValue()));
+        return $request->has($this->getSortKey()
+            && $request->query($this->getSortKey()) === $this->getName()
+            && $request->has($this->getOrderKey()));
     }
 
-    public function jsonSerialize(): array
+    public function toArray(): array
     {
         return [
             'name' => $this->getName(),
@@ -65,5 +63,11 @@ abstract class BaseSort extends Refiner implements Sorts
             'metadata' => $this->getMetadata(),
             'active' => $this->isActive(),
         ];
+    }
+
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

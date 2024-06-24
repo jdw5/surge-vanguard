@@ -1,11 +1,15 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining\Sorts\Concerns;
+namespace Jdw5\Vanguard\Sorts\Concerns;
 
-use Jdw5\Vanguard\Refining\Contracts\Sorts;
+use Jdw5\Vanguard\Sorts\Concerns\HasOrderKey;
 
 trait HasDirection
 {    
+    use HasOrderKey {
+        sanitiseOrder as private;
+    }
+
     /** Can be asc, desc or null */
     public string $direction = null;
 
@@ -15,10 +19,8 @@ trait HasDirection
      * @param string|null $direction
      * @return static
      */
-    public function direction(?string $direction = null): static
+    public function direction(string $direction): static
     {
-        if (!\in_array($direction, ['asc', 'desc', null]) ) $direction = 'asc';
-
         $this->setDirection($direction);
         return $this;
     }
@@ -29,9 +31,9 @@ trait HasDirection
      * @param string|null $direction
      * @return void
      */
-    public function setDirection(?string $direction): void
+    protected function setDirection(string|null $direction): void
     {
-        $this->direction = $direction;
+        $this->direction = $this->sanitiseOrder($direction);
     }
 
     /**
@@ -41,7 +43,7 @@ trait HasDirection
      */
     public function getDirection(): string
     {
-        return $this->direction ?? Sorts::DEFAULT_DIRECTION;
+        return $this->evaluate($this->direction);
     }
 
     /**

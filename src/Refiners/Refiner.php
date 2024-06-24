@@ -34,11 +34,6 @@ abstract class Refiner extends Primitive
         $this->setAuthorize($authorize);
     }
 
-    public function isActive(): bool
-    {
-        return ! \is_null($this->getValue());
-    }
-
     /**
      * Convert the refinement to an array representation
      * 
