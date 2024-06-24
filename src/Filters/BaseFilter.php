@@ -2,48 +2,57 @@
 
 namespace Jdw5\Vanguard\Refining\Filters;
 
+use Closure;
 use Illuminate\Http\Request;
-use Jdw5\Vanguard\Refining\Refinement;
+use Jdw5\Vanguard\Refiner\Refiner;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Refining\Contracts\Filters;
-use Jdw5\Vanguard\Refining\Concerns\HasOptions;
+use Jdw5\Vanguard\Filters\Contracts\Filters;
+use Jdw5\Vanguard\Options\Concerns\HasOptions;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Jdw5\Vanguard\Concerns\HasValue;
+use Jdw5\Vanguard\Filters\Concerns\HasValidator;
 use Jdw5\Vanguard\Refining\Filters\Concerns\HasQueryBoolean;
 
-abstract class BaseFilter extends Refinement implements Filters
+abstract class BaseFilter extends Refiner implements Filters
 {
     use HasOptions;
     use HasQueryBoolean;
+    use HasValue;
+    use HasValidator;
 
-    /**
-     * Create a new filter instance.
-     * 
-     * @param mixed $property
-     * @param string $name
-     * @return static
-     */
-    public static function make(mixed $property, string $name = null): static
-    {
-        return resolve(static::class, compact('property', 'name'));
+    public function __construct(
+        string|Closure $property, 
+        string|Closure $name = null,
+        string|Closure $label = null,
+        bool|Closure $authorize = null,
+    ) {
+        $this->setProperty($property);
+        $this->setName($name ?? $this->toName($property));
+        $this->setLabel($label ?? $this->toLabel($this->getName()));
+        $this->setAuthorize($authorize);
     }
 
-    public function refine(Builder|QueryBuilder $builder, Request $request = null): void
+    public function apply(Builder|QueryBuilder $builder): void
     {
-        if (\is_null($request)) $request = request();
-        
-        $this->setValue($request->query($this->getName()));
-        
+        $request = request(); 
+        $value = $this->validateUsing($request->query($this->getName()));
+        $this->setValue($value);
+        $this->setActive($this->filtering($request));
 
-        if ($this->getValue() === null) {
-            return;
-        }
-        
-        if ($this->ignoresInvalidOptions() && $this->isInvalidOption($this->getValue())) return;
-        
-        // Find and set the option to active
-        $this->updateOptionActivity($this->getValue());
-        
-        $this->apply($builder, $this->getProperty(), $this->getValue());
+        $builder->when(
+            $this->isActive(),
+            function (Builder|QueryBuilder $builder) {
+                $builder->where(
+                    column: $builder->qualifyColumn($this->getProperty()),
+                    value: $this->getValue(),
+                );
+            }
+        );        
+    }
+
+    public function filtering(Request $request): bool
+    {
+        return $request->has($this->getName()) && !is_null($request->query($this->getName()));
     }
 
     /**
@@ -57,10 +66,9 @@ abstract class BaseFilter extends Refinement implements Filters
             'name' => $this->getName(),
             'label' => $this->getLabel(),
             'type' => $this->getType(),
-            'metadata' => $this->getMetadata(),
             'active' => $this->isActive(),
             'value' => $this->getValue(),
-            'options' => $this->hasOptions() ? $this->getOptions() : null,
+            'metadata' => $this->getMetadata(),
         ];
     }
     /**

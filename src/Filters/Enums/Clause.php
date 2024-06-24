@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining\Filters\Enums;
+namespace Jdw5\Vanguard\Filters\Enums;
 
-enum FilterMode: string
+enum FilterClause: string
 {
     case EXACT = 'exact';
     case LOOSE = 'loose';

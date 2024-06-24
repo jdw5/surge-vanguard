@@ -2,12 +2,13 @@
 
 namespace Jdw5\Vanguard\Refining\Filters\Concerns;
 
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Jdw5\Vanguard\Refining\Filters\Exceptions\InvalidQueryException;
 
 trait HasQuery
 {
-    protected \Closure $query;
+    protected Closure $query;
 
     public function query(\Closure $query): static
     {
@@ -30,7 +31,7 @@ trait HasQuery
         }
     }
 
-    public function getQuery(): \Closure
+    public function getQuery(): Closure
     {
         if (!isset($this->query)) {
             throw InvalidQueryException::missing();

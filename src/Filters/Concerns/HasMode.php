@@ -2,8 +2,8 @@
 
 namespace Jdw5\Vanguard\Refining\Filters\Concerns;
 
-use Jdw5\Vanguard\Refining\Filters\Enums\FilterMode;
-use Jdw5\Vanguard\Refining\Filters\Exceptions\InvalidMode;
+use Jdw5\Vanguard\Filters\Enums\FilterMode;
+use Jdw5\Vanguard\Filters\Exceptions\InvalidMode;
 
 trait HasMode
 {

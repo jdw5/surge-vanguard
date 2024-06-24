@@ -19,7 +19,7 @@ class Filter extends BaseFilter
         $this->setType('filter');
     }
 
-    public function apply(Builder|QueryBuilder $builder, string $property, mixed $value): void
+    public function apply(Builder|QueryBuilder $builder): void
     {
         if ($this->getMode() === FilterMode::EXACT) {
             $queryMethod = ($this->getQueryBoolean() === 'or') ? 'orWhere' : 'where';

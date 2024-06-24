@@ -45,10 +45,10 @@ abstract class BaseSort extends Refiner implements Sorts
                     direction: $this->sanitiseOrder($request->query($this->getOrderKey())),
                 );
             }
-        );  
+        );
     }
 
-    protected function sorting(Request $request): bool
+    public function sorting(Request $request): bool
     {
         return $request->has($this->getSortKey()
             && $request->query($this->getSortKey()) === $this->getName()

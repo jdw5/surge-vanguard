@@ -2,6 +2,9 @@
 
 namespace Jdw5\Vanguard\Sorts\Concerns;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+
 trait HasSorts
 {
     protected array $sorts;
@@ -25,8 +28,12 @@ trait HasSorts
         return [];
     }
 
-    protected function applySorts(mixed $query): void
+    protected function applySorts(Builder|QueryBuilder &$query): void
     {
-        
+        foreach ($this->getSorts() as $sort) {
+            $sort->apply($query);
+            // Only apply one sort
+            if ($sort->isActive()) break;
+        }
     }
 }

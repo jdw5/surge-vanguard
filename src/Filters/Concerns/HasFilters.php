@@ -2,6 +2,9 @@
 
 namespace Jdw5\Vanguard\Filters\Concerns;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+
 trait HasFilters
 {
     protected array $filters;
@@ -23,5 +26,12 @@ trait HasFilters
         }
 
         return [];
+    }
+
+    protected function applyFilters(Builder|QueryBuilder &$builder): void
+    {
+        foreach ($this->getFilters() as $filter) {
+            $filter->apply($builder);
+        }
     }
 }

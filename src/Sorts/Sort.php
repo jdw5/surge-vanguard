@@ -49,7 +49,7 @@ class Sort extends BaseSort
         ); 
     }
 
-    protected function sorting(Request $request): bool
+    public function sorting(Request $request): bool
     {
         return $this->isDefault() ||
             ($request->has($this->getSortKey()) && $request->query($this->getSortKey()) === $this->getName());

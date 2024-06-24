@@ -25,7 +25,7 @@ class AnisotropicSort extends BaseSort
         $this->setDirection($direction);
     }
 
-    protected function sorting(Request $request): bool
+    public function sorting(Request $request): bool
     {
         return $request->has($this->getSortKey()
             && $request->query($this->getSortKey()) === $this->getName()

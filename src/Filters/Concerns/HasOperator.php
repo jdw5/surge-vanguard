@@ -2,10 +2,12 @@
 
 namespace Jdw5\Vanguard\Refining\Filters\Concerns;
 
+use Closure;
+
 trait HasOperator
 {
     /** Default the operator to an exact equal match */
-    protected string|\Closure $operator = '=';
+    protected string|Closure $operator = '=';
 
     /**
      * Set the operator to be used, chainable.
@@ -13,7 +15,7 @@ trait HasOperator
      * @param string|\Closure $operator
      * @return static
      */
-    public function operator(string|\Closure $operator): static
+    public function operator(string|Closure $operator): static
     {
         $this->setOperator($operator);
         return $this;
@@ -25,8 +27,9 @@ trait HasOperator
      * @param string|\Closure $operator
      * @return void
      */
-    public function setOperator(string|\Closure $operator): void
+    public function setOperator(string|Closure $operator): void
     {
+        if (is_null($operator)) return;
         $this->operator = $operator;
     }
 
