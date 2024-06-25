@@ -14,7 +14,7 @@ use Jdw5\Vanguard\Columns\Concerns\IsSearchable;
 use Jdw5\Vanguard\Columns\Concerns\IsSortable;
 use Jdw5\Vanguard\Columns\Concerns\IsToggleable;
 use Jdw5\Vanguard\Concerns\HasAuthorization;
-use Jdw5\Vanguard\Enums\Breakpoint;
+use Jdw5\Vanguard\Columns\Enums\Breakpoint;
 
 class Column extends BaseColumn
 {

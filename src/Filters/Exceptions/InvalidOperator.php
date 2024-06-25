@@ -2,7 +2,9 @@
 
 namespace Jdw5\Vanguard\Filters\Exceptions;
 
-class InvalidOperator extends \Exception
+use Exception;
+
+class InvalidOperator extends Exception
 {
     public function __construct(string $operator)
     {

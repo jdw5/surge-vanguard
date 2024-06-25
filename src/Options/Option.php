@@ -7,7 +7,6 @@ use Jdw5\Vanguard\Concerns\HasMetadata;
 use Jdw5\Vanguard\Concerns\IsActive;
 use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Concerns\HasValue;
-use Illuminate\Database\Eloquent\Collection;
 
 class Option extends Primitive
 {
@@ -38,51 +37,6 @@ class Option extends Primitive
         array $metadata = null
     ): static {
         return new static($value, $label, $metadata);
-    }
-
-    /**
-     * Create an array of options from a collection.
-     * 
-     * @param Collection $collection
-     * @param string|callable $asValue
-     * @param string|callable|null $asLabel
-     * @return array
-     */
-    public static function collection(Collection $collection, string|callable $asValue = 'value', string|callable $asLabel = null): array
-    {
-        return $collection->map(function ($item) use ($asValue, $asLabel) {
-            $value = is_callable($asValue) ? $asValue($item) : $item[$asValue];
-            $label = is_callable($asLabel) ? $asLabel($item) : (\is_null($asLabel) ? $value : $item[$asLabel]);
-            return static::make($value, $label);
-        })->toArray();
-    }
-
-    /**
-     * Create an array of options from an array.
-     * 
-     * @param array $array
-     * @param string|callable $asValue
-     * @param string|callable|null $asLabel
-     * @return array
-     */
-    public static function array(array $array, string|callable $asValue = 'value', string|callable $asLabel = null): array
-    {
-        return Option::collection(collect($array), $asValue, $asLabel);
-    }
-
-    /**
-     * Create an array of options from an enum.
-     * 
-     * @param string $enum
-     * @param string|callable|null $asLabel
-     * @return array
-     */
-    public static function enum(string $enum, string|callable $asLabel = null): array
-    {
-        return collect($enum::cases())->map(function (\BackedEnum $item) use ($asLabel) {
-            $label = is_callable($asLabel) ? $asLabel($item) : (\is_null($asLabel) ? $item->value : $item->{$asLabel}());
-            return static::make($item->value, $label);
-        })->toArray();
     }
 
     public function toArray(): array

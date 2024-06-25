@@ -12,8 +12,6 @@ trait HasOptions
 {
     /** The options available */
     protected array $options = [];
-    /** If the query should be ignored when not listed values are supplied */
-    protected bool $only = false;
 
     /**
      * Supply a list of options to be used for the filter

@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Record\Concerns;
+namespace Jdw5\Vanguard\Record\Concerns;
 
 use Jdw5\Vanguard\Table\Record\Record;
 

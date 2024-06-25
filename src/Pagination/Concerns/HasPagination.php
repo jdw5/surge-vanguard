@@ -19,7 +19,7 @@ trait HasPagination
     protected $page = null;
     protected $paginateType = null;
     protected $columns = ['*'];
-    protected int|array $pagination;
+    protected int|array $pagination = 10;
 
     public static function setGlobalPagination(int|array $pagination): void
     {
@@ -41,93 +41,10 @@ trait HasPagination
      */
     protected function getRawPagination()
     {
-        if (isset($this->pagination)) {
-            return $this->pagination;
-        }
-
         if (function_exists('pagination')) {
             return $this->pagination();
         }
-
-        return 10;
-    }
-
-    /**
-     * Set the pagination configuration for standard
-     * 
-     * @param int $perPage
-     * @param array $columns
-     * @param string $pageName
-     * @param int|null $page
-     * @return static
-     */
-    public function paginate(int $perPage = 10, array $columns = ['*'], string $pageName = 'page', $page = null): static
-    {
-        $this->setPerPage($perPage); // set the perPage value
-        $this->setColumns($columns); // set the columns to be selected
-        $this->setPage($page); // set the current page
-        $this->setPageName($pageName); // set the page name
-        $this->setPaginateType('paginate'); // set the pagination type
-        return $this;
-    }
-    /**
-     * Set the pagination configuration for cursor
-     * 
-     * @param int $perPage
-     * @param array $columns
-     * @param string $cursorName
-     * @param int|null $cursor
-     * @return static
-     */
-    public function cursorPaginate(int $perPage = 10, array $columns = ['*'], string $cursorName = 'cursor', $cursor = null): static
-    {
-        $this->setPerPage($perPage);
-        $this->setColumns($columns);
-        $this->setPage($cursor);
-        $this->setPageName($cursorName); 
-        $this->setPaginateType('cursor'); 
-        return $this;
-    }
-
-    public function get(): static
-    {
-        $this->setPaginateType('get');
-        return $this;
-    }
-    
-    public function dynamicPaginate(array $perPages, string $showKey = 'show'): static
-    {
-        $this->setPerPage($perPages);
-        $this->setShowKey($showKey);
-        $this->setPaginateType('dynamic');
-        return $this;
-    }
-
-    ############################################################################################
-    # Internal methods
-    ############################################################################################
-    public function hasDynamicPagination(): bool
-    {
-        return $this->isDynamic() || \is_array($this->definePagination());
-    }
-
-    private function hasBeenOverriden(): bool
-    {
-        return !\is_null($this->getPaginateType());
-    }
-
-    public function getDynamicPerPage(): int
-    {
-        if (isset($this->activeDynamicOption)) return $this->activeDynamicOption;
-        $value = request()->query($this->showKey);
-
-        $this->activeDynamicOption = \intval($value);
-
-        if (\is_null($this->activeDynamicOption) || !in_array($this->activeDynamicOption, $this->definePagination())) {
-            $this->activeDynamicOption = $this->defaultPerPage;
-        }
-        return $this->activeDynamicOption;
-
+        return $this->pagination;
     }
 
     public function getPagination(): array

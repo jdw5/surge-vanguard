@@ -5,7 +5,7 @@ namespace Jdw5\Vanguard\Columns;
 use Carbon\Carbon;
 use Closure;
 use Exception;
-use Jdw5\Vanguard\Enums\Breakpoint;
+use Jdw5\Vanguard\Columns\Enums\Breakpoint;
 use Jdw5\Vanguard\Columns\Concerns\HasFormat;
 
 class DateColumn extends Column

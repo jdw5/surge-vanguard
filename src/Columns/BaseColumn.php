@@ -4,7 +4,7 @@ namespace Jdw5\Vanguard\Columns;
 
 use Jdw5\Vanguard\Primitive;
 use Jdw5\Vanguard\Concerns\HasType;
-use Jdw5\Vanguard\Enums\Breakpoint;
+use Jdw5\Vanguard\Columns\Enums\Breakpoint;
 use Jdw5\Vanguard\Concerns\HasLabel;
 use Jdw5\Vanguard\Columns\Contracts\Columns;
 use Jdw5\Vanguard\Columns\Concerns\HasBreakpoint;

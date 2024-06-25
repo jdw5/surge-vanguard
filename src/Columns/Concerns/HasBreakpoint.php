@@ -2,7 +2,7 @@
 
 namespace Jdw5\Vanguard\Columns\Concerns;
 
-use Jdw5\Vanguard\Enums\Breakpoint;
+use Jdw5\Vanguard\Columns\Enums\Breakpoint;
 
 /**
  * Disable a Tailwind-style breakpoint to show the class at.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Refiner;
+namespace Jdw5\Vanguard\Refiners;
 
 use Closure;
 use Jdw5\Vanguard\Concerns\HasAuthorization;

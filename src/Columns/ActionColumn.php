@@ -3,7 +3,7 @@
 namespace Jdw5\Vanguard\Columns;
 
 use Closure;
-use Jdw5\Vanguard\Enums\Breakpoint;
+use Jdw5\Vanguard\Columns\Enums\Breakpoint;
 
 class ActionColumn extends BaseColumn
 {

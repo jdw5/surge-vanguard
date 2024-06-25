@@ -1,10 +1,10 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining;
+namespace Jdw5\Vanguard\Refiners;
 
 use Jdw5\Vanguard\Primitive;
 use Illuminate\Support\Collection;
-use Jdw5\Vanguard\Refining\Refinement;
+use Jdw5\Vanguard\Refiners\Refiner;
 use Jdw5\Vanguard\Concerns\HasRefinements;
 
 class Refiners extends Primitive
@@ -30,7 +30,7 @@ class Refiners extends Primitive
      * @param Refinement $refinement
      * @return static
      */
-    public function add(Refinement $refinement): static
+    public function add(Refiner $refinement): static
     {
         $this->refiners[] = $refinement;
         return $this;

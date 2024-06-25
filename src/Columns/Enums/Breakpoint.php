@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Enums;
+namespace Jdw5\Vanguard\Columns\Enums;
 
 enum Breakpoint: string
 {
