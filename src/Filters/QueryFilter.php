@@ -8,6 +8,10 @@ use Jdw5\Vanguard\Filters\Concerns\HasQuery;
 use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
 use Override;
 
+/**
+ * Allows for custom query filters to be created, 
+ * based on user-defined value behaviour.
+ */
 class QueryFilter extends BaseFilter
 {
     use HasQuery;
@@ -25,6 +29,8 @@ class QueryFilter extends BaseFilter
         $this->setAuthorize($authorize);
         $this->setQuery($query);
         $this->setValidator($condition);
+        $this->setType('filter:custom');
+
     }
     
     public static function make(

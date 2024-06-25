@@ -3,7 +3,7 @@
 namespace Jdw5\Vanguard\Filters\Concerns;
 
 use Closure;
-use Jdw5\Vanguard\Refining\Filters\Exceptions\InvalidQueryException;
+use Jdw5\Vanguard\Filters\Exceptions\QueryNotDefined;
 
 trait HasQuery
 {
@@ -28,7 +28,7 @@ trait HasQuery
 
     public function getQuery(): Closure
     {
-        if (!isset($this->query)) throw InvalidQueryException::missing();
+        if (!isset($this->query)) throw new QueryNotDefined($this->getName());
         return $this->query;
     }
 }
