@@ -12,26 +12,26 @@ trait HasClause
     protected Clause $clause = Clause::IS;
     
     /**
-     * Set the mode to be used.
+     * Set the clause to be used.
      * 
      * @param string|Clause $clause
      * @return static
-     * @throws InvalidMode 
+     * @throws InvalidClause 
      */
     public function clause(string|Clause $clause): static
     {
-        $this->setMode($clause);
+        $this->setClause($clause);
         return $this;
     }
 
     /**
-     * Set the mode to be used quietly.
+     * Set the clause to be used quietly.
      * 
      * @param string|Clause $clause
      * @return void
      * @throws InvalidClause
      */
-    protected function setMode(string|Clause $clause): void
+    protected function setClause(string|Clause $clause): void
     {
         if ($clause instanceof Clause) {
             $this->clause = $clause;
@@ -46,17 +46,17 @@ trait HasClause
     }
 
     /**
-     * Retrieve the mode property.
+     * Retrieve the clause property.
      * 
      * @return Clause
      */
-    public function getMode(): Clause
+    public function getClause(): Clause
     {
         return $this->clause;
     }
 
     /**
-     * Set the mode to be 'exact'.
+     * Set the clause to be 'exact'.
      * 
      * @return static
      */
@@ -66,7 +66,7 @@ trait HasClause
     }
 
     /**
-     * Set the mode to be 'loose'.
+     * Set the clause to be 'loose'.
      * 
      * @return static
      */
@@ -76,7 +76,7 @@ trait HasClause
     }
 
     /**
-     * Set the mode to be 'begins with'.
+     * Set the clause to be 'begins with'.
      * 
      * @return static
      */
@@ -91,7 +91,7 @@ trait HasClause
     }
 
     /**
-     * Set the mode to be 'ends with'.
+     * Set the clause to be 'ends with'.
      * 
      * @return static
      */
@@ -150,13 +150,53 @@ trait HasClause
         return $this->clause(Clause::JSON_LENGTH);
     }
 
-    public function multiple(): static
+    // public function multiple(): static
+    // {
+    //     return $this->clause(Clause::CONTAINS);
+    // }
+
+    // public function multipleNot(): static
+    // {
+    //     return $this->clause(Clause::DOES_NOT_CONTAIN);
+    // }
+
+    public function fullText(): static
     {
-        return $this->clause(Clause::CONTAINS);
+        return $this->clause(Clause::FULL_TEXT);
     }
 
-    public function multipleNot(): static
+    public function search(): static
     {
-        return $this->clause(Clause::DOES_NOT_CONTAIN);
+        return $this->clause(Clause::SEARCH);
+    }
+
+    public function jsonKey(): static
+    {
+        return $this->clause(Clause::JSON_KEY);
+    }
+
+    public function notJsonKey(): static
+    {
+        return $this->clause(Clause::JSON_NOT_KEY);
+    }
+
+    public function jsonOverlap(): static
+    {
+        return $this->clause(Clause::JSON_OVERLAPS);
+    }
+
+    public function jsonOverlaps(): static
+    {
+        return $this->jsonOverlap();
+    }
+
+    public function jsonDoesntOverlap(): static
+    {
+        return $this->clause(Clause::JSON_DOESNT_OVERLAP);
+    }
+
+    public function jsonNotOverlap(): static
+    {
+        return $this->jsonDoesntOverlap();
     }
 }

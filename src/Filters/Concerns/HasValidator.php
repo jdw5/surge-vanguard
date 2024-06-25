@@ -20,9 +20,9 @@ trait HasValidator
     }
 
     /** If nothing is returned, validation has failed */
-    public function validateUsing(mixed $value): mixed
+    public function validateUsing(mixed $value): bool
     {
-        if (!$this->hasValidator()) return $value;
+        if (!$this->hasValidator()) return true;
         return $this->peformValidation($value);
     }
 
@@ -36,7 +36,7 @@ trait HasValidator
         return !is_null($this->validator);
     }
 
-    protected function peformValidation(mixed $value): mixed
+    protected function peformValidation(mixed $value): bool
     {
         return ($this->validator)($value);
     }

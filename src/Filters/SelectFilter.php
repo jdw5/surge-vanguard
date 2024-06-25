@@ -11,7 +11,10 @@ use Jdw5\Vanguard\Filters\BaseFilter;
 use Jdw5\Vanguard\Filters\Concerns\HasMultiple;
 use Jdw5\Vanguard\Filters\Concerns\IsRestrictable;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Jdw5\Vanguard\Filters\Concerns\HasClause;
+use Jdw5\Vanguard\Filters\Concerns\HasOperator;
 use Jdw5\Vanguard\Filters\Concerns\IsNegatable;
+use Jdw5\Vanguard\Filters\Enums\Clause;
 
 class SelectFilter extends BaseFilter
 {
@@ -19,22 +22,22 @@ class SelectFilter extends BaseFilter
     use HasOptions;
     use IsRestrictable;
     use IsNegatable;
+    use HasClause;
+    use HasOperator;
 
     public function __construct(
         string|Closure $property, 
         string|Closure $name = null,
         string|Closure $label = null,
         bool|Closure $authorize = null,
-        bool|Closure $multiple = null,
+        bool $multiple = false,
         array $options = [],
         bool|Closure $restrict = null,
-        bool|Closure $negate = null,
     ) {
         parent::__construct($property, $name, $label, $authorize);
-        $this->setMultiple($multiple);
+        if ($multiple) $this->setClause(Clause::CONTAINS);
         $this->setOptions($options);
         $this->setRestrict($restrict);
-        $this->setNegate($negate);
     }
 
     public static function make(
@@ -42,7 +45,7 @@ class SelectFilter extends BaseFilter
         string|Closure $name = null,
         string|Closure $label = null,
         bool|Closure $authorize = null,
-        bool|Closure $multiple = null,
+        bool $multiple = false,
         array $options = [],
         bool|Closure $restrict = null,
     ): static {
@@ -53,37 +56,32 @@ class SelectFilter extends BaseFilter
     {
         $request = request();
         $raw = $request->query($this->getName());
-        if ($this->isMultiple()) $raw = $this->split($raw);
+        if ($this->getClause()->isMultiple()) $raw = $this->split($raw);
 
         $value = $this->validateUsing($raw);
         $this->setValue($value ?? $raw);
 
+        $optionExists = false;
+
+        $this->getOptions()->each(function (Option $option) use (&$optionExists) {
+            $isActive = $option->hasValue($this->getValue(), $this->isMultiple());
+            $option->setActive($isActive);
+            $optionExists = $optionExists || $isActive;
+        });
+
         if (!$value) return;
 
-        // Check the options -> only active if value is an option and options restricted
-        if ($this->hasOptions() && $this->isRestricted()) {
-            $optionExists = false;
-
-            $this->getOptions()->each(function (Option $option) use (&$optionExists) {
-                $isActive = $option->hasValue($this->getValue(), $this->isMultiple());
-                $option->setActive($isActive);
-                $optionExists = $optionExists || $isActive;
-            });
-
-            // If still false, it's not a valid option
-            if (!$optionExists) return $this->setActive(false);
+        if ($this->hasOptions() && $this->isRestricted() && !$optionExists) {
+            $this->setActive(false);
+            return;
         }
 
         $this->setActive($this->filtering($request));
 
         $builder->when(
             $this->isActive(),
-            function (Builder|QueryBuilder $builder) {
-                $builder->{$this->isNegated() ? 'whereNotIn' : 'whereIn'}(
-                    $this->getProperty(),
-                    $this->getValue()
-                );
-            }
+            fn (Builder|QueryBuilder $builder) => $this->getClause()
+                ->apply($builder, $this->getProperty(), $this->getOperator(), $this->getValue())
         );
     }
 

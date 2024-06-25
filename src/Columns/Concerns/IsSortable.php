@@ -4,6 +4,7 @@ namespace Jdw5\Vanguard\Columns\Concerns;
 
 use Closure;
 use Jdw5\Vanguard\Concerns\HasProperty;
+use Override;
 
 trait IsSortable
 {
@@ -11,6 +12,13 @@ trait IsSortable
     use HasProperty;
 
     protected bool $sortable = false;
+
+    #[Override]
+    public function property(string|Closure $property): static
+    {
+        $this->setProperty($property);
+        return $this;
+    }
     
     public function sort(string|Closure $property = null): static
     {

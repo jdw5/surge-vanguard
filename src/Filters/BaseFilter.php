@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Jdw5\Vanguard\Filters\Contracts\Filters;
 use Jdw5\Vanguard\Options\Concerns\HasOptions;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Jdw5\Vanguard\Columns\Concerns\HasTransform;
 use Jdw5\Vanguard\Concerns\HasValue;
 use Jdw5\Vanguard\Filters\Concerns\HasValidator;
 
@@ -17,28 +18,33 @@ abstract class BaseFilter extends Refiner implements Filters
     use HasOptions;
     use HasValue;
     use HasValidator;
+    use HasTransform;
 
     public function __construct(
         string|Closure $property, 
         string|Closure $name = null,
         string|Closure $label = null,
         bool|Closure $authorize = null,
+        Closure $validator = null,
+        Closure $transform = null,
     ) {
         $this->setProperty($property);
         $this->setName($name ?? $this->toName($property));
         $this->setLabel($label ?? $this->toLabel($this->getName()));
         $this->setAuthorize($authorize);
+        $this->setValidator($validator);
+        $this->setTransform($transform);
     }
 
     public function apply(Builder|QueryBuilder $builder): void
     {
         $request = request(); 
-        $value = $this->validateUsing($request->query($this->getName()));
+        $value = $this->transformUsing($request->query($this->getName()));
         $this->setValue($value);
         $this->setActive($this->filtering($request));
 
         $builder->when(
-            $this->isActive(),
+            $this->isActive() && $this->validateUsing($value),
             function (Builder|QueryBuilder $builder) {
                 $builder->where(
                     column: $builder->qualifyColumn($this->getProperty()),

@@ -3,6 +3,7 @@
 namespace Jdw5\Vanguard\Columns\Concerns;
 
 use Closure;
+use Override;
 use Jdw5\Vanguard\Concerns\HasProperty;
 
 trait IsSearchable
@@ -11,6 +12,13 @@ trait IsSearchable
     use HasProperty;
 
     protected bool $searchable = false;
+
+    #[Override]
+    public function property(string|Closure $property): static
+    {
+        $this->setProperty($property);
+        return $this;
+    }
 
     public function searchable(string|Closure $property = null): static
     {

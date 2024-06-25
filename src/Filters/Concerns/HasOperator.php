@@ -13,7 +13,7 @@ trait HasOperator
     /**
      * Set the operator to be used, chainable.
      * 
-     * @param string|\Operator $operator
+     * @param string|Operator $operator
      * @return static
      */
     public function operator(string|Operator $operator): static
@@ -45,9 +45,9 @@ trait HasOperator
     /**
      * Get the operator to be used.
      * 
-     * @return string
+     * @return Operator
      */
-    public function getOperator(): string
+    public function getOperator(): Operator
     {
         return $this->evaluate($this->operator);
     }
