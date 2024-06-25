@@ -1,48 +1,58 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining\Filters\Concerns;
+namespace Jdw5\Vanguard\Filters\Concerns;
 
+use Exception;
 use Jdw5\Vanguard\Filters\Enums\Clause;
-use Jdw5\Vanguard\Filters\Enums\FilterMode;
-use Jdw5\Vanguard\Filters\Exceptions\InvalidMode;
+use Jdw5\Vanguard\Filters\Exceptions\InvalidClause;
 
 trait HasClause
 {
     /** Default to be exact */
-    protected Clause $mode = Clause::EQUALS;
+    protected Clause $clause = Clause::IS;
     
     /**
      * Set the mode to be used.
      * 
-     * @param string|FilterMode $mode
+     * @param string|Clause $clause
      * @return static
      * @throws InvalidMode 
      */
-    public function mode(string|FilterMode $mode): static
+    public function clause(string|Clause $clause): static
     {
-        $this->setMode($mode);
+        $this->setMode($clause);
         return $this;
     }
 
     /**
      * Set the mode to be used quietly.
      * 
-     * @param string|FilterMode $mode
+     * @param string|Clause $clause
      * @return void
-     * @throws InvalidMode
+     * @throws InvalidClause
      */
-    protected function setMode(string|FilterMode $mode): void
+    protected function setMode(string|Clause $clause): void
     {
-        if ($mode instanceof FilterMode) {
-            $this->mode = $mode;
-        } 
+        if ($clause instanceof Clause) {
+            $this->clause = $clause;
+        }
         else {
             try {
-                $this->mode = FilterMode::from($mode);
-            } catch (\Exception $e) {
-                throw InvalidMode::make($mode);
+                $this->clause = Clause::from($clause);
+            } catch (Exception $e) {
+                throw new InvalidClause($clause);
             }
         }
+    }
+
+    /**
+     * Retrieve the mode property.
+     * 
+     * @return Clause
+     */
+    public function getMode(): Clause
+    {
+        return $this->clause;
     }
 
     /**
@@ -50,9 +60,9 @@ trait HasClause
      * 
      * @return static
      */
-    public function exact(): static
+    public function is(): static
     {
-        return $this->mode(FilterMode::EXACT);
+        return $this->clause(Clause::IS);
     }
 
     /**
@@ -60,9 +70,9 @@ trait HasClause
      * 
      * @return static
      */
-    public function loose(): static
+    public function isNot(): static
     {
-        return $this->mode(FilterMode::LOOSE);
+        return $this->clause(Clause::IS_NOT);
     }
 
     /**
@@ -70,9 +80,14 @@ trait HasClause
      * 
      * @return static
      */
+    public function startsWith(): static
+    {
+        return $this->clause(Clause::STARTS_WITH);
+    }
+
     public function beginsWith(): static
     {
-        return $this->mode(FilterMode::BEGINS_WITH);
+        return $this->startsWith();
     }
 
     /**
@@ -82,17 +97,66 @@ trait HasClause
      */
     public function endsWith(): static
     {
-        $this->mode = FilterMode::ENDS_WITH;
-        return $this;
+        return $this->clause(Clause::ENDS_WITH);
     }
 
-    /**
-     * Retrieve the mode property.
-     * 
-     * @return FilterMode
-     */
-    public function getMode(): FilterMode
+    public function contains(): static
     {
-        return $this->mode;
+        return $this->clause(Clause::CONTAINS);
+    }
+
+    public function doesNotContain(): static
+    {
+        return $this->clause(Clause::DOES_NOT_CONTAIN);
+    }
+
+    public function doesntContain(): static
+    {
+        return $this->doesNotContain();
+    }
+
+    public function all(): static
+    {
+        return $this->clause(Clause::ALL);
+    }
+
+    public function any(): static
+    {
+        return $this->clause(Clause::ANY);
+    }
+
+    public function jsonContains(): static
+    {
+        return $this->clause(Clause::JSON);
+    }
+
+    public function json(): static
+    {
+        return $this->jsonContains();
+    }
+
+    public function jsonDoesNotContain(): static
+    {
+        return $this->clause(Clause::NOT_JSON);
+    }
+
+    public function notJson(): static
+    {
+        return $this->jsonDoesNotContain();
+    }
+
+    public function jsonLength(): static
+    {
+        return $this->clause(Clause::JSON_LENGTH);
+    }
+
+    public function multiple(): static
+    {
+        return $this->clause(Clause::CONTAINS);
+    }
+
+    public function multipleNot(): static
+    {
+        return $this->clause(Clause::DOES_NOT_CONTAIN);
     }
 }

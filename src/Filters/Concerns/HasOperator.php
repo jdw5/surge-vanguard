@@ -1,21 +1,22 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining\Filters\Concerns;
+namespace Jdw5\Vanguard\Filters\Concerns;
 
-use Closure;
+use Exception;
+use Jdw5\Vanguard\Filters\Enums\Operator;
+use Jdw5\Vanguard\Filters\Exceptions\InvalidOperator;
 
 trait HasOperator
 {
-    /** Default the operator to an exact equal match */
-    protected string|Closure $operator = '=';
+    protected Operator $operator = Operator::EQUAL;
 
     /**
      * Set the operator to be used, chainable.
      * 
-     * @param string|\Closure $operator
+     * @param string|\Operator $operator
      * @return static
      */
-    public function operator(string|Closure $operator): static
+    public function operator(string|Operator $operator): static
     {
         $this->setOperator($operator);
         return $this;
@@ -24,79 +25,21 @@ trait HasOperator
     /**
      * Set the operator to be used quietly.
      * 
-     * @param string|\Closure $operator
+     * @param string|Operator $operator
      * @return void
      */
-    public function setOperator(string|Closure $operator): void
+    public function setOperator(string|Operator $operator): void
     {
-        if (is_null($operator)) return;
-        $this->operator = $operator;
-    }
-
-    /**
-     * Set the operator to be '>'.
-     * 
-     * @return static
-     */
-    public function gt(): static
-    {
-        $this->setOperator('>');
-        return $this;
-    }
-
-    /**
-     * Set the operator to be '>='.
-     * 
-     * @return static
-     */
-    public function gte(): static
-    {
-        $this->setOperator('>=');
-        return $this;
-    }
-
-    /**
-     * Set the operator to be '<'.
-     * 
-     * @return static
-     */
-    public function lt(): static
-    {
-        $this->setOperator('<');
-        return $this;
-    }
-
-    /**
-     * Set the operator to be '<='.
-     * 
-     * @return static
-     */
-    public function lte(): static
-    {
-        $this->setOperator('<=');
-        return $this;
-    }
-
-    /**
-     * Set the operator to be '='.
-     * 
-     * @return static
-     */
-    public function eq(): static
-    {
-        $this->setOperator('=');
-        return $this;
-    }
-
-    /**
-     * Set the operator to be '!='.
-     * 
-     * @return static
-     */
-    public function neq(): static
-    {
-        $this->setOperator('!=');
-        return $this;
+        if ($operator instanceof Operator) {
+            $this->operator = $operator;
+        } 
+        else {
+            try {
+                $this->operator = operator::from($operator);
+            } catch (Exception $e) {
+                throw new InvalidOperator($operator);
+            }
+        }
     }
 
     /**
@@ -110,21 +53,130 @@ trait HasOperator
     }
 
     /**
-     * Negate the operator.
+     * Set the operator to be '>'.
      * 
      * @return static
      */
-    public function not(): static
+    public function gt(): static
     {
-        $this->setOperator(match ($this->operator) {
-            '!=' => '=',
-            '>' => '<=',
-            '>=' => '<',
-            '<' => '>=',
-            '<=' => '>',
-            default => '!='
-        });
-        
+        $this->setOperator(Operator::GREATER_THAN);
         return $this;
+    }
+
+    /**
+     * Set the operator to be '>='.
+     * 
+     * @return static
+     */
+    public function gte(): static
+    {
+        $this->setOperator(Operator::GREATER_THAN_OR_EQUAL);
+        return $this;
+    }
+
+    /**
+     * Set the operator to be '<'.
+     * 
+     * @return static
+     */
+    public function lt(): static
+    {
+        $this->setOperator(Operator::LESS_THAN);
+        return $this;
+    }
+
+    /**
+     * Set the operator to be '<='.
+     * 
+     * @return static
+     */
+    public function lte(): static
+    {
+        $this->setOperator(Operator::LESS_THAN_OR_EQUAL);
+        return $this;
+    }
+
+    /**
+     * Set the operator to be '='.
+     * 
+     * @return static
+     */
+    public function eq(): static
+    {
+        $this->setOperator(Operator::EQUAL);
+        return $this;
+    }
+
+    /**
+     * Set the operator to be '!='.
+     * 
+     * @return static
+     */
+    public function neq(): static
+    {
+        $this->setOperator(Operator::NOT_EQUAL);
+        return $this;
+    }
+
+    public function like(): static
+    {
+        $this->setOperator(Operator::LIKE);
+        return $this;
+    }
+
+    // Alias
+    public function equals(): static
+    {
+        return $this->eq();
+    }
+
+    public function equal(): static
+    {
+        return $this->eq();
+    }
+
+    public function notEqual(): static
+    {
+        return $this->neq();
+    }
+
+    public function greaterThan(): static
+    {
+        return $this->gt();
+    }
+
+    public function greaterThanOrEqual(): static
+    {
+        return $this->gte();
+    }
+
+    public function lessThan(): static
+    {
+        return $this->lt();
+    }
+
+    public function lessThanOrEqual(): static
+    {
+        return $this->lte();
+    }
+
+    public function similar(): static
+    {
+        return $this->like();
+    }
+
+    public function fuzzy(): static
+    {
+        return $this->like();
+    }
+
+    public function greater(): static
+    {
+        return $this->gt();
+    }
+
+    public function less(): static
+    {
+        return $this->lt();
     }
 }

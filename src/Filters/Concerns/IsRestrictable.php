@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Filters;
+namespace Jdw5\Vanguard\Filters\Concerns;
 
 trait IsRestrictable
 {
@@ -30,7 +30,7 @@ trait IsRestrictable
 
     protected function setRestricted(bool $restricted): void
     {
-        if (is_null($this->getRestrictions())) return;
+        if (is_null($restricted)) return;
         $this->restrictions = $restricted;
     }
 

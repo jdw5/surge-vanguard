@@ -38,4 +38,9 @@ trait HasMultiple
     {
         return $this->getMultiple();
     }
+
+    public function split(string|null $value): array
+    {
+        return array_map('trim', explode(',', $value));
+    }
 }

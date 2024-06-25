@@ -16,12 +16,14 @@ class Option extends Primitive
     use HasMetadata;
     use IsActive;
 
-    public function __construct(mixed $value, string $label = null) { 
-        if (is_string($value)) $value = str($value)->slug();
-        
-        $this->setValue($value);
-        
+    public function __construct(
+        mixed $value, 
+        string $label = null,
+        array $metadata = null
+    ) {         
+        $this->setValue(str($value)->slug());
         $this->setLabel($label ?? $this->toLabel($value));
+        $this->setMetadata($metadata);
     }
     
     /**
@@ -30,9 +32,12 @@ class Option extends Primitive
      * @param mixed $value
      * @param string|null $label
      */
-    public static function make(mixed $value, string $label = null): static
-    {
-        return new static($value, $label);
+    public static function make(
+        mixed $value, 
+        string $label = null,
+        array $metadata = null
+    ): static {
+        return new static($value, $label, $metadata);
     }
 
     /**
@@ -98,5 +103,11 @@ class Option extends Primitive
     public function jsonSerialize(): array
     {
         return $this->toArray();
+    }
+
+    public function hasValue(mixed $value, bool $multiple = false): bool
+    {
+        return $multiple ?
+            in_array($this->getValue(), $value) : $this->getValue() === $value;
     }
 }
