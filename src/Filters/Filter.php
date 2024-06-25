@@ -33,6 +33,7 @@ class Filter extends BaseFilter
         $this->setClause($clause);
         $this->setOperator($operator);
         $this->setNegation($negate);
+        $this->setType('filter');
     }
 
     public static function make(

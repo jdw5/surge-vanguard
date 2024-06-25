@@ -1,40 +1,52 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining\Filters;
+namespace Jdw5\Vanguard\Filters;
 
-use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
-use Illuminate\Http\Request;
-use Jdw5\Vanguard\Refining\Refinement;
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Refining\Contracts\Filters;
-use Jdw5\Vanguard\Refining\Filters\Concerns\HasQuery;
+use Jdw5\Vanguard\Filters\Concerns\HasQuery;
+use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
+use Override;
 
 class QueryFilter extends BaseFilter
 {
     use HasQuery;
 
-    // Use a different 'make' method to reflect no need for property: just name
-
-    protected function setUp(): void
-    {
-        $this->setType('query');
+    #[Override]
+    public function __construct(
+        string|Closure $name,
+        string|Closure $label = null,
+        bool|Closure $authorize = null,
+        Closure $query = null,
+        Closure $condition = null,
+    ) {
+        $this->setName($name);
+        $this->setLabel($label ?? $this->toLabel($this->getName()));
+        $this->setAuthorize($authorize);
+        $this->setQuery($query);
+        $this->setValidator($condition);
+    }
+    
+    public static function make(
+        string|Closure $name,
+        string|Closure $label = null,
+        bool|Closure $authorize = null,
+        Closure $query = null,
+        Closure $condition = null,
+    ): static {
+        return new static($name, $label, $authorize, $query, $condition);
     }
 
-    public function refine(Builder|QueryBuilder $builder, ?Request $request = null): void
-    {
-        if (\is_null($request)) $request = request();
-        
-        $this->setValue($request->query($this->getName()));
-
-        $this->apply($builder, $this->getName(), $this->getValue());
-
-        return;        
-    }
-
+    #[Override]
     public function apply(Builder|QueryBuilder $builder): void
     {
-        $builder->when(!\is_null($value), function ($builder) use ($value) {
-            $this->getQuery()($builder, $value);
-        });
+        $request = request(); 
+        $this->setValue($request->query($this->getName()));
+        $this->setActive($this->filtering($request));
+
+        $builder->when(
+            value: $this->isActive() && $this->validateUsing($this->getValue()),
+            callback: fn (Builder|QueryBuilder $builder) => ($this->getQuery())($builder, $this->getValue())
+        );        
     }
 }

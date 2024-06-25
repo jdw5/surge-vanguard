@@ -36,6 +36,8 @@ class SelectFilter extends Filter
         if ($multiple) $this->multiple();
         $this->setOptions($options);
         $this->setRestrict($restrict);
+        $this->setType('filter:select');
+
     }
 
     #[Override]

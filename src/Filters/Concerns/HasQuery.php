@@ -1,41 +1,34 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining\Filters\Concerns;
+namespace Jdw5\Vanguard\Filters\Concerns;
 
 use Closure;
-use Illuminate\Database\Eloquent\Builder;
 use Jdw5\Vanguard\Refining\Filters\Exceptions\InvalidQueryException;
 
 trait HasQuery
 {
     protected Closure $query;
 
-    public function query(\Closure $query): static
+    public function query(Closure $query): static
     {
-        $this->validateQueryClosure($query);
-        $this->query = $query;
+        $this->setQuery($query);
         return $this;
     }
 
-    protected function validateQueryClosure(\Closure $query): void
+    public function using(Closure $query): static
     {
-        $reflection = new \ReflectionFunction($query);
-        $parameters = $reflection->getParameters();
+        return $this->query($query);
+    }
 
-        if (count($parameters) !== 2) {
-            throw InvalidQueryException::count(2);
-        }
-
-        if (!$parameters[0]->getType() || $parameters[0]->getType()->getName() !== Builder::class) {
-            throw InvalidQueryException::invalid();
-        }
+    protected function setQuery(Closure|null $query): void
+    {
+        if (is_null($query)) return;
+        $this->query = $query;
     }
 
     public function getQuery(): Closure
     {
-        if (!isset($this->query)) {
-            throw InvalidQueryException::missing();
-        }
+        if (!isset($this->query)) throw InvalidQueryException::missing();
         return $this->query;
     }
 }

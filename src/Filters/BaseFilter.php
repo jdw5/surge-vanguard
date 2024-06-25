@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Jdw5\Vanguard\Refiner\Refiner;
 use Illuminate\Database\Eloquent\Builder;
 use Jdw5\Vanguard\Filters\Contracts\Filters;
-use Jdw5\Vanguard\Options\Concerns\HasOptions;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Columns\Concerns\HasTransform;
 use Jdw5\Vanguard\Concerns\HasValue;
@@ -16,7 +15,6 @@ use Jdw5\Vanguard\Filters\Exceptions\CannotResolveNameFromProperty;
 
 abstract class BaseFilter extends Refiner implements Filters
 {
-    use HasOptions;
     use HasValue;
     use HasValidator;
     use HasTransform;
@@ -29,11 +27,8 @@ abstract class BaseFilter extends Refiner implements Filters
         Closure $validator = null,
         Closure $transform = null,
     ) {
-        $this->setProperty($property);
         if (is_array($property) && is_null($name)) throw new CannotResolveNameFromProperty($property);
-        $this->setName($name ?? $this->toName($property));
-        $this->setLabel($label ?? $this->toLabel($this->getName()));
-        $this->setAuthorize($authorize);
+        parent::__construct($property, $name, $label, $authorize);
         $this->setValidator($validator);
         $this->setTransform($transform);
     }

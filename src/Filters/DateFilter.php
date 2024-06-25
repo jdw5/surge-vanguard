@@ -1,145 +1,83 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining\Filters;
+namespace Jdw5\Vanguard\Filters;
 
+use Closure;
+use Override;
+use Exception;
+use Carbon\Carbon;
+use Jdw5\Vanguard\Filters\BaseFilter;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Refining\Options\Option;
-use Jdw5\Vanguard\Refining\Filters\BaseFilter;
+use Jdw5\Vanguard\Filters\Enums\Operator;
+use Jdw5\Vanguard\Filters\Enums\DateClause;
+use Jdw5\Vanguard\Filters\Concerns\HasOperator;
+use Jdw5\Vanguard\Filters\Concerns\IsNegatable;
+use Jdw5\Vanguard\Filters\Concerns\HasDateClause;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Jdw5\Vanguard\Refining\Filters\Concerns\HasQueryBoolean;
-use Jdw5\Vanguard\Refining\Filters\Concerns\HasDateOperations;
-use Jdw5\Vanguard\Refining\Filters\Exceptions\InvalidDateOperator;
 
-/**
- * Date filtering.
- */
 class DateFilter extends BaseFilter
 {
-    use HasDateOperations;
+    use IsNegatable;
+    use HasDateClause;
+    use HasOperator;
+    // Give options
 
-    protected function setUp(): void
-    {
-        $this->type('date');
+    #[Override]
+    public function __construct(
+        array|string|Closure $property, 
+        string|Closure $name = null,
+        string|Closure $label = null,
+        bool|Closure $authorize = null,
+        string|DateClause $dateClause = DateClause::DATE,
+        string|Operator $operator = Operator::EQUAL,
+        bool $negate = false,
+    ) {
+        parent::__construct($property, $name, $label, $authorize);
+        $this->setDateClause($dateClause);
+        $this->setOperator($operator);
+        $this->setNegation($negate);
+        $this->setType('filter:date');
     }
 
-    public function apply(Builder|QueryBuilder $builder, string $property, mixed $value): void
-    {
-        $value = $this->parseQuery($value);
-        $builder->{$this->getDateOperator()}($property, $this->getOperator(), $value, $this->getQueryBoolean());
+    public static function make(
+        array|string|Closure $property, 
+        string|Closure $name = null,
+        string|Closure $label = null,
+        bool|Closure $authorize = null,
+        string|DateClause $dateClause = DateClause::DATE,
+        string|Operator $operator = Operator::EQUAL,
+        bool $negate = false,
+    ): static {
+        return new static($property, $name, $label, $authorize, $dateClause, $operator, $negate);
     }
 
-    /**
-     * Get the month number from the given value.
-     * 
-     * @param string $value
-     * @return string
-     */
-    public function getMonthNumber(string $value): string
+    #[Override]
+    public function apply(Builder|QueryBuilder $builder): void
     {
-        return match (strtolower($value)) {
-            'jan', 'january' => '01',
-            'feb', 'february' => '02',
-            'mar', 'march' => '03',
-            'apr', 'april' => '04',
-            'may' => '05',
-            'jun', 'june' => '06',
-            'jul', 'july' => '07',
-            'aug', 'august' => '08',
-            'sep', 'september' => '09',
-            'oct', 'october' => '10',
-            'nov', 'november' => '11',
-            'dec', 'december' => '12',
-            default => null,
-        };
+        $request = request();
+        $value = $this->parseQueryToDate($request->query($this->getName()));
+
+        $transformedValue = $this->transformUsing($value);
+        $this->setValue($transformedValue);
+        $this->setActive($this->filtering($request));
+
+        $builder->when(
+            $this->isActive() && $this->isValid($transformedValue),
+            fn (Builder|QueryBuilder $builder) => $this->getClause()
+                ->apply($builder, 
+                    $this->getProperty(), 
+                    $this->isNegated() ? $this->getOperator()->negate() : $this->getOperator(), 
+                    $this->getValue()
+                )
+        );
     }
 
-    /**
-     * Parse the query value to ensure it is valid.
-     * 
-     * @param mixed $value
-     */
-    public function parseQuery(mixed $value): mixed
+    public function parseQueryToDate(mixed $value): ?Carbon
     {
-        switch ($this->getDateOperator())
-        {
-            case ('whereDay'): {
-                if (is_numeric($value) && $value >= 1 && $value <= 31) { 
-                    return $value;
-                }
-                return null;
-            }
-            case ('whereMonth'): {
-                if (is_numeric($value) && $value >= 1 && $value <= 12) { 
-                    return str($value);
-                }
-                if (is_string($value) && $month = $this->getMonthNumber($value)) {
-                    return $month;
-                }
-
-                return null;
-            }
-            case ('whereYear'): {
-                if (is_numeric($value) && strlen($value) === 4) { 
-                    return $value;
-                }
-                return null;
-            }
-
-            case ('whereDate'): {
-                if (is_string($value) && strtotime($value)) {
-                    return $value;
-                }
-                return null;
-            }
-
-            case ('whereTime'): {
-                if (is_string($value) && strtotime($value)) {
-                    return $value;
-                }
-                return null;
-            }
-
-            default: {
-                throw InvalidDateOperator::invalid($this->getDateOperator(), $this->getName());
-            }
+        try {
+            return Carbon::parse($value);
+        } catch (Exception $e) {
+            return null;
         }
-    }
-    
-    /**
-     * Generate a list of day options to attach as filter options.
-     * 
-     * @return static
-     */
-    public function dayOptions(): static
-    {
-        $options = [];
-        for ($i = 1; $i <= 31; $i++) {
-            $options[] = Option::make($i);
-        }
-        return $this->options($options); 
-    }
-
-    /**
-     * Generate a list of month options to attach as filter options.
-     * 
-     * @param bool $numeric
-     * @return static
-     */
-    public function monthOptions(bool $numeric = false): static
-    {
-        $options = [];
-
-        if ($numeric) {
-            for ($i = 1; $i <= 12; $i++) {
-                $options[] = Option::make($i);
-            }
-            return $this->options($options); 
-        }
-
-        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        foreach ($months as $month) {
-            $options[] = Option::make(strtolower($month), $month);
-        }
-        return $this->options($options); 
     }
 }

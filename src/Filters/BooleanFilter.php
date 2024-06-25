@@ -2,6 +2,10 @@
 
 namespace Jdw5\Vanguard\Filters;
 
+/**
+ * Interpolates the positive presence of a parameter, 
+ * and applies a predefined query
+ */
 class BooleanFilter extends Filter
 {
     protected string $confirmText = 'Yes';
