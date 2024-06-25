@@ -31,8 +31,10 @@ trait HasClause
      * @return void
      * @throws InvalidClause
      */
-    protected function setClause(string|Clause $clause): void
+    protected function setClause(string|Clause|null $clause): void
     {
+        if (is_null($clause)) return;
+        
         if ($clause instanceof Clause) {
             $this->clause = $clause;
         }

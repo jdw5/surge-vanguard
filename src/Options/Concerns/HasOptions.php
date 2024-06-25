@@ -11,7 +11,7 @@ use Jdw5\Vanguard\Options\Option;
 trait HasOptions
 {
     /** The options available */
-    protected ?Collection $options = null;
+    protected array $options = [];
     /** If the query should be ignored when not listed values are supplied */
     protected bool $only = false;
 
@@ -23,10 +23,10 @@ trait HasOptions
      */
     public function options(...$options): static
     {
-        $this->options = collect($options)->flatten()->map(function ($option) {
-            if ($option instanceof Option) return $option;            
+        $this->options = array_map(function (mixed $option) {
+            if ($option instanceof Option) return $option;
             return Option::make($option);
-        })->flatten();
+        }, $options);
 
         return $this;
     }
@@ -34,9 +34,9 @@ trait HasOptions
     /**
      * Get the options
      * 
-     * @return Collection|null
+     * @return array
      */
-    public function getOptions(): ?Collection
+    public function getOptions(): array
     {
         return $this->options;
     }
@@ -48,7 +48,7 @@ trait HasOptions
      */
     public function hasOptions(): bool
     {
-        return ! \is_null($this->getOptions()) && $this->getOptions()->isNotEmpty();
+        return !empty($this->options);
     }
 
     /**
@@ -58,29 +58,7 @@ trait HasOptions
      */
     public function doesNotHaveOptions(): bool
     {
-        return ! $this->hasOptions();
+        return !$this->hasOptions();
     }
 
-    /**
-     * Check if the value is a valid option
-     * 
-     * @param mixed $value
-     * @return bool
-     */
-    public function isValidOption(mixed $value): bool
-    {
-        if ($this->doesNotHaveOptions()) return true;
-        return $this->getOptions()->map(fn (Option $option) => $option->getValue())->contains($value);
-    }
-
-    /**
-     * Check if the value is an invalid option
-     * 
-     * @param mixed $value
-     * @return bool
-     */
-    public function isInvalidOption(mixed $value): bool
-    {
-        return ! $this->isValidOption($value);
-    }
 }

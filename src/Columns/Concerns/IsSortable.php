@@ -14,7 +14,7 @@ trait IsSortable
     protected bool $sortable = false;
 
     #[Override]
-    public function property(string|Closure $property): static
+    private function property(string|Closure $property): static
     {
         $this->setProperty($property);
         return $this;

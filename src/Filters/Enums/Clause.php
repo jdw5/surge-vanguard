@@ -91,6 +91,14 @@ enum Clause: string
         };
     }
 
+    public function formatProperty(string $property): string
+    {
+        return match ($this) {
+            self::ALL, self::ANY => is_array($property) ? $property : [$property],
+            default => $property,
+        };
+    }
+
     public function apply(Builder|QueryBuilder $builder, string $property, Operator $operator, mixed $value): void
     {
         
@@ -99,8 +107,8 @@ enum Clause: string
         if ($operator->invalid($value)) return;
 
         if ($this->needsOperator()) {
-            $builder->{$this->statement()}(
-                $builder->qualifyColumn($property), 
+            $builder->{$this->statement()} (
+                $this->formatProperty($property), 
                 $operator->value(), 
                 $this->formatValue($value)
             );
@@ -108,7 +116,7 @@ enum Clause: string
         }
 
         $builder->{$this->statement()}(
-            $builder->qualifyColumn($property), 
+            $this->formatProperty($property), 
             $this->formatValue($value)
         );
     }

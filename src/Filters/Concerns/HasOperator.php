@@ -28,8 +28,10 @@ trait HasOperator
      * @param string|Operator $operator
      * @return void
      */
-    public function setOperator(string|Operator $operator): void
+    public function setOperator(string|Operator|null $operator): void
     {
+        if (is_null($operator)) return;
+        
         if ($operator instanceof Operator) {
             $this->operator = $operator;
         } 

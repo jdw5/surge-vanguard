@@ -40,4 +40,9 @@ trait HasValidator
     {
         return ($this->validator)($value);
     }
+
+    public function isValid(mixed $value): bool
+    {
+        return $this->validateUsing($value);
+    }
 }

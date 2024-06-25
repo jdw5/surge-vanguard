@@ -12,6 +12,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Columns\Concerns\HasTransform;
 use Jdw5\Vanguard\Concerns\HasValue;
 use Jdw5\Vanguard\Filters\Concerns\HasValidator;
+use Jdw5\Vanguard\Filters\Exceptions\CannotResolveNameFromProperty;
 
 abstract class BaseFilter extends Refiner implements Filters
 {
@@ -21,7 +22,7 @@ abstract class BaseFilter extends Refiner implements Filters
     use HasTransform;
 
     public function __construct(
-        string|Closure $property, 
+        array|string|Closure $property, 
         string|Closure $name = null,
         string|Closure $label = null,
         bool|Closure $authorize = null,
@@ -29,6 +30,7 @@ abstract class BaseFilter extends Refiner implements Filters
         Closure $transform = null,
     ) {
         $this->setProperty($property);
+        if (is_array($property) && is_null($name)) throw new CannotResolveNameFromProperty($property);
         $this->setName($name ?? $this->toName($property));
         $this->setLabel($label ?? $this->toLabel($this->getName()));
         $this->setAuthorize($authorize);
