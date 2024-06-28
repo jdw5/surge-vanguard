@@ -6,9 +6,9 @@ use Closure;
 use Illuminate\Http\Request;
 use Conquest\Table\Refiners\Refiner;
 use Conquest\Table\Sorts\Contracts\Sorts;
-use Illuminate\Database\Eloquent\Builder;
 use Conquest\Table\Sorts\Concerns\HasSortKey;
 use Conquest\Table\Sorts\Concerns\HasOrderKey;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 abstract class BaseSort extends Refiner implements Sorts

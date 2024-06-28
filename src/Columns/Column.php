@@ -22,11 +22,11 @@ class Column extends BaseColumn
     use HasMetadata;
     use HasFallback;
     use CanTransform;
-    // use HasSort;
+    use HasSort;
     use CanAuthorize;
     use IsKey;
     use IsHidden;
-    use IsSortable;
+    // use IsSortable;
     use IsSearchable;
     use IsToggleable;
 
@@ -45,7 +45,7 @@ class Column extends BaseColumn
     ) {
         $this->setName($name);
         $this->setLabel($label ?? $this->toLabel($this->getName()));
-        $this->setSortability($sortable);
+        if ($sortable) $this->setSort();
         $this->setSearchability($searchable);
         $this->setToggleability($toggleable);
         $this->setBreakpoint($breakpoint);
@@ -98,9 +98,9 @@ class Column extends BaseColumn
             /** Sorting options */
             'has_sort' => $this->hasSort(),
             'active' => $this->isSorting(),
-            'direction' => $this->getDirection(),
-            'next_direction' => $this->getNextDirection(),
-            'sort_field' => $this->getSortName(),
+            'direction' => $this->getSort()?->getDirection(),
+            'next_direction' => $this->getSort()?->getNextDirection(),
+            'sort_field' => $this->getSort()?->getName(),
         ];
     }
 

@@ -46,9 +46,9 @@ trait HasDirection
      * 
      * @return string
      */
-    public function getDirection(): string
+    public function getDirection(): ?string
     {
-        return $this->evaluate($this->direction);
+        return $this->direction;
     }
 
     /**

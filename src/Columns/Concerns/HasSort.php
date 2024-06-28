@@ -2,7 +2,7 @@
 
 namespace Conquest\Table\Columns\Concerns;
 
-use Conquest\Table\Refining\Sorts\ToggleSort;
+use Conquest\Table\Sorts\ToggleSort;
 
 /**
  * Define whether a column should have toggle sorting enabled.
@@ -18,10 +18,15 @@ trait HasSort
      * @param string|null $property
      * @return static
      */
-    public function sort(string $name = null, string $property = null): static
+    public function sort(string $property = null, string $name = null): static
+    {
+        $this->setSort($property, $name);
+        return $this;
+    }
+
+    protected function setSort(string $property = null, string $name = null)
     {
         $this->sort = ToggleSort::make($property ?? $this->getName(), $name ?? $this->getName());
-        return $this;
     }
 
     /**
@@ -43,23 +48,11 @@ trait HasSort
      */
     public function hasSort(): bool
     {
-        return !\is_null($this->getSort());
+        return !is_null($this->getSort());
     }
 
     /**
-     * Get the sort name
-     * 
-     * @return string|null
-     */
-    public function getSortName(): ?string
-    {
-        return $this->hasSort() ? $this->sort->getName() : null;
-    }
-    
-    /**
      * Get the sorting class
-     * 
-     * @return \Conquest\Table\Refining\Sorts\ToggleSort|null
      */
     public function getSort(): ?ToggleSort
     {
@@ -73,26 +66,6 @@ trait HasSort
      */
     public function isSorting(): bool
     {
-        return $this->hasSort() && $this->sort->isActiveSort();
-    }
-
-    /**
-     * Get the sorting direction
-     * 
-     * @return string|null
-     */
-    public function getDirection(): ?string
-    {
-        return $this->hasSort() ? $this->sort->getDirection() : null;
-    }
-
-    /**
-     * Get the next sorting direction
-     * 
-     * @return string|null
-     */
-    public function getNextDirection(): ?string
-    {
-        return $this->hasSort() ? $this->sort->getNextDirection() : null;
+        return !!$this->getSort()?->isActive();
     }
 }

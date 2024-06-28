@@ -1,47 +1,45 @@
 <?php
 
-namespace Conquest\Table\Refining\Sorts;
+namespace Conquest\Table\Sorts;
 
-use Illuminate\Http\Request;
-use Conquest\Table\Refining\Sorts\BaseSort;
-use Conquest\Table\Refining\Sorts\Concerns\HasActiveDirection;
+use Conquest\Table\Sorts\BaseSort;
+use Conquest\Table\Sorts\Concerns\HasDirection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Conquest\Table\Refining\Sorts\Concerns\SortConstants;
 
 class ToggleSort extends BaseSort
 {
+    use HasDirection;
+
     public ?string $nextDirection = null;
 
-    public function refine(Builder|QueryBuilder $builder, ?Request $request = null): void
+    public function apply(Builder|QueryBuilder $builder): void
     {
-        if (is_null($request)) $request = request();
+        $request = request();
         
-        /** Set the sort field */
-        $this->value($request->query(SortConstants::SORT_FIELD));
-        $this->direction($request->query(SortConstants::ORDER_FIELD));
-
-        $this->nextDirection($this->getDirection());
-
-        if (! $this->isActive()) return;
+        $this->setActive($this->sorting($request));
+        $this->setDirection($this->sanitiseOrder($request->query($this->getOrderKey())));
         
-        $this->apply($builder, $this->getProperty(), $this->getDirection());
-    }
-
-    public function nextDirection(?string $direction): void
-    {
-        if (!$this->isActive()) $direction = null;
-
-        $this->nextDirection = match ($direction) {
-            null => 'asc',
-            'asc' => 'desc',
-            default => null,
-        };
+        $builder->when(
+            $this->isActive(),
+            function (Builder|QueryBuilder $builder) use ($request) {
+                $builder->orderBy(
+                    column: $builder->qualifyColumn($this->getProperty()),
+                    direction: $this->getDirection(),
+                );
+            }
+        );
     }
 
     public function getNextDirection(): ?string
     {
-        return $this->nextDirection;
+        if (!$this->isActive()) return 'asc';
+
+        return match ($this->sanitiseOrder(request()->query($this->getOrderKey()))) {
+            'asc' => 'desc',
+            'desc' => null,
+            default => 'asc',
+        };
     }
 
     public function toArray(): array

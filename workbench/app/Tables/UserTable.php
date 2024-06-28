@@ -55,8 +55,8 @@ final class UserTable extends Table
     protected function actions(): array
     {
         return [
-            PageAction::make('add')->label('Add User'),
-            BulkAction::make('delete')->label('Delete Users'),
+            // PageAction::make('add')->label('Add User'),
+            // BulkAction::make('delete')->label('Delete Users'),
         ];
     }
 }
