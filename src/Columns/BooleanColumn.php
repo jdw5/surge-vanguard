@@ -32,7 +32,7 @@ class TextColumn extends Column
 
     public function apply(mixed $value): mixed
     {
-        if ($this->hasTransform()) $value = $this->transformUsing($value);
+        if ($this->canTransform()) $value = $this->transformUsing($value);
         
         if (!!$value) return $this->getTruthLabel();
         return $this->getFalseLabel();

@@ -2,14 +2,8 @@
 
 namespace Conquest\Table\Sorts\Concerns;
 
-use Conquest\Table\Sorts\Concerns\HasOrderKey;
-
 trait HasDirection
 {    
-    use HasOrderKey {
-        sanitiseOrder as public;
-    }
-
     /** Can be asc, desc or null */
     public ?string $direction = null;
 

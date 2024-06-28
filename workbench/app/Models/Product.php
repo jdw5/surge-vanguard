@@ -4,19 +4,20 @@ namespace Workbench\App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Workbench\Database\Factories\TestUserFactory;
+use Workbench\App\Enums\Status;
 
-class User extends Model
+class Product extends Model
 {
     use HasFactory;
-
-    protected $factory = TestUserFactory::class;
 
     protected $guarded = [];
 
     protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-
+        'category' => Status::class,
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

@@ -107,7 +107,7 @@ class Column extends BaseColumn
     public function apply(mixed $value): mixed
     {
         if (is_null($value)) return $this->getFallback();
-        if ($this->hasTransform()) return $this->transformUsing($value);
+        if ($this->canTransform()) return $this->transformUsing($value);
         return $value;
     }
 }

@@ -20,6 +20,8 @@ use Conquest\Table\Columns\Concerns\HasColumns;
 use Conquest\Table\Filters\Concerns\HasFilters;
 use Conquest\Table\Pagination\Enums\PaginationType;
 use Conquest\Table\Pagination\Concerns\HasPagination;
+use Conquest\Table\Pagination\Concerns\HasPaginationKey;
+use Conquest\Table\Pagination\Concerns\HasPaginationType;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 abstract class Table extends Primitive implements Tables
@@ -32,11 +34,11 @@ abstract class Table extends Primitive implements Tables
     use HasSorts;
     use HasSearch;
     use HasPagination;
+    use HasPaginationType;
+    use HasPaginationKey;
     // use HasExports;
     use HasMeta;
     use HasRecords;
-
-    protected Collection $records;
 
     public function __construct(
         Builder|QueryBuilder $resource = null,
@@ -114,9 +116,9 @@ abstract class Table extends Primitive implements Tables
     {
         $table = [
             'key' => $this->getTableKey(),
-            'records' => $this->getRecords(),
+            'records' => $this->getTableRecords(),
             'columns' => $this->getTableColumns(),
-            'meta' => $this->getMeta(),
+            'meta' => $this->getTableMeta(),
             'sorts' => $this->getSorts(),
             'filters' => $this->getFilters(),
             'actions' => [

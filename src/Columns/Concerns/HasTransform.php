@@ -61,7 +61,7 @@ trait HasTransform
      */
     public function transformUsing(mixed $value): mixed
     {
-        if (!$this->hasTransform()) return $value;
+        if ($this->cannotTransform()) return $value;
         return $this->performTransform($value);
     }
 
