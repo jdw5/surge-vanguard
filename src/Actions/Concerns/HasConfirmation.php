@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Actions\Concerns;
+namespace Conquest\Table\Actions\Concerns;
 
 use Closure;
 

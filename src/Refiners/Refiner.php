@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Refiners;
+namespace Conquest\Table\Refiners;
 
 use Closure;
 use Conquest\Core\Primitive;
@@ -10,7 +10,7 @@ use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Concerns\IsActive;
 use Conquest\Core\Concerns\HasMetadata;
 use Conquest\Core\Concerns\HasProperty;
-use Conquest\Core\Concerns\HasAuthorization;
+use Conquest\Core\Concerns\CanAuthorize;
 
 abstract class Refiner extends Primitive
 {
@@ -19,7 +19,7 @@ abstract class Refiner extends Primitive
     use HasLabel;
     use HasMetadata;
     use HasType;
-    use HasAuthorization;
+    use CanAuthorize;
     use IsActive;
 
     public function __construct(
@@ -32,6 +32,20 @@ abstract class Refiner extends Primitive
         $this->setName($name ?? $this->toName($property));
         $this->setLabel($label ?? $this->toLabel($this->getName()));
         $this->setAuthorize($authorize);
+    }
+
+    public static function make(
+        string|Closure $property, 
+        string|Closure $name = null,
+        string|Closure $label = null,
+        bool|Closure $authorize = null, 
+    ): static {
+        return resolve(static::class, compact(
+            'property', 
+            'name', 
+            'label', 
+            'authorize'
+        ));
     }
 
     /**
@@ -48,15 +62,5 @@ abstract class Refiner extends Primitive
             'metadata' => $this->getMetadata(),
             'active' => $this->isActive(),
         ];
-    }
-    
-    /**
-     * Serialise the refinement to JSON
-     * 
-     * @return array
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

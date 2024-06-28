@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Contracts;
+namespace Conquest\Table\Contracts;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Jdw5\Vanguard\Actions\Concerns;
+namespace Conquest\Table\Actions\Concerns;
 
-use Jdw5\Vanguard\Table\Actions\Concerns\HasRoute;
-use Jdw5\Vanguard\Table\Actions\Concerns\HasMethod;
+use Conquest\Table\Actions\Concerns\HasRoute;
+use Conquest\Table\Actions\Concerns\HasMethod;
 
 trait HasEndpoint 
 {

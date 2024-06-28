@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Columns\Exceptions;
+namespace Conquest\Table\Columns\Exceptions;
 
 class ReservedColumnName extends \Exception
 {

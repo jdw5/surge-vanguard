@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Exceptions;
+namespace Conquest\Table\Exceptions;
 
 class InvalidKeyException extends \Exception
 {

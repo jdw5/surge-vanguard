@@ -1,10 +1,10 @@
 <?php
 
-namespace Jdw5\Vanguard\Filters\Concerns;
+namespace Conquest\Table\Filters\Concerns;
 
 use Exception;
-use Jdw5\Vanguard\Filters\Enums\DateClause;
-use Jdw5\Vanguard\Filters\Exceptions\InvalidClause;
+use Conquest\Table\Filters\Enums\DateClause;
+use Conquest\Table\Filters\Exceptions\InvalidClause;
 
 trait HasDateClause
 {

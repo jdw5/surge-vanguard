@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\Vanguard\Columns\Concerns;
+namespace Conquest\Table\Columns\Concerns;
 
-use Jdw5\Vanguard\Refining\Sorts\ToggleSort;
+use Conquest\Table\Refining\Sorts\ToggleSort;
 
 /**
  * Define whether a column should have toggle sorting enabled.
@@ -59,7 +59,7 @@ trait HasSort
     /**
      * Get the sorting class
      * 
-     * @return \Jdw5\Vanguard\Refining\Sorts\ToggleSort|null
+     * @return \Conquest\Table\Refining\Sorts\ToggleSort|null
      */
     public function getSort(): ?ToggleSort
     {

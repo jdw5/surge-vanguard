@@ -2,19 +2,19 @@
 
 namespace Workbench\App\Tables;
 
-use Jdw5\Vanguard\Table\Table;
+use Conquest\Table\Table;
 use Workbench\App\Enums\TestRole;
 use Workbench\App\Models\TestUser;
-use Jdw5\Vanguard\Refining\Sorts\Sort;
-use Jdw5\Vanguard\Table\Columns\Column;
+use Conquest\Table\Refining\Sorts\Sort;
+use Conquest\Table\Columns\Column;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Refining\Filters\Filter;
-use Jdw5\Vanguard\Refining\Options\Option;
-use Jdw5\Vanguard\Table\Actions\BulkAction;
-use Jdw5\Vanguard\Table\Actions\PageAction;
-use Jdw5\Vanguard\Table\Actions\InlineAction;
-use Jdw5\Vanguard\Refining\Filters\QueryFilter;
-use Jdw5\Vanguard\Refining\Filters\SelectFilter;
+use Conquest\Table\Refining\Filters\Filter;
+use Conquest\Table\Refining\Options\Option;
+use Conquest\Table\Actions\BulkAction;
+use Conquest\Table\Actions\PageAction;
+use Conquest\Table\Actions\InlineAction;
+use Conquest\Table\Refining\Filters\QueryFilter;
+use Conquest\Table\Refining\Filters\SelectFilter;
 
 class PaginatedTable extends Table
 {

@@ -1,23 +1,23 @@
 <?php
 
-namespace Jdw5\Vanguard\Filters;
+namespace Conquest\Table\Filters;
 
 use Closure;
 use Illuminate\Http\Request;
-use Jdw5\Vanguard\Refiners\Refiner;
+use Conquest\Table\Refiners\Refiner;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Filters\Contracts\Filters;
+use Conquest\Table\Filters\Contracts\Filters;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Conquest\Core\Concerns\HasTransform;
+use Conquest\Core\Concerns\CanTransform;
 use Conquest\Core\Concerns\HasValue;
-use Jdw5\Vanguard\Filters\Concerns\HasValidator;
-use Jdw5\Vanguard\Filters\Exceptions\CannotResolveNameFromProperty;
+use Conquest\Table\Filters\Concerns\HasValidator;
+use Conquest\Table\Filters\Exceptions\CannotResolveNameFromProperty;
 
 abstract class BaseFilter extends Refiner implements Filters
 {
     use HasValue;
     use HasValidator;
-    use HasTransform;
+    use CanTransform;
 
     public function __construct(
         array|string|Closure $property, 

@@ -2,14 +2,14 @@
 
 namespace {{ namespace }};
 
-use Jdw5\Vanguard\Table\Table;
-use Jdw5\Vanguard\Table\Columns\Column;
-use Jdw5\Vanguard\Refining\Sorts\Sort;
-use Jdw5\Vanguard\Refining\Filters\Filter;
-use Jdw5\Vanguard\Table\Actions\BulkAction;
-use Jdw5\Vanguard\Table\Actions\PageAction;
-use Jdw5\Vanguard\Table\Actions\InlineAction;
-use Jdw5\Vanguard\Table\Record\Record;
+use Conquest\Table\Table;
+use Conquest\Table\Columns\Column;
+use Conquest\Table\Refining\Sorts\Sort;
+use Conquest\Table\Refining\Filters\Filter;
+use Conquest\Table\Actions\BulkAction;
+use Conquest\Table\Actions\PageAction;
+use Conquest\Table\Actions\InlineAction;
+use Conquest\Table\Record\Record;
 use Illuminate\Support\Collection;
 
 final class {{ class }} extends Table

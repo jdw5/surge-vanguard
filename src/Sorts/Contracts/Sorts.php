@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Sorts\Contracts;
+namespace Conquest\Table\Sorts\Contracts;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;

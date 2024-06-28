@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\Vanguard\Columns\Concerns;
+namespace Conquest\Table\Columns\Concerns;
 
-use Jdw5\Vanguard\Table\Columns\Exceptions\KeyCannotBeDynamic;
+use Conquest\Table\Columns\Exceptions\KeyCannotBeDynamic;
 
 
 trait IsPreferable

@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Columns\Contracts;
+namespace Conquest\Table\Columns\Contracts;
 
 interface Columns
 {

@@ -1,15 +1,11 @@
 <?php
 
-namespace Jdw5\Vanguard;
+namespace Conquest\Table;
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Builder as QueryBuilder;
-use Jdw5\Vanguard\Refining\Refinement;
-use Jdw5\Vanguard\Console\Commands\TableMakeCommand;
+use Conquest\Table\Console\Commands\TableMakeCommand;
 
-class VanguardServiceProvider extends ServiceProvider
+class ConquestTableServiceProvider extends ServiceProvider
 {
     /**
      * Register services.

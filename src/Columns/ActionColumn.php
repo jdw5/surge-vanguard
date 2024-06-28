@@ -1,9 +1,9 @@
 <?php
 
-namespace Jdw5\Vanguard\Columns;
+namespace Conquest\Table\Columns;
 
 use Closure;
-use Jdw5\Vanguard\Columns\Enums\Breakpoint;
+use Conquest\Table\Columns\Enums\Breakpoint;
 
 class ActionColumn extends BaseColumn
 {

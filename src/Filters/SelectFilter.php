@@ -1,16 +1,16 @@
 <?php
 
-namespace Jdw5\Vanguard\Filters;
+namespace Conquest\Table\Filters;
 
 use Closure;
 use Conquest\Core\Options\Concerns\HasOptions;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Filters\Filter;
-use Jdw5\Vanguard\Filters\Concerns\HasMultiple;
-use Jdw5\Vanguard\Filters\Concerns\IsRestrictable;
+use Conquest\Table\Filters\Filter;
+use Conquest\Table\Filters\Concerns\HasMultiple;
+use Conquest\Table\Filters\Concerns\IsRestrictable;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Jdw5\Vanguard\Filters\Enums\Clause;
-use Jdw5\Vanguard\Filters\Enums\Operator;
+use Conquest\Table\Filters\Enums\Clause;
+use Conquest\Table\Filters\Enums\Operator;
 use Override;
 
 class SelectFilter extends Filter

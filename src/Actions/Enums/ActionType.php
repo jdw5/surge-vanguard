@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Actions;
+namespace Conquest\Table\Actions;
 
 use Illuminate\Http\Request;
 

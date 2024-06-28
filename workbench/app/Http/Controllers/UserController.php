@@ -4,14 +4,14 @@ namespace Workbench\App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Workbench\App\Tables\UserTable;
+use Workbench\App\Tables\BasicTable;
 
-class BasicTableIndexController extends Controller
+class UserController extends Controller
 {
-    public function __invoke(Request $request)
+    public function index(Request $request)
     {
         return response()->json([
-            'table' => UserTable::make()
+            'table' => BasicTable::make()
         ]);
     }
 }

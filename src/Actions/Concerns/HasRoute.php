@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\Vanguard\Actions\Concerns;
+namespace Conquest\Table\Actions\Concerns;
 
-use Jdw5\Vanguard\Table\Record\Concerns\WrapsRecord;
+use Conquest\Table\Record\Concerns\WrapsRecord;
 
 /**
  * Trait HasEndpoint

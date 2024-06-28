@@ -1,9 +1,9 @@
 <?php
 
-namespace Jdw5\Vanguard\Actions;
+namespace Conquest\Table\Actions;
 
 use Conquest\Core\Concerns\IsDefault;
-use Jdw5\Vanguard\Actions\BaseAction;
+use Conquest\Table\Actions\BaseAction;
 
 class RowAction extends BaseAction
 {

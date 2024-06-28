@@ -1,22 +1,22 @@
 <?php
 
-namespace Jdw5\Vanguard\Actions;
+namespace Conquest\Table\Actions;
 
 use Closure;
 use Conquest\Core\Primitive;
 use Conquest\Core\Concerns\HasName;
 use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Concerns\HasMetadata;
-use Conquest\Core\Concerns\HasAuthorization;
+use Conquest\Core\Concerns\CanAuthorize;
 use Conquest\Core\Concerns\HasType;
-use Jdw5\Vanguard\Actions\Concerns\HasEndpoint;
+use Conquest\Table\Actions\Concerns\HasEndpoint;
 
 abstract class BaseAction extends Primitive
 {
     use HasLabel;
     use HasName;
     use HasMetadata;
-    use HasAuthorization;
+    use CanAuthorize;
     use HasEndpoint;
     use HasType;
 

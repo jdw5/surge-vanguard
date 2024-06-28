@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Columns\Concerns;
+namespace Conquest\Table\Columns\Concerns;
 
 trait IsToggleable
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Jdw5\Vanguard\Refiners;
+namespace Conquest\Table\Refiners;
 
-use Jdw5\Vanguard\Primitive;
+use Conquest\Core\Primitive;
 use Illuminate\Support\Collection;
-use Jdw5\Vanguard\Refiners\Refiner;
-use Jdw5\Vanguard\Concerns\HasRefinements;
+use Conquest\Table\Refiners\Refiner;
+use Conquest\Table\Concerns\HasRefinements;
 
 class Refiners extends Primitive
 {

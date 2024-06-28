@@ -1,10 +1,10 @@
 <?php
 
-namespace Jdw5\Vanguard\Columns\Concerns;
+namespace Conquest\Table\Columns\Concerns;
 
 use Closure;
 use Override;
-use Jdw5\Vanguard\Concerns\HasProperty;
+use Conquest\Table\Concerns\HasProperty;
 
 trait IsSearchable
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Record;
+namespace Conquest\Table\Record;
 
 use ArrayAccess;
 

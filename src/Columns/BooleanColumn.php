@@ -1,10 +1,10 @@
 <?php
 
-namespace Jdw5\Vanguard\Columns;
+namespace Conquest\Table\Columns;
 
 use Closure;
-use Jdw5\Vanguard\Columns\Enums\Breakpoint;
-use Jdw5\Vanguard\Columns\Concerns\HasTruthLabels;
+use Conquest\Table\Columns\Enums\Breakpoint;
+use Conquest\Table\Columns\Concerns\HasTruthLabels;
 
 class TextColumn extends Column
 {

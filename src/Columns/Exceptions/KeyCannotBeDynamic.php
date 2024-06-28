@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Columns\Exceptions;
+namespace Conquest\Table\Columns\Exceptions;
 
 class KeyCannotBeDynamic extends \Exception
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\Vanguard\Tests\Unit;
+namespace Conquest\Table\Tests\Unit;
 
-use Jdw5\Vanguard\Tests\TestCase;
+use Conquest\Table\Tests\TestCase;
 
 class MakeTableTest extends TestCase
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\Vanguard\Tests\Feature;
+namespace Conquest\Table\Tests\Feature;
 
-use Jdw5\Vanguard\Tests\Testcase;
+use Conquest\Table\Tests\Testcase;
 use Workbench\App\Models\TestUser;
 use Workbench\App\Tables\BasicTable;
 

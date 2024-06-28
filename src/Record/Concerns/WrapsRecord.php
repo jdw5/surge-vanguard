@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\Vanguard\Record\Concerns;
+namespace Conquest\Table\Record\Concerns;
 
-use Jdw5\Vanguard\Table\Record\Record;
+use Conquest\Table\Record\Record;
 
 trait WrapsRecord
 {

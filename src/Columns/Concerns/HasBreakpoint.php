@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\Vanguard\Columns\Concerns;
+namespace Conquest\Table\Columns\Concerns;
 
-use Jdw5\Vanguard\Columns\Enums\Breakpoint;
+use Conquest\Table\Columns\Enums\Breakpoint;
 
 /**
  * Disable a Tailwind-style breakpoint to show the class at.

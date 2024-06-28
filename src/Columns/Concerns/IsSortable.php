@@ -1,9 +1,9 @@
 <?php
 
-namespace Jdw5\Vanguard\Columns\Concerns;
+namespace Conquest\Table\Columns\Concerns;
 
 use Closure;
-use Jdw5\Vanguard\Concerns\HasProperty;
+use Conquest\Table\Concerns\HasProperty;
 use Override;
 
 trait IsSortable

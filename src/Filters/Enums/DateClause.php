@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Filters\Enums;
+namespace Conquest\Table\Filters\Enums;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;

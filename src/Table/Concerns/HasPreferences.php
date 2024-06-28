@@ -1,11 +1,11 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Concerns;
+namespace Conquest\Table\Concerns;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cookie;
-use Jdw5\Vanguard\Table\Columns\Column;
+use Conquest\Table\Columns\Column;
 
 /**
  * Trait HasPreferences

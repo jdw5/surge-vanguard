@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Pagination\Enums;
+namespace Conquest\Table\Pagination\Enums;
 
 enum PaginationType: string
 {

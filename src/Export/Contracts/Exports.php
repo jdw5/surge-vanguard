@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Export;
+namespace Conquest\Table\Export;
 
 interface Exports
 {

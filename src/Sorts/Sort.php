@@ -1,14 +1,14 @@
 <?php
 
-namespace Jdw5\Vanguard\Sorts;
+namespace Conquest\Table\Sorts;
 
 use Closure;
 use Illuminate\Http\Request;
-use Jdw5\Vanguard\Sorts\BaseSort;
+use Conquest\Table\Sorts\BaseSort;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Jdw5\Vanguard\Concerns\IsDefault;
-use Jdw5\Vanguard\Sorts\Concerns\HasDirection;
+use Conquest\Core\Concerns\IsDefault;
+use Conquest\Table\Sorts\Concerns\HasDirection;
 
 /** 
  * Agnostic to the order field, considers only field with predefined direction 
@@ -30,6 +30,24 @@ class Sort extends BaseSort
         parent::__construct($property, $name, $label, $authorize);
         $this->setDirection($direction);
         $this->setDefault($default);
+    }
+
+    public static function make(
+        string|Closure $property, 
+        string|Closure $name = null,
+        string|Closure $label = null,
+        bool|Closure $authorize = null,
+        string $direction = null,
+        bool $default = false,
+    ): static {
+        return resolve(static::class, compact(
+            'property', 
+            'name', 
+            'label', 
+            'authorize', 
+            'direction', 
+            'default'
+        ));
     }
 
     public function apply(Builder|QueryBuilder $builder): void

@@ -1,9 +1,9 @@
 <?php
 
-namespace Jdw5\Vanguard\Actions;
+namespace Conquest\Table\Actions;
 
-use Jdw5\Vanguard\Actions\BaseAction;
-use Jdw5\Vanguard\Actions\Concerns\HasEndpoint;
+use Conquest\Table\Actions\BaseAction;
+use Conquest\Table\Actions\Concerns\HasEndpoint;
 
 class PageAction extends BaseAction
 {   

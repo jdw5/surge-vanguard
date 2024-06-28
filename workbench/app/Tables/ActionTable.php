@@ -3,20 +3,20 @@
 namespace Workbench\App\Tables;
 
 use Carbon\Carbon;
-use Jdw5\Vanguard\Table\Table;
-use Jdw5\Vanguard\Table\Record\Record;
+use Conquest\Table\Table;
+use Conquest\Table\Record\Record;
 use Workbench\App\Enums\TestRole;
 use Workbench\App\Models\TestUser;
-use Jdw5\Vanguard\Sorts\Sort;
-use Jdw5\Vanguard\Table\Columns\Column;
+use Conquest\Table\Sorts\Sort;
+use Conquest\Table\Columns\Column;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Filters\Filter;
-use Jdw5\Vanguard\Options\Option;
-use Jdw5\Vanguard\Table\Actions\BulkAction;
-use Jdw5\Vanguard\Table\Actions\PageAction;
-use Jdw5\Vanguard\Table\Actions\InlineAction;
-use Jdw5\Vanguard\Filters\QueryFilter;
-use Jdw5\Vanguard\Filters\SelectFilter;
+use Conquest\Table\Filters\Filter;
+use Conquest\Table\Options\Option;
+use Conquest\Table\Actions\BulkAction;
+use Conquest\Table\Actions\PageAction;
+use Conquest\Table\Actions\InlineAction;
+use Conquest\Table\Filters\QueryFilter;
+use Conquest\Table\Filters\SelectFilter;
 
 class ActionTable extends Table
 {

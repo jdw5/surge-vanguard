@@ -1,18 +1,18 @@
 <?php
 
-namespace Jdw5\Vanguard\Filters;
+namespace Conquest\Table\Filters;
 
 use Closure;
 use Override;
 use Exception;
 use Carbon\Carbon;
-use Jdw5\Vanguard\Filters\BaseFilter;
+use Conquest\Table\Filters\BaseFilter;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Filters\Enums\Operator;
-use Jdw5\Vanguard\Filters\Enums\DateClause;
-use Jdw5\Vanguard\Filters\Concerns\HasOperator;
-use Jdw5\Vanguard\Filters\Concerns\IsNegatable;
-use Jdw5\Vanguard\Filters\Concerns\HasDateClause;
+use Conquest\Table\Filters\Enums\Operator;
+use Conquest\Table\Filters\Enums\DateClause;
+use Conquest\Table\Filters\Concerns\HasOperator;
+use Conquest\Table\Filters\Concerns\IsNegatable;
+use Conquest\Table\Filters\Concerns\HasDateClause;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 class DateFilter extends BaseFilter

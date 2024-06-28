@@ -5,28 +5,32 @@ namespace Workbench\App\Tables;
 use Conquest\Table\Table;
 use Workbench\App\Enums\TestRole;
 use Workbench\App\Models\TestUser;
-use Conquest\Table\Refining\Sorts\Sort;
+use Conquest\Table\Sorts\Sort;
 use Conquest\Table\Columns\Column;
 use Illuminate\Database\Eloquent\Builder;
-use Conquest\Table\Refining\Filters\Filter;
-use Conquest\Table\Refining\Options\Option;
+use Conquest\Table\Filters\Filter;
+use Conquest\Table\Options\Option;
 use Conquest\Table\Actions\BulkAction;
 use Conquest\Table\Actions\PageAction;
 use Conquest\Table\Actions\InlineAction;
-use Conquest\Table\Refining\Filters\QueryFilter;
-use Conquest\Table\Refining\Filters\SelectFilter;
+use Conquest\Table\Filters\QueryFilter;
+use Conquest\Table\Filters\SelectFilter;
 use Conquest\Table\Actions\BaseAction;
 
-class BasicTable extends Table
+final class UserTable extends Table
 {
     // protected function definePagination()
     // {
     //     return 10;
     // }
 
-    protected $model = TestUser::class;
+    protected $resource = TestUser::class;
 
-    protected function defineColumns(): array
+    protected $search = 'name';
+
+    protected $pagination = [10, 50, 100];
+
+    protected function columns(): array
     {
         return [
             Column::make('id')->asKey()->hide(),
@@ -38,29 +42,28 @@ class BasicTable extends Table
         ];
     }
 
-    protected function defineRefinements(): array
+    protected function filters(): array
     {
         return [
             Filter::make('name')->loose(),
-            SelectFilter::make('role', 'type')->options(Option::enum(TestRole::class, 'label')),
+            SelectFilter::make('role', 'type'),
             QueryFilter::make('id')->query(fn (Builder $builder, $value) => $builder->where('id', '<', $value)),
-            
+        ];
+    }
+
+    protected function sorts(): array
+    {
+        return [
             Sort::make('created_at', 'newest')->desc()->default(),
             Sort::make('created_at', 'oldest')->asc(),
         ];
     }
 
-    protected function defineActions(): array
+    protected function actions(): array
     {
         return [
             PageAction::make('add')->label('Add User'),
-
             BulkAction::make('delete')->label('Delete Users'),
-
-            InlineAction::make('view')->label('View User')->default(),
-            InlineAction::make('edit')->label('Edit User'),
-            InlineAction::make('delete')->label('Delete User')
-
         ];
     }
 }

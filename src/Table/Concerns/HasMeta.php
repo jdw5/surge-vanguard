@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Table\Concerns;
+namespace Conquest\Table\Concerns;
 
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\CursorPaginator;

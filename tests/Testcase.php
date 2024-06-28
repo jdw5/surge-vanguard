@@ -1,9 +1,9 @@
 <?php
 
-namespace Jdw5\Vanguard\Tests;
+namespace Conquest\Table\Tests;
 
 use Illuminate\Contracts\Config\Repository;
-use Jdw5\Vanguard\VanguardServiceProvider;
+use Conquest\Table\ConquestTableServiceProvider;
 
 use function Orchestra\Testbench\workbench_path;
 use Orchestra\Testbench\TestCase as TestbenchTestCase;
@@ -27,7 +27,7 @@ class TestCase extends TestbenchTestCase
     protected function getPackageProviders($app)
     {
         return [
-            VanguardServiceProvider::class,
+            ConquestTableServiceProvider::class,
         ];
     }
 
@@ -45,11 +45,6 @@ class TestCase extends TestbenchTestCase
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
-
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_skeleton_table.php.stub';
-        $migration->up();
-        */
     }
 
     /**

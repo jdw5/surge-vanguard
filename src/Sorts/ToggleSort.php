@@ -1,13 +1,13 @@
 <?php
 
-namespace Jdw5\Vanguard\Refining\Sorts;
+namespace Conquest\Table\Refining\Sorts;
 
 use Illuminate\Http\Request;
-use Jdw5\Vanguard\Refining\Sorts\BaseSort;
-use Jdw5\Vanguard\Refining\Sorts\Concerns\HasActiveDirection;
+use Conquest\Table\Refining\Sorts\BaseSort;
+use Conquest\Table\Refining\Sorts\Concerns\HasActiveDirection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Jdw5\Vanguard\Refining\Sorts\Concerns\SortConstants;
+use Conquest\Table\Refining\Sorts\Concerns\SortConstants;
 
 class ToggleSort extends BaseSort
 {

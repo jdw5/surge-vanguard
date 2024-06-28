@@ -1,10 +1,10 @@
 <?php
 
-namespace Jdw5\Vanguard\Filters;
+namespace Conquest\Table\Filters;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Filters\Concerns\HasQuery;
+use Conquest\Table\Filters\Concerns\HasQuery;
 use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
 use Override;
 

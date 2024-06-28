@@ -1,13 +1,13 @@
 <?php
 
-namespace Jdw5\Vanguard\Sorts;
+namespace Conquest\Table\Sorts;
 
 use Closure;
 use Illuminate\Http\Request;
-use Jdw5\Vanguard\Sorts\BaseSort;
+use Conquest\Table\Sorts\BaseSort;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Jdw5\Vanguard\Sorts\Concerns\HasDirection;
+use Conquest\Table\Sorts\Concerns\HasDirection;
 
 /** Only applied when sort AND order match  */
 class AnisotropicSort extends BaseSort

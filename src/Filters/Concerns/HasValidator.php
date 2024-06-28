@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Filters\Concerns;
+namespace Conquest\Table\Filters\Concerns;
 
 use Closure;
 

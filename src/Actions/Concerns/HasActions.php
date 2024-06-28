@@ -1,13 +1,13 @@
 <?php
 
-namespace Jdw5\Vanguard\Actions\Concerns;
+namespace Conquest\Table\Actions\Concerns;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Jdw5\Vanguard\Actions\RowAction;
-use Jdw5\Vanguard\Actions\BaseAction;
-use Jdw5\Vanguard\Actions\BulkAction;
-use Jdw5\Vanguard\Actions\PageAction;
+use Conquest\Table\Actions\RowAction;
+use Conquest\Table\Actions\BaseAction;
+use Conquest\Table\Actions\BulkAction;
+use Conquest\Table\Actions\PageAction;
 
 /**
  * Define a class as having actions.

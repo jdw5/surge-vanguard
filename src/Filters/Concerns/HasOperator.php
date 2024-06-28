@@ -1,10 +1,10 @@
 <?php
 
-namespace Jdw5\Vanguard\Filters\Concerns;
+namespace Conquest\Table\Filters\Concerns;
 
 use Exception;
-use Jdw5\Vanguard\Filters\Enums\Operator;
-use Jdw5\Vanguard\Filters\Exceptions\InvalidOperator;
+use Conquest\Table\Filters\Enums\Operator;
+use Conquest\Table\Filters\Exceptions\InvalidOperator;
 
 trait HasOperator
 {

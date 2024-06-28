@@ -1,20 +1,20 @@
 <?php
 
-namespace Jdw5\Vanguard\Columns;
+namespace Conquest\Table\Columns;
 
 use Closure;
 use Conquest\Core\Concerns\HasName;
 use Conquest\Core\Concerns\HasDisplay;
 use Conquest\Core\Concerns\HasMetadata;
 use Conquest\Core\Concerns\HasTransform;
-use Conquest\Core\Concerns\HasAuthorization;
-use Jdw5\Vanguard\Columns\Concerns\IsKey;
-use Jdw5\Vanguard\Columns\Concerns\HasSort;
-use Jdw5\Vanguard\Columns\Enums\Breakpoint;
-use Jdw5\Vanguard\Columns\Concerns\IsSortable;
-use Jdw5\Vanguard\Columns\Concerns\HasFallback;
-use Jdw5\Vanguard\Columns\Concerns\IsSearchable;
-use Jdw5\Vanguard\Columns\Concerns\IsToggleable;
+use Conquest\Core\Concerns\CanAuthorize;
+use Conquest\Table\Columns\Concerns\IsKey;
+use Conquest\Table\Columns\Concerns\HasSort;
+use Conquest\Table\Columns\Enums\Breakpoint;
+use Conquest\Table\Columns\Concerns\IsSortable;
+use Conquest\Table\Columns\Concerns\HasFallback;
+use Conquest\Table\Columns\Concerns\IsSearchable;
+use Conquest\Table\Columns\Concerns\IsToggleable;
 
 class Column extends BaseColumn
 {
@@ -23,7 +23,7 @@ class Column extends BaseColumn
     use HasFallback;
     use HasTransform;
     use HasSort;
-    use HasAuthorization;
+    use CanAuthorize;
     use IsKey;
     use HasDisplay;
     use IsSortable;

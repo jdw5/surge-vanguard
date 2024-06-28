@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Sorts\Concerns;
+namespace Conquest\Table\Sorts\Concerns;
 
 trait HasSortKey
 {

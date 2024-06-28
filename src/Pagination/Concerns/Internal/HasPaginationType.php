@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\Vanguard\Pagination\Concerns\Internal;
+namespace Conquest\Table\Pagination\Concerns\Internal;
 
-use Jdw5\Vanguard\Pagination\Enums\PaginationType;
+use Conquest\Table\Pagination\Enums\PaginationType;
 
 trait HasPaginationType
 {

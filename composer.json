@@ -1,12 +1,9 @@
 {
-    "name": "jdw5/vanguard",
+    "name": "conquest/table",
     "description": "Extend filters, actions and table data for your Laravel applications.",
     "keywords": [
         "laravel",
-        "laravel-vanguard",
-        "laravel-tables",
-        "laravel-filters",
-        "laravel-refiners"
+        "inertia-table"
     ],
     "type": "library",
     "license": "MIT",
@@ -19,16 +16,15 @@
     ],
     "autoload": {
         "psr-4": {
-            "Jdw5\\Vanguard\\": "src/",
-            "Jdw5\\Vanguard\\Tests\\": "tests"
+            "Conquest\\Table\\": "src/",
+            "Conquest\\Table\\Tests\\": "tests"
         }
     },
     "require": {
         "php": "^8.3",
         "illuminate/support": ">=10.0.0",
         "illuminate/console": ">=10.0.0",
-        "illuminate/database": ">=10.0.0",
-        "conquest/core": "^0.2.0"
+        "illuminate/database": ">=10.0.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -69,7 +65,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Jdw5\\Vanguard\\VanguardServiceProvider"
+                "Conquest\\Table\\ConquestTableServiceProvider"
             ]
         }
     },

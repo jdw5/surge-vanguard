@@ -1,10 +1,10 @@
 <?php
 
-namespace Jdw5\Vanguard\Pagination;
+namespace Conquest\Table\Pagination;
 
-use Jdw5\Vanguard\Concerns\IsActive;
-use Jdw5\Vanguard\Primitive;
-use Jdw5\Vanguard\Concerns\HasValue;
+use Conquest\Table\Concerns\IsActive;
+use Conquest\Core\Primitive;
+use Conquest\Table\Concerns\HasValue;
 
 class Pagination extends Primitive
 {

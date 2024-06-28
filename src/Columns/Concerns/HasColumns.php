@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\Vanguard\Columns\Concerns;
+namespace Conquest\Table\Columns\Concerns;
 
-use Jdw5\Vanguard\Columns\Column;
+use Conquest\Table\Columns\Column;
 use Illuminate\Support\Collection;
 
 trait HasColumns

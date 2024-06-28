@@ -1,9 +1,9 @@
 <?php
 
-namespace Jdw5\Vanguard\Filters\Concerns;
+namespace Conquest\Table\Filters\Concerns;
 
 use Closure;
-use Jdw5\Vanguard\Filters\Exceptions\QueryNotDefined;
+use Conquest\Table\Filters\Exceptions\QueryNotDefined;
 
 trait HasQuery
 {

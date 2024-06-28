@@ -1,16 +1,16 @@
 <?php
 
-namespace Jdw5\Vanguard\Filters;
+namespace Conquest\Table\Filters;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Filters\BaseFilter;
+use Conquest\Table\Filters\BaseFilter;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Jdw5\Vanguard\Filters\Concerns\HasClause;
-use Jdw5\Vanguard\Filters\Concerns\HasOperator;
-use Jdw5\Vanguard\Filters\Concerns\IsNegatable;
-use Jdw5\Vanguard\Filters\Enums\Clause;
-use Jdw5\Vanguard\Filters\Enums\Operator;
+use Conquest\Table\Filters\Concerns\HasClause;
+use Conquest\Table\Filters\Concerns\HasOperator;
+use Conquest\Table\Filters\Concerns\IsNegatable;
+use Conquest\Table\Filters\Enums\Clause;
+use Conquest\Table\Filters\Enums\Operator;
 use Override;
 
 /**

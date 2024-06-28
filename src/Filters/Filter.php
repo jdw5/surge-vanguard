@@ -1,17 +1,17 @@
 <?php
 
-namespace Jdw5\Vanguard\Filters;
+namespace Conquest\Table\Filters;
 
 use Closure;
-use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Filters\BaseFilter;
-use Illuminate\Database\Query\Builder as QueryBuilder;
-use Jdw5\Vanguard\Filters\Concerns\HasClause;
-use Jdw5\Vanguard\Filters\Concerns\HasOperator;
-use Jdw5\Vanguard\Filters\Concerns\IsNegatable;
-use Jdw5\Vanguard\Filters\Enums\Clause;
-use Jdw5\Vanguard\Filters\Enums\Operator;
 use Override;
+use Conquest\Table\Filters\BaseFilter;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Conquest\Table\Filters\Concerns\HasClause;
+use Conquest\Table\Filters\Concerns\HasOperator;
+use Conquest\Table\Filters\Concerns\IsNegatable;
+use Conquest\Table\Filters\Enums\Clause;
+use Conquest\Table\Filters\Enums\Operator;
 
 class Filter extends BaseFilter
 {
@@ -45,7 +45,15 @@ class Filter extends BaseFilter
         string|Operator $operator = Operator::EQUAL,
         bool $negate = false,
     ): static {
-        return new static($property, $name, $label, $authorize, $clause, $operator, $negate);
+        return resolve(static::class, compact(
+            'property', 
+            'name', 
+            'label', 
+            'authorize',
+            'clause',
+            'operator',
+            'negate',
+        ));
     }
 
     #[Override]

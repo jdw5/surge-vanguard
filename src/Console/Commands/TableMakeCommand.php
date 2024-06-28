@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Console\Commands;
+namespace Conquest\Table\Console\Commands;
 
 use InvalidArgumentException;
 use Illuminate\Console\GeneratorCommand;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Pagination\Concerns\Internal;
+namespace Conquest\Table\Pagination\Concerns\Internal;
 
 trait HasPaginationKey
 {

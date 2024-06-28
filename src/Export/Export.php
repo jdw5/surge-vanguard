@@ -1,11 +1,11 @@
 <?php
 
-namespace Jdw5\Vanguard\Export;
+namespace Conquest\Table\Export;
 
 use Closure;
-use Jdw5\Vanguard\Concerns\HasLabel;
-use Jdw5\Vanguard\Primitive;
-use Jdw5\Vanguard\Export\Exports;
+use Conquest\Table\Concerns\HasLabel;
+use Conquest\Core\Primitive;
+use Conquest\Table\Export\Exports;
 
 class Export extends Primitive implements Exports 
 {

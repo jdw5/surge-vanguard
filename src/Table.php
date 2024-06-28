@@ -1,25 +1,25 @@
 <?php
 
-namespace Jdw5\Vanguard\Table;
+namespace Conquest\Table;
 
 use Conquest\Core\Primitive;
-use Illuminate\Support\Collection;
-use Jdw5\Vanguard\Table\Concerns\HasMeta;
-use Jdw5\Vanguard\Table\Contracts\Tables;
-use Jdw5\Vanguard\Sorts\Concerns\HasSorts;
-use Jdw5\Vanguard\Table\Concerns\HasSearch;
 use Conquest\Core\Exceptions\KeyDoesntExist;
-use Jdw5\Vanguard\Table\Concerns\HasExports;
-use Jdw5\Vanguard\Table\Concerns\HasResource;
-use Jdw5\Vanguard\Table\Concerns\RequiresKey;
-use Jdw5\Vanguard\Actions\Concerns\HasActions;
-use Jdw5\Vanguard\Columns\Concerns\HasColumns;
-use Jdw5\Vanguard\Filters\Concerns\HasFilters;
-use Jdw5\Vanguard\Table\Concerns\HasPagination;
-use Jdw5\Vanguard\Pagination\Enums\PaginationType;
+use Conquest\Core\Concerns\RequiresKey;
+use Conquest\Table\Concerns\HasMeta;
+use Conquest\Table\Contracts\Tables;
+use Conquest\Table\Concerns\HasSearch;
+use Conquest\Table\Concerns\HasExports;
+use Conquest\Table\Concerns\HasRecords;
+use Conquest\Table\Concerns\HasResource;
+use Conquest\Table\Concerns\HasPagination;
+use Conquest\Table\Sorts\Concerns\HasSorts;
+use Conquest\Table\Actions\Concerns\HasActions;
+use Conquest\Table\Columns\Concerns\HasColumns;
+use Conquest\Table\Filters\Concerns\HasFilters;
+use Conquest\Table\Pagination\Enums\PaginationType;
+use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Jdw5\Vanguard\Table\Concerns\HasRecords;
 
 abstract class Table extends Primitive implements Tables
 {
@@ -38,7 +38,7 @@ abstract class Table extends Primitive implements Tables
     protected Collection $records;
 
     public function __construct(
-        EloquentBuilder|QueryBuilder $resource = null,
+        Builder|QueryBuilder $resource = null,
         array $columns = null,
         array $actions = null,
         array $filters = null,
@@ -60,14 +60,14 @@ abstract class Table extends Primitive implements Tables
     /**
      * Create a new table instance.
      * 
-     * @param EloquentBuilder|QueryBuilder $data
+     * @param Builder|QueryBuilder $data
      * @return static
      */
     /** 
      * Todo: Alias for build, new
      * */
     public static function make(
-        EloquentBuilder|QueryBuilder $resource = null,
+        Builder|QueryBuilder $resource = null,
         array $columns = null,
         array $actions = null,
         array $filters = null,

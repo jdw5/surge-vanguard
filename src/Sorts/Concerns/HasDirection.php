@@ -1,8 +1,8 @@
 <?php
 
-namespace Jdw5\Vanguard\Sorts\Concerns;
+namespace Conquest\Table\Sorts\Concerns;
 
-use Jdw5\Vanguard\Sorts\Concerns\HasOrderKey;
+use Conquest\Table\Sorts\Concerns\HasOrderKey;
 
 trait HasDirection
 {    

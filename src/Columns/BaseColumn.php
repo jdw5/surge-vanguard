@@ -1,13 +1,13 @@
 <?php
 
-namespace Jdw5\Vanguard\Columns;
+namespace Conquest\Table\Columns;
 
 use Conquest\Core\Primitive;
 use Conquest\Core\Concerns\HasType;
 use Conquest\Core\Concerns\HasLabel;
-use Jdw5\Vanguard\Columns\Contracts\Columns;
-use Jdw5\Vanguard\Columns\Concerns\HasBreakpoint;
-use Jdw5\Vanguard\Columns\Concerns\HasAccessibility;
+use Conquest\Table\Columns\Contracts\Columns;
+use Conquest\Table\Columns\Concerns\HasBreakpoint;
+use Conquest\Table\Columns\Concerns\HasAccessibility;
 
 abstract class BaseColumn extends Primitive implements Columns
 {

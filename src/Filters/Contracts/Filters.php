@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Filters\Contracts;
+namespace Conquest\Table\Filters\Contracts;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;

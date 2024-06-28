@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Filters\Exceptions;
+namespace Conquest\Table\Filters\Exceptions;
 
 use Exception;
 

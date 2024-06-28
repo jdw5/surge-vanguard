@@ -1,18 +1,15 @@
 <?php
 
-namespace Jdw5\Vanguard\Sorts;
+namespace Conquest\Table\Sorts;
 
 use Closure;
 use Illuminate\Http\Request;
-use Jdw5\Vanguard\Refiner\Refiner;
-use Jdw5\Vanguard\Concerns\IsDefault;
-use Jdw5\Vanguard\Sorts\Contracts\Sorts;
+use Conquest\Table\Refiners\Refiner;
+use Conquest\Table\Sorts\Contracts\Sorts;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Sorts\Concerns\HasSortKey;
-use Jdw5\Vanguard\Sorts\Concerns\HasOrderKey;
-use Jdw5\Vanguard\Sorts\Sorts\Concerns\HasDirection;
+use Conquest\Table\Sorts\Concerns\HasSortKey;
+use Conquest\Table\Sorts\Concerns\HasOrderKey;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Jdw5\Vanguard\Refining\Sorts\Concerns\SortConstants;
 
 abstract class BaseSort extends Refiner implements Sorts
 {
