@@ -37,8 +37,9 @@ trait HasTransform
      * @param Closure $callback
      * @return void
      */
-    protected function setTransform(Closure $callback): void
+    protected function setTransform(Closure|null $callback): void
     {
+        if (is_null($callback)) return;
         $this->transform = $callback;
     }
 

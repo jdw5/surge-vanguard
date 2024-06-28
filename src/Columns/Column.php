@@ -3,18 +3,18 @@
 namespace Jdw5\Vanguard\Columns;
 
 use Closure;
-use Jdw5\Vanguard\Concerns\HasName;
-use Jdw5\Vanguard\Concerns\HasDisplay;
-use Jdw5\Vanguard\Concerns\HasMetadata;
+use Conquest\Core\Concerns\HasName;
+use Conquest\Core\Concerns\HasDisplay;
+use Conquest\Core\Concerns\HasMetadata;
+use Conquest\Core\Concerns\HasTransform;
+use Conquest\Core\Concerns\HasAuthorization;
 use Jdw5\Vanguard\Columns\Concerns\IsKey;
 use Jdw5\Vanguard\Columns\Concerns\HasSort;
-use Jdw5\Vanguard\Columns\Concerns\HasFallback;
-use Jdw5\Vanguard\Columns\Concerns\HasTransform;
-use Jdw5\Vanguard\Columns\Concerns\IsSearchable;
-use Jdw5\Vanguard\Columns\Concerns\IsSortable;
-use Jdw5\Vanguard\Columns\Concerns\IsToggleable;
-use Jdw5\Vanguard\Concerns\HasAuthorization;
 use Jdw5\Vanguard\Columns\Enums\Breakpoint;
+use Jdw5\Vanguard\Columns\Concerns\IsSortable;
+use Jdw5\Vanguard\Columns\Concerns\HasFallback;
+use Jdw5\Vanguard\Columns\Concerns\IsSearchable;
+use Jdw5\Vanguard\Columns\Concerns\IsToggleable;
 
 class Column extends BaseColumn
 {

@@ -3,13 +3,13 @@
 namespace Jdw5\Vanguard\Actions;
 
 use Closure;
-use Jdw5\Vanguard\Primitive;
-use Jdw5\Vanguard\Concerns\HasName;
-use Jdw5\Vanguard\Concerns\HasLabel;
-use Jdw5\Vanguard\Concerns\HasMetadata;
-use Jdw5\Vanguard\Concerns\HasAuthorization;
+use Conquest\Core\Primitive;
+use Conquest\Core\Concerns\HasName;
+use Conquest\Core\Concerns\HasLabel;
+use Conquest\Core\Concerns\HasMetadata;
+use Conquest\Core\Concerns\HasAuthorization;
+use Conquest\Core\Concerns\HasType;
 use Jdw5\Vanguard\Actions\Concerns\HasEndpoint;
-use Jdw5\Vanguard\Concerns\HasType;
 
 abstract class BaseAction extends Primitive
 {

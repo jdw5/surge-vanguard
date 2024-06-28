@@ -7,16 +7,16 @@ use Jdw5\Vanguard\Table\Table;
 use Jdw5\Vanguard\Table\Record\Record;
 use Workbench\App\Enums\TestRole;
 use Workbench\App\Models\TestUser;
-use Jdw5\Vanguard\Refining\Sorts\Sort;
+use Jdw5\Vanguard\Sorts\Sort;
 use Jdw5\Vanguard\Table\Columns\Column;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Refining\Filters\Filter;
-use Jdw5\Vanguard\Refining\Options\Option;
+use Jdw5\Vanguard\Filters\Filter;
+use Jdw5\Vanguard\Options\Option;
 use Jdw5\Vanguard\Table\Actions\BulkAction;
 use Jdw5\Vanguard\Table\Actions\PageAction;
 use Jdw5\Vanguard\Table\Actions\InlineAction;
-use Jdw5\Vanguard\Refining\Filters\QueryFilter;
-use Jdw5\Vanguard\Refining\Filters\SelectFilter;
+use Jdw5\Vanguard\Filters\QueryFilter;
+use Jdw5\Vanguard\Filters\SelectFilter;
 
 class ActionTable extends Table
 {

@@ -16,7 +16,7 @@ trait HasMeta
      * @param Collection $collection
      * @return array
      */
-    private function generateUnpaginatedMeta(Collection $collection): array
+    private function getCollectionMeta(Collection $collection): array
     {
         return [
             'empty' => $collection->isEmpty(),
@@ -30,7 +30,7 @@ trait HasMeta
      * @param CursorPaginator $paginator
      * @return array
      */
-    private function generateCursorPaginatorMeta(CursorPaginator $paginator): array
+    private function getCursorMeta(CursorPaginator $paginator): array
     {
         return [
             'per_page' => $paginator->perPage(),
@@ -50,7 +50,7 @@ trait HasMeta
      * @param LengthAwarePaginator $paginator
      * @return array
      */
-    private function generatePaginatorMeta(LengthAwarePaginator $paginator): array
+    private function getPaginateMeta(LengthAwarePaginator $paginator): array
     {
         return [
             'per_page' => $paginator->perPage(),
@@ -64,7 +64,6 @@ trait HasMeta
             'last_url' => $paginator->url($paginator->lastPage()),
             'next_url' => $paginator->nextPageUrl(),
             'prev_url' => $paginator->previousPageUrl(),
-            
             'show' => $paginator->hasPages(),
             'empty' => $paginator->isEmpty(),
         ];

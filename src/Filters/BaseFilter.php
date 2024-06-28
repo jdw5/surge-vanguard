@@ -4,12 +4,12 @@ namespace Jdw5\Vanguard\Filters;
 
 use Closure;
 use Illuminate\Http\Request;
-use Jdw5\Vanguard\Refiner\Refiner;
+use Jdw5\Vanguard\Refiners\Refiner;
 use Illuminate\Database\Eloquent\Builder;
 use Jdw5\Vanguard\Filters\Contracts\Filters;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Jdw5\Vanguard\Columns\Concerns\HasTransform;
-use Jdw5\Vanguard\Concerns\HasValue;
+use Conquest\Core\Concerns\HasTransform;
+use Conquest\Core\Concerns\HasValue;
 use Jdw5\Vanguard\Filters\Concerns\HasValidator;
 use Jdw5\Vanguard\Filters\Exceptions\CannotResolveNameFromProperty;
 

@@ -2,12 +2,12 @@
 
 namespace Jdw5\Vanguard\Actions;
 
-use Jdw5\Vanguard\Table\Actions\BaseAction;
+use Jdw5\Vanguard\Actions\BaseAction;
 
 class BulkAction extends BaseAction
 {
     // Needs to have a handler
-    public function jsonSerialize(): array
+    public function toArray(): array
     {
         return array_merge(parent::jsonSerialize(), $this->serializeStaticEndpoint());
     }

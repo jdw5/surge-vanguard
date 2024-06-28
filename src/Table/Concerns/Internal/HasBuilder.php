@@ -18,7 +18,8 @@ trait HasBuilder
      */
     public function setBuilder($builder = null): void
     {
-        if (!\is_null($builder)) $this->_setBuilder($builder);
+        if (is_null($builder)) return;
+        $this->builder = $builder;
     }
 
     /**
@@ -28,19 +29,14 @@ trait HasBuilder
      */
     public function hasBuilder(): bool
     {
-        return !\is_null($this->getBuilder());
+        return !is_null($this->getBuilder());
     }
 
     public function getBuilder(): mixed
     {
         return $this->builder;
     }
-
-    protected function _setBuilder(EloquentBuilder|QueryBuilder $builder): void
-    {
-        $this->builder = $builder;
-    }
-
+    
     public function refineBuilder(Collection $refiners): void
     {
         $this->setBuilder($this->builder->withRefinements($refiners));

@@ -27,7 +27,8 @@
         "php": "^8.3",
         "illuminate/support": ">=10.0.0",
         "illuminate/console": ">=10.0.0",
-        "illuminate/database": ">=10.0.0"
+        "illuminate/database": ">=10.0.0",
+        "conquest/core": "^0.1.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

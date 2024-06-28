@@ -2,7 +2,7 @@
 
 namespace Jdw5\Vanguard\Actions;
 
-use Jdw5\Vanguard\Primitive;
+use Conquest\Core\Primitive;
 use Jdw5\Vanguard\Actions\Concerns\HasActions;
 use Jdw5\Vanguard\Actions\BaseAction;
 
@@ -29,7 +29,7 @@ class Actions extends Primitive
      * @param BaseAction $action
      * @return static
      */
-    public function add(BaseAction $action): static
+    protected function add(BaseAction $action): static
     {
         $this->actions[] = $action;
         return $this;

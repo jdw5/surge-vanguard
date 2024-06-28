@@ -3,8 +3,8 @@
 namespace Jdw5\Vanguard\Filters;
 
 use Closure;
+use Conquest\Core\Options\Concerns\HasOptions;
 use Illuminate\Database\Eloquent\Builder;
-use Jdw5\Vanguard\Options\Concerns\HasOptions;
 use Jdw5\Vanguard\Filters\Filter;
 use Jdw5\Vanguard\Filters\Concerns\HasMultiple;
 use Jdw5\Vanguard\Filters\Concerns\IsRestrictable;

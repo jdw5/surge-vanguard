@@ -2,9 +2,20 @@
 
 namespace Jdw5\Vanguard\Table\Concerns;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Http\Request;
+
 trait HasSearch
 {
     protected array $search;
+    protected string $searchKey = 'q';
+    protected bool $useScout;
+
+    public static function setGlobalSearchKey(string $key): void
+    {
+        static::$searchKey = $key;
+    }
 
     protected function setSearch(string|array|null $search): void
     {
@@ -27,18 +38,19 @@ trait HasSearch
 
     public function getSearchKey(): string
     {
-        if (isset($this->searchKey)) {
-            return $this->searchKey;
-        }
-
         if (function_exists('searchKey')) {
             return $this->searchKey();
         }
-        
-        return 'q';
+
+        return $this->searchKey;
     }
 
-    public function useScout(): bool
+    public function getSearchTerm(Request $request): string|null
+    {
+        return $request->query($this->getSearchKey());
+    }
+
+    protected function usesScout(): bool
     {
         if (isset($this->useScout)) {
             return $this->useScout;
@@ -51,8 +63,15 @@ trait HasSearch
         return false;
     }
 
-    public function applySearch($query, string $term)
+    public function applySearch(Builder|QueryBuilder $query, string|null $term): void
     {
+        if (empty($term)) return;
+
+        if ($this->useScout()) {
+            $query->search($term);
+        }
+
+        $query->whereAny($this->getSearchColumns(), 'LIKE', "%$term%");
 
     }
 }

@@ -2,13 +2,14 @@
 
 namespace Jdw5\Vanguard\Table\Concerns;
 
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder ;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
 trait HasResource
 {
-    protected $resource;
+    protected mixed $resource = null;
 
-    protected function setResource(array|null $resource): void
+    protected function setResource(Builder|QueryBuilder|null $resource): void
     {
         if (is_null($resource)) return;
         $this->resource = $resource;
@@ -17,7 +18,7 @@ trait HasResource
     public function getResource()
     {
         if (isset($this->resource)) {
-            return $this->resource;
+            return $this->isBuilderInstance() ? $this->resource : $this->resource->query();
         }
 
         // Check if the resource() function is defined
@@ -26,12 +27,12 @@ trait HasResource
         }
 
         // Else, try to resolve a model from name
-        return str(static::class)
+        return (str(static::class)
             ->classBasename()
             ->beforeLast('Table')
             ->singular()
             ->prepend('\\App\\Models\\')
-            ->toString();
+            ->toString())::query();
     }
 
     public function getBaseModel()
@@ -49,7 +50,10 @@ trait HasResource
         }
 
         // If it's a DB object (QueryBuilder), get the table and return DB::table('string')
-        
+    }
 
+    public function isBuilderInstance()
+    {
+        return $this->resource instanceof Builder || $this->resource instanceof QueryBuilder;
     }
 }

@@ -3,14 +3,14 @@
 namespace Jdw5\Vanguard\Refiners;
 
 use Closure;
-use Jdw5\Vanguard\Concerns\HasAuthorization;
-use Jdw5\Vanguard\Primitive;
-use Jdw5\Vanguard\Concerns\HasName;
-use Jdw5\Vanguard\Concerns\HasType;
-use Jdw5\Vanguard\Concerns\HasLabel;
-use Jdw5\Vanguard\Concerns\HasMetadata;
-use Jdw5\Vanguard\Concerns\IsActive;
-use Jdw5\Vanguard\Concerns\HasProperty;
+use Conquest\Core\Primitive;
+use Conquest\Core\Concerns\HasName;
+use Conquest\Core\Concerns\HasType;
+use Conquest\Core\Concerns\HasLabel;
+use Conquest\Core\Concerns\IsActive;
+use Conquest\Core\Concerns\HasMetadata;
+use Conquest\Core\Concerns\HasProperty;
+use Conquest\Core\Concerns\HasAuthorization;
 
 abstract class Refiner extends Primitive
 {

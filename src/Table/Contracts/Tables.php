@@ -8,11 +8,7 @@ use Illuminate\Support\Collection;
 
 interface Tables
 {
-    public static function make(Builder|QueryBuilder $data = null): static;
-
-    public function pipeline(): void;
-
     public function getMeta(): array;
-
+    
     public function getRecords(): Collection;
 }

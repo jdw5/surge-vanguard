@@ -2,11 +2,12 @@
 
 namespace Jdw5\Vanguard\Actions\Concerns;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Jdw5\Vanguard\Actions\RowAction;
 use Jdw5\Vanguard\Actions\BaseAction;
 use Jdw5\Vanguard\Actions\BulkAction;
 use Jdw5\Vanguard\Actions\PageAction;
-use Jdw5\Vanguard\Actions\RowAction;
-use Illuminate\Support\Collection;
 
 /**
  * Define a class as having actions.
@@ -101,5 +102,62 @@ trait HasActions
     {
         $this->actions[] = $action;
         return $this;
+    }
+
+    
+    public static function handle(Request $request): mixed
+    {
+        [$type, $name] = explode(':', $request->input('name'));
+        // If either doesn't exist, then the request is invalid
+        if (!$type || !$name) abort(400);
+
+        return match ($type) {
+            'action' => static::handleAction($request, $name),
+            'export' => static::handleExport($request, $name),
+            default => null
+        };
+        /**
+         * return Table::handle($request); 
+         * Accepts a request, pulls out the values
+         * Find the first action OR export which matches the `type:name` and `httpMethod`
+         * 
+         * If anything is found, check the permissions -> authorize
+         * If authorize fails, abort(403)
+         * 
+         * Export:
+         * create the export for the table
+         * -> frontend handles it as axios NOT inertia
+         * 
+         * Actions format depends on whether it's bulk or row
+         */
+    }
+
+    private static function handleAction(Request $request, string $name): mixed
+    {
+        // Find the action which has the name and method the same as the request
+        $action = static::findAction($name, $request->method(), $request->get('type'));
+
+        if (!$action) return;
+
+        return $action->handle($request);
+    }
+
+    private static function findAction(string $name, string $method, string $type = null): BaseAction|null
+    {
+        if (is_null($type)) $type = 'row';
+
+        return static::getActions()->first(fn($action) => $action->getName() === $name 
+            && $action->getMethod() === $method 
+            && $action->getType() === $type
+        );
+    }
+
+    private static function handleExport(Request $request, string $name): mixed
+    {
+        $export = static::findExport($name, $request->method());
+
+        if (!$export) return;
+        $export->handle($request);
+        return $export->after();
     }
 }

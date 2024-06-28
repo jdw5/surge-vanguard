@@ -2,31 +2,24 @@
 
 namespace Jdw5\Vanguard\Table;
 
-use Jdw5\Vanguard\Primitive;
+use Conquest\Core\Primitive;
 use Illuminate\Support\Collection;
 use Jdw5\Vanguard\Actions\Concerns\HasActions;
-use Illuminate\Database\Eloquent\Model;
 use Jdw5\Vanguard\Table\Concerns\HasKey;
 use Jdw5\Vanguard\Table\Concerns\HasMeta;
 use Jdw5\Vanguard\Table\Contracts\Tables;
-use Jdw5\Vanguard\Concerns\HasRefinements;
 use Jdw5\Vanguard\Sorts\Concerns\HasSorts;
-use Jdw5\Vanguard\Table\Concerns\HasModel;
-use Jdw5\Vanguard\Table\Concerns\HasScopes;
 use Jdw5\Vanguard\Table\Concerns\Internal\HasBuilder;
 use Jdw5\Vanguard\Columns\Concerns\HasColumns;
-use Jdw5\Vanguard\Table\Concerns\HasProcess;
-use Jdw5\Vanguard\Table\Concerns\HasRecords;
 use Jdw5\Vanguard\Table\Concerns\HasPagination;
-use Jdw5\Vanguard\Table\Concerns\HasPreferences;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Jdw5\Vanguard\Table\Exceptions\InvalidKeyException;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Illuminate\Http\Request;
-use Jdw5\Vanguard\Actions\BaseAction;
 use Jdw5\Vanguard\Filters\Concerns\HasFilters;
+use Jdw5\Vanguard\Pagination\Enums\PaginationType;
 use Jdw5\Vanguard\Table\Concerns\HasExports;
 use Jdw5\Vanguard\Table\Concerns\HasResource;
+use Jdw5\Vanguard\Table\Concerns\HasSearch;
 
 abstract class Table extends Primitive implements Tables
 {
@@ -40,6 +33,7 @@ abstract class Table extends Primitive implements Tables
     use HasFilters;
     use HasResource;
     use HasExports;
+    use HasSearch;
 
     protected Collection $records;
 
@@ -80,10 +74,9 @@ abstract class Table extends Primitive implements Tables
         array $sorts = null,
         array|string $search = null,
         array|int $pagination = null,
-        array $exports = null
     ): static
     {
-        return new static($resource, $columns, $actions, $filters, $sorts, $search, $pagination, $exports);
+        return new static($resource, $columns, $actions, $filters, $sorts, $search, $pagination);
     }
 
     /**
@@ -103,16 +96,6 @@ abstract class Table extends Primitive implements Tables
         }
     }
 
-    /**
-     * Serialize the table to JSON.
-     * 
-     * @return array
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
-    }
-    
     /**
      * Retrieve the table as an array
      * 
@@ -171,19 +154,35 @@ abstract class Table extends Primitive implements Tables
      * 
      * @return void
      */
-    public function pipeline(): void
+    private function retrieveData(): void
     {
-        if (! $this->hasBuilder()) $this->setBuilder($this->defineQuery());
-        
-        $this->refineBuilder($this->getRefinements());
+        $builder = $this->getResource();
 
-        $this->refineBuilder($this->getSortableColumns()->map->getSort()->filter());
+        $this->applyFilters($builder);
+        $this->applySorts($builder);
+        $this->applySearch($builder, $this->getSearchTerm(request()));
 
-        [$this->records, $this->meta] = $this->retrieveRecords($this->getBuilder());
+        [$records, $meta] = match ($this->getPaginateType()) {
+            PaginationType::CURSOR => [
+                $data = $builder->cursorPaginate(...array_values($this->getPagination()))->withQueryString(),
+                $this->getCursorMeta($data)
+            ],
+            PaginationType::NONE => [
+                $data = $builder->get(),
+                $this->getCollectionMeta($data)
+            ],
+            default => [
+                $data = $builder->paginate(...$this->getPagination()),
+                $this->getPaginateMeta($data)
+            ],
+        };
 
-        $this->freeBuilder();
+        $this->setRecords($records);
+        $this->setMeta($meta);
 
-        $this->applyScopes($this->records, $this->getTableColumns(), $this->getInlineActions());
+        // Handle the actions
+
+        // Handle the columns
     }
 
     /**
@@ -206,61 +205,5 @@ abstract class Table extends Primitive implements Tables
                 $data = $this->getBuilder()->paginate(...$this->getPagination())->withQueryString();
                 return [$data->getCollection(), $this->generatePaginatorMeta($data)];
         }
-    }
-
-    public static function handle(Request $request): mixed
-    {
-        [$type, $name] = explode(':', $request->input('name'));
-        // If either doesn't exist, then the request is invalid
-        if (!$type || !$name) abort(400);
-
-        return match ($type) {
-            'action' => static::handleAction($request, $name),
-            'export' => static::handleExport($request, $name),
-            default => null
-        };
-        /**
-         * return Table::handle($request);
-         * Accepts a request, pulls out the values
-         * Find the first action OR export which matches the `type:name` and `httpMethod`
-         * 
-         * If anything is found, check the permissions -> authorize
-         * If authorize fails, abort(403)
-         * 
-         * Export:
-         * create the export for the table
-         * -> frontend handles it as axios NOT inertia
-         * 
-         * Actions format depends on whether it's bulk or row
-         */
-    }
-
-    private static function handleAction(Request $request, string $name): mixed
-    {
-        // Find the action which has the name and method the same as the request
-        $action = static::findAction($name, $request->method(), $request->get('type'));
-
-        if (!$action) return;
-
-        return $action->handle($request);
-    }
-
-    private static function findAction(string $name, string $method, string $type = null): BaseAction|null
-    {
-        if (is_null($type)) $type = 'row';
-
-        return static::getActions()->first(fn($action) => $action->getName() === $name 
-            && $action->getMethod() === $method 
-            && $action->getType() === $type
-        );
-    }
-
-    private static function handleExport(Request $request, string $name): mixed
-    {
-        $export = static::findExport($name, $request->method());
-
-        if (!$export) return;
-        $export->handle($request);
-        return $export->after();
     }
 }

@@ -8,7 +8,7 @@ namespace Jdw5\Vanguard\Concerns;
 trait IsDefault
 {
     /** Always default to false */
-    protected $default = false;
+    protected bool $default = false;
 
     /**
      * Set the class as default, chainable
