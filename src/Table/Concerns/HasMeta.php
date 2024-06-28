@@ -8,7 +8,23 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 trait HasMeta
 {
-    private mixed $meta = null;
+    protected array $meta = [];
+
+    protected function setMeta(array|null $meta): void
+    {
+        if (empty($meta)) return;
+        $this->meta = $meta;
+    }
+
+    public function getMeta(): array
+    {
+        return $this->meta;
+    }
+
+    public function hasMeta(): bool
+    {
+        return !empty($this->meta);
+    }
 
     /**
      * Generate the metadata for an unpaginated collection.
@@ -16,7 +32,7 @@ trait HasMeta
      * @param Collection $collection
      * @return array
      */
-    private function getCollectionMeta(Collection $collection): array
+    public function getCollectionMeta(Collection $collection): array
     {
         return [
             'empty' => $collection->isEmpty(),
@@ -30,7 +46,7 @@ trait HasMeta
      * @param CursorPaginator $paginator
      * @return array
      */
-    private function getCursorMeta(CursorPaginator $paginator): array
+    public function getCursorMeta(CursorPaginator $paginator): array
     {
         return [
             'per_page' => $paginator->perPage(),
@@ -50,7 +66,7 @@ trait HasMeta
      * @param LengthAwarePaginator $paginator
      * @return array
      */
-    private function getPaginateMeta(LengthAwarePaginator $paginator): array
+    public function getPaginateMeta(LengthAwarePaginator $paginator): array
     {
         return [
             'per_page' => $paginator->perPage(),

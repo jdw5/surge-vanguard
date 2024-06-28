@@ -22,7 +22,7 @@ trait HasResource
         }
 
         // Check if the resource() function is defined
-        if (function_exists('resource')) {
+        if (method_exists($this, 'resource')) {
             return $this->resource();
         }
 

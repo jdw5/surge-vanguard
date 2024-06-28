@@ -18,7 +18,7 @@ trait HasExports
             return $this->exports;
         }
 
-        if (function_exists('exports')) {
+        if (method_exists($this, 'exports')) {
             return $this->exports();
         }
 

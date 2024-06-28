@@ -29,7 +29,7 @@ trait HasSearch
             return is_array($this->search) ? $this->search : [$this->search];
         }
 
-        if (function_exists('search')) {
+        if (method_exists($this, 'search')) {
             return $this->search();
         }
 
@@ -38,7 +38,7 @@ trait HasSearch
 
     public function getSearchKey(): string
     {
-        if (function_exists('searchKey')) {
+        if (method_exists($this, 'searchKey')) {
             return $this->searchKey();
         }
 
@@ -56,7 +56,7 @@ trait HasSearch
             return $this->useScout;
         }
 
-        if (function_exists('useScout')) {
+        if (method_exists($this, 'useScout')) {
             return $this->useScout();
         }
 

@@ -35,7 +35,7 @@ trait HasActions
             return $this->actions;
         }
 
-        if (function_exists('actions')) {
+        if (method_exists($this, 'actions')) {
             return $this->actions();
         }
 

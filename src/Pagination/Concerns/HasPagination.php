@@ -41,7 +41,7 @@ trait HasPagination
      */
     protected function getRawPagination()
     {
-        if (function_exists('pagination')) {
+        if (method_exists($this, 'pagination')) {
             return $this->pagination();
         }
         return $this->pagination;

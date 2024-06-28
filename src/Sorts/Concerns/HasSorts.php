@@ -21,7 +21,7 @@ trait HasSorts
             return $this->sorts;
         }
 
-        if (function_exists('sorts')) {
+        if (method_exists($this, 'sorts')) {
             return $this->sorts();
         }
 

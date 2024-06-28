@@ -21,7 +21,7 @@ trait HasFilters
             return $this->filters;
         }
 
-        if (function_exists('filters')) {
+        if (method_exists($this, 'filters')) {
             return $this->filters();
         }
 

@@ -22,7 +22,7 @@ trait HasPaginationKey
             return $this->paginationKey;
         }
 
-        if (function_exists('paginationKey')) {
+        if (method_exists($this, 'paginationKey')) {
             return $this->paginationKey();
         }
 

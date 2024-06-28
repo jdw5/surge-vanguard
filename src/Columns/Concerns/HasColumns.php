@@ -28,7 +28,7 @@ trait HasColumns
             return $this->columns;
         }
 
-        if (function_exists('columns')) {
+        if (method_exists($this, 'columns')) {
             return $this->columns();
         }
 
@@ -57,7 +57,7 @@ trait HasColumns
      * 
      * @return Column|null
      */
-    protected function findKeyColumn(): ?Column
+    protected function getKeyColumn(): ?Column
     {
         return $this->getTableColumns()->first(fn (Column $column): bool => $column->isKey());
     }

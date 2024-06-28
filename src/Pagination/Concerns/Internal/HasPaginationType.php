@@ -24,7 +24,7 @@ trait HasPaginationType
             return $this->paginationType;
         }
 
-        if (function_exists('paginateType')) {
+        if (method_exists($this, 'paginateType')) {
             return $this->paginateType();
         }
 
