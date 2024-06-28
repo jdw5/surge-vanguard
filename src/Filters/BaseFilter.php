@@ -72,13 +72,4 @@ abstract class BaseFilter extends Refiner implements Filters
             'metadata' => $this->getMetadata(),
         ];
     }
-    /**
-     * Serialize the filter for JSON.
-     * 
-     * @return array
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
-    }
 }

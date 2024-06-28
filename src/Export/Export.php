@@ -26,8 +26,9 @@ class Export extends Primitive implements Exports
         return [];
     }
 
-    public function jsonSerialize(): mixed
+    public function toArray(): array
     {
-        
+        return [
+        ];
     }
 }

@@ -3,22 +3,10 @@
 namespace Conquest\Table\Columns\Concerns;
 
 use Closure;
-use Conquest\Table\Concerns\HasProperty;
-use Override;
 
 trait IsSortable
 {
-    /** Shares property with search */
-    use HasProperty;
-
     protected bool $sortable = false;
-
-    #[Override]
-    private function property(string|Closure $property): static
-    {
-        $this->setProperty($property);
-        return $this;
-    }
     
     public function sort(string|Closure $property = null): static
     {

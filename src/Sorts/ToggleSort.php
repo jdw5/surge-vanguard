@@ -44,9 +44,9 @@ class ToggleSort extends BaseSort
         return $this->nextDirection;
     }
 
-    public function jsonSerialize(): array
+    public function toArray(): array
     {
-        return array_merge(parent::jsonSerialize(), [
+        return array_merge(parent::toArray(), [
             'next_direction' => $this->getNextDirection(),
         ]);
     }

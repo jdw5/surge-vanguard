@@ -12,9 +12,4 @@ class PageAction extends BaseAction
         $this->setName($name);
         $this->setEndpoint($route, $method);
     }
-    
-    public function jsonSerialize(): array
-    {
-        return array_merge(parent::jsonSerialize(), $this->serializeStaticEndpoint());
-    }
 }

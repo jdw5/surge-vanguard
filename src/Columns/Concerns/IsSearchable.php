@@ -4,21 +4,12 @@ namespace Conquest\Table\Columns\Concerns;
 
 use Closure;
 use Override;
-use Conquest\Table\Concerns\HasProperty;
+use Conquest\Core\Concerns\HasProperty;
 
 trait IsSearchable
 {
-    /** Shares property with sort */
-    use HasProperty;
-
     protected bool $searchable = false;
 
-    #[Override]
-    private function property(string|Closure $property): static
-    {
-        $this->setProperty($property);
-        return $this;
-    }
 
     public function searchable(string|Closure $property = null): static
     {

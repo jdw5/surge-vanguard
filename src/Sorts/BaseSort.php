@@ -61,10 +61,4 @@ abstract class BaseSort extends Refiner implements Sorts
             'active' => $this->isActive(),
         ];
     }
-
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
-    }
 }

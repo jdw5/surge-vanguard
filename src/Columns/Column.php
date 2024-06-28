@@ -22,7 +22,7 @@ class Column extends BaseColumn
     use HasMetadata;
     use HasFallback;
     use CanTransform;
-    use HasSort;
+    // use HasSort;
     use CanAuthorize;
     use IsKey;
     use IsHidden;
@@ -102,16 +102,6 @@ class Column extends BaseColumn
             'next_direction' => $this->getNextDirection(),
             'sort_field' => $this->getSortName(),
         ];
-    }
-
-    /**
-     * Serialize the column for JSON
-     * 
-     * @return array
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 
     public function apply(mixed $value): mixed

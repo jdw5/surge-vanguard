@@ -5,6 +5,7 @@ namespace Conquest\Table\Columns;
 use Conquest\Core\Primitive;
 use Conquest\Core\Concerns\HasType;
 use Conquest\Core\Concerns\HasLabel;
+use Conquest\Core\Concerns\HasProperty;
 use Conquest\Table\Columns\Contracts\Columns;
 use Conquest\Table\Columns\Concerns\HasBreakpoint;
 use Conquest\Table\Columns\Concerns\HasAccessibility;
@@ -15,6 +16,7 @@ abstract class BaseColumn extends Primitive implements Columns
     use HasAccessibility;
     use HasBreakpoint;
     use HasType;
+    use HasProperty;
 
     public function toArray(): array
     {

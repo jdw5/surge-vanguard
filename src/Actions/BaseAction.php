@@ -52,14 +52,4 @@ abstract class BaseAction extends Primitive
             'metadata' => $this->getMetadata(),
         ];
     }
-
-    /**
-     * Serialize the action to JSON.
-     * 
-     * @return array
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
-    }
 }
