@@ -22,6 +22,7 @@ use Conquest\Table\Pagination\Enums\PaginationType;
 use Conquest\Table\Pagination\Concerns\HasPagination;
 use Conquest\Table\Pagination\Concerns\HasPaginationKey;
 use Conquest\Table\Pagination\Concerns\HasPaginationType;
+use Conquest\Table\Pagination\Concerns\HasShowKey;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 abstract class Table extends Primitive implements Tables
@@ -36,6 +37,7 @@ abstract class Table extends Primitive implements Tables
     use HasPagination;
     use HasPaginationType;
     use HasPaginationKey;
+    use HasShowKey;
     // use HasExports;
     use HasMeta;
     use HasRecords;
@@ -50,7 +52,6 @@ abstract class Table extends Primitive implements Tables
         array|int $pagination = null,
     )
     {
-        $this->setRecords(collect());
         $this->setResource($resource);
         $this->setColumns($columns);
         $this->setActions($actions);
@@ -144,12 +145,12 @@ abstract class Table extends Primitive implements Tables
      * 
      * @return array
      */
-    public function getTableRecords(): Collection
+    public function getTableRecords(): array
     {
         if (!$this->hasRecords()) {
             $this->retrieveData();
         }
-        return $this->records;
+        return $this->getRecords();
     }
 
     /**
@@ -179,9 +180,14 @@ abstract class Table extends Primitive implements Tables
         // $this->applyColumnSorts($builder);
         $this->applySearch($builder, $this->getSearchTerm(request()));
 
+        // dd($builder->toSql());
+
         [$records, $meta] = match ($this->getPaginateType()) {
             PaginationType::CURSOR => [
-                $data = $builder->cursorPaginate(...array_values($this->getPagination()))->withQueryString(),
+                $data = $builder->cursorPaginate(
+                    perPage: $this->getActivePagination(),
+                    cursor: $this->getPageTerm(),
+                )->withQueryString(),
                 $this->getCursorMeta($data)
             ],
             PaginationType::NONE => [
@@ -189,20 +195,36 @@ abstract class Table extends Primitive implements Tables
                 $this->getCollectionMeta($data)
             ],
             default => [
-                $data = $builder->paginate(...$this->getPagination()),
+                $data = $builder->paginate(
+                    perPage: $this->getActivePagination(),
+                    pageName: $this->getPageTerm(),
+                ),
                 $this->getPaginateMeta($data)
             ],
         };
+        // Loop over the data
 
-        $this->setRecords($records);
+        foreach ($records as &$record) {
+            // Create a new row
+            // dd($record, $this->getTableColumns());
+            // Apply row action
+        }
+
+        dd($records->items(), $meta);
+
+        $this->setRecords($records->items());
         $this->setMeta($meta);
+    }
 
-        
-        // Handle the actions
-        // $this->buildActions($this->getRecords());
+    private function getActivePagination(): int
+    {
+        $count = $this->getPagination();
+        if (is_int($count)) return $count;
 
-        // Handle the columns
-        // $this->buildColumns($this->getRecords());
+        // Else it's dynamic pagination
+        $query = request()->query($this->getShowKey());
+        if (in_array($query, $count)) return $query;
+        return $this->getDefaultPagination();
     }
 
      

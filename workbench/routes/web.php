@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Workbench\App\Http\Controllers\UserController;
 use Workbench\App\Http\Controllers\BasicTableIndexController;
 use Workbench\App\Http\Controllers\ActionTableIndexController;
 use Workbench\App\Http\Controllers\PaginatedTableIndexController;
 use Workbench\App\Http\Controllers\PreferenceTableIndexController;
+use Workbench\App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +18,7 @@ use Workbench\App\Http\Controllers\PreferenceTableIndexController;
 |
 */
 
-Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/users', [ProductController::class, 'index'])->name('users.index');
 Route::get('/basic', BasicTableIndexController::class)->name('basic.index');
 Route::get('/action', ActionTableIndexController::class)->name('action.index');
 Route::get('/paginated', PaginatedTableIndexController::class)->name('paginated.index');

@@ -3,11 +3,9 @@
 namespace Workbench\App\Tables;
 
 use Conquest\Table\Table;
-use Workbench\App\Enums\TestRole;
 use Workbench\App\Models\TestUser;
 use Conquest\Table\Sorts\Sort;
 use Conquest\Table\Columns\Column;
-use Illuminate\Database\Eloquent\Builder;
 use Conquest\Table\Filters\Filter;
 use Conquest\Table\Options\Option;
 use Conquest\Table\Actions\BulkAction;
@@ -16,10 +14,11 @@ use Conquest\Table\Actions\InlineAction;
 use Conquest\Table\Filters\QueryFilter;
 use Conquest\Table\Filters\SelectFilter;
 use Conquest\Table\Actions\BaseAction;
+use Workbench\App\Models\Product;
 
-final class UserTable extends Table
+final class ProductTable extends Table
 {
-    protected $resource = TestUser::class;
+    protected $resource = Product::class;
     protected $search = 'name';
     protected $pagination = [10, 50, 100];
 
