@@ -37,9 +37,10 @@ trait HasColumns
 
     private function getTableColumns(): Collection
     {
-        return $this->cachedColumns ??= collect($this->defineColumns())
-            ->filter(static fn (Column $column): bool => !$column->isExcluded()
+        return $this->cachedColumns ??= collect($this->getColumns())
+            ->filter(static fn (Column $column) => $column->authorized()
         )->values();
+        // return collect($this->getColumns())->values();
     }
 
     /**

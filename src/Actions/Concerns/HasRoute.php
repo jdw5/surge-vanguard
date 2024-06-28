@@ -2,19 +2,14 @@
 
 namespace Conquest\Table\Actions\Concerns;
 
-use Conquest\Table\Record\Concerns\WrapsRecord;
 
 /**
- * Trait HasEndpoint
- * 
  * Creates an endpoint dynamically, given a set of parameters
  * 
  * @property string|Closure $endpoint
  */
 trait HasRoute
 {
-    use WrapsRecord;
-
     /**
      * Routes need to be resolvable by a function based on the record, and allow for the parameters to vary based on record
      */

@@ -11,7 +11,6 @@ use Conquest\Table\Filters\Concerns\IsRestrictable;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Conquest\Table\Filters\Enums\Clause;
 use Conquest\Table\Filters\Enums\Operator;
-use Override;
 
 class SelectFilter extends Filter
 {
@@ -19,7 +18,6 @@ class SelectFilter extends Filter
     use HasOptions;
     use IsRestrictable;
 
-    #[Override]
     public function __construct(
         array|string|Closure $property, 
         string|Closure $name = null,
@@ -35,12 +33,11 @@ class SelectFilter extends Filter
         parent::__construct($property, $name, $label, $authorize, $clause, $operator, $negate);
         if ($multiple) $this->multiple();
         $this->setOptions($options);
-        $this->setRestrict($restrict);
+        $this->setRestricted($restrict);
         $this->setType('filter:select');
 
     }
 
-    #[Override]
     public static function make(
         array|string|Closure $property, 
         string|Closure $name = null,
@@ -56,7 +53,6 @@ class SelectFilter extends Filter
         return new static($property, $name, $label, $authorize, $clause, $operator, $negate, $multiple, $options, $restrict);
     }
 
-    #[Override]
     public function apply(Builder|QueryBuilder $builder): void
     {
         $request = request();
@@ -88,7 +84,6 @@ class SelectFilter extends Filter
         );
     }
 
-    #[Override]
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [
@@ -97,7 +92,6 @@ class SelectFilter extends Filter
         ]);
     }
 
-    #[Override]
     public function multiple(): static
     {
         $this->setClause(Clause::CONTAINS);

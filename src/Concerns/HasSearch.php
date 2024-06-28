@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 
 trait HasSearch
 {
-    protected array $search;
+    protected $search;
     protected string $searchKey = 'q';
-    protected bool $useScout;
+    protected bool $useScout = false;
 
     public static function setGlobalSearchKey(string $key): void
     {

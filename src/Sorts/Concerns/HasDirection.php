@@ -7,11 +7,11 @@ use Conquest\Table\Sorts\Concerns\HasOrderKey;
 trait HasDirection
 {    
     use HasOrderKey {
-        sanitiseOrder as private;
+        sanitiseOrder as public;
     }
 
     /** Can be asc, desc or null */
-    public string $direction = null;
+    public ?string $direction = null;
 
     /**
      * Set the direction

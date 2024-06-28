@@ -38,9 +38,9 @@ final class UserTable extends Table
     protected function filters(): array
     {
         return [
-            Filter::make('name')->loose(),
+            Filter::make('name'),
             SelectFilter::make('role', 'type'),
-            QueryFilter::make('id')->query(fn (Builder $builder, $value) => $builder->where('id', '<', $value)),
+            // QueryFilter::make('id')->query(fn (Builder $builder, $value) => $builder->where('id', '<', $value)),
         ];
     }
 

@@ -4,19 +4,19 @@ namespace Conquest\Table\Filters;
 
 use Closure;
 use Illuminate\Http\Request;
+use Conquest\Core\Concerns\HasValue;
 use Conquest\Table\Refiners\Refiner;
+use Conquest\Core\Concerns\CanValidate;
+use Conquest\Core\Concerns\CanTransform;
 use Illuminate\Database\Eloquent\Builder;
 use Conquest\Table\Filters\Contracts\Filters;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Conquest\Core\Concerns\CanTransform;
-use Conquest\Core\Concerns\HasValue;
-use Conquest\Table\Filters\Concerns\HasValidator;
 use Conquest\Table\Filters\Exceptions\CannotResolveNameFromProperty;
 
 abstract class BaseFilter extends Refiner implements Filters
 {
     use HasValue;
-    use HasValidator;
+    use CanValidate;
     use CanTransform;
 
     public function __construct(

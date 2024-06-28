@@ -3,7 +3,6 @@
 namespace Conquest\Table\Filters;
 
 use Closure;
-use Override;
 use Exception;
 use Carbon\Carbon;
 use Conquest\Table\Filters\BaseFilter;
@@ -22,7 +21,6 @@ class DateFilter extends BaseFilter
     use HasOperator;
     // Give options
 
-    #[Override]
     public function __construct(
         array|string|Closure $property, 
         string|Closure $name = null,
@@ -51,7 +49,6 @@ class DateFilter extends BaseFilter
         return new static($property, $name, $label, $authorize, $dateClause, $operator, $negate);
     }
 
-    #[Override]
     public function apply(Builder|QueryBuilder $builder): void
     {
         $request = request();

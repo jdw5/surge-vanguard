@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Conquest\Table\Filters\Concerns\HasQuery;
 use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
-use Override;
 
 /**
  * Allows for custom query filters to be created, 
@@ -16,7 +15,6 @@ class QueryFilter extends BaseFilter
 {
     use HasQuery;
 
-    #[Override]
     public function __construct(
         string|Closure $name,
         string|Closure $label = null,
@@ -43,7 +41,6 @@ class QueryFilter extends BaseFilter
         return new static($name, $label, $authorize, $query, $condition);
     }
 
-    #[Override]
     public function apply(Builder|QueryBuilder $builder): void
     {
         $request = request(); 

@@ -3,8 +3,6 @@
 namespace Conquest\Table\Columns\Concerns;
 
 use Closure;
-use Override;
-use Conquest\Core\Concerns\HasProperty;
 
 trait IsSearchable
 {

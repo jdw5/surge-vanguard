@@ -6,16 +6,15 @@ use Closure;
 use Conquest\Table\Pagination\Pagination;
 
 /**
- * Trait HasPagination
- * 
  * Adds the ability to paginate a table
  * 
+ * @property string|array $pagination
  */
 trait HasPagination
 {
     protected string|Closure $pageTerm = 'page';
     protected int $defaultPagination = 10;
-    protected int|array $pagination;
+    protected $pagination;
 
     public static function setGlobalPageTerm(string|Closure $pageTerm): void
     {

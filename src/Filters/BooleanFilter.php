@@ -11,7 +11,6 @@ use Conquest\Table\Filters\Concerns\HasOperator;
 use Conquest\Table\Filters\Concerns\IsNegatable;
 use Conquest\Table\Filters\Enums\Clause;
 use Conquest\Table\Filters\Enums\Operator;
-use Override;
 
 /**
  * Interpolates a value in the query parameter as true, then executes
@@ -22,7 +21,6 @@ class BooleanFilter extends BaseFilter
     use HasClause;
     use HasOperator;
 
-    #[Override]
     public function __construct(
         array|string|Closure $property,
         string|Closure $name = null,
@@ -51,7 +49,6 @@ class BooleanFilter extends BaseFilter
         return new static($property, $name, $label, $authorize, $clause, $operator, $negate);
     }
 
-    #[Override]
     public function apply(Builder|QueryBuilder $builder): void
     {
         $this->setActive(request()->boolean($this->getName()));

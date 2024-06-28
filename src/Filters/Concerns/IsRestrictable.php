@@ -28,7 +28,7 @@ trait IsRestrictable
         return $this->unrestricted();
     }
 
-    protected function setRestricted(bool $restricted): void
+    protected function setRestricted(bool|null $restricted): void
     {
         if (is_null($restricted)) return;
         $this->restrictions = $restricted;

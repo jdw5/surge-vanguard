@@ -3,7 +3,6 @@
 namespace Conquest\Table\Filters;
 
 use Closure;
-use Override;
 use Conquest\Table\Filters\BaseFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -19,7 +18,6 @@ class Filter extends BaseFilter
     use HasClause;
     use HasOperator;
 
-    #[Override]
     public function __construct(
         array|string|Closure $property, 
         string|Closure $name = null,
@@ -56,7 +54,6 @@ class Filter extends BaseFilter
         ));
     }
 
-    #[Override]
     public function apply(Builder|QueryBuilder $builder): void
     {
         $request = request();

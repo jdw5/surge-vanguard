@@ -17,9 +17,9 @@ trait IsNegatable
         return $this->not();
     }
 
-    protected function setNegation(bool $negation): void
+    protected function setNegation(bool|null $negation): void
     {
-        if (is_null($this->getRestrictions())) return;
+        if (is_null($negation)) return;
         $this->negated = $negation;
     }
 

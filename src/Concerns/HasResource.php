@@ -7,7 +7,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 
 trait HasResource
 {
-    protected mixed $resource = null;
+    protected $resource = null;
 
     protected function setResource(Builder|QueryBuilder|null $resource): void
     {

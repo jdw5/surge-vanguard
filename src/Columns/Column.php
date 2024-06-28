@@ -8,7 +8,7 @@ use Conquest\Core\Concerns\IsHidden;
 use Conquest\Core\Concerns\HasMetadata;
 use Conquest\Core\Concerns\CanTransform;
 use Conquest\Core\Concerns\CanAuthorize;
-use Conquest\Table\Columns\Concerns\IsKey;
+use Conquest\Core\Concerns\IsKey;
 use Conquest\Table\Columns\Concerns\HasSort;
 use Conquest\Table\Columns\Enums\Breakpoint;
 use Conquest\Table\Columns\Concerns\IsSortable;
@@ -39,7 +39,7 @@ class Column extends BaseColumn
         Breakpoint|string $breakpoint = Breakpoint::NONE,
         Closure|bool $authorize = null,
         mixed $fallback = null,
-        bool $asHeading = true,
+        bool $hidden = false,
         bool $srOnly = false,
         Closure $transform = null,
     ) {
@@ -51,7 +51,7 @@ class Column extends BaseColumn
         $this->setBreakpoint($breakpoint);
         $this->setAuthorize($authorize);
         $this->setFallback($fallback);
-        $this->setShow($asHeading);
+        $this->setHidden($hidden);
         $this->setSrOnly($srOnly);
         $this->setTransform($transform);
         $this->setType('col:');
