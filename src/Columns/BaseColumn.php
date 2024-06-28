@@ -25,9 +25,4 @@ abstract class BaseColumn extends Primitive implements Columns
             'type' => $this->getType(),
         ];
     }
-
-    public function jsonSerialize(): mixed
-    {
-        return $this->toArray();
-    }
 }

@@ -4,9 +4,9 @@ namespace Conquest\Table\Columns;
 
 use Closure;
 use Conquest\Core\Concerns\HasName;
-use Conquest\Core\Concerns\HasDisplay;
+use Conquest\Core\Concerns\IsHidden;
 use Conquest\Core\Concerns\HasMetadata;
-use Conquest\Core\Concerns\HasTransform;
+use Conquest\Core\Concerns\CanTransform;
 use Conquest\Core\Concerns\CanAuthorize;
 use Conquest\Table\Columns\Concerns\IsKey;
 use Conquest\Table\Columns\Concerns\HasSort;
@@ -21,11 +21,11 @@ class Column extends BaseColumn
     use HasName;
     use HasMetadata;
     use HasFallback;
-    use HasTransform;
+    use CanTransform;
     use HasSort;
     use CanAuthorize;
     use IsKey;
-    use HasDisplay;
+    use IsHidden;
     use IsSortable;
     use IsSearchable;
     use IsToggleable;

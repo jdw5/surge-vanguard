@@ -3,22 +3,23 @@
 namespace Conquest\Table;
 
 use Conquest\Core\Primitive;
-use Conquest\Core\Exceptions\KeyDoesntExist;
-use Conquest\Core\Concerns\RequiresKey;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Conquest\Table\Concerns\HasMeta;
 use Conquest\Table\Contracts\Tables;
 use Conquest\Table\Concerns\HasSearch;
+use Conquest\Core\Concerns\RequiresKey;
 use Conquest\Table\Concerns\HasExports;
 use Conquest\Table\Concerns\HasRecords;
 use Conquest\Table\Concerns\HasResource;
-use Conquest\Table\Concerns\HasPagination;
+use Illuminate\Database\Eloquent\Builder;
 use Conquest\Table\Sorts\Concerns\HasSorts;
+use Conquest\Core\Exceptions\KeyDoesntExist;
 use Conquest\Table\Actions\Concerns\HasActions;
 use Conquest\Table\Columns\Concerns\HasColumns;
 use Conquest\Table\Filters\Concerns\HasFilters;
 use Conquest\Table\Pagination\Enums\PaginationType;
-use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Builder;
+use Conquest\Table\Pagination\Concerns\HasPagination;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 abstract class Table extends Primitive implements Tables
@@ -195,9 +196,66 @@ abstract class Table extends Primitive implements Tables
 
         
         // Handle the actions
-        // $this->buildActions();
+        // $this->buildActions($this->getRecords());
 
         // Handle the columns
-        // $this->buildColumns();
+        // $this->buildColumns($this->getRecords());
     }
+
+     
+    // public static function handle(Request $request): mixed
+    // {
+    //     [$type, $name] = explode(':', $request->input('name'));
+    //     // If either doesn't exist, then the request is invalid
+    //     if (!$type || !$name) abort(400);
+
+    //     return match ($type) {
+    //         'action' => static::handleAction($request, $name),
+    //         'export' => static::handleExport($request, $name),
+    //         default => null
+    //     };
+    //     /**
+    //      * return Table::handle($request); 
+    //      * Accepts a request, pulls out the values
+    //      * Find the first action OR export which matches the `type:name` and `httpMethod`
+    //      * 
+    //      * If anything is found, check the permissions -> authorize
+    //      * If authorize fails, abort(403)
+    //      * 
+    //      * Export:
+    //      * create the export for the table
+    //      * -> frontend handles it as axios NOT inertia
+    //      * 
+    //      * Actions format depends on whether it's bulk or row
+    //      */
+    // }
+
+    // private static function handleAction(Request $request, string $name): mixed
+    // {
+    //     // Find the action which has the name and method the same as the request
+    //     $action = static::findAction($name, $request->method(), $request->get('type'));
+
+    //     if (!$action) return;
+
+    //     return $action->handle($request);
+    // }
+
+    // private static function findAction(string $name, string $method, string $type = null): BaseAction|null
+    // {
+    //     if (is_null($type)) $type = 'row';
+
+    //     return static::getActions()->first(fn($action) => $action->getName() === $name 
+    //         && $action->getMethod() === $method 
+    //         && $action->getType() === $type
+    //     );
+    // }
+
+    // private static function handleExport(Request $request, string $name): mixed
+    // {
+    //     $export = static::findExport($name, $request->method());
+
+    //     if (!$export) return;
+    //     $export->handle($request);
+    //     return $export->after();
+    // }
 }

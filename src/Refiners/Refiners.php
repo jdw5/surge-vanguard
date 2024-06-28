@@ -51,7 +51,7 @@ class Refiners extends Primitive
      * 
      * @return array
      */
-    public function jsonSerialize(): array
+    public function toArray(): array
     {
         return [
             'sorts' => $this->getSorts(),

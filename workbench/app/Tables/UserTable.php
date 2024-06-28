@@ -19,15 +19,8 @@ use Conquest\Table\Actions\BaseAction;
 
 final class UserTable extends Table
 {
-    // protected function definePagination()
-    // {
-    //     return 10;
-    // }
-
     protected $resource = TestUser::class;
-
     protected $search = 'name';
-
     protected $pagination = [10, 50, 100];
 
     protected function columns(): array

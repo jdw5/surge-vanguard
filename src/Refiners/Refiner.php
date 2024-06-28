@@ -4,13 +4,13 @@ namespace Conquest\Table\Refiners;
 
 use Closure;
 use Conquest\Core\Primitive;
+use Conquest\Core\Concerns\CanAuthorize;
 use Conquest\Core\Concerns\HasName;
 use Conquest\Core\Concerns\HasType;
 use Conquest\Core\Concerns\HasLabel;
-use Conquest\Core\Concerns\IsActive;
 use Conquest\Core\Concerns\HasMetadata;
 use Conquest\Core\Concerns\HasProperty;
-use Conquest\Core\Concerns\CanAuthorize;
+use Conquest\Core\Concerns\IsActive;
 
 abstract class Refiner extends Primitive
 {

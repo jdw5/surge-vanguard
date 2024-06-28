@@ -14,4 +14,9 @@ class UserController extends Controller
             'table' => BasicTable::make()
         ]);
     }
+
+    public function handle(Request $request)
+    {
+        // return BasicTable::handle($request);
+    }
 }

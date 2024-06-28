@@ -1,6 +1,9 @@
 <?php
 
-namespace Conquest\Table\Concerns;
+namespace Conquest\Table\Pagination\Concerns;
+
+use Closure;
+use Conquest\Table\Pagination\Pagination;
 
 /**
  * Trait HasPagination
@@ -10,23 +13,59 @@ namespace Conquest\Table\Concerns;
  */
 trait HasPagination
 {
-    /** New API */
-    private $activeDynamicOption;
-    protected $defaultPerPage = 10;
-    protected $showKey = 'show';
-    protected $pageName = 'page';
-    protected $perPage = null;
-    protected $page = null;
-    protected $paginateType = null;
-    protected $columns = ['*'];
-    protected int|array $pagination = 10;
+    protected string|Closure $pageTerm = 'page';
+    protected int $defaultPagination = 10;
+    protected int|array $pagination;
 
-    public static function setGlobalPagination(int|array $pagination): void
+    public static function setGlobalPageTerm(string|Closure $pageTerm): void
     {
-        static::$pagination = $pagination;
+        static::$pageTerm = $pageTerm;
     }
-    
-    /** Create a registered method which defines default at root */
+
+    protected function setPageTerm(string|Closure|null $pageTerm): void
+    {
+        if (is_null($pageTerm)) return;
+        $this->pageTerm = $pageTerm;
+    }
+
+    public function getPageTerm(): string
+    {
+        return $this->evaluate($this->pageTerm);
+    }
+
+    //
+
+    public static function setGlobalDefaultPagination(int $defaultPagination): void
+    {
+        static::$defaultPagination = $defaultPagination;
+    }
+
+    public function getDefaultPagination(): int
+    {
+        return $this->defaultPagination;
+    }
+
+    protected function setDefaultPagination(int $defaultPagination): void
+    {
+        $this->defaultPagination = $defaultPagination;
+    }
+
+    /**
+     * 
+     * @return int|array
+     */
+    public function getPagination(): int|array
+    {
+        if (isset($this->pagination)) {
+            return $this->pagination;
+        }
+
+        if (method_exists($this, 'pagination')) {
+            return $this->pagination();
+        }
+
+        return $this->getDefaultPagination();
+    }
 
     protected function setPagination(int|array|null $pagination): void
     {
@@ -34,195 +73,18 @@ trait HasPagination
         $this->pagination = $pagination;
     }
 
-    /**
-     * Should be used to override the perPage metric
-     * 
-     * @return int|array
-     */
-    protected function getRawPagination()
+    public function getPaginationOptions(int|null $active): array
     {
-        if (method_exists($this, 'pagination')) {
-            return $this->pagination();
-        }
-        return $this->pagination;
-    }
-
-    public function getPagination(): array
-    {
-        // The application defaults to pagination with the defaultPerPage if nothing is provided
-        return [
-            'perPage' => $this->getPerPage(),
-            'pageName' => $this->getPageName(),
-            'page' => $this->getPage(),
-            'columns' => $this->getColumns(),
-        ];
-    }
-
-    public function getPaginationOptions(): array
-    {
-        $options = $this->isDynamic() ? $this->perPage : $this->definePagination();
-
-        return collect($options)->map(function ($value) {
-            return [
-                'value' => $value,
-                'label' => $value,
-                'active' => $value === $this->getDynamicPerPage(),
-            ];
-        })->values()->toArray();
-    }   
-
-    public function serializePagination(): array
-    {
-        return $this->hasDynamicPagination() ? 
-            [
-                'paging_options' => 
-                [
-                    'options' => $this->getPaginationOptions(),
-                    'key' => $this->getShowKey()
-                ]
-            ] : [];
-    }
-
-    /**
-     * Set the perPage value
-     * 
-     * @param int|array $perPage
-     * @return void
-     */
-    protected function setPerPage(int|array $perPage): void
-    {
-        $this->perPage = $perPage;
-    }
-
-    /**
-     * Get the perPage value
-     * 
-     * @return int
-     */
-    protected function getPerPage(): mixed
-    {
-
-        if ($this->hasBeenOverriden()) {
-            return !$this->isDynamic() ? $this->perPage : $this->getDynamicPerPage();
+        if (!is_array($this->getPagination())) {
+            return [Pagination::make($this->getPagination(), true)];
         }
 
-        // Otherwise, use the definePagination to determine the type
-        $this->setPerPage($this->definePagination());
+        $options = [];
 
-        
-        if (\is_array($this->perPage)) {
-            return $this->getDynamicPerPage();
+        foreach ($this->getPagination() as $count) {
+            $options[] = Pagination::make($count, $count === $active);
         }
 
-        return $this->perPage;
-    }
-
-    /**
-     * Set the type of pagination
-     * 
-     * @param string $paginateType
-     */
-    protected function setPaginateType(string $paginateType): void
-    {
-        if (!in_array($paginateType, ['paginate', 'cursor', 'get', 'dynamic'])) {
-            throw new \InvalidArgumentException('Invalid pagination type');
-        }
-
-        $this->paginateType = $paginateType;
-    }
-
-    /**
-     * Get the pagination configuration
-     * 
-     * @return string|null
-     */
-    public function getPaginateType(): ?string
-    {
-        return $this->paginateType;
-    }
-
-    /**
-     * Get the current page
-     */
-    protected function getPage(): ?int
-    {
-        return $this->page;
-    }
-
-    /**
-     * Set the current page
-     * 
-     * @param int|null $page
-     */
-    protected function setPage(?int $page): void
-    {
-        $this->page = $page;
-    }
-
-    /**
-     * Get the key used for dynamic pagination in query string
-     * 
-     * @return string
-     */
-    protected function getShowKey(): ?string
-    {
-        return isset($this->showKey) ? $this->showKey : null;
-    }
-
-    protected function setShowKey(string $showKey): void
-    {
-        $this->showKey = $showKey;
-    }
-
-    /**
-     * Set the columns to be selected for pagination
-     * 
-     * @param array $columns
-     * @return void
-     */
-    protected function setColumns(array $columns): void
-    {
-        $this->columns = $columns;
-    }
-
-    /**
-     * Get the columns to be selected for pagination
-     * 
-     * @return array
-     */
-    protected function getColumns(): array
-    {
-        return $this->columns;
-    }
-
-    /**
-     * Set the page name
-     * 
-     * @param array $columns
-     * @return void
-     */
-    protected function setPageName(string $pageName): void
-    {
-        $this->pageName = $pageName;
-    }
-
-    /**
-     * Get the page name
-     * 
-     * @return array
-     */
-    protected function getPageName(): string
-    {
-        return $this->pageName;
-    }
-
-    /**
-     * Determine if the pagination is dynamic
-     * 
-     * @return bool
-     */
-    private function isDynamic(): bool
-    {
-        return $this->getPaginateType() === 'dynamic';
+        return $options;        
     }
 }

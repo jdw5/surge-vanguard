@@ -1,6 +1,6 @@
 <?php
 
-namespace Conquest\Table\Pagination\Concerns\Internal;
+namespace Conquest\Table\Pagination\Concerns;
 
 trait HasPaginationKey
 {

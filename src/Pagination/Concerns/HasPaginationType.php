@@ -1,12 +1,12 @@
 <?php
 
-namespace Conquest\Table\Pagination\Concerns\Internal;
+namespace Conquest\Table\Pagination\Concerns;
 
 use Conquest\Table\Pagination\Enums\PaginationType;
 
 trait HasPaginationType
 {
-    protected PaginationType|string $paginationType;
+    protected PaginationType $paginationType;
 
     protected function setPaginationType(PaginationType|string $paginationType): void
     {
@@ -18,7 +18,7 @@ trait HasPaginationType
         $this->paginationType = PaginationType::from($paginationType);
     }
 
-    public function getPaginateType(): PaginationType|string
+    public function getPaginateType(): PaginationType
     {
         if (isset($this->paginationType)) {
             return $this->paginationType;
@@ -33,10 +33,6 @@ trait HasPaginationType
 
     public function getPaginateTypeString(): string
     {
-        if ($this->getPaginateType() instanceof PaginationType) {
-            return $this->getPaginateType()->value;
-        }
-
-        return $this->getPaginateType();
+        return $this->getPaginateType()->value;
     }
 }

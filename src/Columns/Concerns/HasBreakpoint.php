@@ -10,7 +10,7 @@ use Conquest\Table\Columns\Enums\Breakpoint;
 trait HasBreakpoint
 {
     /** The breakpoint it should display at */
-    protected Breakpoint $breakpoint = null;
+    protected ?Breakpoint $breakpoint = null;
 
     /**
      * Set the visibility of the column to show only for xs screens

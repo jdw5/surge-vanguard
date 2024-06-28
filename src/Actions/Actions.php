@@ -59,14 +59,4 @@ class Actions extends Primitive
             'default' => $this->getDefaultAction(),
         ];
     }
-
-    /**
-     * Serialize the actions.
-     * 
-     * @return array
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
-    }
 }

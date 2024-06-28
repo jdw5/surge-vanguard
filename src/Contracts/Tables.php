@@ -10,5 +10,5 @@ interface Tables
 {
     public function getMeta(): array;
     
-    public function getRecords(): Collection;
+    public function getRecords(): ?Collection;
 }
