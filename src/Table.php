@@ -4,6 +4,7 @@ namespace Conquest\Table;
 
 use Conquest\Core\Primitive;
 use Illuminate\Http\Request;
+use Conquest\Table\Columns\Column;
 use Illuminate\Support\Collection;
 use Conquest\Table\Concerns\HasMeta;
 use Conquest\Table\Contracts\Tables;
@@ -12,18 +13,22 @@ use Conquest\Core\Concerns\RequiresKey;
 use Conquest\Table\Concerns\HasExports;
 use Conquest\Table\Concerns\HasRecords;
 use Conquest\Table\Concerns\HasResource;
+use Conquest\Table\Concerns\HasToggleKey;
 use Illuminate\Database\Eloquent\Builder;
+use Conquest\Table\Concerns\HasRememberKey;
 use Conquest\Table\Sorts\Concerns\HasSorts;
 use Conquest\Core\Exceptions\KeyDoesntExist;
 use Conquest\Table\Actions\Concerns\HasActions;
 use Conquest\Table\Columns\Concerns\HasColumns;
+use Conquest\Table\Concerns\HasRememberDuration;
+use Conquest\Table\Concerns\IsToggleable;
 use Conquest\Table\Filters\Concerns\HasFilters;
+use Conquest\Table\Pagination\Concerns\HasShowKey;
 use Conquest\Table\Pagination\Enums\PaginationType;
 use Conquest\Table\Pagination\Concerns\HasPagination;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Conquest\Table\Pagination\Concerns\HasPaginationKey;
 use Conquest\Table\Pagination\Concerns\HasPaginationType;
-use Conquest\Table\Pagination\Concerns\HasShowKey;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 
 abstract class Table extends Primitive implements Tables
 {
@@ -41,6 +46,10 @@ abstract class Table extends Primitive implements Tables
     // use HasExports;
     use HasMeta;
     use HasRecords;
+    use HasToggleKey;
+    use HasRememberKey;
+    use HasRememberDuration;
+    use IsToggleable;
 
     public function __construct(
         Builder|QueryBuilder $resource = null,
@@ -115,6 +124,10 @@ abstract class Table extends Primitive implements Tables
      */
     public function toArray(): array
     {
+        if (!$this->hasRecords()) {
+            $this->retrieveData();
+        }
+
         $table = [
             'key' => $this->getTableKey(),
             'records' => $this->getTableRecords(),
@@ -177,10 +190,10 @@ abstract class Table extends Primitive implements Tables
 
         $this->applyFilters($builder);
         $this->applySorts($builder);
-        // $this->applyColumnSorts($builder);
+        $this->applyColumnSorts($builder);
         $this->applySearch($builder, $this->getSearchTerm(request()));
 
-        // dd($builder->toSql());
+        dd($builder->toSql());
 
         [$records, $meta] = match ($this->getPaginateType()) {
             PaginationType::CURSOR => [
@@ -202,17 +215,15 @@ abstract class Table extends Primitive implements Tables
                 $this->getPaginateMeta($data)
             ],
         };
-        // Loop over the data
 
-        foreach ($records as &$record) {
-            // Create a new row
-            // dd($record, $this->getTableColumns());
-            // Apply row action
-        }
+        $records = array_map(fn ($record) => $this->getTableColumns()->reduce(function ($filteredRecord, Column $column) use ($record) {
+                $columnName = $column->getName();
+                $filteredRecord[$columnName] = $column->apply($record[$columnName] ?? null);
+                return $filteredRecord;
+            }, []), $records instanceof Collection ? $records : $records->items()
+        );
 
-        dd($records->items(), $meta);
-
-        $this->setRecords($records->items());
+        $this->setRecords($records);
         $this->setMeta($meta);
     }
 
@@ -225,6 +236,25 @@ abstract class Table extends Primitive implements Tables
         $query = request()->query($this->getShowKey());
         if (in_array($query, $count)) return $query;
         return $this->getDefaultPagination();
+    }
+
+    private function getRememberedColumns(): array
+    {
+        if (!$this->hasRememberKey()) return [];
+
+        // Get the items
+        if (request()->hasCookie($this->getRememberKey()) && $columns = request()->cookie($this->getRememberKey())) {
+            $columns = explode(',', $columns);
+        } else {
+            $columns = [];
+        }
+    }
+
+    private function applyColumnSorts(Builder|QueryBuilder &$query): void
+    {
+        $this->getSortableColumns()->each(function (Column $sortableCol) use (&$query) {
+            $sortableCol->getSort()->apply($query);
+        });
     }
 
      

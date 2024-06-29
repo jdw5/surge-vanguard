@@ -36,16 +36,6 @@ class Actions extends Primitive
     }
 
     /**
-     * Retrieve the actions.
-     * 
-     * @return array
-     */
-    public function defineActions(): array
-    {
-        return $this->actions;
-    }
-
-    /**
      * Retrieve the actions as an array.
      * 
      * @return array
@@ -53,7 +43,7 @@ class Actions extends Primitive
     public function toArray(): array
     {
         return [
-            'inline' => $this->getInlineActions(),
+            'row' => $this->getRowActions(),
             'bulk' => $this->getBulkActions(),
             'page' => $this->getPageActions(),
             'default' => $this->getDefaultAction(),

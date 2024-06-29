@@ -2,9 +2,10 @@
 
 namespace Conquest\Table\Sorts;
 
+use Closure;
 use Conquest\Table\Sorts\BaseSort;
-use Conquest\Table\Sorts\Concerns\HasDirection;
 use Illuminate\Database\Eloquent\Builder;
+use Conquest\Table\Sorts\Concerns\HasDirection;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 class ToggleSort extends BaseSort
@@ -29,6 +30,20 @@ class ToggleSort extends BaseSort
                 );
             }
         );
+    }
+
+    public static function make(
+        string|Closure $property, 
+        string|Closure $name = null,
+        string|Closure $label = null,
+        bool|Closure $authorize = null,
+    ): static {
+        return resolve(static::class, compact(
+            'property', 
+            'name', 
+            'label', 
+            'authorize',
+        ));
     }
 
     public function getNextDirection(): ?string

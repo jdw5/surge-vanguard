@@ -34,20 +34,6 @@ abstract class Refiner extends Primitive
         $this->setAuthorize($authorize);
     }
 
-    public static function make(
-        string|Closure $property, 
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null, 
-    ): static {
-        return resolve(static::class, compact(
-            'property', 
-            'name', 
-            'label', 
-            'authorize'
-        ));
-    }
-
     /**
      * Convert the refinement to an array representation
      * 

@@ -7,8 +7,9 @@ trait HasChunking
     protected int $chunkSize = 1000;
     protected bool $chunkById = true;
 
-    protected function setChunkSize(int $size): void
+    protected function setChunkSize(int|null $size): void
     {
+        if (is_null($size)) return;
         $this->chunkSize = $size;
     }
 

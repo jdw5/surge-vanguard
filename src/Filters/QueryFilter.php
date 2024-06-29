@@ -38,7 +38,13 @@ class QueryFilter extends BaseFilter
         Closure $query = null,
         Closure $condition = null,
     ): static {
-        return new static($name, $label, $authorize, $query, $condition);
+        return resolve(static::class, compact(
+            'name',
+            'label',
+            'authorize',
+            'query',
+            'condition',
+        ));
     }
 
     public function apply(Builder|QueryBuilder $builder): void

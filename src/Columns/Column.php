@@ -11,10 +11,8 @@ use Conquest\Core\Concerns\CanAuthorize;
 use Conquest\Core\Concerns\IsKey;
 use Conquest\Table\Columns\Concerns\HasSort;
 use Conquest\Table\Columns\Enums\Breakpoint;
-use Conquest\Table\Columns\Concerns\IsSortable;
 use Conquest\Table\Columns\Concerns\HasFallback;
 use Conquest\Table\Columns\Concerns\IsSearchable;
-use Conquest\Table\Columns\Concerns\IsToggleable;
 
 class Column extends BaseColumn
 {
@@ -28,14 +26,12 @@ class Column extends BaseColumn
     use IsHidden;
     // use IsSortable;
     use IsSearchable;
-    use IsToggleable;
 
     public function __construct(
         string|Closure $name, 
         string|Closure $label = null,
         bool $sortable = false,
         bool $searchable = false,
-        bool $toggleable = false,
         Breakpoint|string $breakpoint = Breakpoint::NONE,
         Closure|bool $authorize = null,
         mixed $fallback = null,
@@ -47,7 +43,6 @@ class Column extends BaseColumn
         $this->setLabel($label ?? $this->toLabel($this->getName()));
         if ($sortable) $this->setSort();
         $this->setSearchability($searchable);
-        $this->setToggleability($toggleable);
         $this->setBreakpoint($breakpoint);
         $this->setAuthorize($authorize);
         $this->setFallback($fallback);
@@ -73,7 +68,19 @@ class Column extends BaseColumn
         bool $srOnly = false,
         Closure $transform = null,
     ): static {
-        return new static($name, $label, $sortable, $searchable, $toggleable, $breakpoint, $authorize, $fallback, $asHeading, $srOnly, $transform);
+        return resolve(static::class, compact(
+            'name', 
+            'label', 
+            'sortable', 
+            'searchable', 
+            'toggleable', 
+            'breakpoint', 
+            'authorize', 
+            'fallback', 
+            'asHeading', 
+            'srOnly', 
+            'transform'
+        ));
     }
 
     /**
@@ -91,7 +98,7 @@ class Column extends BaseColumn
             'fallback' => $this->getFallback(),
 
             /** Display options for frontend */
-            'display' => $this->isShown(),
+            'hidden' => $this->isShown(),
             'breakpoint' => $this->getBreakpoint(),
             'srOnly' => $this->isSrOnly(),
 

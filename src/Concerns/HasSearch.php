@@ -10,7 +10,7 @@ trait HasSearch
 {
     protected $search;
     protected string $searchKey = 'q';
-    protected bool $useScout = false;
+    protected bool $useScout;
 
     public static function setGlobalSearchKey(string $key): void
     {
@@ -63,15 +63,14 @@ trait HasSearch
         return false;
     }
 
-    public function applySearch(Builder|QueryBuilder $query, string|null $term): void
+    public function applySearch(Builder|QueryBuilder &$query, string|null $term): void
     {
         if (empty($term)) return;
 
-        if ($this->useScout()) {
+        if ($this->usesScout()) {
             $query->search($term);
+            return;
         }
-
-        $query->whereAny($this->getSearchColumns(), 'LIKE', "%$term%");
-
+        $query->whereAny($this->getSearch(), 'LIKE', "%$term%");
     }
 }

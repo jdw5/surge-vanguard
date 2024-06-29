@@ -2,6 +2,7 @@
 
 namespace Workbench\App\Tables;
 
+use Carbon\Carbon;
 use Conquest\Table\Table;
 use Workbench\App\Models\TestUser;
 use Conquest\Table\Sorts\Sort;
@@ -25,12 +26,13 @@ final class ProductTable extends Table
     protected function columns(): array
     {
         return [
-            Column::make('id')->asKey()->hide(),
+            Column::make('public_id')->asKey()->hide(),
             Column::make('name')->sort(),
-            Column::make('email')->fallback('No email')->sort(),
-            Column::make('created_at')->transform(fn ($value) => $value->format('d/m/Y H:i:s')),
-            Column::make('role')->label('User Role'),
-            Column::make('non_existent')->fallback('Fake')
+            Column::make('description')->fallback('No description')->sort(),
+            Column::make('created_at')->transform(fn (Carbon $value) => $value->format('d/m/Y H:i:s')),
+            Column::make('price')->transform(fn ($value) => '$' . number_format($value, 2)),
+            Column::make('best_seller', 'Favourite'),
+            Column::make('misc')->fallback('N/A')
         ];
     }
 
@@ -38,7 +40,7 @@ final class ProductTable extends Table
     {
         return [
             Filter::make('name'),
-            SelectFilter::make('role', 'type'),
+            SelectFilter::make('status', 'availability'),
             // QueryFilter::make('id')->query(fn (Builder $builder, $value) => $builder->where('id', '<', $value)),
         ];
     }

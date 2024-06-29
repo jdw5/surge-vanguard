@@ -18,7 +18,7 @@ use Workbench\App\Http\Controllers\ProductController;
 |
 */
 
-Route::get('/users', [ProductController::class, 'index'])->name('users.index');
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/basic', BasicTableIndexController::class)->name('basic.index');
 Route::get('/action', ActionTableIndexController::class)->name('action.index');
 Route::get('/paginated', PaginatedTableIndexController::class)->name('paginated.index');

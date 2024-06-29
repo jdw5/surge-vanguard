@@ -35,7 +35,7 @@ trait HasColumns
         return [];
     }
 
-    private function getTableColumns(): Collection
+    public function getTableColumns(): Collection
     {
         return $this->cachedColumns ??= collect($this->getColumns())
             ->filter(static fn (Column $column) => $column->authorized()
@@ -48,7 +48,7 @@ trait HasColumns
      * 
      * @return Collection
      */
-    protected function getSortableColumns(): Collection
+    public function getSortableColumns(): Collection
     {
         return $this->getTableColumns()->filter(static fn (Column $column): bool => $column->hasSort());
     }
@@ -58,8 +58,13 @@ trait HasColumns
      * 
      * @return Column|null
      */
-    protected function getKeyColumn(): ?Column
+    public function getKeyColumn(): ?Column
     {
         return $this->getTableColumns()->first(fn (Column $column): bool => $column->isKey());
+    }
+
+    protected function getHeadingColumns(): Collection
+    {
+        return $this->getTableColumns()->filter(static fn (Column $column): bool => $column->isShown());
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Conquest\Table\Actions\Concerns;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Conquest\Table\Actions\RowAction;
 use Conquest\Table\Actions\BaseAction;
 use Conquest\Table\Actions\BulkAction;
@@ -14,22 +12,16 @@ use Conquest\Table\Actions\PageAction;
  */
 trait HasActions
 {
-    private Collection $cachedActions;
-
-    protected array $actions;
-
-    protected function setActions(array|null $actions): void
-    {
-        if (is_null($actions)) return;
-        $this->actions = $actions;
-    }
+    private array $cachedActions;
+    private array $caccedRowActions;
+    protected array $actions = [];
 
     /**
      * Define the actions for the class.
      * 
      * @return array
      */
-    protected function getRawActions(): array
+    protected function getActions(): array
     {
         if (isset($this->actions)) {
             return $this->actions;
@@ -42,48 +34,51 @@ trait HasActions
         return [];
     }
 
+    protected function setActions(array|null $actions): void
+    {
+        if (is_null($actions)) return;
+        $this->actions = $actions;
+    }
+
     /**
      * Retrieve the actions for the class.
      * 
-     * @return Collection
+     * @return array
      */
-    public function getActions(): Collection
+    public function getTableActions(): array
     {
-        return $this->cachedActions ??= collect($this->getRawActions())
-            ->filter(static fn (BaseAction $action): bool => $action->authorized());
+        
+        return $this->cachedActions ??= array_filter($this->getActions(), static fn (BaseAction $action): bool => $action->authorized());
     }
 
     /**
      * Retrieve the inline actions for the class.
      * 
-     * @return Collection
+     * @return array
      */
-    public function getRowActions(): Collection
+    public function getRowActions(): array
     {
-        return $this->getActions()
-            ->filter(static fn (BaseAction $action): bool => $action instanceof RowAction)->values();
+        return $this->cachedRowActions ??= array_values(array_filter($this->getTableActions(), static fn (BaseAction $action): bool => $action instanceof RowAction));
     }
 
     /**
      * Retrieve the bulk actions for the class.
      * 
-     * @return Collection
+     * @return array
      */
-    public function getBulkActions(): Collection
+    public function getBulkActions(): array
     {
-        return $this->getActions()
-            ->filter(static fn (BaseAction $action): bool => $action instanceof BulkAction)->values();
+        return array_values(array_filter($this->getTableActions(), static fn (BaseAction $action): bool => $action instanceof BulkAction));
     }
 
     /**
      * Retrieve the page actions for the class.
      * 
-     * @return Collection
+     * @return array
      */
-    public function getPageActions(): Collection
+    public function getPageActions(): array
     {
-        return $this->getActions()
-            ->filter(static fn (BaseAction $action): bool => $action instanceof PageAction)->values();
+        return array_values(array_filter($this->getTableActions(), static fn (BaseAction $action): bool => $action instanceof PageAction));
     }
 
     /**
@@ -94,8 +89,8 @@ trait HasActions
      */
     public function getDefaultAction(): ?BaseAction
     {
-        return $this->getActions()
-            ->first(static fn (BaseAction $action): bool => $action instanceof RowAction && $action->isDefault());
+        return collect($this->getRowActions())
+            ->first(static fn (BaseAction $action): bool => $action->isDefault());
     }
 
     public function addAction(BaseAction $action): static
