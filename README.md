@@ -1,5 +1,5 @@
-# Vanguard
-Vanguard is a fullstack datatable and search query builder package for Laravel, with a companion Vue frontend composable using the InertiaJS HTTP protocol specification. It provides an elegant API to define tables, columns, actions and refiners for your data.
+# Conquest\Core
+Conquest\Core is a fullstack datatable and search query builder package for Laravel, with a companion Vue frontend composable using the InertiaJS HTTP protocol specification. It provides an elegant API to define tables, columns, actions and refiners for your data.
 
 ## Table of Contents
 - [Installation](#installation)
@@ -30,25 +30,25 @@ Vanguard is a fullstack datatable and search query builder package for Laravel, 
 Install the package via composer.
 
 ```console
-composer require jdw5/vanguard
+composer require jdw5/Conquest\Core
 ```
 
 There are no configuration files needed. You may want to publish the stub and command to customise the default table generated.
     
 ```console
-php artisan vendor:publish --tag=vanguard-stubs
+php artisan vendor:publish --tag=Conquest\Core-stubs
 ```
 
 ## Frontend Companion
 There is a Vue-Inertia client library available via `npm` that provides a composable around the refiners and table data. View the documentation for that here.
 
 ```console
-npm install vanguard-client
+npm install Conquest\Core-client
 ```
 
 And use as 
 ```javascript
-import { useTable } from 'vanguard-client'
+import { useTable } from 'Conquest\Core-client'
 
 defineProps({
     propName: Object
@@ -88,7 +88,7 @@ Or, the recommended method is to complete the `public function paginate()` metho
 `defineActions` returns an array where you can specify the actions to perform on the data. There are three actions types available `PageAction`, `InlineAction` and `BulkAction` to use to separate them.
 
 ## Core
-We provide a complete API documentation for the classes and traits provided by Vanguard, including the relevant namespacing. Abstract classes are not included in the documentation, but are available in the source code.
+We provide a complete API documentation for the classes and traits provided by Conquest\Core, including the relevant namespacing. Abstract classes are not included in the documentation, but are available in the source code.
 
 ### Table
 Tables can be generated from the command line using `php artisan make:table`.
@@ -114,12 +114,12 @@ Columns are defined using the `protected function defineColumns(): array` method
 There is an additional property `protected $applyColumns` which can be set to `false` to disable the application of columns to the query. This is useful when you don't want to reduce the data, or are happy with the default columns. This, by default, is set to true.
 
 #### Defining refiners
-Vanguard provides a macro on both the `Query\Builder` and `Eloquent\Builder`'s to apply the `Refinement` class to a given query. This is used in the pipeline for generating the table, allowing you to fluently define refinements for the table.
+Conquest\Core provides a macro on both the `Query\Builder` and `Eloquent\Builder`'s to apply the `Refinement` class to a given query. This is used in the pipeline for generating the table, allowing you to fluently define refinements for the table.
 
 To add refinements to your table, you can define the `protected function defineRefinements(): array` method, which should return an array of `Refinement` instances. See the Refinement documentation for the API.
 
 #### Defining pagination and meta
-Vanguard provides a nearly identical API to the default fetching methods provided by Laravel's query builder. You can define the fetching method when making the table, defining the attribute or defining the method. The supported methods are: `get`, `paginate`, `cursorPaginate` and `dynamicPaginate`. In order of precendence:
+Conquest\Core provides a nearly identical API to the default fetching methods provided by Laravel's query builder. You can define the fetching method when making the table, defining the attribute or defining the method. The supported methods are: `get`, `paginate`, `cursorPaginate` and `dynamicPaginate`. In order of precendence:
 - Setting the method when making `Table::make()->paginate()`
 - Setting `protected $paginateType` to `get`, `paginate`, `cursor` or `dynamic`
 - Overriding the method `protected function paginate(): int|array` to return the number of records per page
@@ -141,7 +141,7 @@ To enable preferences, you must define the the key to be used for the preference
 
 The columns you have defined can then have the `preference()` method chained onto them to enable them as preferences. If you have columns applied, this will then prevent any data not in those preferences from being sent to the frontend. However, the query must select the necessary columns for all possible preferences - as the preferencing is done at the server level, not database.
 
-Additionally, Vanguard provides functionality to store a user's preferences for a given table through a cookie. To enable this, the cookie name must be defined in the table class. This can be done by setting the property `protected $preferenceCookie` to the name of your choice, or by overriding the method `protected definePreferenceCookie(): string` to return the name. It is critical that this key is unique amongst all your tables, and cookies, to prevent conflicts.
+Additionally, Conquest\Core provides functionality to store a user's preferences for a given table through a cookie. To enable this, the cookie name must be defined in the table class. This can be done by setting the property `protected $preferenceCookie` to the name of your choice, or by overriding the method `protected definePreferenceCookie(): string` to return the name. It is critical that this key is unique amongst all your tables, and cookies, to prevent conflicts.
 
 ### Actions
 Actions allow for you to define a group of actions, not part of a table. To define an `Actions` class, you can create it inline with the `Actions::make(...BaseAction $actions)` method. The arguments must be `InlineAction`, `PageAction` or `BulkAction` instances. The actions are then grouped by their type for access on your frontend.

@@ -28,7 +28,7 @@ class ConquestTableServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../stubs' => base_path('stubs'),
-        ], 'vanguard-stubs');
+        ], 'conquest-stubs');
     }
 
     public function provides()

@@ -193,7 +193,7 @@ abstract class Table extends Primitive implements Tables
         $this->applyColumnSorts($builder);
         $this->applySearch($builder, $this->getSearchTerm(request()));
 
-        dd($builder->toSql());
+        // dd($builder->toSql());
 
         [$records, $meta] = match ($this->getPaginateType()) {
             PaginationType::CURSOR => [

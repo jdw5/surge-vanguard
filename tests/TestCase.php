@@ -1,6 +1,6 @@
 <?php
 
-namespace Jdw5\Vanguard\Tests;
+namespace Jdw5\Conquest\Core\Tests;
 
 use Orchestra\Testbench\TestCase as TestbenchTestCase;
 
@@ -15,7 +15,7 @@ class TestCase extends TestbenchTestCase
     protected function getPackageProviders($app)
     {
         return [
-            'Vanguard\VanguardServiceProvider',
+            'Conquest\Core\Conquest\CoreServiceProvider',
         ];
     }
 
@@ -28,7 +28,7 @@ class TestCase extends TestbenchTestCase
     protected function getPackageAliases($app)
     {
         return [
-            'Vanguard' => 'Jdw5\Vanguard',
+            'Conquest\Core' => 'Jdw5\Conquest\Core',
         ];
     }
 }
