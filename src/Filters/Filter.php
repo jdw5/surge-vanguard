@@ -62,6 +62,7 @@ class Filter extends BaseFilter
         $transformedValue = $this->transformUsing($queryValue);
         $this->setValue($transformedValue);
         $this->setActive($this->filtering($request));
+        // dd($this->getClause()->formatValue('test'));
         $builder->when(
             $this->isActive() && $this->isValid($transformedValue),
             fn (Builder|QueryBuilder $builder) => $this->getClause()

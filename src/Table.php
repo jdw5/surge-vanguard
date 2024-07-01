@@ -124,9 +124,7 @@ abstract class Table extends Primitive implements Tables
      */
     public function toArray(): array
     {
-        if (!$this->hasRecords()) {
-            $this->retrieveData();
-        }
+        $this->retrieveData();
 
         return [
             'key' => $this->getTableKey(),
@@ -153,9 +151,7 @@ abstract class Table extends Primitive implements Tables
      */
     public function getTableRecords(): array
     {
-        if (!$this->hasRecords()) {
-            $this->retrieveData();
-        }
+        $this->retrieveData();
         return $this->getRecords();
     }
 
@@ -166,9 +162,7 @@ abstract class Table extends Primitive implements Tables
      */
     public function getTableMeta(): array
     {
-        if (!$this->hasMeta()) {
-            $this->retrieveData();
-        }
+        $this->retrieveData();
         return $this->getMeta();
     }
 
@@ -179,12 +173,20 @@ abstract class Table extends Primitive implements Tables
      */
     private function retrieveData(): void
     {
+        // Records already retrieved and cached
+        if ($this->hasRecords()) {
+            return;
+        }
+
         $builder = $this->getResource();
 
+        // $builder->where('name', 'like', "%jordi%");
         $this->applyFilters($builder);
         $this->applySorts($builder);
         $this->applyColumnSorts($builder);
         $this->applySearch($builder, $this->getSearchTerm(request()));
+
+        // dd($builder->toSql());
 
         [$records, $meta] = match ($this->getPaginateType()) {
             PaginationType::CURSOR => [

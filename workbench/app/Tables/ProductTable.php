@@ -15,6 +15,7 @@ use Conquest\Table\Actions\InlineAction;
 use Conquest\Table\Filters\QueryFilter;
 use Conquest\Table\Filters\SelectFilter;
 use Conquest\Table\Actions\BaseAction;
+use Conquest\Table\Filters\BooleanFilter;
 use Workbench\App\Models\Product;
 
 final class ProductTable extends Table
@@ -39,8 +40,8 @@ final class ProductTable extends Table
     protected function filters(): array
     {
         return [
-            Filter::make('name'),
-            SelectFilter::make('status', 'availability'),
+            Filter::make('name')->like(),
+            BooleanFilter::make('best_seller', 'availability', 0),
             // QueryFilter::make('id')->query(fn (Builder $builder, $value) => $builder->where('id', '<', $value)),
         ];
     }

@@ -120,12 +120,6 @@ trait HasOperator
         return $this;
     }
 
-    public function like(): static
-    {
-        $this->setOperator(Operator::LIKE);
-        return $this;
-    }
-
     // Alias
     public function equals(): static
     {
@@ -162,14 +156,10 @@ trait HasOperator
         return $this->lte();
     }
 
-    public function similar(): static
-    {
-        return $this->like();
-    }
-
     public function fuzzy(): static
     {
-        return $this->like();
+        $this->setOperator(Operator::LIKE);
+        return $this;
     }
 
     public function greater(): static

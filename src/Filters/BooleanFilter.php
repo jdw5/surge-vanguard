@@ -24,13 +24,16 @@ class BooleanFilter extends BaseFilter
     public function __construct(
         array|string|Closure $property,
         string|Closure $name = null,
+        mixed $value = true,
         string|Closure $label = null,
         bool|Closure $authorize = null,
         string|Clause $clause = Clause::IS,
         string|Operator $operator = Operator::EQUAL,
         bool $negate = false,
     ) {
+        // Needs to accept value
         parent::__construct($property, $name, $label, $authorize);
+        $this->setValue($value);
         $this->setClause($clause);
         $this->setOperator($operator);
         $this->setNegation($negate);
@@ -40,13 +43,23 @@ class BooleanFilter extends BaseFilter
     public static function make(
         array|string|Closure $property,
         string|Closure $name = null,
+        mixed $value = true,
         string|Closure $label = null,
         bool|Closure $authorize = null,
         string|Clause $clause = Clause::IS,
         string|Operator $operator = Operator::EQUAL,
         bool $negate = false,
     ): static {
-        return new static($property, $name, $label, $authorize, $clause, $operator, $negate);
+        return resolve(static::class, compact(
+            'property',
+            'name',
+            'value',
+            'label',
+            'authorize',
+            'clause',
+            'operator',
+            'negate',
+        ));
     }
 
     public function apply(Builder|QueryBuilder $builder): void

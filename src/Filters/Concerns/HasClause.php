@@ -201,4 +201,9 @@ trait HasClause
     {
         return $this->jsonDoesntOverlap();
     }
+
+    public function like(): static
+    {
+        return $this->clause(Clause::LIKE);
+    }
 }

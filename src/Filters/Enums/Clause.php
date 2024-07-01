@@ -4,6 +4,7 @@ namespace Conquest\Table\Filters\Enums;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Facades\DB;
 
 enum Clause: string
 {
@@ -25,6 +26,7 @@ enum Clause: string
     case JSON_OVERLAPS = 'json_overlaps';
     case JSON_DOESNT_OVERLAP = 'json_doesnt_overlap';
     case FULL_TEXT = 'fulltext';
+    case LIKE = 'like';
 
     public function statement(): string
     {
@@ -46,6 +48,7 @@ enum Clause: string
             self::JSON_OVERLAPS => 'whereJsonOverlaps',
             self::JSON_DOESNT_OVERLAP => 'whereJsonDoesntOverlap',
             self::FULL_TEXT => 'whereFullText',
+            self::LIKE => 'where',
         };
     }
 
@@ -53,13 +56,13 @@ enum Clause: string
     {
         return match ($this) {
             self::JSON_LENGTH, 
-                self::JSON_KEY, 
-                self::JSON_NOT_KEY, 
-                self::JSON_OVERLAPS, 
-                self::JSON_DOESNT_OVERLAP, 
-                self::FULL_TEXT,
-                self::CONTAINS,
-                self::DOES_NOT_CONTAIN => false,
+            self::JSON_KEY, 
+            self::JSON_NOT_KEY, 
+            self::JSON_OVERLAPS, 
+            self::JSON_DOESNT_OVERLAP, 
+            self::FULL_TEXT,
+            self::CONTAINS,
+            self::DOES_NOT_CONTAIN => false,
             default => true,
         };
     }
@@ -75,7 +78,7 @@ enum Clause: string
     public function overrideOperator(Operator $operator): Operator
     {
         return match ($this) {
-            self::STARTS_WITH, self::ENDS_WITH, self::SEARCH => Operator::LIKE,
+            self::STARTS_WITH, self::ENDS_WITH, self::SEARCH, self::LIKE => Operator::LIKE,
             default => $operator,
         };
     }
@@ -83,18 +86,19 @@ enum Clause: string
     public function formatValue(mixed $value): mixed
     {
         return match ($this) {
-            self::STARTS_WITH => "{$value}%",
-            self::ENDS_WITH => "%{$value}",
-            self::SEARCH => "%{$value}%",
+            self::STARTS_WITH => "$value%",
+            self::ENDS_WITH => "%$value",
+            self::SEARCH, self::LIKE => '%' . strtolower($value) . '%',
             $this->isMultiple() => is_array($value) ? $value : [$value],
             default => $value,
         };
     }
 
-    public function formatProperty(string $property): string
+    public function formatProperty(string $property)
     {
         return match ($this) {
             self::ALL, self::ANY => is_array($property) ? $property : [$property],
+            self::SEARCH, self::LIKE => DB::raw("lower($property)"),
             default => $property,
         };
     }
