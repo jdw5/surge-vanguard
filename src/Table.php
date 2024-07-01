@@ -193,8 +193,6 @@ abstract class Table extends Primitive implements Tables
         $this->applyColumnSorts($builder);
         $this->applySearch($builder, $this->getSearchTerm(request()));
 
-        // dd($builder->toSql());
-
         [$records, $meta] = match ($this->getPaginateType()) {
             PaginationType::CURSOR => [
                 $data = $builder->cursorPaginate(
@@ -216,11 +214,12 @@ abstract class Table extends Primitive implements Tables
             ],
         };
 
-        $records = array_map(fn ($record) => $this->getTableColumns()->reduce(function ($filteredRecord, Column $column) use ($record) {
+        $records = array_map(fn ($record) => array_reduce($this->getTableColumns(), 
+            function ($filteredRecord, Column $column) use ($record) {
                 $columnName = $column->getName();
                 $filteredRecord[$columnName] = $column->apply($record[$columnName] ?? null);
                 return $filteredRecord;
-            }, []), $records instanceof Collection ? $records : $records->items()
+            }, []), $records instanceof Collection ? $records->toArray() : $records->items()
         );
 
         $this->setRecords($records);
@@ -252,9 +251,9 @@ abstract class Table extends Primitive implements Tables
 
     private function applyColumnSorts(Builder|QueryBuilder &$query): void
     {
-        $this->getSortableColumns()->each(function (Column $sortableCol) use (&$query) {
-            $sortableCol->getSort()->apply($query);
-        });
+        foreach ($this->getSortableColumns() as $column) {
+            $column->getSort()->apply($query);
+        }
     }
 
      

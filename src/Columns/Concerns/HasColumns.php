@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 
 trait HasColumns
 {
-    private Collection $cachedColumns;
+    private array $cachedColumns;
 
     protected array $columns;
 
@@ -35,12 +35,11 @@ trait HasColumns
         return [];
     }
 
-    public function getTableColumns(): Collection
+    public function getTableColumns(): array
     {
-        return $this->cachedColumns ??= collect($this->getColumns())
-            ->filter(static fn (Column $column) => $column->authorized()
-        )->values();
-        // return collect($this->getColumns())->values();
+        return $this->cachedColumns ??= array_values(
+            array_filter($this->getColumns(), static fn (Column $column): bool => $column->authorized())
+        );
     }
 
     /**
@@ -48,9 +47,11 @@ trait HasColumns
      * 
      * @return Collection
      */
-    public function getSortableColumns(): Collection
+    public function getSortableColumns(): array
     {
-        return $this->getTableColumns()->filter(static fn (Column $column): bool => $column->hasSort());
+        return array_values(
+            array_filter($this->getTableColumns(), static fn (Column $column): bool => $column->hasSort())
+        );
     }
 
     /**
@@ -60,11 +61,17 @@ trait HasColumns
      */
     public function getKeyColumn(): ?Column
     {
-        return $this->getTableColumns()->first(fn (Column $column): bool => $column->isKey());
+        foreach ($this->getTableColumns() as $column) {
+            if ($column->isKey()) {
+                return $column;
+            }
+        }
     }
 
-    protected function getHeadingColumns(): Collection
+    protected function getHeadingColumns(): array
     {
-        return $this->getTableColumns()->filter(static fn (Column $column): bool => $column->isShown());
+        return array_values(
+            array_filter($this->getTableColumns(), static fn (Column $column): bool => $column->isHeading())
+        );
     }
 }

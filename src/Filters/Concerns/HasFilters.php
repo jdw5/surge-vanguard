@@ -28,7 +28,7 @@ trait HasFilters
         return [];
     }
 
-    protected function applyFilters(Builder|QueryBuilder &$builder): void
+    protected function applyFilters(Builder|QueryBuilder $builder): void
     {
         foreach ($this->getFilters() as $filter) {
             $filter->apply($builder);

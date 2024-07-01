@@ -28,8 +28,8 @@ trait HasSorts
         return [];
     }
 
-    protected function applySorts(Builder|QueryBuilder &$query): void
-    {
+    protected function applySorts(Builder|QueryBuilder $query): void
+    {        
         foreach ($this->getSorts() as $sort) {
             $sort->apply($query);
             // Only apply one sort

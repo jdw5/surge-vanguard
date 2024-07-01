@@ -1,34 +1,43 @@
 <?php
 
-namespace Jdw5\Conquest\Core\Tests;
+namespace Conquest\Table\Tests;
 
-use Orchestra\Testbench\TestCase as TestbenchTestCase;
+use Orchestra\Testbench\TestCase as Orchestra;
+use Orchestra\Testbench\Concerns\WithWorkbench;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use function Orchestra\Testbench\workbench_path;
 
-class TestCase extends TestbenchTestCase
+class TestCase extends Orchestra
 {
-    /**
-     * Get package providers.
-     *
-     * @param  \Illuminate\Foundation\Application  $app
-     * @return array<int, class-string<\Illuminate\Support\ServiceProvider>>
-     */
-    protected function getPackageProviders($app)
+    use WithWorkbench;
+    use RefreshDatabase;
+    
+    protected function setUp(): void
     {
-        return [
-            'Conquest\Core\Conquest\CoreServiceProvider',
-        ];
+        parent::setUp();
+
+        Factory::guessFactoryNamesUsing(
+            fn (string $modelName) => 'Conquest\\Form\\Database\\Factories\\'.class_basename($modelName).'Factory'
+        );
     }
 
-    /**
-     * Override application aliases.
-     *
-     * @param  \Illuminate\Foundation\Application  $app
-     * @return array<string, class-string<\Illuminate\Support\Facades\Facade>>
-     */
-    protected function getPackageAliases($app)
+    protected function defineEnvironment($app)
     {
-        return [
-            'Conquest\Core' => 'Jdw5\Conquest\Core',
-        ];
+        $app['config']->set('database.default', 'testing');
+    }
+
+    // public function getEnvironmentSetUp($app)
+    // {
+    //     config()->set('database.default', 'testing');
+    //     // $migration = include __DIR__.'/../workbench/database/migrations/create_form_table.php.stub';
+    //     // $migration->up();
+    // }
+
+    protected function defineDatabaseMigrations()
+    {
+        $this->loadLaravelMigrations();
+        $this->loadMigrationsFrom(workbench_path('database/migrations'));
+        $this->artisan('migrate', ['--database' => 'testing'])->run();
     }
 }

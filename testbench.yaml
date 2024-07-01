@@ -2,10 +2,14 @@ providers:
   # - Workbench\App\Providers\WorkbenchServiceProvider
 
 migrations:
-  - workbench/database/migrations
+  - Workbench/database/migrations
 
 seeders:
   - Workbench\Database\Seeders\DatabaseSeeder
+
+providers:
+  - Workbench\App\Providers\WorkbenchServiceProvider
+  - Conquest\Table\ConquestTableServiceProvider
 
 workbench:
   start: '/'
@@ -19,6 +23,7 @@ workbench:
     views: false
   build: 
     - 'create-sqlite-db'
-    - 'migrate:fresh --seed'
+    # - 'migrate:refresh'
+    # - 'db:seed'
   assets: []
   sync: []

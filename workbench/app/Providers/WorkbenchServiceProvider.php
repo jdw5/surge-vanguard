@@ -3,6 +3,7 @@
 namespace Workbench\App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Workbench\Database\Seeders\DatabaseSeeder;
 
 class WorkbenchServiceProvider extends ServiceProvider
 {
