@@ -5,7 +5,7 @@ namespace Conquest\Table;
 use Illuminate\Support\ServiceProvider;
 use Conquest\Table\Console\Commands\TableMakeCommand;
 
-class ConquestTableServiceProvider extends ServiceProvider
+class TableServiceProvider extends ServiceProvider
 {
     /**
      * Register services.

@@ -4,60 +4,47 @@ namespace {{ namespace }};
 
 use Conquest\Table\Table;
 use Conquest\Table\Columns\Column;
-use Conquest\Table\Refining\Sorts\Sort;
-use Conquest\Table\Refining\Filters\Filter;
+use Conquest\Table\Sorts\Sort;
+use Conquest\Table\Filters\Filter;
 use Conquest\Table\Actions\BulkAction;
 use Conquest\Table\Actions\PageAction;
-use Conquest\Table\Actions\InlineAction;
-use Conquest\Table\Record\Record;
-use Illuminate\Support\Collection;
+use Conquest\Table\Actions\RowAction;
 
 final class {{ class }} extends Table
 {
-    protected bool $scopeTransform = true;
-    protected bool $scopeColumns = true;
-    protected bool $scopeActions = true;
-    protected bool $scopeEndpoints = true;
+    protected $search;
+    protected $pagination = [10];
 
-    protected function defineQuery()
+    protected function resource()
     {
         // return Model::query();
     }
 
-    protected function defineColumns(): array
+    protected function columns(): array
     {
         return [
             Column::make('id')->hide()->asKey(),
         ];
     }
 
-    protected function definePagination()
-    {
-        return 10;
-    }
-
-    protected function defineRefinements(): array
+    protected function filters(): array
     {
         return [
 
         ];
     }
 
-    protected function defineActions(): array
+    protected function sorts(): array
     {
         return [
 
         ];
     }
 
-    // Set these if you want to add preferencing (dynamic columns)
-    protected function definePreferenceKey()
+    protected function actions(): array
     {
-        return null;
-    }
+        return [
 
-    protected function definePreferenceCookie()
-    {
-        return null;
+        ];
     }
 }

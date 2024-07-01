@@ -6,6 +6,8 @@ use Orchestra\Testbench\TestCase as Orchestra;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Workbench\Database\Seeders\DatabaseSeeder;
+
 use function Orchestra\Testbench\workbench_path;
 
 class TestCase extends Orchestra
@@ -27,17 +29,11 @@ class TestCase extends Orchestra
         $app['config']->set('database.default', 'testing');
     }
 
-    // public function getEnvironmentSetUp($app)
-    // {
-    //     config()->set('database.default', 'testing');
-    //     // $migration = include __DIR__.'/../workbench/database/migrations/create_form_table.php.stub';
-    //     // $migration->up();
-    // }
-
     protected function defineDatabaseMigrations()
     {
         $this->loadLaravelMigrations();
         $this->loadMigrationsFrom(workbench_path('database/migrations'));
         $this->artisan('migrate', ['--database' => 'testing'])->run();
+        $this->seed(DatabaseSeeder::class);
     }
 }

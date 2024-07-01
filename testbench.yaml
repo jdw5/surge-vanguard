@@ -9,7 +9,13 @@ seeders:
 
 providers:
   - Workbench\App\Providers\WorkbenchServiceProvider
-  - Conquest\Table\ConquestTableServiceProvider
+  - Conquest\Table\TableServiceProvider
+
+connections:
+  testing:
+    driver: sqlite
+    database: ":memory:"
+    prefix: ""
 
 workbench:
   start: '/'
@@ -27,3 +33,6 @@ workbench:
     # - 'db:seed'
   assets: []
   sync: []
+
+env:
+  APP_DEBUG: true
