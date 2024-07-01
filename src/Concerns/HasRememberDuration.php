@@ -4,7 +4,7 @@ namespace Conquest\Table\Concerns;
 
 trait HasRememberDuration
 {
-    protected int $rememberFor = 30*24*60*60; // seconds
+    protected int $rememberFor = 30 * 24 * 60 * 60; // seconds
 
     public static function setGlobalRememberFor(int $seconds): void
     {
@@ -14,12 +14,15 @@ trait HasRememberDuration
     public function rememberFor(int $seconds): static
     {
         $this->setRememberFor($seconds);
+
         return $this;
     }
 
-    protected function setRememberFor(int|null $seconds): void
+    protected function setRememberFor(?int $seconds): void
     {
-        if (is_null($seconds)) return;
+        if (is_null($seconds)) {
+            return;
+        }
         $this->rememberFor = $seconds;
     }
 

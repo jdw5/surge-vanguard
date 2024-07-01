@@ -5,11 +5,14 @@ namespace Conquest\Table\Actions\Concerns;
 trait HasChunking
 {
     protected int $chunkSize = 1000;
+
     protected bool $chunkById = true;
 
-    protected function setChunkSize(int|null $size): void
+    protected function setChunkSize(?int $size): void
     {
-        if (is_null($size)) return;
+        if (is_null($size)) {
+            return;
+        }
         $this->chunkSize = $size;
     }
 
@@ -21,12 +24,14 @@ trait HasChunking
     public function chunkSize(int $size): static
     {
         $this->setChunkSize($size);
+
         return $this;
     }
 
     public function chunkById(bool $byId = true): static
     {
         $this->setChunkById($byId);
+
         return $this;
     }
 

@@ -11,7 +11,7 @@ class BasicTableIndexController extends Controller
     public function __invoke(Request $request)
     {
         return response()->json([
-            'table' => UserTable::make()
+            'table' => UserTable::make(),
         ]);
     }
 }

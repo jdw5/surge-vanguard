@@ -12,6 +12,7 @@ trait HasQuery
     public function query(Closure $query): static
     {
         $this->setQuery($query);
+
         return $this;
     }
 
@@ -20,15 +21,20 @@ trait HasQuery
         return $this->query($query);
     }
 
-    protected function setQuery(Closure|null $query): void
+    protected function setQuery(?Closure $query): void
     {
-        if (is_null($query)) return;
+        if (is_null($query)) {
+            return;
+        }
         $this->query = $query;
     }
 
     public function getQuery(): Closure
     {
-        if (!isset($this->query)) throw new QueryNotDefined($this->getName());
+        if (! isset($this->query)) {
+            throw new QueryNotDefined($this->getName());
+        }
+
         return $this->query;
     }
 }

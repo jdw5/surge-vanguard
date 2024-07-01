@@ -11,6 +11,7 @@ trait HasFormat
     public function format(string|Closure $format): static
     {
         $this->setFormat($format);
+
         return $this;
     }
 
@@ -26,7 +27,7 @@ trait HasFormat
 
     public function hasFormat(): bool
     {
-        return !is_null($this->format);
+        return ! is_null($this->format);
     }
 
     public function getFormat(): string

@@ -16,12 +16,15 @@ trait HasToggleKey
     public function toggleKey(string|Closure $key): static
     {
         $this->setToggleKey($key);
+
         return $this;
     }
 
     protected function setToggleKey(string|Closure|null $key): void
     {
-        if (is_null($key)) return;
+        if (is_null($key)) {
+            return;
+        }
         $this->toggleKey = $key;
     }
 

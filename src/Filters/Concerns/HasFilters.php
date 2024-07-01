@@ -9,9 +9,11 @@ trait HasFilters
 {
     protected array $filters;
 
-    protected function setFilters(array|null $filters): void
+    protected function setFilters(?array $filters): void
     {
-        if (is_null($filters)) return;
+        if (is_null($filters)) {
+            return;
+        }
         $this->filters = $filters;
     }
 

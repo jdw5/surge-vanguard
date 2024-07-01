@@ -12,7 +12,7 @@ class ProductController extends Controller
     {
         // dd(ProductTable::make()->toArray());
         return response()->json([
-            'table' => ProductTable::make()
+            'table' => ProductTable::make(),
         ]);
     }
 

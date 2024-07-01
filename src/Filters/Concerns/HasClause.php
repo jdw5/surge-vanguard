@@ -2,43 +2,41 @@
 
 namespace Conquest\Table\Filters\Concerns;
 
-use Exception;
 use Conquest\Table\Filters\Enums\Clause;
 use Conquest\Table\Filters\Exceptions\InvalidClause;
+use Exception;
 
 trait HasClause
 {
     /** Default to be exact */
     protected Clause $clause = Clause::IS;
-    
+
     /**
      * Set the clause to be used.
-     * 
-     * @param string|Clause $clause
-     * @return static
-     * @throws InvalidClause 
+     *
+     * @throws InvalidClause
      */
     public function clause(string|Clause $clause): static
     {
         $this->setClause($clause);
+
         return $this;
     }
 
     /**
      * Set the clause to be used quietly.
-     * 
-     * @param string|Clause $clause
-     * @return void
+     *
      * @throws InvalidClause
      */
     protected function setClause(string|Clause|null $clause): void
     {
-        if (is_null($clause)) return;
-        
+        if (is_null($clause)) {
+            return;
+        }
+
         if ($clause instanceof Clause) {
             $this->clause = $clause;
-        }
-        else {
+        } else {
             try {
                 $this->clause = Clause::from($clause);
             } catch (Exception $e) {
@@ -49,8 +47,6 @@ trait HasClause
 
     /**
      * Retrieve the clause property.
-     * 
-     * @return Clause
      */
     public function getClause(): Clause
     {
@@ -59,8 +55,6 @@ trait HasClause
 
     /**
      * Set the clause to be 'exact'.
-     * 
-     * @return static
      */
     public function is(): static
     {
@@ -69,8 +63,6 @@ trait HasClause
 
     /**
      * Set the clause to be 'loose'.
-     * 
-     * @return static
      */
     public function isNot(): static
     {
@@ -79,8 +71,6 @@ trait HasClause
 
     /**
      * Set the clause to be 'begins with'.
-     * 
-     * @return static
      */
     public function startsWith(): static
     {
@@ -94,8 +84,6 @@ trait HasClause
 
     /**
      * Set the clause to be 'ends with'.
-     * 
-     * @return static
      */
     public function endsWith(): static
     {

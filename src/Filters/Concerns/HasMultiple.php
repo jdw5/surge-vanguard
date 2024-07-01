@@ -9,18 +9,22 @@ trait HasMultiple
     public function multiple(): static
     {
         $this->setMultiple(true);
+
         return $this;
     }
 
     public function notMultiple(): static
     {
         $this->setMultiple(false);
+
         return $this;
     }
 
-    protected function setMultiple(bool|null $multiple): void
+    protected function setMultiple(?bool $multiple): void
     {
-        if (is_null($multiple)) return;
+        if (is_null($multiple)) {
+            return;
+        }
         $this->multiple = $multiple;
     }
 
@@ -39,7 +43,7 @@ trait HasMultiple
         return $this->getMultiple();
     }
 
-    public function splitToMultiple(string|null $value): array
+    public function splitToMultiple(?string $value): array
     {
         return array_map('trim', explode(',', $value));
     }

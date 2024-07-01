@@ -3,24 +3,24 @@
 namespace Conquest\Table\Sorts;
 
 use Closure;
-use Illuminate\Http\Request;
 use Conquest\Table\Refiners\Refiner;
-use Conquest\Table\Sorts\Contracts\Sorts;
-use Conquest\Table\Sorts\Concerns\HasSortKey;
 use Conquest\Table\Sorts\Concerns\HasOrderKey;
+use Conquest\Table\Sorts\Concerns\HasSortKey;
+use Conquest\Table\Sorts\Contracts\Sorts;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Http\Request;
 
 abstract class BaseSort extends Refiner implements Sorts
 {
-    use HasSortKey;
     use HasOrderKey;
-    
+    use HasSortKey;
+
     public function __construct(
-            string|Closure $property, 
-            string|Closure $name = null,
-            string|Closure $label = null,
-            bool|Closure $authorize = null,
+        string|Closure $property,
+        string|Closure|null $name = null,
+        string|Closure|null $label = null,
+        bool|Closure|null $authorize = null,
     ) {
         $this->setProperty($property);
         $this->setName($name ?? $this->toName($property));
@@ -31,9 +31,9 @@ abstract class BaseSort extends Refiner implements Sorts
     public function apply(Builder|QueryBuilder $builder): void
     {
         $request = request();
-        
+
         $this->setActive($this->sorting($request));
-        
+
         $builder->when(
             $this->isActive(),
             function (Builder|QueryBuilder $builder) use ($request) {

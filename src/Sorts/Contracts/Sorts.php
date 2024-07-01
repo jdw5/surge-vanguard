@@ -2,9 +2,9 @@
 
 namespace Conquest\Table\Sorts\Contracts;
 
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Http\Request;
 
 interface Sorts
 {
@@ -13,12 +13,11 @@ interface Sorts
 
     /**
      * Apply the sorting to the builder
-     * 
-     * @param Builder|QueryBuilder $builder
-     * @param string $property
-     * @param string|null $direction
-     * @return void
+     *
+     * @param  string  $property
+     * @param  string|null  $direction
      */
     public function apply(Builder|QueryBuilder $builder): void;
+
     public function sorting(Request $request): bool;
 }

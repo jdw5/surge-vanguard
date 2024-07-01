@@ -4,13 +4,12 @@ namespace Conquest\Table\Filters;
 
 use Closure;
 use Conquest\Core\Options\Concerns\HasOptions;
-use Illuminate\Database\Eloquent\Builder;
-use Conquest\Table\Filters\Filter;
 use Conquest\Table\Filters\Concerns\HasMultiple;
 use Conquest\Table\Filters\Concerns\IsRestrictable;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Conquest\Table\Filters\Enums\Clause;
 use Conquest\Table\Filters\Enums\Operator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
 class SelectFilter extends Filter
 {
@@ -19,19 +18,21 @@ class SelectFilter extends Filter
     use IsRestrictable;
 
     public function __construct(
-        array|string|Closure $property, 
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null,
+        array|string|Closure $property,
+        string|Closure|null $name = null,
+        string|Closure|null $label = null,
+        bool|Closure|null $authorize = null,
         string|Clause $clause = Clause::IS,
         string|Operator $operator = Operator::EQUAL,
         bool $negate = false,
         bool $multiple = false,
         array $options = [],
-        bool|Closure $restrict = null,
+        bool|Closure|null $restrict = null,
     ) {
         parent::__construct($property, $name, $label, $authorize, $clause, $operator, $negate);
-        if ($multiple) $this->multiple();
+        if ($multiple) {
+            $this->multiple();
+        }
         $this->setOptions($options);
         $this->setRestricted($restrict);
         $this->setType('filter:select');
@@ -39,16 +40,16 @@ class SelectFilter extends Filter
     }
 
     public static function make(
-        array|string|Closure $property, 
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null,
+        array|string|Closure $property,
+        string|Closure|null $name = null,
+        string|Closure|null $label = null,
+        bool|Closure|null $authorize = null,
         string|Clause $clause = Clause::IS,
         string|Operator $operator = Operator::EQUAL,
         bool $negate = false,
         bool $multiple = false,
         array $options = [],
-        bool|Closure $restrict = null,
+        bool|Closure|null $restrict = null,
     ): static {
         return new static($property, $name, $label, $authorize, $clause, $operator, $negate, $multiple, $options, $restrict);
     }
@@ -57,7 +58,9 @@ class SelectFilter extends Filter
     {
         $request = request();
         $queryValue = $request->query($this->getName());
-        if ($this->hasMultiple() && $this->getClause()->isMultiple()) $queryValue = $this->splitToMultiple($queryValue);
+        if ($this->hasMultiple() && $this->getClause()->isMultiple()) {
+            $queryValue = $this->splitToMultiple($queryValue);
+        }
 
         $transformedValue = $this->transformUsing($queryValue);
         $this->setValue($transformedValue);
@@ -71,14 +74,16 @@ class SelectFilter extends Filter
             $optionExists = $optionExists || $isActive;
         }
 
-        if ($this->hasOptions() && $this->isRestricted() && !$optionExists) return;
+        if ($this->hasOptions() && $this->isRestricted() && ! $optionExists) {
+            return;
+        }
 
         $builder->when(
             $this->isActive() && $this->isValid($transformedValue),
             fn (Builder|QueryBuilder $builder) => $this->getClause()
-                ->apply($builder, 
-                    $this->getProperty(), 
-                    $this->isNegated() ? $this->getOperator()->negate() : $this->getOperator(), 
+                ->apply($builder,
+                    $this->getProperty(),
+                    $this->isNegated() ? $this->getOperator()->negate() : $this->getOperator(),
                     $this->getValue()
                 )
         );
@@ -95,6 +100,7 @@ class SelectFilter extends Filter
     public function multiple(): static
     {
         $this->setClause(Clause::CONTAINS);
+
         return parent::multiple();
     }
 }

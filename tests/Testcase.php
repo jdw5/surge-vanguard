@@ -2,12 +2,11 @@
 
 namespace Conquest\Table\Tests;
 
-use Illuminate\Contracts\Config\Repository;
 use Conquest\Table\ConquestTableServiceProvider;
-
-use function Orchestra\Testbench\workbench_path;
 use Orchestra\Testbench\TestCase as TestbenchTestCase;
 use Workbench\Database\Seeders\DatabaseSeeder;
+
+use function Orchestra\Testbench\workbench_path;
 
 class TestCase extends TestbenchTestCase
 {

@@ -3,31 +3,31 @@
 namespace Conquest\Table\Actions;
 
 use Closure;
-use Conquest\Core\Primitive;
-use Conquest\Core\Concerns\HasName;
-use Conquest\Core\Concerns\HasLabel;
-use Conquest\Core\Concerns\HasMetadata;
 use Conquest\Core\Concerns\CanAuthorize;
 use Conquest\Core\Concerns\HasHttpMethod;
+use Conquest\Core\Concerns\HasLabel;
+use Conquest\Core\Concerns\HasMetadata;
+use Conquest\Core\Concerns\HasName;
 use Conquest\Core\Concerns\HasRoute;
 use Conquest\Core\Concerns\HasType;
+use Conquest\Core\Primitive;
 use Illuminate\Http\Request;
 
 abstract class BaseAction extends Primitive
 {
-    use HasLabel;
-    use HasName;
-    use HasMetadata;
     use CanAuthorize;
-    use HasType;
-    use HasRoute;
     use HasHttpMethod;
+    use HasLabel;
+    use HasMetadata;
+    use HasName;
+    use HasRoute;
+    use HasType;
 
     public function __construct(
-        string $label, 
-        string $name = null,
-        Closure|bool $authorize = null,
-        string|Closure $route = null,
+        string $label,
+        ?string $name = null,
+        Closure|bool|null $authorize = null,
+        string|Closure|null $route = null,
         string $method = Request::METHOD_GET
     ) {
         $this->setLabel($label);
@@ -39,25 +39,22 @@ abstract class BaseAction extends Primitive
 
     public static function make(
         string $label,
-        string $name = null,
-        Closure|bool $authorize = null,
-        string|Closure $route = null,
+        ?string $name = null,
+        Closure|bool|null $authorize = null,
+        string|Closure|null $route = null,
         string $method = Request::METHOD_GET
-    ): static
-    {
+    ): static {
         return resolve(static::class, compact(
-            'label', 
-            'name', 
-            'authorize', 
-            'route', 
+            'label',
+            'name',
+            'authorize',
+            'route',
             'method'
         ));
     }
 
     /**
      * Retrieve the action as an array.
-     * 
-     * @return array
      */
     public function toArray(): array
     {

@@ -12,8 +12,10 @@ trait HasResource
 
     protected function setResource($resource): void
     {
-        if (is_null($resource)) return;
-        
+        if (is_null($resource)) {
+            return;
+        }
+
         if (is_string($resource)) {
             // If it's a string, assume it's a class name and store it
             if (class_exists($resource)) {
@@ -36,6 +38,7 @@ trait HasResource
             if ($this->resource instanceof \Illuminate\Database\Eloquent\Model) {
                 return $this->resource->newQuery();
             }
+
             return $this->isBuilderInstance() ? $this->resource : $this->resource->query();
         }
 
@@ -56,7 +59,7 @@ trait HasResource
             return $modelClass::query();
         }
 
-        throw new \RuntimeException("Unable to resolve resource for " . static::class);
+        throw new \RuntimeException('Unable to resolve resource for '.static::class);
     }
 
     public function getBaseModel()
@@ -75,12 +78,13 @@ trait HasResource
             return DB::table($resource->from);
         }
 
-        throw new \RuntimeException("Unable to get base model for resource");
+        throw new \RuntimeException('Unable to get base model for resource');
     }
 
     public function isBuilderInstance()
     {
         $resource = $this->getResource();
+
         return $resource instanceof Builder || $resource instanceof QueryBuilder;
     }
 }

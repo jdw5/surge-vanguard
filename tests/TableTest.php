@@ -1,6 +1,7 @@
 <?php
 
 use Workbench\App\Tables\ProductTable;
+
 use function Pest\Laravel\get;
 
 beforeAll(function () {

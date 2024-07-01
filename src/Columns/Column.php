@@ -3,45 +3,48 @@
 namespace Conquest\Table\Columns;
 
 use Closure;
+use Conquest\Core\Concerns\CanAuthorize;
+use Conquest\Core\Concerns\CanTransform;
+use Conquest\Core\Concerns\HasMetadata;
 use Conquest\Core\Concerns\HasName;
 use Conquest\Core\Concerns\IsHidden;
-use Conquest\Core\Concerns\HasMetadata;
-use Conquest\Core\Concerns\CanTransform;
-use Conquest\Core\Concerns\CanAuthorize;
 use Conquest\Core\Concerns\IsKey;
-use Conquest\Table\Columns\Concerns\HasSort;
-use Conquest\Table\Columns\Enums\Breakpoint;
 use Conquest\Table\Columns\Concerns\HasFallback;
+use Conquest\Table\Columns\Concerns\HasSort;
 use Conquest\Table\Columns\Concerns\IsSearchable;
+use Conquest\Table\Columns\Enums\Breakpoint;
 
 class Column extends BaseColumn
 {
-    use HasName;
-    use HasMetadata;
-    use HasFallback;
-    use CanTransform;
-    use HasSort;
     use CanAuthorize;
-    use IsKey;
+    use CanTransform;
+    use HasFallback;
+    use HasMetadata;
+    use HasName;
+    use HasSort;
     use IsHidden;
+    use IsKey;
+
     // use IsSortable;
     use IsSearchable;
 
     public function __construct(
-        string|Closure $name, 
-        string|Closure $label = null,
+        string|Closure $name,
+        string|Closure|null $label = null,
         bool $sortable = false,
         bool $searchable = false,
         Breakpoint|string $breakpoint = Breakpoint::NONE,
-        Closure|bool $authorize = null,
+        Closure|bool|null $authorize = null,
         mixed $fallback = null,
         bool $hidden = false,
         bool $srOnly = false,
-        Closure $transform = null,
+        ?Closure $transform = null,
     ) {
         $this->setName($name);
         $this->setLabel($label ?? $this->toLabel($this->getName()));
-        if ($sortable) $this->setSort();
+        if ($sortable) {
+            $this->setSort();
+        }
         $this->setSearchability($searchable);
         $this->setBreakpoint($breakpoint);
         $this->setAuthorize($authorize);
@@ -56,37 +59,35 @@ class Column extends BaseColumn
      * Statically create the column
      */
     public static function make(
-        string $name, 
-        string $label = null,
+        string $name,
+        ?string $label = null,
         bool $sortable = false,
         bool $searchable = false,
         bool $toggleable = false,
         Breakpoint|string $breakpoint = Breakpoint::NONE,
-        Closure|bool $authorize = null,
+        Closure|bool|null $authorize = null,
         mixed $fallback = null,
         bool $asHeading = true,
         bool $srOnly = false,
-        Closure $transform = null,
+        ?Closure $transform = null,
     ): static {
         return resolve(static::class, compact(
-            'name', 
-            'label', 
-            'sortable', 
-            'searchable', 
-            'toggleable', 
-            'breakpoint', 
-            'authorize', 
-            'fallback', 
-            'asHeading', 
-            'srOnly', 
+            'name',
+            'label',
+            'sortable',
+            'searchable',
+            'toggleable',
+            'breakpoint',
+            'authorize',
+            'fallback',
+            'asHeading',
+            'srOnly',
             'transform'
         ));
     }
 
     /**
      * Convert the column to an array
-     * 
-     * @return array
      */
     public function toArray(): array
     {
@@ -113,8 +114,13 @@ class Column extends BaseColumn
 
     public function apply(mixed $value): mixed
     {
-        if (is_null($value)) return $this->getFallback();
-        if ($this->canTransform()) return $this->transformUsing($value);
+        if (is_null($value)) {
+            return $this->getFallback();
+        }
+        if ($this->canTransform()) {
+            return $this->transformUsing($value);
+        }
+
         return $value;
     }
 }

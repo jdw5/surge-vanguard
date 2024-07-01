@@ -2,9 +2,9 @@
 
 namespace Conquest\Table\Filters\Concerns;
 
-use Exception;
 use Conquest\Table\Filters\Enums\Operator;
 use Conquest\Table\Filters\Exceptions\InvalidOperator;
+use Exception;
 
 trait HasOperator
 {
@@ -12,30 +12,26 @@ trait HasOperator
 
     /**
      * Set the operator to be used, chainable.
-     * 
-     * @param string|Operator $operator
-     * @return static
      */
     public function operator(string|Operator $operator): static
     {
         $this->setOperator($operator);
+
         return $this;
     }
 
     /**
      * Set the operator to be used quietly.
-     * 
-     * @param string|Operator $operator
-     * @return void
      */
     public function setOperator(string|Operator|null $operator): void
     {
-        if (is_null($operator)) return;
-        
+        if (is_null($operator)) {
+            return;
+        }
+
         if ($operator instanceof Operator) {
             $this->operator = $operator;
-        } 
-        else {
+        } else {
             try {
                 $this->operator = operator::from($operator);
             } catch (Exception $e) {
@@ -46,8 +42,6 @@ trait HasOperator
 
     /**
      * Get the operator to be used.
-     * 
-     * @return Operator
      */
     public function getOperator(): Operator
     {
@@ -56,73 +50,68 @@ trait HasOperator
 
     /**
      * Set the operator to be '>'.
-     * 
-     * @return static
      */
     public function gt(): static
     {
         $this->setOperator(Operator::GREATER_THAN);
+
         return $this;
     }
 
     /**
      * Set the operator to be '>='.
-     * 
-     * @return static
      */
     public function gte(): static
     {
         $this->setOperator(Operator::GREATER_THAN_OR_EQUAL);
+
         return $this;
     }
 
     /**
      * Set the operator to be '<'.
-     * 
-     * @return static
      */
     public function lt(): static
     {
         $this->setOperator(Operator::LESS_THAN);
+
         return $this;
     }
 
     /**
      * Set the operator to be '<='.
-     * 
-     * @return static
      */
     public function lte(): static
     {
         $this->setOperator(Operator::LESS_THAN_OR_EQUAL);
+
         return $this;
     }
 
     /**
      * Set the operator to be '='.
-     * 
-     * @return static
      */
     public function eq(): static
     {
         $this->setOperator(Operator::EQUAL);
+
         return $this;
     }
 
     /**
      * Set the operator to be '!='.
-     * 
-     * @return static
      */
     public function neq(): static
     {
         $this->setOperator(Operator::NOT_EQUAL);
+
         return $this;
     }
 
     public function like(): static
     {
         $this->setOperator(Operator::LIKE);
+
         return $this;
     }
 

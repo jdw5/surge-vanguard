@@ -11,16 +11,16 @@ trait HasColumns
 
     protected array $columns;
 
-    protected function setColumns(array|null $columns): void
+    protected function setColumns(?array $columns): void
     {
-        if (is_null($columns)) return;
+        if (is_null($columns)) {
+            return;
+        }
         $this->columns = $columns;
     }
 
     /**
      * Define the columns for the table.
-     * 
-     * @return array
      */
     protected function getColumns(): array
     {
@@ -44,7 +44,7 @@ trait HasColumns
 
     /**
      * Retrieve the sortable columns for the table
-     * 
+     *
      * @return Collection
      */
     public function getSortableColumns(): array
@@ -56,8 +56,6 @@ trait HasColumns
 
     /**
      * Retrieve the key column for the table if one exists
-     * 
-     * @return Column|null
      */
     public function getKeyColumn(): ?Column
     {

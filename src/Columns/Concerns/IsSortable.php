@@ -7,14 +7,15 @@ use Closure;
 trait IsSortable
 {
     protected bool $sortable = false;
-    
-    public function sort(string|Closure $property = null): static
+
+    public function sort(string|Closure|null $property = null): static
     {
         $this->setSortability(true, $property);
+
         return $this;
     }
-    
-    public function sortable(string|Closure $property = null): static
+
+    public function sortable(string|Closure|null $property = null): static
     {
         return $this->search($property);
     }
@@ -22,6 +23,7 @@ trait IsSortable
     public function dontSort(): static
     {
         $this->setSortability(false);
+
         return $this;
     }
 
@@ -30,7 +32,7 @@ trait IsSortable
         return $this->dontSort();
     }
 
-    protected function setSortability(bool $sortable, string|Closure $property = null): void
+    protected function setSortability(bool $sortable, string|Closure|null $property = null): void
     {
         $this->sortable = $sortable;
         $this->setProperty($property);

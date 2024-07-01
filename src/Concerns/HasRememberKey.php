@@ -21,6 +21,6 @@ trait HasRememberKey
 
     public function hasRememberKey(): bool
     {
-        return !is_null($this->getRememberKey());
+        return ! is_null($this->getRememberKey());
     }
 }

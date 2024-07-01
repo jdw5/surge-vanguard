@@ -7,7 +7,6 @@ use Conquest\Table\Columns\Enums\Breakpoint;
 
 class ActionColumn extends BaseColumn
 {
-
     public function __construct(
         string|Closure $label,
         bool $srOnly = false,
@@ -16,7 +15,7 @@ class ActionColumn extends BaseColumn
         parent::__construct($label, $srOnly, $breakpoint);
         $this->setType('col:action');
     }
-    
+
     public function make(
         string|Closure $label,
         bool $srOnly = false,
@@ -25,8 +24,5 @@ class ActionColumn extends BaseColumn
         return new static($label, $srOnly, $breakpoint);
     }
 
-    public function apply(mixed $value): void
-    {
-        return;
-    }
+    public function apply(mixed $value): void {}
 }

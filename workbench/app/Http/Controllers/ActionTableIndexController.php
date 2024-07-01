@@ -11,7 +11,7 @@ class ActionTableIndexController extends Controller
     public function __invoke(Request $request)
     {
         return response()->json([
-            'table' => ActionTable::make()
+            'table' => ActionTable::make(),
         ]);
     }
 }

@@ -11,7 +11,7 @@ class PaginatedTableIndexController extends Controller
     public function __invoke(Request $request)
     {
         return response()->json([
-            'table' => PaginatedTable::make()
+            'table' => PaginatedTable::make(),
         ]);
     }
 }

@@ -2,21 +2,21 @@
 
 namespace Conquest\Table\Columns;
 
-use Conquest\Core\Primitive;
-use Conquest\Core\Concerns\HasType;
 use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Concerns\HasProperty;
-use Conquest\Table\Columns\Contracts\Columns;
-use Conquest\Table\Columns\Concerns\HasBreakpoint;
+use Conquest\Core\Concerns\HasType;
+use Conquest\Core\Primitive;
 use Conquest\Table\Columns\Concerns\HasAccessibility;
+use Conquest\Table\Columns\Concerns\HasBreakpoint;
+use Conquest\Table\Columns\Contracts\Columns;
 
 abstract class BaseColumn extends Primitive implements Columns
 {
-    use HasLabel;
     use HasAccessibility;
     use HasBreakpoint;
-    use HasType;
+    use HasLabel;
     use HasProperty;
+    use HasType;
 
     public function toArray(): array
     {

@@ -11,7 +11,7 @@ class PreferenceTableIndexController extends Controller
     public function __invoke(Request $request)
     {
         return response()->json([
-            'table' => PreferenceTable::make()
+            'table' => PreferenceTable::make(),
         ]);
     }
 }

@@ -3,11 +3,8 @@
 namespace Conquest\Table\Sorts;
 
 use Closure;
-use Illuminate\Http\Request;
-use Conquest\Table\Sorts\BaseSort;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Conquest\Table\Sorts\Concerns\HasDirection;
+use Illuminate\Http\Request;
 
 /** Only applied when sort AND order match  */
 class AnisotropicSort extends BaseSort
@@ -15,11 +12,11 @@ class AnisotropicSort extends BaseSort
     use HasDirection;
 
     public function __construct(
-        string|Closure $property, 
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null,
-        string $direction = null,
+        string|Closure $property,
+        string|Closure|null $name = null,
+        string|Closure|null $label = null,
+        bool|Closure|null $authorize = null,
+        ?string $direction = null,
     ) {
         parent::__construct($property, $name, $label, $authorize);
         $this->setDirection($direction);
@@ -33,7 +30,7 @@ class AnisotropicSort extends BaseSort
             && $request->query($this->getOrderKey()) === $this->getDirection()
         );
     }
-    
+
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [

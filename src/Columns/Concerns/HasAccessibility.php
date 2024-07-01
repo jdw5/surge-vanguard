@@ -5,7 +5,7 @@ namespace Conquest\Table\Columns\Concerns;
 trait HasAccessibility
 {
     protected bool $srOnly = false;
-    
+
     protected function setSrOnly(bool $srOnly): void
     {
         $this->srOnly = $srOnly;
@@ -13,12 +13,11 @@ trait HasAccessibility
 
     /**
      * Set the column to be screen reader only
-     * 
-     * @return static
      */
     public function srOnly(): static
     {
         $this->setSrOnly(true);
+
         return $this;
     }
 
@@ -35,6 +34,7 @@ trait HasAccessibility
     public function notSrOnly(): static
     {
         $this->setSrOnly(false);
+
         return $this;
     }
 
@@ -62,8 +62,4 @@ trait HasAccessibility
     {
         return $this->srOnly;
     }
-
-
-
 }
-

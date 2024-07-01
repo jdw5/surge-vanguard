@@ -2,18 +2,15 @@
 
 namespace Conquest\Table;
 
-use Illuminate\Support\ServiceProvider;
 use Conquest\Table\Console\Commands\TableMakeCommand;
+use Illuminate\Support\ServiceProvider;
 
 class TableServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
      */
-    public function register(): void
-    {
-
-    }
+    public function register(): void {}
 
     /**
      * Bootstrap services.
@@ -34,7 +31,7 @@ class TableServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
-            TableMakeCommand::class
+            TableMakeCommand::class,
         ];
     }
 }

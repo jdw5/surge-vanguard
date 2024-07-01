@@ -2,11 +2,11 @@
 
 namespace Conquest\Table\Console\Commands;
 
-use InvalidArgumentException;
-use Illuminate\Console\GeneratorCommand;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Attribute\AsCommand;
 use Illuminate\Console\Concerns\CreatesMatchingTest;
+use Illuminate\Console\GeneratorCommand;
+use InvalidArgumentException;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Input\InputOption;
 
 #[AsCommand(name: 'make:table')]
 class TableMakeCommand extends GeneratorCommand
@@ -14,12 +14,15 @@ class TableMakeCommand extends GeneratorCommand
     use CreatesMatchingTest;
 
     protected $name = 'make:table';
+
     protected $description = 'Create a new table class';
+
     protected $type = 'Table';
 
     protected function getStub()
     {
         $stub = '/stubs/table.php.stub';
+
         return $this->resolveStubPath($stub);
     }
 
@@ -27,12 +30,12 @@ class TableMakeCommand extends GeneratorCommand
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : __DIR__ . '/../../..' . $stub;
+            : __DIR__.'/../../..'.$stub;
     }
 
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Tables';
+        return $rootNamespace.'\Tables';
     }
 
     protected function buildClass($name)
@@ -63,7 +66,7 @@ class TableMakeCommand extends GeneratorCommand
     {
         return [
             ['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the table already exists'],
-            ['model', 'm', InputOption::VALUE_OPTIONAL, 'Create a new model for the table']
+            ['model', 'm', InputOption::VALUE_OPTIONAL, 'Create a new model for the table'],
         ];
     }
 }

@@ -7,6 +7,7 @@ use Closure;
 trait HasConfirmation
 {
     protected bool|Closure $confirm = false;
+
     protected string|Closure $confirmMessage = 'Are you sure you want to do this?';
 
     protected function setConfirm(bool $confirm): void
@@ -17,6 +18,7 @@ trait HasConfirmation
     public function confirm(bool $confirm): static
     {
         $this->setConfirm($confirm);
+
         return $this;
     }
 

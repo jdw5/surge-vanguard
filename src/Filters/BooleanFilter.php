@@ -3,29 +3,28 @@
 namespace Conquest\Table\Filters;
 
 use Closure;
-use Illuminate\Database\Eloquent\Builder;
-use Conquest\Table\Filters\BaseFilter;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Conquest\Table\Filters\Concerns\HasClause;
 use Conquest\Table\Filters\Concerns\HasOperator;
 use Conquest\Table\Filters\Concerns\IsNegatable;
 use Conquest\Table\Filters\Enums\Clause;
 use Conquest\Table\Filters\Enums\Operator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
 /**
  * Interpolates a value in the query parameter as true, then executes
  */
 class BooleanFilter extends BaseFilter
 {
-    use IsNegatable;
     use HasClause;
     use HasOperator;
+    use IsNegatable;
 
     public function __construct(
         array|string|Closure $property,
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null,
+        string|Closure|null $name = null,
+        string|Closure|null $label = null,
+        bool|Closure|null $authorize = null,
         string|Clause $clause = Clause::IS,
         string|Operator $operator = Operator::EQUAL,
         bool $negate = false,
@@ -39,9 +38,9 @@ class BooleanFilter extends BaseFilter
 
     public static function make(
         array|string|Closure $property,
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null,
+        string|Closure|null $name = null,
+        string|Closure|null $label = null,
+        bool|Closure|null $authorize = null,
         string|Clause $clause = Clause::IS,
         string|Operator $operator = Operator::EQUAL,
         bool $negate = false,
@@ -55,9 +54,9 @@ class BooleanFilter extends BaseFilter
         $builder->when(
             $this->isActive(),
             fn (Builder|QueryBuilder $builder) => $this->getClause()
-                ->apply($builder, 
-                    $this->getProperty(), 
-                    $this->isNegated() ? $this->getOperator()->negate() : $this->getOperator(), 
+                ->apply($builder,
+                    $this->getProperty(),
+                    $this->isNegated() ? $this->getOperator()->negate() : $this->getOperator(),
                     $this->getValue()
                 )
         );

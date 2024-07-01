@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 trait HasSearch
 {
     protected $search;
+
     protected string $searchKey = 'q';
+
     protected bool $useScout;
 
     public static function setGlobalSearchKey(string $key): void
@@ -19,7 +21,9 @@ trait HasSearch
 
     protected function setSearch(string|array|null $search): void
     {
-        if (is_null($search)) return;
+        if (is_null($search)) {
+            return;
+        }
         $this->search = $search;
     }
 
@@ -45,7 +49,7 @@ trait HasSearch
         return $this->searchKey;
     }
 
-    public function getSearchTerm(Request $request): string|null
+    public function getSearchTerm(Request $request): ?string
     {
         return $request->query($this->getSearchKey());
     }
@@ -63,12 +67,15 @@ trait HasSearch
         return false;
     }
 
-    public function applySearch(Builder|QueryBuilder &$query, string|null $term): void
+    public function applySearch(Builder|QueryBuilder &$query, ?string $term): void
     {
-        if (empty($term)) return;
+        if (empty($term)) {
+            return;
+        }
 
         if ($this->usesScout()) {
             $query->search($term);
+
             return;
         }
         $query->whereAny($this->getSearch(), 'LIKE', "%$term%");

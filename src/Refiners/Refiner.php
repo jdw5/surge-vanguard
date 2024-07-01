@@ -3,30 +3,30 @@
 namespace Conquest\Table\Refiners;
 
 use Closure;
-use Conquest\Core\Primitive;
 use Conquest\Core\Concerns\CanAuthorize;
-use Conquest\Core\Concerns\HasName;
-use Conquest\Core\Concerns\HasType;
 use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Concerns\HasMetadata;
+use Conquest\Core\Concerns\HasName;
 use Conquest\Core\Concerns\HasProperty;
+use Conquest\Core\Concerns\HasType;
 use Conquest\Core\Concerns\IsActive;
+use Conquest\Core\Primitive;
 
 abstract class Refiner extends Primitive
 {
-    use HasProperty;
-    use HasName;
+    use CanAuthorize;
     use HasLabel;
     use HasMetadata;
+    use HasName;
+    use HasProperty;
     use HasType;
-    use CanAuthorize;
     use IsActive;
 
     public function __construct(
-        string|Closure $property, 
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null, 
+        string|Closure $property,
+        string|Closure|null $name = null,
+        string|Closure|null $label = null,
+        bool|Closure|null $authorize = null,
     ) {
         $this->setProperty($property);
         $this->setName($name ?? $this->toName($property));
@@ -36,8 +36,6 @@ abstract class Refiner extends Primitive
 
     /**
      * Convert the refinement to an array representation
-     * 
-     * @return array
      */
     public function toArray(): array
     {

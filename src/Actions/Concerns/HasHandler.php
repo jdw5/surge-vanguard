@@ -3,13 +3,12 @@
 namespace Conquest\Table\Actions\Concerns;
 
 use Closure;
-use Illuminate\Http\Request;
-use Conquest\Table\Actions\ActionType;
 use ReflectionFunction;
 
 trait HasHandler
 {
     protected Closure $handle;
+
     protected string|Closure $redirect;
 
     protected function setHandler(Closure $handle): void
@@ -19,19 +18,23 @@ trait HasHandler
 
     protected function setRedirect(string|Closure $redirect): void
     {
-        if (is_null($redirect)) return;
+        if (is_null($redirect)) {
+            return;
+        }
         $this->redirect = $redirect;
     }
 
     public function handle(Closure $handle): static
     {
         $this->setHandler($handle);
+
         return $this;
     }
 
     public function redirect(string|Closure $redirect): static
     {
         $this->setRedirect($redirect);
+
         return $this;
     }
 

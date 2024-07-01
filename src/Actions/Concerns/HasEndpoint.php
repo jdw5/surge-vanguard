@@ -2,32 +2,27 @@
 
 namespace Conquest\Table\Actions\Concerns;
 
-use Conquest\Table\Actions\Concerns\HasRoute;
-use Conquest\Table\Actions\Concerns\HasMethod;
-
-trait HasEndpoint 
+trait HasEndpoint
 {
     use HasMethod;
     use HasRoute;
 
     /**
      * Define the endpoint for the action.
-     * 
-     * @param string|\Closure $method
-     * @param \Closure|string $route
-     * @param mixed $parameters Optional
+     *
+     * @param  \Closure|string  $route
+     * @param  mixed  $parameters  Optional
      */
     public function endpoint(string|\Closure $method, ...$args): static
     {
         $this->setMethod($method);
         $this->route(...$args);
+
         return $this;
     }
-    
+
     /**
      * Check if the action has an endpoint
-     * 
-     * @return bool
      */
     public function hasEndpoint(): bool
     {
@@ -36,23 +31,20 @@ trait HasEndpoint
 
     /**
      * Resolve the endpoint for the action
-     * 
-     * @param mixed $record
-     * @return array|null
+     *
+     * @param  mixed  $record
      */
     public function resolveEndpoint($record): ?array
     {
-        return $this->hasEndpoint() ? 
+        return $this->hasEndpoint() ?
             [
                 'method' => $this->getMethod(),
                 'route' => $this->resolveRoute($record),
             ] : null;
     }
 
-    /** 
+    /**
      * Serialize the endpoint for the action where they are not dependent on records
-     * 
-     * @return array
      */
     public function serializeStaticEndpoint(): array
     {

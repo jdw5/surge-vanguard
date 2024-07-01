@@ -2,17 +2,19 @@
 
 namespace Conquest\Table\Concerns;
 
-use Illuminate\Support\Collection;
 use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 trait HasMeta
 {
     protected array $meta = [];
 
-    protected function setMeta(array|null $meta): void
+    protected function setMeta(?array $meta): void
     {
-        if (empty($meta)) return;
+        if (empty($meta)) {
+            return;
+        }
         $this->meta = $meta;
     }
 
@@ -23,14 +25,11 @@ trait HasMeta
 
     public function hasMeta(): bool
     {
-        return !empty($this->meta);
+        return ! empty($this->meta);
     }
 
     /**
      * Generate the metadata for an unpaginated collection.
-     * 
-     * @param Collection $collection
-     * @return array
      */
     public function getCollectionMeta(Collection $collection): array
     {
@@ -42,9 +41,6 @@ trait HasMeta
 
     /**
      * Generate the metadata for a cursor paginated collection.
-     * 
-     * @param CursorPaginator $paginator
-     * @return array
      */
     public function getCursorMeta(CursorPaginator $paginator): array
     {
@@ -62,9 +58,6 @@ trait HasMeta
 
     /**
      * Generate the metadata for a length aware paginated collection.
-     * 
-     * @param LengthAwarePaginator $paginator
-     * @return array
      */
     public function getPaginateMeta(LengthAwarePaginator $paginator): array
     {

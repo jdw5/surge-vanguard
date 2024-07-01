@@ -16,9 +16,11 @@ trait HasSortKey
         return $this->sort;
     }
 
-    protected function setSortKey(string|null $key): void
+    protected function setSortKey(?string $key): void
     {
-        if (is_null($key)) return;
+        if (is_null($key)) {
+            return;
+        }
         $this->sort = $key;
     }
 }

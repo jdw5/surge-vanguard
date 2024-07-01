@@ -12,6 +12,7 @@ trait HasPaginationType
     {
         if ($paginationType instanceof PaginationType) {
             $this->paginationType = $paginationType;
+
             return;
         }
 

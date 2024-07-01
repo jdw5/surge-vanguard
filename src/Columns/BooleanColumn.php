@@ -3,24 +3,24 @@
 namespace Conquest\Table\Columns;
 
 use Closure;
-use Conquest\Table\Columns\Enums\Breakpoint;
 use Conquest\Table\Columns\Concerns\HasTruthLabels;
+use Conquest\Table\Columns\Enums\Breakpoint;
 
 class TextColumn extends Column
 {
     use HasTruthLabels;
 
     public function __construct(
-        string|Closure $name, 
-        string|Closure $label = null,
+        string|Closure $name,
+        string|Closure|null $label = null,
         bool $sortable = false,
         bool $searchable = false,
         bool $toggleable = false,
         Breakpoint|string $breakpoint = Breakpoint::NONE,
-        Closure|bool $authorize = null,
+        Closure|bool|null $authorize = null,
         bool $asHeading = true,
         bool $srOnly = false,
-        Closure $transform = null,
+        ?Closure $transform = null,
         Closure|string $truthLabel = 'Yes',
         Closure|string $falseLabel = 'No',
     ) {
@@ -32,9 +32,14 @@ class TextColumn extends Column
 
     public function apply(mixed $value): mixed
     {
-        if ($this->canTransform()) $value = $this->transformUsing($value);
-        
-        if (!!$value) return $this->getTruthLabel();
+        if ($this->canTransform()) {
+            $value = $this->transformUsing($value);
+        }
+
+        if ((bool) $value) {
+            return $this->getTruthLabel();
+        }
+
         return $this->getFalseLabel();
     }
 }

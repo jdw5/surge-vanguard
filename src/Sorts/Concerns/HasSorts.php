@@ -9,12 +9,14 @@ trait HasSorts
 {
     protected array $sorts;
 
-    protected function setSorts(array|null $sorts): void
+    protected function setSorts(?array $sorts): void
     {
-        if (is_null($sorts)) return;
+        if (is_null($sorts)) {
+            return;
+        }
         $this->sorts = $sorts;
     }
-    
+
     public function getSorts()
     {
         if (isset($this->sorts)) {
@@ -29,11 +31,13 @@ trait HasSorts
     }
 
     protected function applySorts(Builder|QueryBuilder $query): void
-    {        
+    {
         foreach ($this->getSorts() as $sort) {
             $sort->apply($query);
             // Only apply one sort
-            if ($sort->isActive()) break;
+            if ($sort->isActive()) {
+                break;
+            }
         }
     }
 }

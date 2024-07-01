@@ -6,9 +6,9 @@ use Conquest\Table\Actions\Exceptions\InvalidEndpointMethod;
 
 /**
  * Trait HasEndpoint
- * 
+ *
  * Set an endpoint to be accessed on the client
- * 
+ *
  * @property string $method
  */
 trait HasMethod
@@ -17,20 +17,16 @@ trait HasMethod
 
     /**
      * Set the method for the endpoint
-     * 
-     * @param string $method
-     * @return static
      */
     public function method(string $method): static
     {
         $this->setMethod($method);
+
         return $this;
     }
 
     /**
      * Get the method for the endpoint
-     * 
-     * @return string
      */
     public function getMethod(): string
     {
@@ -39,9 +35,9 @@ trait HasMethod
 
     /**
      * Set the method for the endpoint quietly
-     * 
-     * @param string $method
-     * @return void
+     *
+     * @param  string  $method
+     *
      * @throws InvalidEndpointMethod
      */
     protected function setMethod(string|\Closure $method): void
@@ -51,12 +47,9 @@ trait HasMethod
         }
         $this->method = $method;
     }
-    
 
     /**
      * Set the method for the endpoint to get
-     * 
-     * @return static
      */
     public function get(): static
     {
@@ -65,8 +58,6 @@ trait HasMethod
 
     /**
      * Set the method for the endpoint to post
-     * 
-     * @return static
      */
     public function post(): static
     {
@@ -75,8 +66,6 @@ trait HasMethod
 
     /**
      * Set the method for the endpoint to put
-     * 
-     * @return static
      */
     public function put(): static
     {
@@ -85,8 +74,6 @@ trait HasMethod
 
     /**
      * Set the method for the endpoint to patch
-     * 
-     * @return static
      */
     public function patch(): static
     {
@@ -95,8 +82,6 @@ trait HasMethod
 
     /**
      * Set the method for the endpoint to delete
-     * 
-     * @return static
      */
     public function delete(): static
     {
