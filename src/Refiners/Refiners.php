@@ -5,11 +5,9 @@ namespace Conquest\Table\Refiners;
 use Conquest\Core\Primitive;
 use Illuminate\Support\Collection;
 use Conquest\Table\Refiners\Refiner;
-use Conquest\Table\Concerns\HasRefinements;
 
 class Refiners extends Primitive
 {
-    use HasRefinements;
     
     public function __construct(protected array $refiners = []) { }
 

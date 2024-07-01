@@ -13,7 +13,7 @@ use Conquest\Table\Actions\PageAction;
 trait HasActions
 {
     private array $cachedActions;
-    private array $caccedRowActions;
+    private array $cachedRowActions;
     protected array $actions = [];
 
     /**

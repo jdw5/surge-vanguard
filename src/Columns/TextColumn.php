@@ -5,14 +5,13 @@ namespace Conquest\Table\Columns;
 use Closure;
 use Conquest\Table\Columns\Enums\Breakpoint;
 
-class DateColumn extends Column
+class TextColumn extends Column
 {
     public function __construct(
         string|Closure $name, 
         string|Closure $label = null,
         bool $sortable = false,
         bool $searchable = false,
-        bool $toggleable = false,
         string|Breakpoint $breakpoint = Breakpoint::NONE,
         bool|Closure $authorize = null,
         mixed $fallback = '-',
@@ -20,7 +19,7 @@ class DateColumn extends Column
         bool $srOnly = false,
         Closure $transform = null,
     ) {
-        parent::__construct($name, $label, $sortable, $searchable, $toggleable, $breakpoint, $authorize, $fallback, $asHeading, $srOnly, $transform);
+        parent::__construct($name, $label, $sortable, $searchable, $breakpoint, $authorize, $fallback, $asHeading, $srOnly, $transform);
         $this->setType('col:text');
     }
 }

@@ -3,7 +3,7 @@
 namespace Conquest\Table\Export;
 
 use Closure;
-use Conquest\Table\Concerns\HasLabel;
+use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Primitive;
 use Conquest\Table\Export\Exports;
 

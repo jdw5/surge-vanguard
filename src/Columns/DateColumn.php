@@ -2,9 +2,10 @@
 
 namespace Conquest\Table\Columns;
 
-use Carbon\Carbon;
 use Closure;
 use Exception;
+use Carbon\Carbon;
+use Conquest\Table\Columns\Column;
 use Conquest\Table\Columns\Enums\Breakpoint;
 use Conquest\Table\Columns\Concerns\HasFormat;
 
@@ -17,7 +18,6 @@ class DateColumn extends Column
         string|Closure $label = null,
         bool $sortable = false,
         bool $searchable = false,
-        bool $toggleable = false,
         string|Breakpoint $breakpoint = Breakpoint::NONE,
         bool|Closure $authorize = null,
         mixed $fallback = null,
@@ -26,7 +26,7 @@ class DateColumn extends Column
         string|Closure $format = null,
         Closure $transform = null,
     ) {
-        parent::__construct($name, $label, $sortable, $searchable, $toggleable, $breakpoint, $authorize, $fallback, $asHeading, $srOnly, $transform);
+        parent::__construct($name, $label, $sortable, $searchable, $breakpoint, $authorize, $fallback, $asHeading, $srOnly, $transform);
         $this->setType('col:date');
         $this->setFormat($format);
     }

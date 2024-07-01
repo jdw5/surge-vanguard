@@ -1,8 +1,5 @@
-providers:
-  # - Workbench\App\Providers\WorkbenchServiceProvider
-
 migrations:
-  - Workbench/database/migrations
+  - workbench/database/migrations
 
 seeders:
   - Workbench\Database\Seeders\DatabaseSeeder
@@ -29,8 +26,7 @@ workbench:
     views: false
   build: 
     - 'create-sqlite-db'
-    # - 'migrate:refresh'
-    # - 'db:seed'
+    - 'migrate:fresh'
   assets: []
   sync: []
 

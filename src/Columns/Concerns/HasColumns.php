@@ -68,10 +68,12 @@ trait HasColumns
         }
     }
 
-    protected function getHeadingColumns(): array
+    public function getHeadingColumns(): array
     {
+        // Manipulate the show trait to handle the toggleaable columns
         return array_values(
-            array_filter($this->getTableColumns(), static fn (Column $column): bool => $column->isHeading())
+            // array_filter($this->getTableColumns(), static fn (Column $column): bool => $column->isShown() && $column->isToggledOn())
+            array_filter($this->getTableColumns(), static fn (Column $column): bool => $column->isShown())
         );
     }
 }

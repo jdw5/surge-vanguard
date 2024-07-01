@@ -6,7 +6,7 @@ use Closure;
 
 trait HasValidator
 {
-    protected Closure $validator = null;
+    protected ?Closure $validator = null;
 
     public function validate(Closure $callback): static
     {

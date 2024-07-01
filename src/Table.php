@@ -107,7 +107,7 @@ abstract class Table extends Primitive implements Tables
      * @throws KeyDoesntExist
      * @return string
      */
-    protected function getTableKey(): string 
+    public function getTableKey(): string 
     {
         try { 
             return $this->getKey();
@@ -128,10 +128,10 @@ abstract class Table extends Primitive implements Tables
             $this->retrieveData();
         }
 
-        $table = [
+        return [
             'key' => $this->getTableKey(),
             'records' => $this->getTableRecords(),
-            'columns' => $this->getTableColumns(),
+            'columns' => $this->getHeadingColumns(),
             'meta' => $this->getTableMeta(),
             'sorts' => $this->getSorts(),
             'filters' => $this->getFilters(),
@@ -141,16 +141,9 @@ abstract class Table extends Primitive implements Tables
                 'page' => $this->getPageActions(),
                 'default' => $this->getDefaultAction(),
             ],
-            // 'allColumns'
-            // 'pages' =>
+            'properties' => $this->getTableColumns(),
+            'pagination' => $this->getPaginationOptions($this->getActivePagination())
         ];
-
-        return $table;
-        // $pagination = $this->serializePagination();
-
-        // $preferences = $this->hasPreferences() ? ['preference_cols' => $this->getColumnsWithPreferences($this->getUncachedTableColumns())] : [];
-
-        // return array_merge($table, $pagination, $preferences);
     }
 
     /**
@@ -230,8 +223,6 @@ abstract class Table extends Primitive implements Tables
     {
         $count = $this->getPagination();
         if (is_int($count)) return $count;
-
-        // Else it's dynamic pagination
         $query = request()->query($this->getShowKey());
         if (in_array($query, $count)) return $query;
         return $this->getDefaultPagination();

@@ -6,7 +6,7 @@ use Closure;
 
 trait HasFormat
 {
-    protected string|Closure $format = null;
+    protected string|Closure|null $format = null;
 
     public function format(string|Closure $format): static
     {
