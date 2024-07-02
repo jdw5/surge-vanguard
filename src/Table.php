@@ -21,7 +21,7 @@ use Conquest\Core\Exceptions\KeyDoesntExist;
 use Conquest\Table\Actions\Concerns\HasActions;
 use Conquest\Table\Columns\Concerns\HasColumns;
 use Conquest\Table\Concerns\HasRememberDuration;
-use Conquest\Table\Concerns\IsToggleable;
+use Conquest\Table\Concerns\HasToggleability;
 use Conquest\Table\Filters\Concerns\HasFilters;
 use Conquest\Table\Pagination\Concerns\HasShowKey;
 use Conquest\Table\Pagination\Enums\PaginationType;
@@ -46,10 +46,10 @@ abstract class Table extends Primitive implements Tables
     // use HasExports;
     use HasMeta;
     use HasRecords;
-    use HasToggleKey;
     use HasRememberKey;
     use HasRememberDuration;
-    use IsToggleable;
+    use HasToggleKey;
+    use HasToggleability;
 
     public function __construct(
         Builder|QueryBuilder $resource = null,
@@ -101,6 +101,29 @@ abstract class Table extends Primitive implements Tables
     }
 
     /**
+     * Alias for make
+     */
+    public static function build(
+        Builder|QueryBuilder $resource = null,
+        array $columns = null,
+        array $actions = null,
+        array $filters = null,
+        array $sorts = null,
+        array|string $search = null,
+        array|int $pagination = null,
+    ): static {
+        return static::make(
+            $resource,
+            $columns,
+            $actions,
+            $filters,
+            $sorts,
+            $search,
+            $pagination,
+        );
+    }
+
+    /**
      * Get the key for the table.
      * 
      * @return string
@@ -124,7 +147,7 @@ abstract class Table extends Primitive implements Tables
      */
     public function toArray(): array
     {
-        $this->retrieveData();
+        $this->create();
 
         return [
             'key' => $this->getTableKey(),
@@ -151,7 +174,7 @@ abstract class Table extends Primitive implements Tables
      */
     public function getTableRecords(): array
     {
-        $this->retrieveData();
+        $this->create();
         return $this->getRecords();
     }
 
@@ -162,7 +185,7 @@ abstract class Table extends Primitive implements Tables
      */
     public function getTableMeta(): array
     {
-        $this->retrieveData();
+        $this->create();
         return $this->getMeta();
     }
 
@@ -171,7 +194,7 @@ abstract class Table extends Primitive implements Tables
      * 
      * @return void
      */
-    private function retrieveData(): void
+    private function create(): void
     {
         // Records already retrieved and cached
         if ($this->hasRecords()) {
@@ -180,14 +203,13 @@ abstract class Table extends Primitive implements Tables
 
         $builder = $this->getResource();
 
-        // $builder->where('name', 'like', "%jordi%");
         $this->applyFilters($builder);
         $this->applySorts($builder);
         $this->applyColumnSorts($builder);
         $this->applySearch($builder, $this->getSearchTerm(request()));
 
-        // dd($builder->toSql());
-
+        dd($builder->toSql());
+        
         [$records, $meta] = match ($this->getPaginateType()) {
             PaginationType::CURSOR => [
                 $data = $builder->cursorPaginate(
@@ -250,7 +272,7 @@ abstract class Table extends Primitive implements Tables
     }
 
      
-    // public static function handle(Request $request): mixed
+    // public static function handle(Request $request, string $name = null): mixed
     // {
     //     [$type, $name] = explode(':', $request->input('name'));
     //     // If either doesn't exist, then the request is invalid

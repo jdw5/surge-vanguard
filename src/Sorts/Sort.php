@@ -50,11 +50,11 @@ class Sort extends BaseSort
         ));
     }
 
-    public function apply(Builder|QueryBuilder $builder): void
+    public function apply(Builder|QueryBuilder $builder, bool $default = false): void
     {
         $request = request();
         
-        $this->setActive($this->sorting($request));
+        $this->setActive($this->sorting($request) || $default);
         
         $builder->when(
             $this->isActive(),
@@ -69,8 +69,7 @@ class Sort extends BaseSort
 
     public function sorting(Request $request): bool
     {
-        return $this->isDefault() ||
-            ($request->has($this->getSortKey()) && $request->query($this->getSortKey()) === $this->getName());
+        return $request->has($this->getSortKey()) && $request->query($this->getSortKey()) === $this->getName();
     }
     
     public function toArray(): array

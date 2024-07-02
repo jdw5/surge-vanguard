@@ -20,6 +20,7 @@ use Conquest\Table\Columns\Concerns\HasSort;
 use Conquest\Table\Columns\Enums\Breakpoint;
 use Conquest\Table\Columns\Concerns\HasFallback;
 use Conquest\Table\Columns\Concerns\IsSearchable;
+use Conquest\Table\Columns\Concerns\IsToggleable;
 
 abstract class BaseColumn extends Primitive implements Columns
 {
@@ -38,6 +39,7 @@ abstract class BaseColumn extends Primitive implements Columns
     use IsHidden;
     // use IsSortable;
     use IsSearchable;
+    use IsToggleable;
 
     public function __construct(
         string|Closure $name, 

@@ -2,24 +2,18 @@
 
 namespace Conquest\Table\Concerns;
 
-use Closure;
+use Illuminate\Http\Request;
 
 trait HasToggleKey
 {
-    protected string|Closure $toggleKey = 'cols';
+    protected string $toggleKey = 'cols';
 
-    public static function setGlobalToggleKey(string|Closure $key): void
+    public static function setGlobalToggleKey(string $key): void
     {
         static::$toggleKey = $key;
     }
 
-    public function toggleKey(string|Closure $key): static
-    {
-        $this->setToggleKey($key);
-        return $this;
-    }
-
-    protected function setToggleKey(string|Closure|null $key): void
+    protected function setToggleKey(string|null $key): void
     {
         if (is_null($key)) return;
         $this->toggleKey = $key;
@@ -27,11 +21,17 @@ trait HasToggleKey
 
     public function getToggleKey(): string
     {
-        return $this->evaluate($this->toggleKey);
+        if (method_exists($this, 'toggleKey')) {
+            return $this->toggleKey();
+        }
+        return $this->toggleKey;
     }
 
-    public function getActiveToggles(): array
+    /**
+     * Retrieve the column names which are active for toggling
+     */
+    public function getActiveToggles(Request $request): array
     {
-        return explode(',', request()->query($this->getToggleKey(), ''));
+        return explode(',', $request->query($this->getToggleKey(), ''));
     }
 }

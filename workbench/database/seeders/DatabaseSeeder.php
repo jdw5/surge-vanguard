@@ -26,8 +26,8 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Product 1',
                 'category_id' => 1,
                 'description' => null,
-                'price' => 1000,
-                'created_at' => '2000-01-01 00:00:00',
+                'price' => 1000, // $10.00
+                'created_at' => now(),
             ]);
     }
 }
