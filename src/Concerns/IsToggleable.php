@@ -2,11 +2,9 @@
 
 namespace Conquest\Table\Concerns;
 
-trait HasToggleability
+trait IsToggleable
 {
-    protected bool $toggleable;
-
-    public function getToggleability(): bool
+    public function isToggleable(): bool
     {
         if (isset($this->toggleable)) {
             return $this->toggleable;

@@ -28,6 +28,7 @@ final class ProductTable extends Table
     protected $resource = Product::class;
     protected $search = ['name', 'description'];
     protected $pagination = [10, 50, 100];
+    protected $toggleable = true;
 
     protected function columns(): array
     {

@@ -15,12 +15,12 @@ use Conquest\Core\Concerns\IsHidden;
 use Conquest\Core\Concerns\HasMetadata;
 use Conquest\Core\Concerns\CanTransform;
 use Conquest\Core\Concerns\CanAuthorize;
+use Conquest\Core\Concerns\IsActive;
 use Conquest\Core\Concerns\IsKey;
 use Conquest\Table\Columns\Concerns\HasSort;
 use Conquest\Table\Columns\Enums\Breakpoint;
 use Conquest\Table\Columns\Concerns\HasFallback;
 use Conquest\Table\Columns\Concerns\IsSearchable;
-use Conquest\Table\Columns\Concerns\IsToggleable;
 
 abstract class BaseColumn extends Primitive implements Columns
 {
@@ -37,9 +37,8 @@ abstract class BaseColumn extends Primitive implements Columns
     use CanAuthorize;
     use IsKey;
     use IsHidden;
-    // use IsSortable;
+    use IsActive;
     use IsSearchable;
-    use IsToggleable;
 
     public function __construct(
         string|Closure $name, 
@@ -52,6 +51,7 @@ abstract class BaseColumn extends Primitive implements Columns
         bool $hidden = false,
         bool $srOnly = false,
         Closure $transform = null,
+        bool $active = true,
     ) {
         $this->setName($name);
         $this->setLabel($label ?? $this->toLabel($this->getName()));
@@ -63,7 +63,8 @@ abstract class BaseColumn extends Primitive implements Columns
         $this->setHidden($hidden);
         $this->setSrOnly($srOnly);
         $this->setTransform($transform);
-        $this->setType('col:');
+        $this->setActive($active);
+        $this->setType('col');
     }
 
     /**
@@ -77,6 +78,7 @@ abstract class BaseColumn extends Primitive implements Columns
             /** Column information */
             'name' => $this->getName(),
             'label' => $this->getLabel(),
+            'active' => $this->isActive(),
             'metadata' => $this->getMetadata(),
             'fallback' => $this->getFallback(),
 

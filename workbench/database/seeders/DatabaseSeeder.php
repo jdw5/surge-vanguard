@@ -25,9 +25,8 @@ class DatabaseSeeder extends Seeder
             ->create([
                 'name' => 'Product 1',
                 'category_id' => 1,
-                'description' => null,
-                'price' => 1000, // $10.00
-                'created_at' => now(),
+                'price' => 1, // $0.01
+                'created_at' => now()->addYear(),
             ]);
     }
 }

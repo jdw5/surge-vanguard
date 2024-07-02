@@ -3,6 +3,7 @@
 namespace Conquest\Table\Columns;
 
 use Closure;
+use Conquest\Table\Columns\BaseColumn;
 use Conquest\Table\Columns\Enums\Breakpoint;
 
 class TextColumn extends BaseColumn
@@ -15,11 +16,12 @@ class TextColumn extends BaseColumn
         string|Breakpoint $breakpoint = Breakpoint::NONE,
         bool|Closure $authorize = null,
         mixed $fallback = '-',
-        bool $asHeading = true,
+        bool $hidden = false,
         bool $srOnly = false,
         Closure $transform = null,
+        bool $active = true,
     ) {
-        parent::__construct($name, $label, $sortable, $searchable, $breakpoint, $authorize, $fallback, $asHeading, $srOnly, $transform);
+        parent::__construct($name, $label, $sortable, $searchable, $breakpoint, $authorize, $fallback, $hidden, $srOnly, $transform, $active);
         $this->setType('col:text');
     }
 
@@ -32,9 +34,10 @@ class TextColumn extends BaseColumn
         Breakpoint|string $breakpoint = Breakpoint::NONE,
         Closure|bool $authorize = null,
         mixed $fallback = null,
-        bool $asHeading = true,
+        bool $hidden = false,
         bool $srOnly = false,
         Closure $transform = null,
+        bool $active = true,
     ): static {
         return resolve(static::class, compact(
             'name', 
@@ -45,9 +48,10 @@ class TextColumn extends BaseColumn
             'breakpoint', 
             'authorize', 
             'fallback', 
-            'asHeading', 
+            'hidden', 
             'srOnly', 
-            'transform'
+            'transform',
+            'active'
         ));
     }
 }

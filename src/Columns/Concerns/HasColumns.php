@@ -3,7 +3,6 @@
 namespace Conquest\Table\Columns\Concerns;
 
 use Conquest\Table\Columns\BaseColumn;
-use Illuminate\Support\Collection;
 
 trait HasColumns
 {
@@ -45,7 +44,7 @@ trait HasColumns
     /**
      * Retrieve the sortable columns for the table
      * 
-     * @return Collection
+     * @return array
      */
     public function getSortableColumns(): array
     {
@@ -61,7 +60,7 @@ trait HasColumns
      */
     public function getKeyColumn(): ?BaseColumn
     {
-        foreach ($this->getTableColumns() as $column) {
+        foreach ($this->getColumns() as $column) {
             if ($column->isKey()) {
                 return $column;
             }
@@ -72,8 +71,7 @@ trait HasColumns
     {
         // Manipulate the show trait to handle the toggleaable columns
         return array_values(
-            // array_filter($this->getTableColumns(), static fn (Column $column): bool => $column->isShown() && $column->isToggledOn())
-            array_filter($this->getTableColumns(), static fn (BaseColumn $column): bool => $column->isShown())
+            array_filter($this->getTableColumns(), static fn (BaseColumn $column): bool => $column->isKey() || $column->isActive())
         );
     }
 }

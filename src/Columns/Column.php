@@ -18,11 +18,12 @@ class Column extends BaseColumn
         bool $searchable = false,
         bool $toggleable = false,
         Breakpoint|string $breakpoint = Breakpoint::NONE,
-        Closure|bool $authorize = null,
+        Closure|bool $authorize = true,
         mixed $fallback = null,
-        bool $asHeading = true,
+        bool $asHeading = false,
         bool $srOnly = false,
         Closure $transform = null,
+        bool $active = true,
     ): static {
         return resolve(static::class, compact(
             'name', 
@@ -35,6 +36,7 @@ class Column extends BaseColumn
             'fallback', 
             'asHeading', 
             'srOnly', 
-            'transform'
+            'transform',
+            'active',
         ));
     }}

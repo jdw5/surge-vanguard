@@ -21,7 +21,7 @@ use Conquest\Core\Exceptions\KeyDoesntExist;
 use Conquest\Table\Actions\Concerns\HasActions;
 use Conquest\Table\Columns\Concerns\HasColumns;
 use Conquest\Table\Concerns\HasRememberDuration;
-use Conquest\Table\Concerns\HasToggleability;
+use Conquest\Table\Concerns\IsToggleable;
 use Conquest\Table\Filters\Concerns\HasFilters;
 use Conquest\Table\Pagination\Concerns\HasShowKey;
 use Conquest\Table\Pagination\Enums\PaginationType;
@@ -29,6 +29,7 @@ use Conquest\Table\Pagination\Concerns\HasPagination;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Conquest\Table\Pagination\Concerns\HasPaginationKey;
 use Conquest\Table\Pagination\Concerns\HasPaginationType;
+use Illuminate\Support\Facades\Cookie;
 
 abstract class Table extends Primitive implements Tables
 {
@@ -49,7 +50,7 @@ abstract class Table extends Primitive implements Tables
     use HasRememberKey;
     use HasRememberDuration;
     use HasToggleKey;
-    use HasToggleability;
+    use IsToggleable;
 
     public function __construct(
         Builder|QueryBuilder $resource = null,
@@ -202,13 +203,13 @@ abstract class Table extends Primitive implements Tables
         }
 
         $builder = $this->getResource();
-
+        // Ensure the remembering and toggling of columns are handled here
+        $this->applyToggleability();
         $this->applyFilters($builder);
-        $this->applySorts($builder);
-        $this->applyColumnSorts($builder);
+        $this->applySorts($builder, 
+            array_map(fn ($column) => $column->getSort(), $this->getSortableColumns())
+        );
         $this->applySearch($builder, $this->getSearchTerm(request()));
-
-        dd($builder->toSql());
         
         [$records, $meta] = match ($this->getPaginateType()) {
             PaginationType::CURSOR => [
@@ -239,6 +240,8 @@ abstract class Table extends Primitive implements Tables
             }, []), $records instanceof Collection ? $records->toArray() : $records->items()
         );
 
+        dd($this->getHeadingColumns());
+
         $this->setRecords($records);
         $this->setMeta($meta);
     }
@@ -252,25 +255,39 @@ abstract class Table extends Primitive implements Tables
         return $this->getDefaultPagination();
     }
 
-    private function getRememberedColumns(): array
+    private function getToggledColumns(): array
     {
-        if (!$this->hasRememberKey()) return [];
-
-        // Get the items
-        if (request()->hasCookie($this->getRememberKey()) && $columns = request()->cookie($this->getRememberKey())) {
-            $columns = explode(',', $columns);
-        } else {
-            $columns = [];
-        }
+        $cols = request()->query($this->getToggleKey(), null);
+        return (is_null($cols)) ? [] : explode(',', $cols);
     }
 
-    private function applyColumnSorts(Builder|QueryBuilder &$query): void
+    private function applyToggleability(): void
     {
-        foreach ($this->getSortableColumns() as $column) {
-            $column->getSort()->apply($query);
+        // If it isn't toggleable then dont do anything
+        if (!$this->isToggleable()) return;
+
+        $cols = $this->getToggledColumns();
+
+        if ($this->hasRememberKey() && empty($cols)) {
+            dd('s');
+            // Use the remember key to get the columns
+            $cols = json_decode(request()->cookie($this->getRememberKey(), []));
+        }
+
+        if (empty($cols)) {
+            // If there are no columns, then set the default columns
+            return;
+        }
+
+        foreach ($this->getTableColumns() as $column) {
+            if (in_array($column->getName(), $cols)) $column->active(true);
+            else $column->active(false);
+        }
+
+        if ($this->hasRememberKey()) {
+            Cookie::queue($this->getRememberKey(), json_encode($cols), $this->getRememberDuration());
         }
     }
-
      
     // public static function handle(Request $request, string $name = null): mixed
     // {

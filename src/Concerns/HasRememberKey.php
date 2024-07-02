@@ -2,6 +2,9 @@
 
 namespace Conquest\Table\Concerns;
 
+/**
+ * If defined, preferences will be remembered
+ */
 trait HasRememberKey
 {
     protected string $rememberAs;

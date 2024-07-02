@@ -15,11 +15,12 @@ class NumericColumn extends BaseColumn
         string|Breakpoint $breakpoint = Breakpoint::NONE,
         bool|Closure $authorize = null,
         mixed $fallback = 0,
-        bool $asHeading = true,
+        bool $hidden = false,
         bool $srOnly = false,
         Closure $transform = null,
+        bool $active = true,
     ) {
-        parent::__construct($name, $label, $sortable, $searchable, $breakpoint, $authorize, $fallback, $asHeading, $srOnly, $transform);
+        parent::__construct($name, $label, $sortable, $searchable, $breakpoint, $authorize, $fallback, $hidden, $srOnly, $transform);
         $this->setType('col:numeric');
     }
 
@@ -36,6 +37,7 @@ class NumericColumn extends BaseColumn
         bool $srOnly = false,
         Closure $transform = null,
         string|Closure $format = null,
+        bool $active = true,
     ): static {
         return resolve(static::class, compact(
             'name', 
@@ -49,7 +51,8 @@ class NumericColumn extends BaseColumn
             'hidden', 
             'srOnly', 
             'transform',
-            'format'
+            'format',
+            'active'
         ));
     }
 }
