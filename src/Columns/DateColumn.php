@@ -9,7 +9,7 @@ use Conquest\Table\Columns\Column;
 use Conquest\Table\Columns\Enums\Breakpoint;
 use Conquest\Table\Columns\Concerns\HasFormat;
 
-class DateColumn extends Column
+class DateColumn extends BaseColumn
 {
     use HasFormat;
 
@@ -21,14 +21,44 @@ class DateColumn extends Column
         string|Breakpoint $breakpoint = Breakpoint::NONE,
         bool|Closure $authorize = null,
         mixed $fallback = null,
-        bool $asHeading = true,
+        bool $hidden = false,
         bool $srOnly = false,
-        string|Closure $format = null,
         Closure $transform = null,
+        string|Closure $format = null,
     ) {
-        parent::__construct($name, $label, $sortable, $searchable, $breakpoint, $authorize, $fallback, $asHeading, $srOnly, $transform);
+        parent::__construct($name, $label, $sortable, $searchable, $breakpoint, $authorize, $fallback, $hidden, $srOnly, $transform);
         $this->setType('col:date');
         $this->setFormat($format);
+    }
+
+    public static function make(
+        string $name, 
+        string $label = null,
+        bool $sortable = false,
+        bool $searchable = false,
+        bool $toggleable = false,
+        Breakpoint|string $breakpoint = Breakpoint::NONE,
+        Closure|bool $authorize = null,
+        mixed $fallback = null,
+        bool $hidden = false,
+        bool $srOnly = false,
+        Closure $transform = null,
+        string|Closure $format = null,
+    ): static {
+        return resolve(static::class, compact(
+            'name', 
+            'label', 
+            'sortable', 
+            'searchable', 
+            'toggleable', 
+            'breakpoint', 
+            'authorize', 
+            'fallback', 
+            'hidden', 
+            'srOnly', 
+            'transform',
+            'format'
+        ));
     }
 
     public function apply(mixed $value): mixed

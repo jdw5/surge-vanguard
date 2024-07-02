@@ -2,7 +2,7 @@
 
 namespace Conquest\Table\Columns\Concerns;
 
-use Conquest\Table\Columns\Column;
+use Conquest\Table\Columns\BaseColumn;
 use Illuminate\Support\Collection;
 
 trait HasColumns
@@ -38,7 +38,7 @@ trait HasColumns
     public function getTableColumns(): array
     {
         return $this->cachedColumns ??= array_values(
-            array_filter($this->getColumns(), static fn (Column $column): bool => $column->authorized())
+            array_filter($this->getColumns(), static fn (BaseColumn $column): bool => $column->authorized())
         );
     }
 
@@ -50,7 +50,7 @@ trait HasColumns
     public function getSortableColumns(): array
     {
         return array_values(
-            array_filter($this->getTableColumns(), static fn (Column $column): bool => $column->hasSort())
+            array_filter($this->getTableColumns(), static fn (BaseColumn $column): bool => $column->hasSort())
         );
     }
 
@@ -59,7 +59,7 @@ trait HasColumns
      * 
      * @return Column|null
      */
-    public function getKeyColumn(): ?Column
+    public function getKeyColumn(): ?BaseColumn
     {
         foreach ($this->getTableColumns() as $column) {
             if ($column->isKey()) {
@@ -73,7 +73,7 @@ trait HasColumns
         // Manipulate the show trait to handle the toggleaable columns
         return array_values(
             // array_filter($this->getTableColumns(), static fn (Column $column): bool => $column->isShown() && $column->isToggledOn())
-            array_filter($this->getTableColumns(), static fn (Column $column): bool => $column->isShown())
+            array_filter($this->getTableColumns(), static fn (BaseColumn $column): bool => $column->isShown())
         );
     }
 }

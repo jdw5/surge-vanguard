@@ -4,7 +4,7 @@ namespace Conquest\Table;
 
 use Conquest\Core\Primitive;
 use Illuminate\Http\Request;
-use Conquest\Table\Columns\Column;
+use Conquest\Table\Columns\BaseColumn;
 use Illuminate\Support\Collection;
 use Conquest\Table\Concerns\HasMeta;
 use Conquest\Table\Contracts\Tables;
@@ -210,7 +210,7 @@ abstract class Table extends Primitive implements Tables
         };
 
         $records = array_map(fn ($record) => array_reduce($this->getTableColumns(), 
-            function ($filteredRecord, Column $column) use ($record) {
+            function ($filteredRecord, BaseColumn $column) use ($record) {
                 $columnName = $column->getName();
                 $filteredRecord[$columnName] = $column->apply($record[$columnName] ?? null);
                 return $filteredRecord;

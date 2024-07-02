@@ -22,11 +22,12 @@ class ProductFactory extends Factory
     {
         return [
             'public_id' => Str::uuid(),
-            'name' => fake()->name(),
+            'name' => fake()->word(),
             'description' => fake()->sentence(),
             'price' => fake()->randomNumber(4),
             'best_seller' => fake()->boolean(),
-            'status' => fake()->randomElement(Status::cases())
+            'status' => fake()->randomElement(Status::cases()),
+            'created_at' => now()->subDays(fake()->randomNumber(2))
         ];
     }
 }

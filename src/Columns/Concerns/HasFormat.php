@@ -19,8 +19,9 @@ trait HasFormat
         return $this->format($format);
     }
 
-    protected function setFormat(string|Closure $format): void
+    protected function setFormat(string|Closure|null $format): void
     {
+        if (is_null($format)) return;
         $this->format = $format;
     }
 
