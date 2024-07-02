@@ -30,6 +30,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Conquest\Table\Pagination\Concerns\HasPaginationKey;
 use Conquest\Table\Pagination\Concerns\HasPaginationType;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
 
 abstract class Table extends Primitive implements Tables
 {
@@ -158,13 +159,15 @@ abstract class Table extends Primitive implements Tables
             'sorts' => $this->getSorts(),
             'filters' => $this->getFilters(),
             'actions' => [
-                'row' => $this->getRowActions(),
+                // 'row' => $this->getRowActions(),
                 'bulk' => $this->getBulkActions(),
                 'page' => $this->getPageActions(),
-                'default' => $this->getDefaultAction(),
+                // 'default' => $this->getDefaultAction(),
             ],
             'properties' => $this->getTableColumns(),
-            'pagination' => $this->getPaginationOptions($this->getActivePagination())
+            'pagination' => $this->getPaginationOptions($this->getActivePagination()),
+            'toggleKey' => $this->getToggleKey(),
+            'showActions' => true, // Or SrOnly
         ];
     }
 
@@ -203,13 +206,13 @@ abstract class Table extends Primitive implements Tables
         }
 
         $builder = $this->getResource();
-        // Ensure the remembering and toggling of columns are handled here
         $this->applyToggleability();
         $this->applyFilters($builder);
         $this->applySorts($builder, 
             array_map(fn ($column) => $column->getSort(), $this->getSortableColumns())
         );
         $this->applySearch($builder, $this->getSearchTerm(request()));
+        // dd(DB::table('products')->where('best_seller', true)->getFrom());
         
         [$records, $meta] = match ($this->getPaginateType()) {
             PaginationType::CURSOR => [
@@ -239,8 +242,7 @@ abstract class Table extends Primitive implements Tables
                 return $filteredRecord;
             }, []), $records instanceof Collection ? $records->toArray() : $records->items()
         );
-
-        dd($this->getHeadingColumns());
+        // For each record also apply the row action
 
         $this->setRecords($records);
         $this->setMeta($meta);
@@ -269,7 +271,6 @@ abstract class Table extends Primitive implements Tables
         $cols = $this->getToggledColumns();
 
         if ($this->hasRememberKey() && empty($cols)) {
-            dd('s');
             // Use the remember key to get the columns
             $cols = json_decode(request()->cookie($this->getRememberKey(), []));
         }
@@ -288,33 +289,37 @@ abstract class Table extends Primitive implements Tables
             Cookie::queue($this->getRememberKey(), json_encode($cols), $this->getRememberDuration());
         }
     }
-     
-    // public static function handle(Request $request, string $name = null): mixed
-    // {
-    //     [$type, $name] = explode(':', $request->input('name'));
-    //     // If either doesn't exist, then the request is invalid
-    //     if (!$type || !$name) abort(400);
+    
+    /**
+     * Handle the incoming request, the name specifier can be used to prevent a search
+     * 
+     * Request format: name, type, use request->method, 
+     */
+    public static function handle(Request $request, string $name = null, bool $isAction = null): mixed
+    {
+        // [$type, $name] = explode(':', $request->input('name'));
+        $type = 'row';
+        // If either doesn't exist, then the request is invalid
+        // if (!$type || !$name) abort(400);
 
-    //     return match ($type) {
-    //         'action' => static::handleAction($request, $name),
-    //         'export' => static::handleExport($request, $name),
-    //         default => null
-    //     };
-    //     /**
-    //      * return Table::handle($request); 
-    //      * Accepts a request, pulls out the values
-    //      * Find the first action OR export which matches the `type:name` and `httpMethod`
-    //      * 
-    //      * If anything is found, check the permissions -> authorize
-    //      * If authorize fails, abort(403)
-    //      * 
-    //      * Export:
-    //      * create the export for the table
-    //      * -> frontend handles it as axios NOT inertia
-    //      * 
-    //      * Actions format depends on whether it's bulk or row
-    //      */
-    // }
+        $action = static::findAction($name, $request->method(), $type);
+
+        $action?->handle($request);
+        /**
+         * return Table::handle($request); 
+         * Accepts a request, pulls out the values
+         * Find the first action OR export which matches the `type:name` and `httpMethod`
+         * 
+         * If anything is found, check the permissions -> authorize
+         * If authorize fails, abort(403)
+         * 
+         * Export:
+         * create the export for the table
+         * -> frontend handles it as axios NOT inertia
+         * 
+         * Actions format depends on whether it's bulk or row
+         */
+    }
 
     // private static function handleAction(Request $request, string $name): mixed
     // {

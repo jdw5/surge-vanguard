@@ -21,7 +21,7 @@ trait HasActions
      * 
      * @return array
      */
-    protected function getActions(): array
+    public function getActions(): array
     {
         if (isset($this->actions)) {
             return $this->actions;
@@ -34,7 +34,7 @@ trait HasActions
         return [];
     }
 
-    protected function setActions(array|null $actions): void
+    public function setActions(array|null $actions): void
     {
         if (is_null($actions)) return;
         $this->actions = $actions;
@@ -48,7 +48,9 @@ trait HasActions
     public function getTableActions(): array
     {
         
-        return $this->cachedActions ??= array_filter($this->getActions(), static fn (BaseAction $action): bool => $action->authorized());
+        return $this->cachedActions ??= array_filter(
+            $this->getActions(), static fn (BaseAction $action): bool => $action->authorized()
+        );
     }
 
     /**
@@ -58,7 +60,9 @@ trait HasActions
      */
     public function getRowActions(): array
     {
-        return $this->cachedRowActions ??= array_values(array_filter($this->getTableActions(), static fn (BaseAction $action): bool => $action instanceof RowAction));
+        return $this->cachedRowActions ??= array_values(
+            array_filter($this->getTableActions(), static fn (BaseAction $action): bool => $action instanceof RowAction)
+        );
     }
 
     /**
@@ -68,7 +72,9 @@ trait HasActions
      */
     public function getBulkActions(): array
     {
-        return array_values(array_filter($this->getTableActions(), static fn (BaseAction $action): bool => $action instanceof BulkAction));
+        return array_values(
+            array_filter($this->getTableActions(), static fn (BaseAction $action): bool => $action instanceof BulkAction)
+        );
     }
 
     /**
@@ -78,7 +84,9 @@ trait HasActions
      */
     public function getPageActions(): array
     {
-        return array_values(array_filter($this->getTableActions(), static fn (BaseAction $action): bool => $action instanceof PageAction));
+        return array_values(
+            array_filter($this->getTableActions(), static fn (BaseAction $action): bool => $action instanceof PageAction)
+        );
     }
 
     /**
@@ -89,8 +97,12 @@ trait HasActions
      */
     public function getDefaultAction(): ?BaseAction
     {
-        return collect($this->getRowActions())
-            ->first(static fn (BaseAction $action): bool => $action->isDefault());
+        foreach ($this->getRowActions() as $action) {
+            if ($action->isDefault()) {
+                return $action;
+            }
+        }
+        return null;
     }
 
     public function addAction(BaseAction $action): static

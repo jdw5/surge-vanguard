@@ -80,7 +80,6 @@ trait HasResource
 
     public function isBuilderInstance()
     {
-        $resource = $this->getResource();
-        return $resource instanceof Builder || $resource instanceof QueryBuilder;
+        return $this->resource instanceof Builder || $this->resource instanceof QueryBuilder;
     }
 }

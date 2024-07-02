@@ -65,6 +65,7 @@ trait HasColumns
                 return $column;
             }
         }
+        return null;
     }
 
     public function getHeadingColumns(): array

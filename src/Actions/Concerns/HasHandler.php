@@ -9,18 +9,12 @@ use ReflectionFunction;
 
 trait HasHandler
 {
-    protected Closure $handle;
-    protected string|Closure $redirect;
+    protected Closure|null $handle = null;
+    protected callable|null $after = null;
 
-    protected function setHandler(Closure $handle): void
+    public function setHandler(Closure $handle): void
     {
         $this->handle = $handle;
-    }
-
-    protected function setRedirect(string|Closure $redirect): void
-    {
-        if (is_null($redirect)) return;
-        $this->redirect = $redirect;
     }
 
     public function handle(Closure $handle): static
@@ -29,20 +23,9 @@ trait HasHandler
         return $this;
     }
 
-    public function redirect(string|Closure $redirect): static
-    {
-        $this->setRedirect($redirect);
-        return $this;
-    }
-
     public function hasHandler(): bool
     {
-        return isset($this->handle);
-    }
-
-    public function hasRedirect(): bool
-    {
-        return isset($this->redirect);
+        return !is_null($this->handle);
     }
 
     public function getHandler(): Closure
@@ -50,13 +33,38 @@ trait HasHandler
         return $this->handle;
     }
 
-    public function getRedirect(): string|Closure
-    {
-        return $this->evaluate($this->redirect);
-    }
-
     public function usesRecord(): bool
     {
         return $this->hasHandler() && (new ReflectionFunction($this->handle))->getNumberOfParameters() > 0;
+    }
+
+    public function after(Closure $after): static
+    {
+        $this->setAfter($after);
+        return $this;
+    }
+
+    public function setAfter(Closure|null $after): void
+    {
+        if (is_null($after)) return;
+        $this->after = $after;
+    }
+
+    public function hasAfter(): bool
+    {
+        return !is_null($this->after);
+    }
+
+    public function onAfter()
+    {
+        if (!$this->hasAfter()) return;
+        return ($this->handle)();
+    }
+
+    public function apply(mixed $record): void
+    {
+        if (!$this->hasHandler()) return;
+        ($this->handle)($record);
+        return $this->onAfter();
     }
 }

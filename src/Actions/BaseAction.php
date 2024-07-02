@@ -20,38 +20,17 @@ abstract class BaseAction extends Primitive
     use HasMetadata;
     use CanAuthorize;
     use HasType;
-    use HasRoute;
-    use HasHttpMethod;
 
     public function __construct(
         string $label, 
         string $name = null,
         Closure|bool $authorize = null,
-        string|Closure $route = null,
-        string $method = Request::METHOD_GET
+        array $metadata = [],
     ) {
         $this->setLabel($label);
         $this->setName($name ?? $this->toName($label));
         $this->setAuthorize($authorize);
-        $this->setRoute($route);
-        $this->setHttpMethod($method);
-    }
-
-    public static function make(
-        string $label,
-        string $name = null,
-        Closure|bool $authorize = null,
-        string|Closure $route = null,
-        string $method = Request::METHOD_GET
-    ): static
-    {
-        return resolve(static::class, compact(
-            'label', 
-            'name', 
-            'authorize', 
-            'route', 
-            'method'
-        ));
+        $this->setMetadata($metadata);
     }
 
     /**
@@ -66,8 +45,6 @@ abstract class BaseAction extends Primitive
             'label' => $this->getLabel(),
             'metadata' => $this->getMetadata(),
             'type' => $this->getType(),
-            'route' => $this->getResolvedRoute(),
-            'method' => $this->getHttpMethod(),
         ];
     }
 }

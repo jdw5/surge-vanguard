@@ -53,6 +53,7 @@ abstract class BaseColumn extends Primitive implements Columns
         Closure $transform = null,
         bool $active = true,
     ) {
+        if ($name === 'actions') throw new \Exception('Column name cannot be "actions"');
         $this->setName($name);
         $this->setLabel($label ?? $this->toLabel($this->getName()));
         if ($sortable) $this->setSort();
@@ -88,11 +89,10 @@ abstract class BaseColumn extends Primitive implements Columns
             'srOnly' => $this->isSrOnly(),
 
             /** Sorting options */
-            'has_sort' => $this->hasSort(),
+            'hasSort' => $this->hasSort(),
             'active' => $this->isSorting(),
             'direction' => $this->getSort()?->getDirection(),
-            'next_direction' => $this->getSort()?->getNextDirection(),
-            'sort_field' => $this->getSort()?->getName(),
+            'nextDirection' => $this->getSort()?->getNextDirection(),
         ];
     }
 

@@ -10,7 +10,6 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        // dd(ProductTable::make()->toArray());
         return response()->json([
             'table' => ProductTable::make()
         ]);

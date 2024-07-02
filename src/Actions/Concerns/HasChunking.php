@@ -4,8 +4,12 @@ namespace Conquest\Table\Actions\Concerns;
 
 trait HasChunking
 {
+    /** Number of elements to be brought int */
     protected int $chunkSize = 1000;
+    /** Whether the query should be by ID (recommended) */
     protected bool $chunkById = true;
+    /** If one of the IDs cannot be found, whether or not to proceed with updating the rest */
+    protected $failOnFirst = false;
 
     protected function setChunkSize(int|null $size): void
     {
