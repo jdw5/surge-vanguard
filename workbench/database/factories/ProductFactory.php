@@ -22,7 +22,7 @@ class ProductFactory extends Factory
     {
         return [
             'public_id' => Str::uuid(),
-            'name' => fake()->word(),
+            'name' => fake()->unique()->word(),
             'description' => fake()->sentence(),
             'price' => fake()->randomNumber(4),
             'best_seller' => fake()->boolean(),

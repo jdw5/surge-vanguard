@@ -7,7 +7,7 @@ use Conquest\Table\Columns\Enums\Breakpoint;
 use Conquest\Table\Columns\NumericColumn;
 use Conquest\Table\Columns\TextColumn;
 
-it('can create simple column', function () {
+it('can create a column', function () {
     $col = new Column('name');
     expect($col->getName())->toBe('name');
     expect($col->getLabel())->toBe('Name');
@@ -22,7 +22,7 @@ it('can create simple column', function () {
     expect($col->isActive())->toBeTrue();
 });
 
-it('can create column with arguments', function () {
+it('can create a column with arguments', function () {
     $col = new Column(
         name: 'name',
         label: $label = 'Username',
