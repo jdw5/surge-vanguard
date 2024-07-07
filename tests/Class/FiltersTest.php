@@ -74,3 +74,4 @@ it('can apply a filter to a query builder', function () {
     $filter->apply($builder);
     expect($builder->toSql())->toBe('select * from "products" where "name" = ?');
 });
+

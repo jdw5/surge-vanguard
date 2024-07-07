@@ -60,7 +60,7 @@ class Sort extends BaseSort
             $this->isActive(),
             function (Builder|QueryBuilder $builder) {
                 $builder->orderBy(
-                    column: $builder->qualifyColumn($this->getProperty()),
+                    column: $builder instanceof Builder ? $builder->qualifyColumn($this->getProperty()) : $this->getProperty(),
                     direction: $this->getDirection(),
                 );
             }
