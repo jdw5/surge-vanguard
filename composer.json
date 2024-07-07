@@ -3,9 +3,10 @@
     "description": "Extend filters, actions and table data for your Laravel applications.",
     "keywords": [
         "laravel",
+        "conquest",
         "inertia-table"
     ],
-    "type": "library",
+    "homepage": "https://github.com/jdw5/conquest-table",
     "license": "MIT",
     "authors": [
         {   
@@ -21,32 +22,30 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Workbench\\App\\": "workbench/app/",
             "Conquest\\Table\\Tests\\": "tests/",
-            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
-            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+            "Workbench\\App\\": "workbench/app/"
         }
     },
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "illuminate/support": "^10.0||^11.0",
         "illuminate/console": "^10.0||^11.0",
         "illuminate/database": "^10.0||^11.0",
         "illuminate/contracts": "^10.0||^11.0",
-        "spatie/laravel-package-tools": "^1.16",
-        "conquest/core": "0.2.3"
+        "conquest/core": "0.3.2"
     },
     "require-dev": {
+        "larastan/larastan": "^2.9",
         "laravel/pint": "^1.14",
         "nunomaduro/collision": "^8.1.1||^7.10.0",
-        "larastan/larastan": "^2.9",
-        "orchestra/testbench": "^9.0.0",
+        "orchestra/testbench": "^9.0.0||^8.22.0",
         "pestphp/pest": "^2.34",
         "pestphp/pest-plugin-arch": "^2.7",
         "pestphp/pest-plugin-laravel": "^2.3",
         "phpstan/extension-installer": "^1.3",
         "phpstan/phpstan-deprecation-rules": "^1.1",
-        "phpstan/phpstan-phpunit": "^1.3"
+        "phpstan/phpstan-phpunit": "^1.3",
+        "inertiajs/inertia-laravel": "^1.0"
     },
     "scripts": {
         "post-autoload-dump": [
@@ -65,21 +64,27 @@
             "@php vendor/bin/testbench serve"
         ],
         "analyse": "vendor/bin/phpstan analyse",
-        "test": "vendor/bin/pest tests",
+        "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage",
-        "format": "vendor/bin/pint"
+        "format": "vendor/bin/pint",
+        "artisan": "@php ./vendor/bin/testbench",
+        "check": [
+            "@composer run analyse",
+            "@composer run test",
+            "@composer run format"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
     },
     "extra": {
         "laravel": {
             "providers": [
                 "Conquest\\Table\\TableServiceProvider"
             ]
-        }
-    },
-    "config": {
-        "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "phpstan/extension-installer": true
         }
     },
     "minimum-stability": "dev",

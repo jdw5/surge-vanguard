@@ -14,7 +14,6 @@ trait HasActions
 {
     private array $cachedActions;
     private array $cachedRowActions;
-    protected array $actions = [];
 
     /**
      * Define the actions for the class.
@@ -47,7 +46,6 @@ trait HasActions
      */
     public function getTableActions(): array
     {
-        
         return $this->cachedActions ??= array_filter(
             $this->getActions(), static fn (BaseAction $action): bool => $action->authorized()
         );

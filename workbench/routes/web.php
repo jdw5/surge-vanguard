@@ -19,7 +19,3 @@ use Workbench\App\Http\Controllers\ProductController;
 */
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-// Route::get('/basic', BasicTableIndexController::class)->name('basic.index');
-// Route::get('/action', ActionTableIndexController::class)->name('action.index');
-// Route::get('/paginated', PaginatedTableIndexController::class)->name('paginated.index');
-// Route::get('/preference', PreferenceTableIndexController::class)->name('preference.index');

@@ -10,7 +10,7 @@ use ReflectionFunction;
 trait HasHandler
 {
     protected Closure|null $handle = null;
-    protected callable|null $after = null;
+    protected Closure|null $after = null;
 
     public function setHandler(Closure $handle): void
     {
@@ -61,7 +61,7 @@ trait HasHandler
         return ($this->handle)();
     }
 
-    public function apply(mixed $record): void
+    public function apply(mixed $record)
     {
         if (!$this->hasHandler()) return;
         ($this->handle)($record);

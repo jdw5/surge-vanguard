@@ -2,49 +2,73 @@
 
 namespace Conquest\Table\Tests;
 
-use Illuminate\Contracts\Config\Repository;
-use Conquest\Table\ConquestTableServiceProvider;
-
-use function Orchestra\Testbench\workbench_path;
-use Orchestra\Testbench\TestCase as TestbenchTestCase;
+use Conquest\Table\TableServiceProvider;
+use Orchestra\Testbench\Concerns\WithWorkbench;
+use Orchestra\Testbench\TestCase as Orchestra;
+use Workbench\App\Providers\WorkbenchServiceProvider;
 use Workbench\Database\Seeders\DatabaseSeeder;
 
-class TestCase extends TestbenchTestCase
-{
-    /**
-     * Automatically enables package discoveries.
-     *
-     * @var bool
-     */
-    protected $enablesPackageDiscoveries = true;
+use function Orchestra\Testbench\artisan; 
+use function Orchestra\Testbench\workbench_path;
 
-    /**
-     * Get package providers.
-     *
-     * @param  \Illuminate\Foundation\Application  $app
-     * @return array<int, class-string<\Illuminate\Support\ServiceProvider>>
-     */
+class TestCase extends Orchestra
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->artisan('migrate:fresh', ['--database' => 'testing']);
+        $this->artisan('db:seed', ['--database' => 'testing']);        
+    }
+
     protected function getPackageProviders($app)
     {
         return [
-            ConquestTableServiceProvider::class,
+            WorkbenchServiceProvider::class,
+            TableServiceProvider::class,
         ];
     }
 
-    /**
-     * Define database migrations.
-     *
-     * @return void
-     */
     protected function defineDatabaseMigrations()
     {
         $this->loadMigrationsFrom(workbench_path('database/migrations'));
-        $this->seed(DatabaseSeeder::class);
     }
 
     public function getEnvironmentSetUp($app)
     {
-        config()->set('database.default', 'testing');
+        $app['config']->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
+
+        $app['config']->set('database.connections.testing', [
+            'driver' => 'sqlite',
+            'database' => ':memory:',
+            'prefix' => '',
+        ]);
+
+        $app['config']->set('workbench', [
+            'start' => '/',
+            'install' => true,
+            'guard' => 'web',
+            'discovers' => [
+                'web' => true,
+                'api' => false,
+                'commands' => false,
+                'components' => false,
+                'views' => false,
+            ],
+            'build' => [
+                'create-sqlite-db',
+                'migrate:fresh',
+            ],
+            'assets' => [],
+            'sync' => [],
+        ]);
+
+        // $app['config']->set('inertia', [
+        //     'testing' => [
+        //         'ensure_pages_exist' => false,
+        //         'page_paths' => [],
+        //         'page_extensions' => [],
+        //     ],
+        // ]);
     }
 
     /**
