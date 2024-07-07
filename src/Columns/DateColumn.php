@@ -13,12 +13,17 @@ class DateColumn extends BaseColumn
 {
     use HasFormat;
 
+    public function setUp(): void
+    {
+        $this->setType('col:date');
+    }
+
     public function __construct(
         string|Closure $name, 
         string|Closure $label = null,
         bool $sortable = false,
         bool $searchable = false,
-        string|Breakpoint $breakpoint = Breakpoint::NONE,
+        string|Breakpoint $breakpoint = null,
         bool|Closure $authorize = null,
         mixed $fallback = null,
         bool $hidden = false,
@@ -27,7 +32,6 @@ class DateColumn extends BaseColumn
         string|Closure $format = null,
     ) {
         parent::__construct($name, $label, $sortable, $searchable, $breakpoint, $authorize, $fallback, $hidden, $srOnly, $transform);
-        $this->setType('col:date');
         $this->setFormat($format);
     }
 
@@ -37,7 +41,7 @@ class DateColumn extends BaseColumn
         bool $sortable = false,
         bool $searchable = false,
         bool $toggleable = false,
-        Breakpoint|string $breakpoint = Breakpoint::NONE,
+        Breakpoint|string $breakpoint = null,
         Closure|bool $authorize = null,
         mixed $fallback = null,
         bool $hidden = false,

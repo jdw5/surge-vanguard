@@ -90,9 +90,10 @@ trait HasBreakpoint
      * @param Breakpoint|string $breakpoint
      * @return void
      */
-    public function setBreakpoint(Breakpoint|string $breakpoint): void
+    public function setBreakpoint(Breakpoint|string|null $breakpoint): void
     {
-        $this->breakpoint = $breakpoint instanceof Breakpoint ? $breakpoint : Breakpoint::from($breakpoint);
+        if (is_null($breakpoint)) return;
+        $this->breakpoint = $breakpoint instanceof Breakpoint ? $breakpoint : Breakpoint::tryFrom($breakpoint);
     }
 
     /**

@@ -4,7 +4,6 @@ namespace Conquest\Table\Columns\Enums;
 
 enum Breakpoint: string
 {
-    case NONE = null;
     case XS = 'xs';     // 400px -> Embedded device
     case SM = 'sm';     // 640px -> Phone
     case MD = 'md';     // 768px -> Tablet

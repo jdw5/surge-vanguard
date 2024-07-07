@@ -40,12 +40,17 @@ abstract class BaseColumn extends Primitive implements Columns
     use IsActive;
     use IsSearchable;
 
+    public function setUp(): void
+    {
+        $this->setType('col:base');
+    }
+
     public function __construct(
         string|Closure $name, 
         string|Closure $label = null,
         bool $sortable = false,
         bool $searchable = false,
-        Breakpoint|string $breakpoint = Breakpoint::NONE,
+        Breakpoint|string $breakpoint = null,
         Closure|bool $authorize = null,
         mixed $fallback = null,
         bool $hidden = false,
@@ -53,6 +58,7 @@ abstract class BaseColumn extends Primitive implements Columns
         Closure $transform = null,
         bool $active = true,
     ) {
+        parent::__construct();
         if ($name === 'actions') throw new \Exception('Column name cannot be "actions"');
         $this->setName($name);
         $this->setLabel($label ?? $this->toLabel($this->getName()));
@@ -65,7 +71,6 @@ abstract class BaseColumn extends Primitive implements Columns
         $this->setSrOnly($srOnly);
         $this->setTransform($transform);
         $this->setActive($active);
-        $this->setType('col');
     }
 
     /**

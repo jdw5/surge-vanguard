@@ -10,12 +10,17 @@ class BooleanColumn extends BaseColumn
 {
     use HasTruthLabels;
 
+    public function setUp(): void
+    {
+        $this->setType('col:boolean');
+    }
+
     public function __construct(
         string|Closure $name, 
         string|Closure $label = null,
         bool $sortable = false,
         bool $searchable = false,
-        Breakpoint|string $breakpoint = Breakpoint::NONE,
+        Breakpoint|string $breakpoint = null,
         Closure|bool $authorize = null,
         bool $hidden = false,
         bool $srOnly = false,
@@ -24,7 +29,6 @@ class BooleanColumn extends BaseColumn
         Closure|string $falseLabel = 'No',
     ) {
         parent::__construct($name, $label, $sortable, $searchable, $breakpoint, $authorize, null, $hidden, $srOnly, $transform);
-        $this->setType('col:boolean');
         $this->truthLabel($truthLabel);
         $this->falseLabel($falseLabel);
     }
@@ -34,7 +38,7 @@ class BooleanColumn extends BaseColumn
         string|Closure $label = null,
         bool $sortable = false,
         bool $searchable = false,
-        Breakpoint|string $breakpoint = Breakpoint::NONE,
+        Breakpoint|string $breakpoint = null,
         Closure|bool $authorize = null,
         bool $hidden = false,
         bool $srOnly = false,
