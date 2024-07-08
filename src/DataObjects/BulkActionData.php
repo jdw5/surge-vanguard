@@ -1,18 +1,19 @@
 <?php
 
-namespace Conquest\Table\Actions\DataTransferObjects;
+namespace Conquest\Table\DataObjects;
 
 use Illuminate\Http\Request;
 
-final class BulkActionData
+class BulkActionData extends ActionData
 {
     public function __construct(
-        public readonly string $name,
-        public readonly string $type,
+        string $name,
+        string $type,
         public readonly bool $all,
         public readonly array $except,
         public readonly array $only,
     ) {
+        parent::__construct(name: $name, type: $type);
     }
 
     public static function from(Request $request): static

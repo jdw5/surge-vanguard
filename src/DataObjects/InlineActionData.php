@@ -4,13 +4,14 @@ namespace Conquest\Table\DataObjects;
 
 use Illuminate\Http\Request;
 
-final class InlineActionData
+final class InlineActionData extends ActionData
 {
     public function __construct(
-        public readonly int|string $id,
-        public readonly string $type,
-        public readonly string $name,
+            string $name,
+            string $type,
+            public readonly int|string $id,
     ) {
+        parent::__construct(name: $name, type: $type);
     }
 
     public static function from(Request $request): static
