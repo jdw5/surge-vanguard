@@ -159,7 +159,7 @@ abstract class Table extends Primitive implements Tables
             'sorts' => $this->getSorts(),
             'filters' => $this->getFilters(),
             'actions' => [
-                'row' => $this->getRowActions(),
+                'row' => $this->getActions(),
                 'bulk' => $this->getBulkActions(),
                 'page' => $this->getPageActions(),
                 // 'default' => $this->getDefaultAction(),

@@ -12,8 +12,9 @@ trait HasHandler
     protected Closure|null $handle = null;
     protected Closure|null $after = null;
 
-    public function setHandler(Closure $handle): void
+    public function setHandler(Closure|null $handle): void
     {
+        if (is_null($handle)) return;
         $this->handle = $handle;
     }
 

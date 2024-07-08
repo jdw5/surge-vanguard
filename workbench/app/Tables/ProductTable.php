@@ -18,7 +18,7 @@ use Conquest\Table\Columns\TextColumn;
 use Conquest\Table\Filters\DateFilter;
 use Conquest\Table\Filters\QueryFilter;
 use Conquest\Table\Actions\InlineAction;
-use Conquest\Table\Actions\RowAction;
+use Conquest\Table\Actions\Action;
 use Conquest\Table\Filters\SelectFilter;
 use Conquest\Table\Columns\BooleanColumn;
 use Conquest\Table\Columns\NumericColumn;
@@ -71,7 +71,7 @@ final class ProductTable extends Table
     protected function actions(): array
     {
         return [
-            RowAction::make('Edit')
+            Action::make('Edit')
             // PageAction::make('add')->label('Add User'),
             // BulkAction::make('delete')->label('Delete Users'),
         ];

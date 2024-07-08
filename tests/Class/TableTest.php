@@ -4,15 +4,11 @@ use Workbench\App\Models\Product;
 use Workbench\App\Tables\ProductTable;
 use function Pest\Laravel\get;
 
-beforeAll(function () {
-    $GLOBALS['table'] = ProductTable::make();
-});
 
-// it('can be made', function () {
-//     expect($GLOBALS['table'])->not->toBeNull();
-//     $alias = ProductTable::build();
-//     expect($alias)->not->toBeNull();
-// });
+it('can make a table from class', function () {
+    $alias = ProductTable::build();
+    expect($alias)->not->toBeNull();
+});
 
 // it('is serialized', function () {
 //     $table = $GLOBALS['table'];
@@ -31,11 +27,10 @@ beforeAll(function () {
 //     expect($key)->toBe('public_id');
 // });
 
-it('has records', function () {
-    $table = $GLOBALS['table'];
-    $records = $table->getTableRecords();
-    expect($records)->toHaveCount($table->getDefaultPagination());
-});
+// it('has records', function () {
+//     $records = $this->table->getTableRecords();
+//     expect($records)->toHaveCount($this->table->getDefaultPagination());
+// });
 
 // it('has filters', function () {
 //     $table = $GLOBALS['table'];

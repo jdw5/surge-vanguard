@@ -4,17 +4,22 @@ namespace Conquest\Table\Actions;
 
 use Closure;
 use Conquest\Core\Concerns\HasRoute;
-// use Conquest\Core\Concerns\IsDefault;
+use Conquest\Core\Concerns\IsDefault;
 use Conquest\Table\Actions\BaseAction;
 use Conquest\Core\Concerns\HasHttpMethod;
 use Conquest\Table\Actions\Concerns\HasHandler;
 
-class RowAction extends BaseAction
+class InlineAction extends BaseAction
 {
-    // use IsDefault;
+    use IsDefault;
     use HasHandler;
     use HasRoute;
     use HasHttpMethod;
+
+    public function setUp(): void
+    {
+        $this->setType('action:inline');
+    }
 
     public function __construct(
         string $label, 
@@ -23,24 +28,21 @@ class RowAction extends BaseAction
         string|Closure $route = null,
         string $method = null,
         Closure $handle = null,
-        bool $default = false,
         array $metadata = [],
     ) {
         parent::__construct($label, $name, $authorize, $metadata);
         $this->setRoute($route);
         $this->setMethod($method);
         $this->setHandler($handle);
-        $this->setDefault($default);
     }
 
     public static function make(
         string $label, 
         string $name = null,
-        Closure|bool $authorize = null,
+        bool|Closure $authorize = null,
         string|Closure $route = null,
         string $method = null,
         Closure $handle = null,
-        bool $default = false,
         array $metadata = [],
     ): static
     {
@@ -51,23 +53,27 @@ class RowAction extends BaseAction
             'route',
             'method',
             'handle',
-            'default',
             'metadata',
         ));
     }
 
     public function toArray(): array
     {
-        return array_merge(parent::toArray(), [
+        $navigable = $this->hasMethod() ? [
             'route' => $this->getResolvedRoute(),
             'method' => $this->getMethod(),
+        ] : [];
+
+        $handler = $this->hasHandler() ? [
             'handler' => $this->hasHandler(),
-        ]);
+        ] : [];
+        
+        return array_merge(parent::toArray(), $navigable, $handler);
     }
 
-    public function forRecord($record): static
-    {
-        if ($this->hasRoute()) $this->resolveRoute($record);
-        return $this;
-    }
+    // public function forRecord($record): static
+    // {
+    //     if ($this->hasRoute()) $this->resolveRoute($record);
+    //     return $this;
+    // }
 }

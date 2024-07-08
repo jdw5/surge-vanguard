@@ -4,6 +4,7 @@ use Workbench\App\Models\Product;
 use Conquest\Table\Filters\Filter;
 use Conquest\Table\Filters\Enums\Clause;
 use Conquest\Table\Filters\Enums\Operator;
+use Conquest\Table\Sorts\IsotropicSort;
 use Conquest\Table\Sorts\Sort;
 use Illuminate\Support\Facades\DB;
 
@@ -71,11 +72,10 @@ it('can apply a sort to a query builder', function () {
     expect($builder->toSql())->toBe('select * from "products" order by "name" desc');
 });
 
-// it('can apply a filter to a query builder', function () {
-//     $filter = Filter::make('name');
-//     $builder = DB::table('products');
-//     request()->merge(['name' => 'test']);
-//     $filter->apply($builder);
-//     expect($builder->toSql())->toBe('select * from "products" where "name" = ?');
+// it('can apply an isotropic sort', function () {
+//     $sort = IsotropicSort::make('name')->desc();
+//     $builder = Product::query();
+//     request()->merge(['sort' => 'price']);
+//     $sort->apply($builder, true);
+//     expect($builder->toSql())->toBe('select * from "products" order by "products"."name" desc');
 // });
-

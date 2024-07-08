@@ -62,6 +62,8 @@ class TestCase extends Orchestra
             'sync' => [],
         ]);
 
+        
+
         // $app['config']->set('inertia', [
         //     'testing' => [
         //         'ensure_pages_exist' => false,

@@ -2,10 +2,11 @@
 
 namespace Conquest\Table\Actions\Concerns;
 
-use Conquest\Table\Actions\RowAction;
+use Conquest\Table\Actions\Action;
 use Conquest\Table\Actions\BaseAction;
 use Conquest\Table\Actions\BulkAction;
 use Conquest\Table\Actions\PageAction;
+use Conquest\Table\Actions\InlineAction;
 
 /**
  * Define a class as having actions.
@@ -13,7 +14,26 @@ use Conquest\Table\Actions\PageAction;
 trait HasActions
 {
     private array $cachedActions;
-    private array $cachedRowActions;
+    protected $actions; // array
+    protected $actionRoute;
+
+    public function getActionRoute(): ?string
+    {
+        if (isset($this->actionRoute)) {
+            return $this->actionRoute;
+        }
+
+        if (method_exists($this, 'actionRoute')) {
+            return $this->actionRoute();
+        }
+
+        return null;
+    }
+
+    public function hasActionRoute(): bool
+    {
+        return !is_null($this->getActionRoute());
+    }
 
     /**
      * Define the actions for the class.
@@ -56,10 +76,10 @@ trait HasActions
      * 
      * @return array
      */
-    public function getRowActions(): array
+    public function getInlineActions(): array
     {
-        return $this->cachedRowActions ??= array_values(
-            array_filter($this->getTableActions(), static fn (BaseAction $action): bool => $action instanceof RowAction)
+        return $this->cachedActions ??= array_values(
+            array_filter($this->getTableActions(), static fn (BaseAction $action): bool => $action instanceof InlineAction)
         );
     }
 
@@ -101,11 +121,5 @@ trait HasActions
             }
         }
         return null;
-    }
-
-    public function addAction(BaseAction $action): static
-    {
-        $this->actions[] = $action;
-        return $this;
     }
 }

@@ -27,11 +27,6 @@ trait HasAccessibility
         return $this->srOnly();
     }
 
-    public function forAccessibility(): static
-    {
-        return $this->srOnly();
-    }
-
     public function notSrOnly(): static
     {
         $this->setSrOnly(false);
@@ -41,16 +36,6 @@ trait HasAccessibility
     public function notScreenReader(): static
     {
         return $this->notSrOnly();
-    }
-
-    public function notForAccessibility(): static
-    {
-        return $this->notSrOnly();
-    }
-
-    public function isForAccessibility(): bool
-    {
-        return $this->srOnly;
     }
 
     public function isScreenReaderOnly(): bool

@@ -27,6 +27,7 @@ abstract class BaseAction extends Primitive
         Closure|bool $authorize = null,
         array $metadata = [],
     ) {
+        parent::__construct();
         $this->setLabel($label);
         $this->setName($name ?? $this->toName($label));
         $this->setAuthorize($authorize);
