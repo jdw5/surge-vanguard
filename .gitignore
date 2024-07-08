@@ -8,3 +8,4 @@ vendor
 .vscode/
 coverage/
 node_modules
+.phpunit.cache/
