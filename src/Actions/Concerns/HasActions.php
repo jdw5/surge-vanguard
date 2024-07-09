@@ -3,16 +3,23 @@
 namespace Conquest\Table\Actions\Concerns;
 
 use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Conquest\Table\Actions\Action;
 use Conquest\Table\Actions\Export;
+use Illuminate\Support\Collection;
+use Illuminate\Http\RedirectResponse;
 use Conquest\Table\Actions\BaseAction;
 use Conquest\Table\Actions\BulkAction;
 use Conquest\Table\Actions\PageAction;
 use Illuminate\Database\Eloquent\Model;
 use Conquest\Table\Actions\InlineAction;
+use Conquest\Table\DataObjects\ActionData;
 use Conquest\Table\DataObjects\ActionTypeData;
+use Conquest\Table\DataObjects\BulkActionData;
 use Conquest\Table\DataObjects\InlineActionData;
-use Conquest\Table\Actions\DataTransferObjects\BulkActionData;
+use Conquest\Table\Actions\Exceptions\InvalidActionException;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 /**
  * Define a class as having actions.
@@ -23,7 +30,7 @@ trait HasActions
     public const BULK_ACTION = 'action:bulk';
     public const EXPORT_ACTION = 'action:export';
 
-    private array $cachedActions;
+    private Collection $cachedActions;
     protected $actions; // array
     protected $actionRoute;
 
@@ -72,49 +79,45 @@ trait HasActions
     /**
      * Retrieve the actions for the class.
      * 
-     * @return array
+     * @return Collection
      */
-    public function getTableActions(): array
+    public function getTableActions(): Collection
     {
-        return $this->cachedActions ??= array_filter(
-            $this->getActions(), static fn (BaseAction $action): bool => $action->authorized()
-        );
+        return $this->cachedActions ??= collect($this->getActions())
+            ->filter(static fn (BaseAction $action): bool => $action->authorized());
     }
 
     /**
      * Retrieve the inline actions for the class.
      * 
-     * @return array
+     * @return Collection
      */
-    public function getInlineActions(): array
+    public function getInlineActions(): Collection
     {
-        return $this->cachedActions ??= array_values(
-            array_filter($this->getTableActions(), static fn (BaseAction $action): bool => $action instanceof InlineAction)
-        );
+        return $this->getTableActions()
+            ->filter(static fn (BaseAction $action): bool => $action instanceof InlineAction);
     }
 
     /**
      * Retrieve the bulk actions for the class.
      * 
-     * @return array
+     * @return Collection
      */
-    public function getBulkActions(): array
+    public function getBulkActions(): Collection
     {
-        return array_values(
-            array_filter($this->getTableActions(), static fn (BaseAction $action): bool => $action instanceof BulkAction)
-        );
+        return $this->getTableActions()
+            ->filter(static fn (BaseAction $action): bool => $action instanceof BulkAction);
     }
 
     /**
      * Retrieve the page actions for the class.
      * 
-     * @return array
+     * @return Collection
      */
-    public function getPageActions(): array
+    public function getPageActions(): Collection
     {
-        return array_values(
-            array_filter($this->getTableActions(), static fn (BaseAction $action): bool => $action instanceof PageAction)
-        );
+        return $this->getTableActions()
+            ->filter(static fn (BaseAction $action): bool => $action instanceof PageAction);
     }
 
     /**
@@ -125,15 +128,17 @@ trait HasActions
      */
     public function getDefaultAction(): ?BaseAction
     {
-        foreach ($this->getRowActions() as $action) {
-            if ($action->isDefault()) {
-                return $action;
-            }
-        }
-        return null;
+        return $this->getInlineActions()
+            ->first(fn (BaseAction $action): bool => $action->isDefault());
     }
 
+
     // Handling
+    public static function redirectOrExit(HttpFoundationResponse $response): void
+    {
+        $response->send();
+        exit;
+    }
 
 
 
@@ -144,40 +149,31 @@ trait HasActions
             static::INLINE_ACTION => InlineActionData::from($request),
             static::BULK_ACTION => BulkActionData::from($request),
             // static::EXPORT_ACTION => ExportActionData::from($request);
-            default => back()
+            default => static::redirectOrExit(back())
         };
     
-        if ($type instanceof Response) {
-            $type->send();
-            exit;
-        }
 
         try {
             $action = static::resolve($type);
         } catch (InvalidActionException $e) {
-            return back()->withErrors($exception->getMessage());
+            static::redirectOrExit(back());
         }
 
-        // Ensure that the action is authorized
-        if (!$action->authorized()) {
-            abort(403);
-        }
-
-        match ($data::class) {
-            InlineActionData::class => static::executeInlineAction($data),
-            BulkActionData::class => static::executeBulkAction($data),
+        match ($action::class) {
+            InlineAction::class => $this->executeInlineAction($action),
+            BulkAction::class => $this->executeBulkAction($action),
             // ExportActionData::class => static::executeExportAction($data),
-            default => back()
+            default => static::redirectOrExit(back())
         };
     }
 
     private function resolveAction(ActionData $data): BaseAction
     {
         $actions = match ($data::class) {
-            InlineActionData::class => $this->getInlineActions(showHidden: true),
-            BulkActionData::class => $this->getBulkActions(showHidden: true),
+            InlineActionData::class => $this->getInlineActions(),
+            BulkActionData::class => $this->getBulkActions(),
             // ExportActionData::class => $this->getExportActions(showHidden: true),
-            default => collect([])
+            default => throw new Exception('Invalid action data')
         };
 
         if (!$action = $actions->first(fn (BaseAction $action) => $action->getName() === $data->getName())) {
@@ -187,18 +183,13 @@ trait HasActions
         return $action;
     }
 
-    private function executeInlineAction(InlineAction $data): mixed
+    private function executeInlineAction(InlineAction $action): mixed
     {
-        /**
-         * @var Table $table
-         * @var InlineAction $action
-         */
-        [$table, $action] = $this->resolveAction($data);
-
-        $modelClass = $table->getModelClass();
-        $record = $action->resolveModel($modelClass, $data);
-        $result = $table->evaluate(
-            value: $action->getAction(),
+        $modelClass = $this->getModelClass();
+        $record = $this->resolveModel($modelClass, $action);
+        
+        $this->evaluate(
+            value: $this->getAction(),
             named: [
                 'record' => $record,
             ],
@@ -208,12 +199,7 @@ trait HasActions
             ],
         );
 
-        if ($result instanceof Response) {
-            $result->send();
-            exit;
-        }
-
-        return back();
+        $this->redirectOrExit(back());
     }
 
     private function executeBulkAction(BulkAction $data): mixed
@@ -246,11 +232,7 @@ trait HasActions
             ],
         );
 
-        if ($result instanceof Response) {
-            $result->send();
-            exit;
-        }
-
-        return back();
+        $this->redirectOrExit($result || back());
+        
     }
 }

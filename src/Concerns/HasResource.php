@@ -59,7 +59,7 @@ trait HasResource
         throw new \RuntimeException("Unable to resolve resource for " . static::class);
     }
 
-    public function getBaseModel()
+    public function getModelClass()
     {
         $resource = $this->getResource();
 
