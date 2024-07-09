@@ -54,8 +54,6 @@ trait HasActions
 
     /**
      * Define the actions for the class.
-     * 
-     * @return array
      */
     public function getActions(): array
     {
@@ -72,7 +70,9 @@ trait HasActions
 
     public function setActions(array|null $actions): void
     {
-        if (is_null($actions)) return;
+        if (is_null($actions)) {
+            return;
+        }
         $this->actions = $actions;
     }
 
@@ -122,7 +122,7 @@ trait HasActions
 
     /**
      * Retrieve the default action for the class.
-     * 
+     *
      * @return BaseAction if a default is defined
      * @return null if no default is defined
      */

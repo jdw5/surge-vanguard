@@ -3,19 +3,15 @@
 namespace Conquest\Table\Refiners;
 
 use Conquest\Core\Primitive;
-use Illuminate\Support\Collection;
-use Conquest\Table\Refiners\Refiner;
 
 class Refiners extends Primitive
 {
-    
-    public function __construct(protected array $refiners = []) { }
+    public function __construct(protected array $refiners = []) {}
 
     /**
      * Create a new refiner instance.
-     * 
-     * @param array $actions
-     * @return static
+     *
+     * @param  array  $actions
      */
     public static function make(...$refiners): static
     {
@@ -24,30 +20,26 @@ class Refiners extends Primitive
 
     /**
      * Add a refiner to the refiners.
-     * 
-     * @param Refinement $refinement
-     * @return static
+     *
+     * @param  Refinement  $refinement
      */
     public function add(Refiner $refinement): static
     {
         $this->refiners[] = $refinement;
+
         return $this;
     }
 
     /**
      * Retrieve the refinements.
-     * 
-     * @return array
      */
     public function defineRefinements(): array
     {
         return $this->refiners;
-    }    
+    }
 
     /**
      * Serialize the refiners.
-     * 
-     * @return array
      */
     public function toArray(): array
     {

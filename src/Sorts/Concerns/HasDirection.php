@@ -3,19 +3,19 @@
 namespace Conquest\Table\Sorts\Concerns;
 
 trait HasDirection
-{    
+{
     /** Can be asc, desc or null */
     public ?string $direction = null;
 
     /**
      * Set the direction
-     * 
-     * @param string|null $direction
-     * @return static
+     *
+     * @param  string|null  $direction
      */
     public function direction(string $direction): static
     {
         $this->setDirection($direction);
+
         return $this;
     }
 
@@ -26,19 +26,14 @@ trait HasDirection
 
     /**
      * Set the direction quietly.
-     * 
-     * @param string|null $direction
-     * @return void
      */
-    protected function setDirection(string|null $direction): void
+    protected function setDirection(?string $direction): void
     {
         $this->direction = $this->sanitiseOrder($direction);
     }
 
     /**
      * Get the direction
-     * 
-     * @return string
      */
     public function getDirection(): ?string
     {
@@ -47,8 +42,6 @@ trait HasDirection
 
     /**
      * Set the direction to descending
-     * 
-     * @return static
      */
     public function desc(): static
     {
@@ -57,8 +50,6 @@ trait HasDirection
 
     /**
      * Set the direction to ascending
-     * 
-     * @return static
      */
     public function asc(): static
     {

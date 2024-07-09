@@ -3,20 +3,21 @@
 namespace Conquest\Table\Actions;
 
 use Closure;
-use Conquest\Core\Primitive;
-use Conquest\Core\Concerns\HasName;
-use Conquest\Core\Concerns\HasLabel;
-use Conquest\Core\Concerns\HasMetadata;
 use Conquest\Core\Concerns\CanAuthorize;
 use Conquest\Core\Concerns\HasHttpMethod;
+use Conquest\Core\Concerns\HasLabel;
+use Conquest\Core\Concerns\HasMetadata;
+use Conquest\Core\Concerns\HasName;
 use Conquest\Core\Concerns\HasRoute;
 use Conquest\Core\Concerns\HasType;
+use Conquest\Core\Primitive;
 use Illuminate\Http\Request;
 
 abstract class BaseAction extends Primitive
 {
+    use CanAuthorize;
+    use HasHttpMethod;
     use HasLabel;
-    use HasName;
     use HasMetadata;
     use CanAuthorize;
     use HasType;
@@ -36,8 +37,6 @@ abstract class BaseAction extends Primitive
 
     /**
      * Retrieve the action as an array.
-     * 
-     * @return array
      */
     public function toArray(): array
     {

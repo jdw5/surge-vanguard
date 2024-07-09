@@ -36,7 +36,6 @@ enum DateClause: string
         };
     }
 
-
     public function apply(Builder|QueryBuilder $builder, string $property, Operator $operator, Carbon $value): void
     {
         $builder->{$this->statement()}(

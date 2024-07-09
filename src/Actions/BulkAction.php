@@ -9,7 +9,6 @@ use Conquest\Table\Actions\Concerns\HasChunking;
 
 class BulkAction extends BaseAction
 {
-    use HasHandler;
     use HasChunking;
 
     

@@ -5,13 +5,16 @@ namespace Conquest\Table\Sorts\Concerns;
 trait HasOrderKey
 {
     const array VALID_ORDERS = ['asc', 'desc'];
-    
+
     protected string $order = 'order';
+
     protected string $defaultDirection = 'asc';
 
     public static function setGlobalDefaultDirection(string $defaultDirection): void
     {
-        if (!in_array($defaultDirection, self::VALID_ORDERS) ) return;
+        if (! in_array($defaultDirection, self::VALID_ORDERS)) {
+            return;
+        }
 
         static::$defaultDirection = $defaultDirection;
     }
@@ -26,7 +29,7 @@ trait HasOrderKey
         return $this->order;
     }
 
-    public function sanitiseOrder(string|null $value): string
+    public function sanitiseOrder(?string $value): string
     {
         return in_array($value, static::VALID_ORDERS) ? $value : $this->getDefaultDirection();
     }

@@ -5,22 +5,21 @@ namespace Conquest\Table\Export;
 use Closure;
 use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Primitive;
-use Conquest\Table\Export\Exports;
 
-class Export extends Primitive implements Exports 
+class Export extends Primitive implements Exports
 {
     use HasLabel;
 
     public function __construct(
-        string $label, 
-        string $filename = null,
+        string $label,
+        ?string $filename = null,
         // type = null,
         Closure|bool $authorize = true,
     ) {
         $this->setLabel($label);
         // $this-
     }
-    
+
     public function export()
     {
         return [];

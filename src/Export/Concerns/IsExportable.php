@@ -6,31 +6,28 @@ trait IsExportable
 
     /**
      * Set the export to true, chainable.
-     * 
-     * @param bool $export
-     * @return static
+     *
+     * @param  bool  $export
      */
     public function export(): static
     {
         $this->setExport(true);
+
         return $this;
     }
 
     /**
      * Set the export to false, chainable.
-     * 
-     * @return static
      */
     public function dontExport(): static
     {
         $this->setExport(false);
+
         return $this;
     }
-    
+
     /**
      * Set the export quietly.
-     * 
-     * @return void
      */
     protected function setExport(bool $export): void
     {

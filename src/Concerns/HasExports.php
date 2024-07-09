@@ -6,12 +6,14 @@ trait HasExports
 {
     protected array $exports;
 
-    protected function setExports(array|null $exports): void
+    protected function setExports(?array $exports): void
     {
-        if (is_null($exports)) return;
+        if (is_null($exports)) {
+            return;
+        }
         $this->exports = $exports;
     }
-    
+
     protected function getExports(): array
     {
         if (isset($this->exports)) {

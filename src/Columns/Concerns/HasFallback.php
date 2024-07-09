@@ -11,14 +11,11 @@ trait HasFallback
 
     /**
      * Set the fallback value, chainable.
-     * 
-     * @param mixed $fallback
-     * @return static
-     
      */
     public function fallback(mixed $fallback): static
     {
         $this->setFallback($fallback);
+
         return $this;
     }
 
@@ -29,9 +26,6 @@ trait HasFallback
 
     /**
      * Set the fallback value quietly.
-     * 
-     * @param mixed $fallback
-     * @return void
      */
     protected function setFallback(mixed $fallback): void
     {
@@ -40,18 +34,14 @@ trait HasFallback
 
     /**
      * Check if a fallback value exists.
-     * 
-     * @return bool
      */
     public function hasFallback(): bool
     {
-        return !is_null($this->fallback);
+        return ! is_null($this->fallback);
     }
 
     /**
      * Get the fallback value.
-     * 
-     * @return mixed
      */
     public function getFallback(): mixed
     {

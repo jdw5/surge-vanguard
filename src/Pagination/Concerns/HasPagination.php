@@ -7,13 +7,15 @@ use Conquest\Table\Pagination\Pagination;
 
 /**
  * Adds the ability to paginate a table
- * 
+ *
  * @property string|array $pagination
  */
 trait HasPagination
 {
     protected string|Closure $pageTerm = 'page';
+
     protected int $defaultPagination = 10;
+
     protected $pagination;
 
     public static function setGlobalPageTerm(string|Closure $pageTerm): void
@@ -23,7 +25,9 @@ trait HasPagination
 
     protected function setPageTerm(string|Closure|null $pageTerm): void
     {
-        if (is_null($pageTerm)) return;
+        if (is_null($pageTerm)) {
+            return;
+        }
         $this->pageTerm = $pageTerm;
     }
 
@@ -49,10 +53,6 @@ trait HasPagination
         $this->defaultPagination = $defaultPagination;
     }
 
-    /**
-     * 
-     * @return int|array
-     */
     public function getPagination(): int|array
     {
         if (isset($this->pagination)) {
@@ -68,13 +68,15 @@ trait HasPagination
 
     protected function setPagination(int|array|null $pagination): void
     {
-        if (is_null($pagination)) return;
+        if (is_null($pagination)) {
+            return;
+        }
         $this->pagination = $pagination;
     }
 
-    public function getPaginationOptions(int|null $active): array
+    public function getPaginationOptions(?int $active): array
     {
-        if (!is_array($this->getPagination())) {
+        if (! is_array($this->getPagination())) {
             return [Pagination::make($this->getPagination(), true)];
         }
 
@@ -84,6 +86,6 @@ trait HasPagination
             $options[] = Pagination::make($count, $count === $active);
         }
 
-        return $options;        
+        return $options;
     }
 }

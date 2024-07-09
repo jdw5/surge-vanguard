@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Workbench\App\Http\Controllers\BasicTableIndexController;
 use Workbench\App\Http\Controllers\ActionTableIndexController;
+use Workbench\App\Http\Controllers\BasicTableIndexController;
 use Workbench\App\Http\Controllers\PaginatedTableIndexController;
 use Workbench\App\Http\Controllers\PreferenceTableIndexController;
 use Workbench\App\Http\Controllers\ProductController;

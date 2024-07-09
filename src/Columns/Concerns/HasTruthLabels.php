@@ -7,17 +7,20 @@ use Closure;
 trait HasTruthLabels
 {
     protected string|Closure $truthLabel = 'Yes';
+
     protected string|Closure $falseLabel = 'No';
 
     public function truthLabel(string|Closure $label): static
     {
         $this->setTruthLabel($label);
+
         return $this;
     }
 
     public function falseLabel(string|Closure $label): static
     {
         $this->setFalseLabel($label);
+
         return $this;
     }
 

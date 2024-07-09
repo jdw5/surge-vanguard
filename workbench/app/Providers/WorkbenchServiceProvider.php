@@ -12,7 +12,7 @@ class WorkbenchServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Register services
     }
 
     /**
@@ -20,6 +20,6 @@ class WorkbenchServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Add routes
     }
 }
