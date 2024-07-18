@@ -22,8 +22,19 @@ trait HasRememberKey
         return null;
     }
 
+    public function setRememberKey(string|null $key): void
+    {
+        if (is_null($key)) return;
+        $this->rememberAs = $key;
+    }
+
+    public function lacksRememberKey(): bool
+    {
+        return is_null($this->getRememberKey());
+    }
+
     public function hasRememberKey(): bool
     {
-        return !is_null($this->getRememberKey());
+        return ! $this->lacksRememberKey();
     }
 }

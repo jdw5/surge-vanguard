@@ -7,7 +7,9 @@ use Conquest\Table\Pagination\Enums\PaginationType;
 
 beforeEach(function () {
     Table::setGlobalPageTerm('page');
+    Table::setGlobalShowKey('show');
 });
+
 it('uses simple pagination by default', function () {
     $table = Table::make(
         resource: Product::query(),
@@ -79,6 +81,7 @@ it('changes the pagination amount if dynamic', function () {
     expect($table->getPagination())->toBe([5, 10, 20]);
     expect($t = $table->getTableMeta())->toHaveCount(13);
     expect($t['per_page'])->toBe(20);
+    expect($table->getTableRecords())->toHaveCount(20);
 });
 
 it('defaults to 10 if pagination amount is dynamic but invalid', function () {

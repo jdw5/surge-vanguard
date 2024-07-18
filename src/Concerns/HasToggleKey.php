@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 trait HasToggleKey
 {
-    protected string $toggleKey = 'cols';
+    protected static string $toggleKey = 'cols';
 
     public static function setGlobalToggleKey(string $key): void
     {
@@ -24,7 +24,7 @@ trait HasToggleKey
         if (method_exists($this, 'toggleKey')) {
             return $this->toggleKey();
         }
-        return $this->toggleKey;
+        return static::$toggleKey;
     }
 
     /**
