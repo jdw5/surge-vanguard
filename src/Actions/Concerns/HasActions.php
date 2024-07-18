@@ -97,6 +97,15 @@ trait HasActions
         return $this->getInlineActions()
             ->first(fn (BaseAction $action): bool => $action->isDefault());
     }
+    // Need to be able to run actions against records
+    public function applyRecordToActions(Model $record): Collection
+    {
+        return $this->getTableActions()
+            ->map(fn (BaseAction $action): BaseAction => $action->applyRecord($record));
+    }
+
+
+    // Handler
 
     protected static function redirectOrExit(HttpFoundationResponse $response): void
     {

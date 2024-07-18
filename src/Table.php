@@ -45,7 +45,6 @@ abstract class Table extends Primitive implements Tables
     use HasPaginationType;
     use HasPaginationKey;
     use HasShowKey;
-    // use HasExports;
     use HasMeta;
     use HasRecords;
     use HasRememberKey;

@@ -33,7 +33,7 @@ final class ProductTable extends Table
     protected function columns(): array
     {
         return [
-            Column::make('id')->asKey()->hide(),
+            Column::make('id')->key()->hide(),
             TextColumn::make('name')->sort(),
             TextColumn::make('description')->fallback('No description')->sort(),
             DateColumn::make('created_at')->format('d M Y'),

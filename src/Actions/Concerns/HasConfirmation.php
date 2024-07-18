@@ -23,6 +23,12 @@ trait HasConfirmation
     {
         return $this->evaluate(
             value: $this->confirmation,
+            named: [
+                'action' => $this,
+                'label' => $this->getLabel(),
+                'name' => $this->getName(),
+            ],
+            
         );
     }
 

@@ -14,7 +14,7 @@ it('can create an inline action', function () {
     expect($action->getResolvedRoute())->toBeNull();
     expect($action->getMethod())->toBeNull();
     expect($action->getType())->toBe(Table::INLINE_ACTION);
-    expect($action->hasHandler())->toBeFalse();
+    expect($action->hasAction())->toBeFalse();
     expect($action->getMetadata())->toBe([]);
 });
 
@@ -22,10 +22,6 @@ it('can make an inline action', function () {
     expect(InlineAction::make('Create'))->toBeInstanceOf(InlineAction::class)
         ->getLabel()->toBe('Create')
         ->getName()->toBe('create');
-});
-
-it('tests', function () {
-    // dd(ProductTable::make()->getModelClass());
 });
 
 // it('can create a bulk action', function () {

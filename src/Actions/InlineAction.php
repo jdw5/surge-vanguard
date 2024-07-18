@@ -61,16 +61,12 @@ class InlineAction extends BaseAction
 
     public function toArray(): array
     {
-        $navigable = $this->hasMethod() ? [
+        return array_merge(parent::toArray(), [
             'route' => $this->getResolvedRoute(),
             'method' => $this->getMethod(),
-        ] : [];
-
-        $handler = $this->hasHandler() ? [
-            'handler' => $this->hasHandler(),
-        ] : [];
-        
-        return array_merge(parent::toArray(), $navigable, $handler);
+            'confirmation' => $this->getConfirmation(),
+            'send' => $this->hasAction(),
+        ]);
     }
 
     // public function forRecord($record): static
