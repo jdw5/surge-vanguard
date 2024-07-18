@@ -32,7 +32,7 @@ use Conquest\Table\Pagination\Concerns\HasPaginationType;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 
-abstract class Table extends Primitive implements Tables
+class Table extends Primitive implements Tables
 {
     use RequiresKey;
     use HasResource;
@@ -43,7 +43,6 @@ abstract class Table extends Primitive implements Tables
     use HasSearch;
     use HasPagination;
     use HasPaginationType;
-    use HasPaginationKey;
     use HasShowKey;
     use HasMeta;
     use HasRecords;

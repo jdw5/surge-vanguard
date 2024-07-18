@@ -4,7 +4,7 @@ namespace Conquest\Table\Pagination\Concerns;
 
 trait HasShowKey
 {
-    protected string $showKey;
+    protected static string $showKey;
 
     public static function setGlobalShowKey(string $showKey): void
     {
@@ -18,8 +18,8 @@ trait HasShowKey
 
     public function getShowKey(): string
     {
-        if (isset($this->showKey)) {
-            return $this->showKey;
+        if (isset(static::$showKey)) {
+            return static::$showKey;
         }
 
         if (method_exists($this, 'showKey')) {

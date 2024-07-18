@@ -8,7 +8,7 @@ trait HasPaginationType
 {
     protected PaginationType $paginationType;
 
-    protected function setPaginationType(PaginationType|string $paginationType): void
+    public function setPaginationType(PaginationType|string $paginationType): void
     {
         if ($paginationType instanceof PaginationType) {
             $this->paginationType = $paginationType;

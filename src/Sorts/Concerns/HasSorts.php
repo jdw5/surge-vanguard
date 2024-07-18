@@ -42,6 +42,7 @@ trait HasSorts
                 return $sort;
             }
         }
+        return null;
     }
 
     public function sorting(): bool

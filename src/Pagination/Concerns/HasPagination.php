@@ -12,9 +12,9 @@ use Conquest\Table\Pagination\Pagination;
  */
 trait HasPagination
 {
-    protected string|Closure $pageTerm = 'page';
+    protected static string|Closure $pageTerm = 'page';
 
-    protected int $defaultPagination = 10;
+    protected static int $defaultPagination = 10;
 
     protected $pagination;
 
@@ -23,20 +23,11 @@ trait HasPagination
         static::$pageTerm = $pageTerm;
     }
 
-    protected function setPageTerm(string|Closure|null $pageTerm): void
-    {
-        if (is_null($pageTerm)) {
-            return;
-        }
-        $this->pageTerm = $pageTerm;
-    }
 
     public function getPageTerm(): string
     {
-        return $this->evaluate($this->pageTerm);
+        return $this->evaluate(static::$pageTerm);
     }
-
-    //
 
     public static function setGlobalDefaultPagination(int $defaultPagination): void
     {
@@ -45,7 +36,7 @@ trait HasPagination
 
     public function getDefaultPagination(): int
     {
-        return $this->defaultPagination;
+        return static::$defaultPagination;
     }
 
     protected function setDefaultPagination(int $defaultPagination): void
@@ -74,7 +65,7 @@ trait HasPagination
         $this->pagination = $pagination;
     }
 
-    public function getPaginationOptions(?int $active): array
+    public function getPaginationOptions(?int $active = null): array
     {
         if (! is_array($this->getPagination())) {
             return [Pagination::make($this->getPagination(), true)];

@@ -155,16 +155,7 @@ trait HasActions
         $modelClass = $this->getModelClass();
         $record = $this->resolveModel($modelClass, $data->getId());
         
-        $this->evaluate(
-            value: $action->getAction(),
-            named: [
-                'record' => $record,
-            ],
-            typed: [
-                Model::class => $record,
-                $modelClass => $record,
-            ],
-        );
+        $action->applyAction($modelClass, $record);
     }
 
     private function executeBulkAction(BulkAction $action, BulkActionData $data): void
@@ -178,18 +169,9 @@ trait HasActions
             default => $query->whereIn($key, $data->getOnly())
         };
 
-        $query->{$action->getChunkMethod()}($action->getChunkSize(), fn (Collection $records) =>
-            $records->each(fn (Model $record) => 
-                $this->evaluate(
-                    value: $action->getAction(),
-                    named: [
-                        'record' => $record,
-                    ],
-                    typed: [
-                        Model::class => $record,
-                        $modelClass => $record,
-                    ],
-                )
+        $query->{$action->getChunkMethod()}($action->getChunkSize(), 
+            fn (Collection $records) => $records->each(
+                fn (Model $record) => $action->applyAction($modelClass, $record)
             )
         );
     }
