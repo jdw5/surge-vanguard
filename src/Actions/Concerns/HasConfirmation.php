@@ -3,6 +3,10 @@
 namespace Conquest\Table\Actions\Concerns;
 
 use Closure;
+use Conquest\Table\Actions\BaseAction;
+use Conquest\Table\Actions\BulkAction;
+use Conquest\Table\Actions\InlineAction;
+use Illuminate\Database\Eloquent\Model;
 
 trait HasConfirmation
 {
@@ -10,7 +14,7 @@ trait HasConfirmation
 
     public function confirmation(string|Closure $confirm = 'Are you sure want to do this?'): static
     {
-        $this->setConfirm($confirm);
+        $this->setConfirmation($confirm);
         return $this;
     }
 
@@ -19,7 +23,26 @@ trait HasConfirmation
         $this->confirmation = $message;
     }
 
-    public function getConfirmation(): string
+    public function resolveConfirmation(mixed $record = null, string $modelClass = Model::class): void
+    {
+        $this->setConfirmation(
+            $this->evaluate(
+                value: $this->confirmation,
+                named: [
+                    'action' => $this,
+                    'record' => $record,
+                    'name' => $this->getName(),
+                    'label' => $this->getLabel(),
+                ],
+                typed: [
+                    Model::class => $record,
+                    $modelClass => $record,
+                ],
+            ),
+        );
+    }
+
+    public function getConfirmation(): ?string
     {
         return $this->evaluate(
             value: $this->confirmation,
@@ -28,7 +51,7 @@ trait HasConfirmation
                 'label' => $this->getLabel(),
                 'name' => $this->getName(),
             ],
-            
+
         );
     }
 

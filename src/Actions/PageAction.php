@@ -6,6 +6,7 @@ use Closure;
 use Conquest\Core\Concerns\HasRoute;
 use Conquest\Table\Actions\BaseAction;
 use Conquest\Core\Concerns\HasHttpMethod;
+use Conquest\Table\Table;
 
 class PageAction extends BaseAction
 {
@@ -14,7 +15,7 @@ class PageAction extends BaseAction
 
     public function setUp(): void
     {
-        $this->setType('action:page');
+        $this->setType(Table::PAGE_ACTION);
     }
 
     public function __construct(

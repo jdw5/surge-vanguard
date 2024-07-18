@@ -5,6 +5,7 @@ namespace Conquest\Table\Actions\Concerns;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Database\Eloquent\Model;
 use Conquest\Table\DataObjects\ActionTypeData;
 use Conquest\Table\DataObjects\InlineActionData;
 use Conquest\Table\Actions\DataTransferObjects\BulkActionData;
@@ -35,5 +36,19 @@ trait HasAction
     public function getAction(): ?Closure
     {
         return $this->action;
+    }
+
+    public function applyAction(string $modelClass, mixed $record): void
+    {
+        $this->evaluate(
+            value: $this->getAction(),
+            named: [
+                'record' => $record,
+            ],
+            typed: [
+                Model::class => $record,
+                $modelClass => $record,
+            ],
+        );
     }
 }

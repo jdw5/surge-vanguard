@@ -4,7 +4,6 @@ namespace Conquest\Table\Actions;
 
 use Closure;
 use Conquest\Core\Concerns\CanAuthorize;
-use Conquest\Core\Concerns\HasHttpMethod;
 use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Concerns\HasMetadata;
 use Conquest\Core\Concerns\HasName;
@@ -15,10 +14,8 @@ abstract class BaseAction extends Primitive
 {
     use CanAuthorize;
     use HasName;
-    use HasHttpMethod;
     use HasLabel;
     use HasMetadata;
-    use CanAuthorize;
     use HasType;
 
     public function __construct(

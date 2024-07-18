@@ -9,6 +9,7 @@ use Conquest\Table\Actions\BaseAction;
 use Conquest\Core\Concerns\HasHttpMethod;
 use Conquest\Table\Actions\Concerns\HasAction;
 use Conquest\Table\Actions\Concerns\HasConfirmation;
+use Conquest\Table\Table;
 
 class InlineAction extends BaseAction
 {
@@ -20,7 +21,7 @@ class InlineAction extends BaseAction
 
     public function setUp(): void
     {
-        $this->setType('action:inline');
+        $this->setType(Table::INLINE_ACTION);
     }
 
     public function __construct(
@@ -30,12 +31,16 @@ class InlineAction extends BaseAction
         string|Closure $route = null,
         string $method = null,
         Closure $action = null,
+        string|Closure $confirmation = null,
+        bool|Closure $default = null,
         array $metadata = [],
     ) {
         parent::__construct($label, $name, $authorize, $metadata);
         $this->setRoute($route);
         $this->setMethod($method);
         $this->setAction($action);
+        $this->setConfirmation($confirmation);
+        $this->setDefault($default);
     }
 
     public static function make(
@@ -45,6 +50,8 @@ class InlineAction extends BaseAction
         string|Closure $route = null,
         string $method = null,
         Closure $action = null,
+        string|Closure $confirmation = null,
+        bool|Closure $default = null,
         array $metadata = [],
     ): static
     {
@@ -55,6 +62,8 @@ class InlineAction extends BaseAction
             'route',
             'method',
             'action',
+            'confirmation',
+            'default',
             'metadata',
         ));
     }

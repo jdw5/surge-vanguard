@@ -5,7 +5,7 @@ use Workbench\App\Http\Controllers\ActionTableIndexController;
 use Workbench\App\Http\Controllers\BasicTableIndexController;
 use Workbench\App\Http\Controllers\PaginatedTableIndexController;
 use Workbench\App\Http\Controllers\PreferenceTableIndexController;
-use Workbench\App\Http\Controllers\ProductController;
+use Workbench\App\Http\Controllers\Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +18,6 @@ use Workbench\App\Http\Controllers\ProductController;
 |
 */
 
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products', [Controller::class, 'index'])->name('product.index');
+Route::get('/page', [Controller::class, 'page'])->name('page.index');
+Route::get('/product/{product}', [Controller::class, 'show'])->name('product.show');

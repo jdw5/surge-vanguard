@@ -7,6 +7,7 @@ use Conquest\Table\Actions\BaseAction;
 use Conquest\Table\Actions\Concerns\HasAction;
 use Conquest\Table\Actions\Concerns\HasChunking;
 use Conquest\Table\Actions\Concerns\HasConfirmation;
+use Conquest\Table\Table;
 
 class BulkAction extends BaseAction
 {
@@ -16,7 +17,7 @@ class BulkAction extends BaseAction
 
     public function setUp(): void
     {
-        $this->setType('action:bulk');
+        $this->setType(Table::BULK_ACTION);
     }
 
     public function __construct(
@@ -25,7 +26,7 @@ class BulkAction extends BaseAction
         bool|Closure $authorize = null,
         Closure $action = null,
         string|Closure $confirmation = null,
-        int $chunkSize = 500,
+        int $chunkSize = null,
         bool $chunkById = true,
         array $metadata = [],
     ) {
@@ -42,7 +43,7 @@ class BulkAction extends BaseAction
         Closure|bool $authorize = null,
         Closure $action = null,
         string|Closure $confirmation = null,
-        int $chunkSize = 500,
+        int $chunkSize = null,
         bool $chunkById = true,
         array $metadata = [],
     ): static
@@ -51,7 +52,11 @@ class BulkAction extends BaseAction
             'label', 
             'name', 
             'authorize',
-            'metadata'
+            'metadata',
+            'action',
+            'confirmation',
+            'chunkSize',
+            'chunkById',
         ));
     }
 

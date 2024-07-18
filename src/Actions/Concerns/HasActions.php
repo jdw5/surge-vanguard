@@ -22,6 +22,7 @@ trait HasActions
 {
     public const INLINE_ACTION = 'action:inline';
     public const BULK_ACTION = 'action:bulk';
+    public const PAGE_ACTION = 'action:page';
     public const EXPORT_ACTION = 'action:export';
     
 

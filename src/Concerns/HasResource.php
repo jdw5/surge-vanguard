@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 trait HasResource
 {
     protected $resource = null;
+    // protected $modelClass = null;
 
     protected function setResource($resource): void
     {
