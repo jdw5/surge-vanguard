@@ -10,7 +10,10 @@ class TableServiceProvider extends ServiceProvider
     /**
      * Register services.
      */
-    public function register(): void {}
+    public function register(): void 
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/table.php', 'table');
+    }
 
     /**
      * Bootstrap services.
@@ -26,6 +29,10 @@ class TableServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../stubs' => base_path('stubs'),
         ], 'conquest-stubs');
+
+        $this->publishes([
+            __DIR__.'/../config/table.php' => $this->app['path.config'].DIRECTORY_SEPARATOR.'table.php',
+        ]);
     }
 
     public function provides()

@@ -2,6 +2,7 @@
 
 namespace Conquest\Table\Tests;
 
+use Conquest\Table\TableServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Workbench\Database\Seeders\DatabaseSeeder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -29,6 +30,7 @@ class TestCase extends Orchestra
     {
         return [
             WorkbenchServiceProvider::class,
+            TableServiceProvider::class,
 
         ];
     }
