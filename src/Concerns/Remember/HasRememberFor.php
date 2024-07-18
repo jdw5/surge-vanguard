@@ -26,7 +26,7 @@ trait HasRememberFor
      * @param int|null $seconds
      * @return void
      */
-    public function setRememberDuration(int|null $seconds): void
+    public function setRememberFor(int|null $seconds): void
     {
         if (is_null($seconds)) return;
         $this->rememberFor = $seconds;

@@ -10,18 +10,14 @@ use Conquest\Table\Concerns\HasMeta;
 use Conquest\Table\Contracts\Tables;
 use Conquest\Table\Concerns\HasSearch;
 use Conquest\Core\Concerns\RequiresKey;
-use Conquest\Table\Concerns\HasExports;
 use Conquest\Table\Concerns\HasRecords;
 use Conquest\Table\Concerns\HasResource;
-use Conquest\Table\Concerns\HasToggleKey;
 use Illuminate\Database\Eloquent\Builder;
-use Conquest\Table\Concerns\HasRememberKey;
 use Conquest\Table\Sorts\Concerns\HasSorts;
 use Conquest\Core\Exceptions\KeyDoesntExist;
 use Conquest\Table\Actions\Concerns\HasActions;
 use Conquest\Table\Columns\Concerns\HasColumns;
-use Conquest\Table\Concerns\HasRememberDuration;
-use Conquest\Table\Concerns\IsToggleable;
+use Conquest\Table\Concerns\Remember\Remembers;
 use Conquest\Table\Filters\Concerns\HasFilters;
 use Conquest\Table\Pagination\Concerns\HasShowKey;
 use Conquest\Table\Pagination\Enums\PaginationType;
@@ -46,10 +42,7 @@ class Table extends Primitive implements Tables
     use HasShowKey;
     use HasMeta;
     use HasRecords;
-    use HasRememberKey;
-    use HasRememberDuration;
-    use HasToggleKey;
-    use IsToggleable;
+    use Remembers;
 
     public function __construct(
         Builder|QueryBuilder $resource = null,

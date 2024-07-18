@@ -5,6 +5,7 @@ namespace Conquest\Table\Concerns\Remember;
 trait IsToggleable
 {
     protected $on;
+    
     public function isToggledOn(): bool
     {
         if (!isset($this->on)) {
@@ -15,19 +16,7 @@ trait IsToggleable
 
     public function off(): static
     {
-        $this->setToggleable(false);
+        $this->on = false;
         return $this;
-    }
-
-    public function on(): static
-    {
-        $this->setToggleable(true);
-        return $this;
-    }
-
-    public function setToggleable(bool|null $toggleable): void
-    {
-        if (is_null($toggleable)) return;
-        $this->on = $toggleable;
     }
 }

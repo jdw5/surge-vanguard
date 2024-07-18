@@ -2,24 +2,23 @@
 
 namespace Conquest\Table\Concerns\Remember;
 
-use Conquest\Table\Concerns\HasRememberDuration;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Request;
 
 trait Remembers
 {
     use HasCookie;
-    use HasRememberDuration;
+    use HasRememberFor;
     use HasToggleKey;
-    use RemembersAsKey;
+    use HasCookieName;
 
     protected $remember;
 
     public function remember(string $cookieKey = null, int $duration = null, string $toggleKey = null, bool $cookie = null): static
     {
         $this->setRemember(true);
-        $this->setRememberKey($cookieKey);
-        $this->setRememberDuration($duration);
+        $this->setCookieName($cookieKey);
+        $this->setRememberFor($duration);
         $this->setCookie($cookie);
         $this->setToggleKey($toggleKey);
         return $this;
@@ -48,11 +47,11 @@ trait Remembers
 
     public function encodeCookie(mixed $data): void
     {
-        Cookie::queue($this->getRememberKey(), json_encode($data), $this->getRememberFor());
+        Cookie::queue($this->getCookieName(), json_encode($data), $this->getRememberFor());
     }
 
     public function decodeCookie(): mixed
     {
-        return json_decode(Request::cookie($this->getRememberKey(), []), true);
+        return json_decode(Request::cookie($this->getCookieName()), true);
     }
 }

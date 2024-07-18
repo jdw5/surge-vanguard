@@ -25,7 +25,7 @@ return [
         'default' => false,
         'duration' => 30*24*60*60,
         'toggle_key' => 'cols',
-        'use_cookie' => true,
+        'cookie' => false,
     ],
 
     /*
