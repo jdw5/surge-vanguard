@@ -12,10 +12,6 @@ trait RemembersAsKey
             return $this->rememberAs;
         }
 
-        if (method_exists($this, 'rememberAs')) {
-            return $this->rememberAs();
-        }
-
         return str(class_basename($this))->snake();
     }
 

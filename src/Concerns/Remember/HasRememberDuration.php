@@ -4,7 +4,7 @@ namespace Conquest\Table\Concerns\Remember;
 
 trait HasRememberFor
 {
-    protected $rememberDuration;
+    protected $rememberFor;
 
     /**
      * Retrieve the remember duration (seconds)
@@ -13,12 +13,13 @@ trait HasRememberFor
      */
     public function getRememberFor(): int
     {
-        if ($this->lacksRememberDuration()) {
-            return config('table.remember.duration', 30*24*60*60);
+        if (isset($this->rememberFor)) {
+            return $this->rememberFor;
         }
-        return $this->rememberDuration;
+        
+        return config('table.remember.duration', 30*24*60*60);
     }
-    
+
     /**
      * Set the remember duration (seconds) quietly.
      * 
@@ -28,6 +29,6 @@ trait HasRememberFor
     public function setRememberDuration(int|null $seconds): void
     {
         if (is_null($seconds)) return;
-        $this->rememberDuration = $seconds;
+        $this->rememberFor = $seconds;
     }
 }
