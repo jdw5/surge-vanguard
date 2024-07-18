@@ -8,7 +8,6 @@ use function Pest\Laravel\get;
 it('can make a table from class', function () {
     $alias = ProductTable::build();
     expect($alias)->not->toBeNull();
-    // dd($alias);
 });
 
 // it('is serialized', function () {

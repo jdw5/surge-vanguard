@@ -23,6 +23,7 @@ trait HasActions
     public const INLINE_ACTION = 'action:inline';
     public const BULK_ACTION = 'action:bulk';
     public const EXPORT_ACTION = 'action:export';
+    
 
     private Collection $cachedActions;
     protected $actions;
@@ -110,13 +111,13 @@ trait HasActions
             static::BULK_ACTION => BulkActionData::from($request),
             default => static::redirectOrExit(back())
         };
-
+        
         try {
             $action = $this->resolveAction($type);
         } catch (InvalidActionException $e) {
             static::redirectOrExit(back());
         }
-
+        
         match (get_class($action)) {
             InlineAction::class => $this->executeInlineAction($action, $type),
             BulkAction::class => $this->executeBulkAction($action, $type),
@@ -154,38 +155,32 @@ trait HasActions
                 $modelClass => $record,
             ],
         );
-
-        dd($record);
-
-        static::redirectOrExit(back());
     }
 
     private function executeBulkAction(BulkAction $action, BulkActionData $data): void
     {
-        $query = $this->getRefinedQuery();
+        $query = $this->getResource();
+        $modelClass = $this->getModelClass();
         $key = $this->getTableKey();
 
         $query = match (true) {
-            $data->getAll() === true => $query->whereNotIn($key, $data->getExcept()),
+            $data->isAll() => $query->whereNotIn($key, $data->getExcept()),
             default => $query->whereIn($key, $data->getOnly())
         };
 
-        $reflection = new \ReflectionFunction($action->getAction());
-        $hasRecordsParameter = collect($reflection->getParameters())
-            ->some(fn (\ReflectionParameter $parameter) => 'records' === $parameter->getName() || Collection::class === $parameter->getType());
-
-        $result = $this->evaluate(
-            value: $action->getAction(),
-            named: [
-                'query' => $query,
-                ...($hasRecordsParameter ? ['records' => $query->get()] : []),
-            ],
-            typed: [
-                Builder::class => $query,
-                ...($hasRecordsParameter ? [Collection::class => $query->get()] : []),
-            ],
+        $query->chunkById(200, fn (Collection $records) =>
+            $records->each(fn (Model $record) => 
+                $this->evaluate(
+                    value: $action->getAction(),
+                    named: [
+                        'record' => $record,
+                    ],
+                    typed: [
+                        Model::class => $record,
+                        $modelClass => $record,
+                    ],
+                )
+            )
         );
-
-        static::redirectOrExit($result ?: back());
     }
 }

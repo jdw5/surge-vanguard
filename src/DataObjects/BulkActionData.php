@@ -27,7 +27,7 @@ class BulkActionData extends ActionData
         );
     }
 
-    public function getAll(): bool
+    public function isAll(): bool
     {
         return $this->all;
     }
