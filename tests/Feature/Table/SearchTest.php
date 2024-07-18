@@ -12,6 +12,4 @@ it('tests', function () {
             Column::make('id')->key(),
         ],
     );
-
-    dd(str(class_basename($table))->snake());
 });

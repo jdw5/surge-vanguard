@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Request;
 
 trait Remembers
 {
+    use HasCookie;
     use HasRememberDuration;
     use HasToggleKey;
     use RemembersAsKey;
-    use HasCookie;
 
     protected $remember;
 
@@ -48,9 +48,7 @@ trait Remembers
 
     public function encodeCookie(mixed $data): void
     {
-        if ($this->hasCookie() && $this->remembers()) {
-            Cookie::queue($this->getRememberKey(), json_encode($data), $this->getRememberFor());
-        }
+        Cookie::queue($this->getRememberKey(), json_encode($data), $this->getRememberFor());
     }
 
     public function decodeCookie(): mixed
