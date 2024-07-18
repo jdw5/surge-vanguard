@@ -4,12 +4,15 @@ namespace Conquest\Table\Actions\Concerns;
 
 trait HasChunking
 {
-    /** Number of elements to be brought int */
-    protected int $chunkSize = 1000;
-    /** Whether the query should be by ID (recommended) */
+    protected int $chunkSize = 500;
     protected bool $chunkById = true;
-    /** If one of the IDs cannot be found, whether or not to proceed with updating the rest */
-    protected $failOnFirst = false;
+
+    public function chunk(int $size = 500, bool $byId = true): static
+    {
+        $this->setChunkSize($size);
+        $this->setChunkById($byId);
+        return $this;
+    }
 
     protected function setChunkSize(int|null $size): void
     {
@@ -17,8 +20,9 @@ trait HasChunking
         $this->chunkSize = $size;
     }
 
-    protected function setChunkById(bool $byId): void
+    protected function setChunkById(bool|null $byId): void
     {
+        if (is_null($byId)) return;
         $this->chunkById = $byId;
     }
 
@@ -42,5 +46,10 @@ trait HasChunking
     public function usesIdForChunking(): bool
     {
         return $this->chunkById;
+    }
+
+    public function getChunkMethod(): string
+    {
+        return $this->usesIdForChunking() ? 'chunkById' : 'chunk';
     }
 }

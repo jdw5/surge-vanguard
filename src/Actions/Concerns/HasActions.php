@@ -168,7 +168,7 @@ trait HasActions
             default => $query->whereIn($key, $data->getOnly())
         };
 
-        $query->chunkById(200, fn (Collection $records) =>
+        $query->{$action->getChunkMethod()}($action->getChunkSize(), fn (Collection $records) =>
             $records->each(fn (Model $record) => 
                 $this->evaluate(
                     value: $action->getAction(),
