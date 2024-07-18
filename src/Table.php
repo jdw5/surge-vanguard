@@ -214,7 +214,7 @@ class Table extends Primitive implements Tables
             PaginationType::CURSOR => [
                 $data = $builder->cursorPaginate(
                     perPage: $this->getActivePagination(),
-                    cursor: $this->getPageTerm(),
+                    cursorName: $this->getPageTerm(),
                 )->withQueryString(),
                 $this->getCursorMeta($data)
             ],

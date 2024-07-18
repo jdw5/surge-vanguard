@@ -50,7 +50,6 @@ trait HasMeta
             'prev_cusor' => $paginator->previousCursor()?->encode(),
             'next_url' => $paginator->nextPageUrl(),
             'prev_url' => $paginator->previousPageUrl(),
-
             'show' => $paginator->hasPages(),
             'empty' => $paginator->isEmpty(),
         ];

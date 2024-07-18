@@ -20,6 +20,11 @@ trait HasPagination
 
     public static function setGlobalPageTerm(string|Closure $pageTerm): void
     {
+        static::setPageTerm($pageTerm);
+    }
+
+    public static function setPageTerm(string|Closure $pageTerm): void
+    {
         static::$pageTerm = $pageTerm;
     }
 
@@ -57,11 +62,9 @@ trait HasPagination
         return $this->getDefaultPagination();
     }
 
-    protected function setPagination(int|array|null $pagination): void
+    public function setPagination(int|array|null $pagination): void
     {
-        if (is_null($pagination)) {
-            return;
-        }
+        if (is_null($pagination)) return;
         $this->pagination = $pagination;
     }
 
