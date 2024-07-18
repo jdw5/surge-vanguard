@@ -159,15 +159,14 @@ abstract class Table extends Primitive implements Tables
             'sorts' => $this->getSorts(),
             'filters' => $this->getFilters(),
             'actions' => [
-                'row' => $this->getActions(),
+                'inline' => $this->getInlineActions(),
                 'bulk' => $this->getBulkActions(),
                 'page' => $this->getPageActions(),
-                // 'default' => $this->getDefaultAction(),
+                'default' => $this->getDefaultAction(),
             ],
             'properties' => $this->getTableColumns(),
             'pagination' => $this->getPaginationOptions($this->getActivePagination()),
             'toggleKey' => $this->getToggleKey(),
-            'showActions' => true, // Or SrOnly
         ];
     }
 
@@ -212,7 +211,6 @@ abstract class Table extends Primitive implements Tables
             array_map(fn ($column) => $column->getSort(), $this->getSortableColumns())
         );
         $this->applySearch($builder, $this->getSearchTerm(request()));
-        // dd(DB::table('products')->where('best_seller', true)->getFrom());
         
         [$records, $meta] = match ($this->getPaginateType()) {
             PaginationType::CURSOR => [

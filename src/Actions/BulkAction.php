@@ -4,7 +4,6 @@ namespace Conquest\Table\Actions;
 
 use Closure;
 use Conquest\Table\Actions\BaseAction;
-use Conquest\Table\Actions\Concerns\HasHandler;
 use Conquest\Table\Actions\Concerns\HasChunking;
 
 class BulkAction extends BaseAction

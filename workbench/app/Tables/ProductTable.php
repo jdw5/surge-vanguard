@@ -18,7 +18,6 @@ use Conquest\Table\Columns\TextColumn;
 use Conquest\Table\Filters\DateFilter;
 use Conquest\Table\Filters\QueryFilter;
 use Conquest\Table\Actions\InlineAction;
-use Conquest\Table\Actions\Action;
 use Conquest\Table\Filters\SelectFilter;
 use Conquest\Table\Columns\BooleanColumn;
 use Conquest\Table\Columns\NumericColumn;
@@ -34,7 +33,7 @@ final class ProductTable extends Table
     protected function columns(): array
     {
         return [
-            Column::make('public_id')->asKey()->hide(),
+            Column::make('id')->asKey()->hide(),
             TextColumn::make('name')->sort(),
             TextColumn::make('description')->fallback('No description')->sort(),
             DateColumn::make('created_at')->format('d M Y'),
@@ -71,7 +70,7 @@ final class ProductTable extends Table
     protected function actions(): array
     {
         return [
-            Action::make('Edit')
+            InlineAction::make('Edit')->action(fn (Product $product) => $product->update(['name' => 'Hello'])),
             // PageAction::make('add')->label('Add User'),
             // BulkAction::make('delete')->label('Delete Users'),
         ];

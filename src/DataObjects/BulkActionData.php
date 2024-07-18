@@ -26,4 +26,19 @@ class BulkActionData extends ActionData
             only: $request->input('only', []),
         );
     }
+
+    public function getAll(): bool
+    {
+        return $this->all;
+    }
+
+    public function getExcept(): array
+    {
+        return $this->except;
+    }
+
+    public function getOnly(): array
+    {
+        return $this->only;
+    }
 }

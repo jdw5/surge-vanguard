@@ -1,7 +1,10 @@
 <?php
 
-use Conquest\Table\Actions\InlineAction;
 use Conquest\Table\Table;
+use Illuminate\Http\Request;
+use Conquest\Table\Actions\BulkAction;
+use Conquest\Table\Actions\InlineAction;
+use Workbench\App\Tables\ProductTable;
 
 it('can create an inline action', function () {
     $action = new InlineAction($l = 'Create');
@@ -15,10 +18,14 @@ it('can create an inline action', function () {
     expect($action->getMetadata())->toBe([]);
 });
 
-it('trial', function () {
-    $resource = 'Workbench\App\Models\Product';
+it('can make an inline action', function () {
+    expect(InlineAction::make('Create'))->toBeInstanceOf(InlineAction::class)
+        ->getLabel()->toBe('Create')
+        ->getName()->toBe('create');
+});
 
-    dd($resource::get());
+it('tests', function () {
+    // dd(ProductTable::make()->getModelClass());
 });
 
 // it('can create a bulk action', function () {
@@ -32,6 +39,8 @@ it('trial', function () {
 //     expect($action->hasHandler())->toBeFalse();
 //     expect($action->getMetadata())->toBe([]);
 // });
+
+
 
 // it('can create a filter with arguments', function () {
 //     $filter = new Filter('name', 
@@ -90,4 +99,3 @@ it('trial', function () {
 //     $filter->apply($builder);
 //     expect($builder->toSql())->toBe('select * from "products" where "name" = ?');
 // });
-

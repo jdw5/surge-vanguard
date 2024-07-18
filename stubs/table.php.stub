@@ -8,7 +8,7 @@ use Conquest\Table\Sorts\Sort;
 use Conquest\Table\Filters\Filter;
 use Conquest\Table\Actions\BulkAction;
 use Conquest\Table\Actions\PageAction;
-use Conquest\Table\Actions\Action;
+use Conquest\Table\Actions\InlineAction;
 
 final class {{ class }} extends Table
 {

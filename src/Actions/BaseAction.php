@@ -8,14 +8,13 @@ use Conquest\Core\Concerns\HasHttpMethod;
 use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Concerns\HasMetadata;
 use Conquest\Core\Concerns\HasName;
-use Conquest\Core\Concerns\HasRoute;
 use Conquest\Core\Concerns\HasType;
 use Conquest\Core\Primitive;
-use Illuminate\Http\Request;
 
 abstract class BaseAction extends Primitive
 {
     use CanAuthorize;
+    use HasName;
     use HasHttpMethod;
     use HasLabel;
     use HasMetadata;

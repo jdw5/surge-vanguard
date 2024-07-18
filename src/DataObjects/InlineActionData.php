@@ -16,10 +16,15 @@ final class InlineActionData extends ActionData
 
     public static function from(Request $request): static
     {
-        return new static(
-            name: $request->string('name'),
-            type: $request->string('type'),
-            id: $request->input('id'),
-        );
+        return resolve(static::class, [
+            'name' => $request->string('name'),
+            'type' => $request->string('type'),
+            'id' => $request->input('id'),
+        ]);
+    }
+
+    public function getId(): int|string
+    {
+        return $this->id;
     }
 }

@@ -7,6 +7,7 @@ use Conquest\Core\Concerns\HasRoute;
 use Conquest\Core\Concerns\IsDefault;
 use Conquest\Table\Actions\BaseAction;
 use Conquest\Core\Concerns\HasHttpMethod;
+use Conquest\Table\Actions\Concerns\HasAction;
 use Conquest\Table\Actions\Concerns\HasHandler;
 
 class InlineAction extends BaseAction
@@ -15,6 +16,7 @@ class InlineAction extends BaseAction
     use HasHandler;
     use HasRoute;
     use HasHttpMethod;
+    use HasAction;
 
     public function setUp(): void
     {

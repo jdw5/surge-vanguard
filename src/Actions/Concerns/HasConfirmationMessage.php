@@ -4,11 +4,10 @@ namespace Conquest\Table\Actions\Concerns;
 
 use Closure;
 
-trait HasConfirmation
+trait HasConfirmationMessage
 {
-    protected bool|Closure $confirm = false;
-
-    protected string|Closure $confirmMessage = 'Are you sure you want to do this?';
+    protected static ?string $globalConfirmationMessage = 'Are you sure you want to do this?';
+    protected string|Closure|null $confirmMessage = null;
 
     protected function setConfirm(bool $confirm): void
     {

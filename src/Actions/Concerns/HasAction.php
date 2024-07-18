@@ -11,10 +11,9 @@ use Conquest\Table\Actions\DataTransferObjects\BulkActionData;
 
 trait HasAction
 {
-
     protected ?Closure $action = null;
 
-    public function action(Closure|string|null $action): static
+    public function action(Closure|string $action): static
     {
         $this->setAction($action);
         return $this;
@@ -27,7 +26,6 @@ trait HasAction
 
     public function setAction(Closure|string|null $action): void
     {
-        // Allow for invokable actions
         if (\is_string($action) && class_exists($action) && method_exists($action, '__invoke')) {
             $action = resolve($action)->__invoke(...);
         }
@@ -38,6 +36,4 @@ trait HasAction
     {
         return $this->action;
     }
-
-    
 }
