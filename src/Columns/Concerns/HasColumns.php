@@ -3,12 +3,11 @@
 namespace Conquest\Table\Columns\Concerns;
 
 use Conquest\Table\Columns\BaseColumn;
+use Illuminate\Support\Collection;
 
 trait HasColumns
 {
-    private array $cachedColumns;
-
-    protected array $columns;
+    protected Collection $cachedColumns;
 
     protected function setColumns(array|null $columns): void
     {
@@ -34,23 +33,20 @@ trait HasColumns
         return [];
     }
 
-    public function getTableColumns(): array
+    public function getTableColumns(): Collection
     {
-        return $this->cachedColumns ??= array_values(
-            array_filter($this->getColumns(), static fn (BaseColumn $column): bool => $column->authorized())
-        );
+        return $this->cahcedColumns ??= collect($this->getColumns())
+            ->filter(fn (BaseColumn $column): bool => $column->authorized());
     }
 
     /**
      * Retrieve the sortable columns for the table
      * 
-     * @return array
+     * @return Collection
      */
-    public function getSortableColumns(): array
+    public function getSortableColumns(): Collection
     {
-        return array_values(
-            array_filter($this->getTableColumns(), static fn (BaseColumn $column): bool => $column->hasSort())
-        );
+        return $this->getTableColumns()->filter(fn (BaseColumn $column): bool => $column->hasSort())->values();
     }
 
     /**
@@ -60,19 +56,14 @@ trait HasColumns
      */
     public function getKeyColumn(): ?BaseColumn
     {
-        foreach ($this->getColumns() as $column) {
-            if ($column->isKey()) {
-                return $column;
-            }
-        }
-        return null;
+        return $this->getTableColumns()->first(fn (BaseColumn $column): bool => $column->isKey());
     }
 
-    public function getHeadingColumns(): array
+    /**
+     * 
+     */
+    public function getHeadingColumns(): Collection
     {
-        // Manipulate the show trait to handle the toggleaable columns
-        return array_values(
-            array_filter($this->getTableColumns(), static fn (BaseColumn $column): bool => $column->isKey() || $column->isActive())
-        );
+        return $this->getTableColumns()->filter(fn (BaseColumn $column): bool => $column->isActive())->values();
     }
 }

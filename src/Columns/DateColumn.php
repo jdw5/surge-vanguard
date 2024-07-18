@@ -48,7 +48,6 @@ class DateColumn extends BaseColumn
         bool $srOnly = false,
         Closure $transform = null,
         string|Closure $format = null,
-        bool $active = true,
     ): static {
         return resolve(static::class, compact(
             'name', 
@@ -63,7 +62,6 @@ class DateColumn extends BaseColumn
             'srOnly', 
             'transform',
             'format',
-            'active'
         ));
     }
 

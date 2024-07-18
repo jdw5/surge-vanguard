@@ -21,6 +21,7 @@ use Conquest\Table\Columns\Concerns\HasSort;
 use Conquest\Table\Columns\Enums\Breakpoint;
 use Conquest\Table\Columns\Concerns\HasFallback;
 use Conquest\Table\Columns\Concerns\IsSearchable;
+use Conquest\Table\Concerns\Remember\IsToggleable;
 
 abstract class BaseColumn extends Primitive implements Columns
 {
@@ -37,8 +38,8 @@ abstract class BaseColumn extends Primitive implements Columns
     use CanAuthorize;
     use IsKey;
     use IsHidden;
-    use IsActive;
     use IsSearchable;
+    use IsToggleable;
 
     public function setUp(): void
     {
@@ -56,7 +57,6 @@ abstract class BaseColumn extends Primitive implements Columns
         bool $hidden = false,
         bool $srOnly = false,
         Closure $transform = null,
-        bool $active = true,
     ) {
         parent::__construct();
         if ($name === 'actions') throw new \Exception('Column name cannot be "actions"');
@@ -70,7 +70,6 @@ abstract class BaseColumn extends Primitive implements Columns
         $this->setHidden($hidden);
         $this->setSrOnly($srOnly);
         $this->setTransform($transform);
-        $this->setActive($active);
     }
 
     /**
@@ -84,9 +83,9 @@ abstract class BaseColumn extends Primitive implements Columns
             /** Column information */
             'name' => $this->getName(),
             'label' => $this->getLabel(),
-            'active' => $this->isActive(),
             'metadata' => $this->getMetadata(),
             'fallback' => $this->getFallback(),
+            'toggledOn' => $this->isToggledOn(),
 
             /** Display options for frontend */
             'hidden' => $this->isShown(),

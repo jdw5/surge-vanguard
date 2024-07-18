@@ -25,7 +25,6 @@ class TextColumn extends BaseColumn
         bool $hidden = false,
         bool $srOnly = false,
         Closure $transform = null,
-        bool $active = true,
     ): static {
         return resolve(static::class, compact(
             'name', 
@@ -39,7 +38,6 @@ class TextColumn extends BaseColumn
             'hidden', 
             'srOnly', 
             'transform',
-            'active'
         ));
     }
 }

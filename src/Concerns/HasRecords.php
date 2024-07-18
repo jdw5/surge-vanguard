@@ -2,16 +2,18 @@
 
 namespace Conquest\Table\Concerns;
 
+use Illuminate\Support\Collection;
+
 trait HasRecords
 {
-    protected ?array $records = null;
+    protected ?Collection $records = null;
 
-    protected function setRecords(array $records): void
+    protected function setRecords(Collection $records): void
     {
         $this->records = $records;
     }
 
-    public function getRecords(): ?array
+    public function getRecords(): ?Collection
     {
         if (! $this->hasRecords()) {
             return null;

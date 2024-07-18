@@ -19,7 +19,6 @@ it('can create a column', function () {
     expect($col->isHidden())->toBeFalse();
     expect($col->isSrOnly())->toBeFalse();
     expect($col->canTransform())->toBeFalse();
-    expect($col->isActive())->toBeTrue();
 });
 
 it('can create a column with arguments', function () {
@@ -34,7 +33,6 @@ it('can create a column with arguments', function () {
         hidden: true,
         srOnly: true,
         transform: fn ($value) => strtoupper($value),
-        active: false,
     );
 
     expect($col->getName())->toBe('name');
@@ -47,7 +45,6 @@ it('can create a column with arguments', function () {
     expect($col->isHidden())->toBeTrue();
     expect($col->isSrOnly())->toBeTrue();
     expect($col->canTransform())->toBeTrue();
-    expect($col->isActive())->toBeFalse();
 
 });
 

@@ -26,7 +26,6 @@ class NumericColumn extends BaseColumn
         bool $srOnly = false,
         Closure $transform = null,
         string|Closure $format = null,
-        bool $active = true,
     ): static {
         return resolve(static::class, compact(
             'name', 
@@ -41,7 +40,6 @@ class NumericColumn extends BaseColumn
             'srOnly', 
             'transform',
             'format',
-            'active'
         ));
     }
 }

@@ -6,6 +6,8 @@ use Conquest\Table\Columns\Concerns\HasColumns;
 use Conquest\Table\Sorts\Sort;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Request;
 
 trait HasSorts
 {
@@ -47,14 +49,14 @@ trait HasSorts
 
     public function sorting(): bool
     {
-        return request()->has($this->getSortKey()) && request()->query($this->getSortKey());
+        return Request::has($this->getSortKey()) && Request::input($this->getSortKey());
     }
 
-    protected function applySorts(Builder|QueryBuilder $query, array $colSorts = []): void
+    protected function applySorts(Builder|QueryBuilder $query, Collection $colSorts = null): void
     {
         // Check that there is a sortKey in the query string
         if ($this->sorting()) {
-            $mergedSorts = array_merge($this->getSorts(), $colSorts);
+            // $mergedSorts = array_merge($this->getSorts(), $colSorts);
             foreach ($this->getSorts() as $sort) {
                 $sort->apply($query);
                 // Only apply one sort

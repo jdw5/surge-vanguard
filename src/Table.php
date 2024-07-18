@@ -3,14 +3,16 @@
 namespace Conquest\Table;
 
 use Conquest\Core\Primitive;
-use Illuminate\Http\Request;
-use Conquest\Table\Columns\BaseColumn;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Conquest\Table\Concerns\HasMeta;
 use Conquest\Table\Contracts\Tables;
+use Conquest\Table\Columns\BaseColumn;
 use Conquest\Table\Concerns\HasSearch;
+use Illuminate\Support\Facades\Cookie;
 use Conquest\Core\Concerns\RequiresKey;
 use Conquest\Table\Concerns\HasRecords;
+use Illuminate\Support\Facades\Request;
 use Conquest\Table\Concerns\HasResource;
 use Illuminate\Database\Eloquent\Builder;
 use Conquest\Table\Sorts\Concerns\HasSorts;
@@ -25,8 +27,6 @@ use Conquest\Table\Pagination\Concerns\HasPagination;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Conquest\Table\Pagination\Concerns\HasPaginationKey;
 use Conquest\Table\Pagination\Concerns\HasPaginationType;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\DB;
 
 class Table extends Primitive implements Tables
 {
@@ -164,9 +164,9 @@ class Table extends Primitive implements Tables
     /**
      * Retrieve the records from the table.
      * 
-     * @return array
+     * @return Collection
      */
-    public function getTableRecords(): array
+    public function getTableRecords(): Collection
     {
         $this->create();
         return $this->getRecords();
@@ -198,9 +198,7 @@ class Table extends Primitive implements Tables
         $builder = $this->getResource();
         // $this->applyToggleability();
         $this->applyFilters($builder);
-        $this->applySorts($builder, 
-            array_map(fn ($column) => $column->getSort(), $this->getSortableColumns())
-        );
+        $this->applySorts($builder, $this->getSortableColumns()->map(fn ($column) => $column->getSort()));
         $this->applySearch($builder, $this->getSearchTerm(request()));
         
         [$records, $meta] = match ($this->getPaginateType()) {
@@ -224,15 +222,15 @@ class Table extends Primitive implements Tables
             ],
         };
 
-        $records = array_map(fn ($record) => array_reduce($this->getTableColumns(), 
-            function ($filteredRecord, BaseColumn $column) use ($record) {
-                $columnName = $column->getName();
-                $filteredRecord[$columnName] = $column->apply($record[$columnName] ?? null);
-                return $filteredRecord;
-            }, []), $records instanceof Collection ? $records->toArray() : $records->items()
-        );
-        // For each record also apply the row action
-
+        $records = collect($records instanceof Collection ? $records : $records->items())
+            ->map(function ($record) {
+                return $this->getTableColumns()->reduce(function ($filteredRecord, BaseColumn $column) use ($record) {
+                    $columnName = $column->getName();
+                    $filteredRecord[$columnName] = $column->apply($record[$columnName] ?? null);
+                    return $filteredRecord;
+                }, []);
+            });
+            
         $this->setRecords($records);
         $this->setMeta($meta);
     }
@@ -241,7 +239,7 @@ class Table extends Primitive implements Tables
     {
         $count = $this->getPagination();
         if (is_int($count)) return $count;
-        $query = request()->query($this->getShowKey());
+        $query = Request::query($this->getShowKey());
         if (in_array($query, $count)) return $query;
         return $this->getDefaultPagination();
     }
