@@ -52,21 +52,14 @@ class Sort extends BaseSort
         ));
     }
 
-    public function apply(Builder|QueryBuilder $builder, ?string $sortBy, ?string $orderBy): void
+    public function handle(Builder|QueryBuilder $builder, ?string $orderBy = null): void
     {
-        $this->setActive($this->sorting($sortBy, $orderBy));
-        
-        $builder->when(
-            $this->isActive(),
-            function (Builder|QueryBuilder $builder) use ($orderBy) {
-                $builder->orderBy(
-                    column: $builder instanceof Builder ? $builder->qualifyColumn($this->getProperty()) : $this->getProperty(),
-                    direction: $this->hasDirection() ? $this->getDirection() : $orderBy,
-                );
-            }
-        ); 
+        $builder->orderBy(
+            column: $builder instanceof Builder ? $builder->qualifyColumn($this->getProperty()) : $this->getProperty(),
+            direction: $this->hasDirection() ? $this->getDirection() : $orderBy ?? config('table.sort.default_order', 'asc'),
+        );
     }
-
+    
     public function sorting(?string $sortBy, ?string $orderBy): bool
     {
         $sorts = !is_null($sortBy) && $sortBy === $this->getName();

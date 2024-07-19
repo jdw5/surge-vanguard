@@ -4,18 +4,13 @@ namespace Conquest\Table;
 
 use Conquest\Core\Primitive;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Conquest\Table\Concerns\HasMeta;
 use Conquest\Table\Contracts\Tables;
 use Conquest\Table\Columns\BaseColumn;
-use Conquest\Table\Concerns\HasSearch;
-use Illuminate\Support\Facades\Cookie;
 use Conquest\Core\Concerns\RequiresKey;
 use Conquest\Table\Concerns\HasRecords;
-use Illuminate\Support\Facades\Request;
 use Conquest\Table\Concerns\HasResource;
 use Illuminate\Database\Eloquent\Builder;
-use Conquest\Table\Sorts\Concerns\HasSorts;
 use Conquest\Core\Exceptions\KeyDoesntExist;
 use Conquest\Table\Concerns\Search\Searches;
 use Conquest\Table\Actions\Concerns\HasActions;
@@ -24,6 +19,7 @@ use Conquest\Table\Concerns\Remember\Remembers;
 use Conquest\Table\Filters\Concerns\HasFilters;
 use Conquest\Table\Pagination\Concerns\Paginates;
 use Conquest\Table\Pagination\Enums\PaginationType;
+use Conquest\Table\Sorts\Concerns\Sorts;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 class Table extends Primitive implements Tables
@@ -33,7 +29,7 @@ class Table extends Primitive implements Tables
     use HasColumns;
     use HasActions;
     use HasFilters;
-    use HasSorts;
+    use Sorts;
     use HasMeta;
     use HasRecords;
     use Remembers;

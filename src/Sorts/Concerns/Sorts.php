@@ -50,12 +50,12 @@ trait Sorts
         if ($this->sorting()) {
             // $mergedSorts = array_merge($this->getSorts(), $colSorts);
             foreach ($this->getSorts() as $sort) {
-                $sort->apply($query);
+                $sort->apply($query, $this->getSort(), $this->getOrder());
                 // Only apply one sort
                 if ($sort->isActive()) break;
             }
         } else {
-            $this->getDefaultSort()?->apply($query, true);
+            $this->getDefaultSort()?->handle($query);
         }
     }
 }

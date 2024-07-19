@@ -26,18 +26,21 @@ abstract class BaseSort extends Refiner
         $this->setDirection($direction);
     }
 
-    public function apply(Builder|QueryBuilder $builder, ?string $sortBy, ?string $orderBy): void
+    public function apply(Builder|QueryBuilder $builder, ?string $sortBy = null, ?string $orderBy = null): void
     {
         $this->setActive($this->sorting($sortBy, $orderBy));
 
         $builder->when(
             $this->isActive(),
-            function (Builder|QueryBuilder $builder) use ($orderBy) {
-                $builder->orderBy(
-                    column: $builder->qualifyColumn($this->getProperty()),
-                    direction: $orderBy,
-                );
-            }
+            fn (Builder|QueryBuilder $builder) => $this->handle($builder, $orderBy),
+        );
+    }
+
+    public function handle(Builder|QueryBuilder $builder, ?string $orderBy = null): void
+    {
+        $builder->orderBy(
+            column: $builder->qualifyColumn($this->getProperty()),
+            direction: $orderBy ?? config('table.sort.default_order', 'asc'),
         );
     }
 
