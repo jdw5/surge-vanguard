@@ -129,7 +129,6 @@ class Table extends Primitive implements Tables
         $this->create();
 
         return [
-            'key' => $this->getTableKey(),
             'records' => $this->getTableRecords(),
             'columns' => $this->getHeadingColumns(),
             'meta' => $this->getTableMeta(),
@@ -143,7 +142,15 @@ class Table extends Primitive implements Tables
             ],
             'properties' => $this->getTableColumns(),
             'pagination' => $this->getPagination($this->usePerPage()),
-            'toggleKey' => $this->getToggleKey(),
+            'keys' => [
+                'id' => $this->getTableKey(),
+                'sort' => $this->getSortKey(),
+                'order' => $this->getOrderKey(),
+                'show' => $this->getShowKey(),
+                'action' => $this->getActionRoute(),
+                'search' => $this->getSearchKey(),
+                'toggle' => $this->getToggleKey(),
+            ]
         ];
     }
 

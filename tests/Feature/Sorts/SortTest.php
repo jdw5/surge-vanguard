@@ -74,7 +74,7 @@ it('can apply a bidirectional sort to an eloquent builder', function () {
 it('can apply a directional sort to an eloquent builder', function () {
     $sort = Sort::make('name')->desc();
     $builder = Product::query();
-    $sort->apply($builder, 'name', 'asc');
+    $sort->apply($builder, 'name', 'desc');
     expect($builder->toSql())->toBe('select * from "products" order by "products"."name" desc');
 });
 
@@ -88,7 +88,7 @@ it('can apply a bidirectional sort to a query builder', function () {
 it('can apply a directional sort to a query builder', function () {
     $sort = Sort::make('name')->desc();
     $builder = DB::table('products');
-    $sort->apply($builder, 'name', 'asc');
+    $sort->apply($builder, 'name', 'desc');
     expect($builder->toSql())->toBe('select * from "products" order by "name" desc');
 });
 
@@ -99,11 +99,37 @@ it('does not apply sort if name does not match', function () {
     expect($builder->toSql())->toBe('select * from "products"');
 });
 
+it('ensures sort is not active if it does not match', function () {
+    $sort = Sort::make('name');
+    $builder = Product::query();
+    $sort->apply($builder, 'nam', 'asc');
+    expect($sort->isActive())->toBeFalse();
+});
 
-// it('can apply an isotropic sort', function () {
-//     $sort = IsotropicSort::make('name')->desc();
-//     $builder = Product::query();
-//     request()->merge(['sort' => 'price']);
-//     $sort->apply($builder, true);
-//     expect($builder->toSql())->toBe('select * from "products" order by "products"."name" desc');
-// });
+it('checks if bidirectional sort is active', function () {
+    $sort = Sort::make('name');
+    $builder = Product::query();
+    $sort->apply($builder, 'name', 'asc');
+    expect($sort->isActive())->toBeTrue();
+});
+
+it('checks if directional sort is active', function () {
+    $sort = Sort::make('name')->asc();
+    $builder = Product::query();
+    $sort->apply($builder, 'name', 'asc');
+    expect($sort->isActive())->toBeTrue();
+});
+
+it('ensures directional sort is not active if name does not match', function () {
+    $sort = Sort::make('name')->asc();
+    $builder = Product::query();
+    $sort->apply($builder, 'nam', 'asc');
+    expect($sort->isActive())->toBeFalse();
+});
+
+it('ensures directional sort is not active if direction does not match', function () {
+    $sort = Sort::make('name')->asc();
+    $builder = Product::query();
+    $sort->apply($builder, 'name', 'desc');
+    expect($sort->isActive())->toBeFalse();
+});

@@ -13,19 +13,19 @@ class ToggleSort extends BaseSort
         $this->setType('sort:toggle');
     }
     
-    public function apply(Builder|QueryBuilder $builder, ?string $sortBy = null, ?string $orderBy = null): void
+    public function apply(Builder|QueryBuilder $builder, ?string $sortBy = null, ?string $direction = null): void
     {
-        parent::apply($builder, $sortBy, $orderBy);
-        $this->setDirection($this->getNextDirection($orderBy));
+        parent::apply($builder, $sortBy, $direction);
+        $this->setDirection($this->getNextDirection($direction));
     }
 
-    public function getNextDirection(?string $orderBy): ?string
+    public function getNextDirection(?string $direction): ?string
     {
         if (! $this->isActive()) {
             return 'asc';
         }
 
-        return match ($orderBy) {
+        return match ($direction) {
             'asc' => 'desc',
             'desc' => null,
             default => 'asc',

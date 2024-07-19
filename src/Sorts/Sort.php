@@ -52,18 +52,16 @@ class Sort extends BaseSort
         ));
     }
 
-    public function handle(Builder|QueryBuilder $builder, ?string $orderBy = null): void
+    public function handle(Builder|QueryBuilder $builder, ?string $direction = null): void
     {
         $builder->orderBy(
             column: $builder instanceof Builder ? $builder->qualifyColumn($this->getProperty()) : $this->getProperty(),
-            direction: $this->hasDirection() ? $this->getDirection() : $orderBy ?? config('table.sort.default_order', 'asc'),
+            direction: $this->hasDirection() ? $this->getDirection() : $direction ?? config('table.sort.default_order', 'asc'),
         );
     }
     
-    public function sorting(?string $sortBy, ?string $orderBy): bool
+    public function sorting(?string $sortBy, ?string $direction): bool
     {
-        $sorts = !is_null($sortBy) && $sortBy === $this->getName();
-        $orders = $this->hasDirection() ? true : !is_null($orderBy);
-        return $sorts && $orders;
+        return $sortBy === $this->getName() && ($this->hasDirection() ? $direction === $this->getDirection() : true);
     }
 }
