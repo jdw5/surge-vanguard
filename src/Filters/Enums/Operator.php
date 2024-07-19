@@ -30,6 +30,21 @@ enum Operator: string
         };
     }
 
+    public function label(): string
+    {
+        return match ($this) {
+            self::EQUAL => 'Equal to',
+            self::NOT_EQUAL => 'Not equal to',
+            self::GREATER_THAN => 'Greater than',
+            self::GREATER_THAN_OR_EQUAL => 'Greater than or equal to',
+            self::LESS_THAN => 'Less than',
+            self::LESS_THAN_OR_EQUAL => 'Less than or equal to',
+            self::LIKE => 'Contains',
+        };
+    }
+
+
+
     public function value(): string
     {
         return $this->value;

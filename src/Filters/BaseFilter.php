@@ -11,7 +11,7 @@ use Conquest\Table\Filters\Exceptions\CannotResolveNameFromProperty;
 use Conquest\Table\Refiners\Refiner;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 
 abstract class BaseFilter extends Refiner implements Filters
 {
@@ -26,41 +26,44 @@ abstract class BaseFilter extends Refiner implements Filters
         bool|Closure|null $authorize = null,
         ?Closure $validator = null,
         ?Closure $transform = null,
+        array $metadata = null,
     ) {
-        if (is_array($property) && is_null($name)) {
-            throw new CannotResolveNameFromProperty($property);
-        }
-        parent::__construct($property, $name, $label, $authorize);
+        if (is_array($property) && is_null($name)) throw new CannotResolveNameFromProperty($property);
+        parent::__construct($property, $name, $label, $authorize, $metadata);
         $this->setValidator($validator);
         $this->setTransform($transform);
     }
 
+    public function getValueFromRequest(): mixed
+    {
+        return Request::input($this->getName(), null);
+    }
+
     public function apply(Builder|QueryBuilder $builder): void
     {
-        $request = request();
-        $value = $this->transformUsing($request->query($this->getName()));
+        $value = $this->transformUsing($this->getValueFromRequest());
         $this->setValue($value);
-        $this->setActive($this->filtering($request));
+        $this->setActive($this->filtering($value) && $this->validateUsing($value));
 
         $builder->when(
-            $this->isActive() && $this->validateUsing($value),
-            function (Builder|QueryBuilder $builder) {
-                $builder->where(
-                    column: $builder->qualifyColumn($this->getProperty()),
-                    value: $this->getValue(),
-                );
-            }
+            $this->isActive(),
+            fn (Builder|QueryBuilder $builder) => $this->handle($builder),
         );
     }
 
-    public function filtering(Request $request): bool
+    public function handle(Builder|QueryBuilder $builder): void
     {
-        return $request->has($this->getName()) && ! is_null($request->query($this->getName()));
+        $builder->where(
+            column: $builder->qualifyColumn($this->getProperty()),
+            value: $this->getValue(),
+        );
     }
 
-    /**
-     * Convert the filter to an array representation
-     */
+    public function filtering(mixed $value): bool
+    {
+        return !is_null($value);
+    }
+
     public function toArray(): array
     {
         return [

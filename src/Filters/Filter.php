@@ -5,7 +5,6 @@ namespace Conquest\Table\Filters;
 use Closure;
 use Conquest\Table\Filters\Concerns\HasClause;
 use Conquest\Table\Filters\Concerns\HasOperator;
-use Conquest\Table\Filters\Concerns\IsNegatable;
 use Conquest\Table\Filters\Enums\Clause;
 use Conquest\Table\Filters\Enums\Operator;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,22 +14,26 @@ class Filter extends BaseFilter
 {
     use HasClause;
     use HasOperator;
-    use IsNegatable;
+
+    public function setUp(): void
+    {
+        $this->setType('filter');
+    }
 
     public function __construct(
         array|string|Closure $property,
         string|Closure|null $name = null,
         string|Closure|null $label = null,
         bool|Closure|null $authorize = null,
+        ?Closure $validator = null,
+        ?Closure $transform = null,
         string|Clause $clause = Clause::IS,
         string|Operator $operator = Operator::EQUAL,
-        bool $negate = false,
+        array $metadata = null,
     ) {
-        parent::__construct($property, $name, $label, $authorize);
+        parent::__construct($property, $name, $label, $authorize, $validator, $transform, $metadata);
         $this->setClause($clause);
         $this->setOperator($operator);
-        $this->setNegation($negate);
-        $this->setType('filter');
     }
 
     public static function make(
@@ -38,37 +41,32 @@ class Filter extends BaseFilter
         string|Closure|null $name = null,
         string|Closure|null $label = null,
         bool|Closure|null $authorize = null,
+        ?Closure $validator = null,
+        ?Closure $transform = null,
         string|Clause $clause = Clause::IS,
         string|Operator $operator = Operator::EQUAL,
-        bool $negate = false,
+        array $metadata = null,
     ): static {
         return resolve(static::class, compact(
             'property',
             'name',
             'label',
             'authorize',
+            'validator',
+            'transform',
             'clause',
             'operator',
-            'negate',
+            'metadata',
         ));
     }
 
-    public function apply(Builder|QueryBuilder $builder): void
+    public function handle(Builder|QueryBuilder $builder): void
     {
-        $request = request();
-        $queryValue = $request->query($this->getName());
-
-        $transformedValue = $this->transformUsing($queryValue);
-        $this->setValue($transformedValue);
-        $this->setActive($this->filtering($request));
-        $builder->when(
-            $this->isActive() && $this->isValid($transformedValue),
-            fn (Builder|QueryBuilder $builder) => $this->getClause()
-                ->apply($builder,
-                    $this->getProperty(),
-                    $this->isNegated() ? $this->getOperator()->negate() : $this->getOperator(),
-                    $this->getValue()
-                )
-        );
+        $this->getClause()
+            ->apply($builder,
+                $this->getProperty(),
+                $this->getOperator(),
+                $this->getValue()
+            );
     }
 }

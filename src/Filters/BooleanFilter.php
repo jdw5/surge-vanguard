@@ -11,15 +11,20 @@ use Conquest\Table\Filters\Concerns\HasOperator;
 use Conquest\Table\Filters\Concerns\IsNegatable;
 use Conquest\Table\Filters\Enums\Clause;
 use Conquest\Table\Filters\Enums\Operator;
+use Illuminate\Support\Facades\Request;
 
 /**
  * Interpolates a value in the query parameter as true, then executes
  */
 class BooleanFilter extends BaseFilter
 {
-    use IsNegatable;
     use HasClause;
     use HasOperator;
+
+    public function setUp(): void
+    {
+        $this->setType('filter:boolean');
+    }
 
     public function __construct(
         array|string|Closure $property,
@@ -29,15 +34,13 @@ class BooleanFilter extends BaseFilter
         bool|Closure $authorize = null,
         string|Clause $clause = Clause::IS,
         string|Operator $operator = Operator::EQUAL,
-        bool $negate = false,
+        array $metadata = null,
     ) {
         // Needs to accept value
-        parent::__construct($property, $name, $label, $authorize);
+        parent::__construct($property, $name, $label, $authorize, $metadata);
         $this->setValue($value);
         $this->setClause($clause);
         $this->setOperator($operator);
-        $this->setNegation($negate);
-        $this->setType('filter:boolean');
     }
 
     public static function make(
@@ -48,7 +51,7 @@ class BooleanFilter extends BaseFilter
         bool|Closure $authorize = null,
         string|Clause $clause = Clause::IS,
         string|Operator $operator = Operator::EQUAL,
-        bool $negate = false,
+        array $metadata = null,
     ): static {
         return resolve(static::class, compact(
             'property',
@@ -58,21 +61,26 @@ class BooleanFilter extends BaseFilter
             'authorize',
             'clause',
             'operator',
-            'negate',
+            'metadata',
         ));
     }
 
     public function apply(Builder|QueryBuilder $builder): void
     {
-        $this->setActive(request()->boolean($this->getName()));
+        $this->setActive(Request::boolean($this->getName()));
         $builder->when(
             $this->isActive(),
-            fn (Builder|QueryBuilder $builder) => $this->getClause()
-                ->apply($builder, 
-                    $this->getProperty(), 
-                    $this->isNegated() ? $this->getOperator()->negate() : $this->getOperator(), 
-                    $this->getValue()
-                )
+            fn (Builder|QueryBuilder $builder) => $this->handle($builder),
         );
+    }
+
+    public function handle(Builder|QueryBuilder $builder): void
+    {
+        $this->getClause()
+            ->apply($builder,
+                $this->getProperty(),
+                $this->getOperator(),
+                $this->getValue()
+            );
     }
 }

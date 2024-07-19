@@ -15,47 +15,46 @@ class QueryFilter extends BaseFilter
 {
     use HasQuery;
 
+    public function setUp(): void
+    {
+        $this->setType('filter:query');
+    }
+
     public function __construct(
         string|Closure $name,
         string|Closure|null $label = null,
         bool|Closure|null $authorize = null,
+        ?Closure $validator = null,
+        ?Closure $transform = null,
         ?Closure $query = null,
-        ?Closure $condition = null,
+        array $metadata = null,
     ) {
-        $this->setName($name);
-        $this->setLabel($label ?? $this->toLabel($this->getName()));
-        $this->setAuthorize($authorize);
+        parent::__construct($name, $label, $authorize, $validator, $transform, $metadata);
         $this->setQuery($query);
-        $this->setValidator($condition);
-        $this->setType('filter:custom');
-
     }
 
     public static function make(
         string|Closure $name,
         string|Closure|null $label = null,
         bool|Closure|null $authorize = null,
+        ?Closure $validator = null,
+        ?Closure $transform = null,
         ?Closure $query = null,
-        ?Closure $condition = null,
+        array $metadata = null,
     ): static {
         return resolve(static::class, compact(
             'name',
             'label',
             'authorize',
+            'validator',
+            'transform',
             'query',
-            'condition',
+            'metadata'
         ));
     }
 
-    public function apply(Builder|QueryBuilder $builder): void
+    public function handle(Builder|QueryBuilder $builder): void
     {
-        $request = request();
-        $this->setValue($request->query($this->getName()));
-        $this->setActive($this->filtering($request));
-
-        $builder->when(
-            value: $this->isActive() && $this->validateUsing($this->getValue()),
-            callback: fn (Builder|QueryBuilder $builder) => ($this->getQuery())($builder, $this->getValue())
-        );
+        $this->getQuery()($builder, $this->getValue());
     }
 }

@@ -2,45 +2,31 @@
 
 namespace Conquest\Table\Filters\Concerns;
 
-trait HasMultiple
+trait IsMultiple
 {
     protected bool $multiple = false;
 
     public function multiple(): static
     {
         $this->setMultiple(true);
-
         return $this;
     }
 
     public function notMultiple(): static
     {
         $this->setMultiple(false);
-
         return $this;
     }
 
-    protected function setMultiple(?bool $multiple): void
+    public function setMultiple(bool|null $multiple): void
     {
-        if (is_null($multiple)) {
-            return;
-        }
+        if (is_null($multiple)) return;
         $this->multiple = $multiple;
-    }
-
-    public function getMultiple(): bool
-    {
-        return $this->evaluate($this->multiple);
     }
 
     public function isMultiple(): bool
     {
-        return $this->getMultiple();
-    }
-
-    public function hasMultiple(): bool
-    {
-        return $this->getMultiple();
+        return $this->multiple;
     }
 
     public function splitToMultiple(?string $value): array

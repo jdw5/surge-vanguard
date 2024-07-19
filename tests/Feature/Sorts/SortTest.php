@@ -1,10 +1,6 @@
 <?php
 
 use Workbench\App\Models\Product;
-use Conquest\Table\Filters\Filter;
-use Conquest\Table\Filters\Enums\Clause;
-use Conquest\Table\Filters\Enums\Operator;
-use Conquest\Table\Sorts\IsotropicSort;
 use Conquest\Table\Sorts\Sort;
 use Conquest\Table\Table;
 use Illuminate\Support\Facades\DB;

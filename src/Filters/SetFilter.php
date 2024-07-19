@@ -4,16 +4,16 @@ namespace Conquest\Table\Filters;
 
 use Closure;
 use Conquest\Core\Options\Concerns\HasOptions;
-use Conquest\Table\Filters\Concerns\HasMultiple;
+use Conquest\Table\Filters\Concerns\IsMultiple;
 use Conquest\Table\Filters\Concerns\IsRestrictable;
 use Conquest\Table\Filters\Enums\Clause;
 use Conquest\Table\Filters\Enums\Operator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class SelectFilter extends Filter
+class SetFilter extends BaseFilter
 {
-    use HasMultiple;
+    use IsMultiple;
     use HasOptions;
     use IsRestrictable;
 

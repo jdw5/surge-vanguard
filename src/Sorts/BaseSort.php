@@ -21,8 +21,7 @@ abstract class BaseSort extends Refiner
         string $direction = null,
         array $metadata = null,
     ) {
-        parent::__construct($property, $name, $label, $authorize);
-        $this->setMetadata($metadata);
+        parent::__construct($property, $name, $label, $authorize, $metadata);
         $this->setDirection($direction);
     }
 
