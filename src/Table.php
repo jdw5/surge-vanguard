@@ -27,6 +27,7 @@ use Conquest\Table\Pagination\Concerns\HasPagination;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Conquest\Table\Pagination\Concerns\HasPaginationKey;
 use Conquest\Table\Pagination\Concerns\HasPaginationType;
+use Conquest\Table\Pagination\Concerns\Paginates;
 
 class Table extends Primitive implements Tables
 {
@@ -37,12 +38,13 @@ class Table extends Primitive implements Tables
     use HasFilters;
     use HasSorts;
     use HasSearch;
-    use HasPagination;
-    use HasPaginationType;
-    use HasShowKey;
+    // use HasPagination;
+    // use HasPaginationType;
+    // use HasShowKey;
     use HasMeta;
     use HasRecords;
     use Remembers;
+    use Paginates;
 
     public function __construct(
         Builder|QueryBuilder $resource = null,
@@ -69,9 +71,6 @@ class Table extends Primitive implements Tables
      * @param Builder|QueryBuilder $data
      * @return static
      */
-    /** 
-     * Todo: Alias for build, new
-     * */
     public static function make(
         Builder|QueryBuilder $resource = null,
         array $columns = null,
@@ -156,7 +155,7 @@ class Table extends Primitive implements Tables
                 'default' => $this->getDefaultAction(),
             ],
             'properties' => $this->getTableColumns(),
-            'pagination' => $this->getPaginationOptions($this->getActivePagination()),
+            'pagination' => $this->getPagination($this->usePerPage()),
             'toggleKey' => $this->getToggleKey(),
         ];
     }
@@ -188,9 +187,8 @@ class Table extends Primitive implements Tables
      * 
      * @return void
      */
-    private function create(): void
+    protected function create(): void
     {
-        // Records already retrieved and cached
         if ($this->hasRecords()) {
             return;
         }
@@ -204,8 +202,8 @@ class Table extends Primitive implements Tables
         [$records, $meta] = match ($this->getPaginateType()) {
             PaginationType::CURSOR => [
                 $data = $builder->cursorPaginate(
-                    perPage: $this->getActivePagination(),
-                    cursorName: $this->getPageTerm(),
+                    perPage: $this->usePerPage(),
+                    cursorName: $this->getPageName(),
                 )->withQueryString(),
                 $this->getCursorMeta($data)
             ],
@@ -215,9 +213,9 @@ class Table extends Primitive implements Tables
             ],
             default => [
                 $data = $builder->paginate(
-                    perPage: $this->getActivePagination(),
-                    pageName: $this->getPageTerm(),
-                ),
+                    perPage: $this->usePerPage(),
+                    pageName: $this->getPageName(),
+                )->withQueryString(),
                 $this->getPaginateMeta($data)
             ],
         };
@@ -233,15 +231,6 @@ class Table extends Primitive implements Tables
             
         $this->setRecords($records);
         $this->setMeta($meta);
-    }
-
-    private function getActivePagination(): int
-    {
-        $count = $this->getPagination();
-        if (is_int($count)) return $count;
-        $query = Request::query($this->getShowKey());
-        if (in_array($query, $count)) return $query;
-        return $this->getDefaultPagination();
     }
 
     // private function getToggledColumns(): array

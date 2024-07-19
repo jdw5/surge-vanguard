@@ -47,17 +47,18 @@ return [
     'pagination' => [
         'default' => 10,
         'name' => 'page',
-        'options' => null,
+        // 'options' => null,
         'key' => 'show'
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Chunking configuration
+    | Chunking strategy
     |--------------------------------------------------------------------------
     */
     'chunking' => [
         'by_id' => true,
         'size' => 500,
+        // 'lazy' => false,
     ],
 ];
