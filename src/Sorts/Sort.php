@@ -10,14 +10,14 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Conquest\Core\Concerns\IsDefault;
 use Conquest\Table\Sorts\Concerns\HasDirection;
 
-/** 
- * Agnostic to the order field, considers only field with predefined direction 
- * This sort can be used as a default
- */
 class Sort extends BaseSort
 {
-    use HasDirection;
     use IsDefault;
+
+    public function setUp(): void
+    {
+        $this->setType('sort');
+    }
 
     public function __construct(
         string|Closure $property, 
@@ -26,9 +26,9 @@ class Sort extends BaseSort
         bool|Closure $authorize = null,
         string $direction = null,
         bool $default = false,
+        array $metadata = null,
     ) {
-        parent::__construct($property, $name, $label, $authorize);
-        $this->setDirection($direction);
+        parent::__construct($property, $name, $label, $authorize, $direction, $metadata);
         $this->setDefault($default);
     }
 
@@ -39,6 +39,7 @@ class Sort extends BaseSort
         bool|Closure $authorize = null,
         string $direction = null,
         bool $default = false,
+        array $metadata = null,
     ): static {
         return resolve(static::class, compact(
             'property', 
@@ -46,36 +47,30 @@ class Sort extends BaseSort
             'label', 
             'authorize', 
             'direction', 
-            'default'
+            'default',
+            'metadata',
         ));
     }
 
-    public function apply(Builder|QueryBuilder $builder, bool $default = false): void
+    public function apply(Builder|QueryBuilder $builder, ?string $sortBy, ?string $orderBy): void
     {
-        $request = request();
-        
-        $this->setActive($this->sorting($request) || $default);
+        $this->setActive($this->sorting($sortBy, $orderBy));
         
         $builder->when(
             $this->isActive(),
-            function (Builder|QueryBuilder $builder) {
+            function (Builder|QueryBuilder $builder) use ($orderBy) {
                 $builder->orderBy(
                     column: $builder instanceof Builder ? $builder->qualifyColumn($this->getProperty()) : $this->getProperty(),
-                    direction: $this->getDirection(),
+                    direction: $this->hasDirection() ? $this->getDirection() : $orderBy,
                 );
             }
         ); 
     }
 
-    public function sorting(Request $request): bool
+    public function sorting(?string $sortBy, ?string $orderBy): bool
     {
-        return $request->has($this->getSortKey()) && $request->query($this->getSortKey()) === $this->getName();
-    }
-    
-    public function toArray(): array
-    {
-        return array_merge(parent::toArray(), [
-            'direction' => $this->getDirection(),
-        ]);
+        $sorts = !is_null($sortBy) && $sortBy === $this->getName();
+        $orders = $this->hasDirection() ? true : !is_null($orderBy);
+        return $sorts && $orders;
     }
 }

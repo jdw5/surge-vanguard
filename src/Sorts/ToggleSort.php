@@ -3,65 +3,42 @@
 namespace Conquest\Table\Sorts;
 
 use Closure;
-use Conquest\Table\Sorts\Concerns\HasDirection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 class ToggleSort extends BaseSort
 {
-    use HasDirection;
-
-    public ?string $nextDirection = null;
-
-    public function apply(Builder|QueryBuilder $builder): void
+    public function setUp(): void
     {
-        $request = request();
-
-        $this->setActive($this->sorting($request));
-        $this->setDirection($this->sanitiseOrder($request->query($this->getOrderKey())));
+        $this->setType('sort:toggle');
+    }
+    
+    public function apply(Builder|QueryBuilder $builder, ?string $sortBy, ?string $orderBy): void
+    {
+        $this->setActive($this->sorting($sortBy, $orderBy));
+        $this->setDirection($this->getNextDirection($orderBy));
 
         $builder->when(
             $this->isActive(),
-            function (Builder|QueryBuilder $builder) {
+            function (Builder|QueryBuilder $builder) use ($orderBy) {
                 $builder->orderBy(
                     column: $builder->qualifyColumn($this->getProperty()),
-                    direction: $this->getDirection(),
+                    direction: $orderBy,
                 );
             }
         );
     }
 
-    public static function make(
-        string|Closure $property,
-        string|Closure|null $name = null,
-        string|Closure|null $label = null,
-        bool|Closure|null $authorize = null,
-    ): static {
-        return resolve(static::class, compact(
-            'property',
-            'name',
-            'label',
-            'authorize',
-        ));
-    }
-
-    public function getNextDirection(): ?string
+    public function getNextDirection(?string $orderBy): ?string
     {
         if (! $this->isActive()) {
             return 'asc';
         }
 
-        return match ($this->sanitiseOrder(request()->query($this->getOrderKey()))) {
+        return match ($orderBy) {
             'asc' => 'desc',
             'desc' => null,
             default => 'asc',
         };
-    }
-
-    public function toArray(): array
-    {
-        return array_merge(parent::toArray(), [
-            'next_direction' => $this->getNextDirection(),
-        ]);
     }
 }

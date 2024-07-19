@@ -58,9 +58,4 @@ trait Sorts
             $this->getDefaultSort()?->apply($query, true);
         }
     }
-
-    public function sanitiseOrder(?string $value): string
-    {
-        return in_array($value, [self::ASCENDING, self::DESCENDING]) ? $value : config('table.sorting.default_order', self::ASCENDING);
-    }
 }

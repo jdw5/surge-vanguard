@@ -5,7 +5,7 @@ namespace Conquest\Table\Sorts\Concerns;
 trait HasDirection
 {
     /** Can be asc, desc or null */
-    public ?string $direction = null;
+    public string $direction = null;
 
     /**
      * Set the direction
@@ -49,5 +49,15 @@ trait HasDirection
     public function asc(): static
     {
         return $this->direction('asc');
+    }
+
+    public function lacksDirection(): bool
+    {
+        return is_null($this->direction);
+    }
+
+    public function hasDirection(): bool
+    {
+        return !$this->lacksDirection();
     }
 }

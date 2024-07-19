@@ -23,7 +23,7 @@ trait HasSort
         $this->sort = $sortKey;
     }
 
-    public function getSortNameFromRequest(): ?string
+    public function getSort(): ?string
     {
         return Request::input($this->getSortKey(), null);
     }

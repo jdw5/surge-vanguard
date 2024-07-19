@@ -29,4 +29,14 @@ trait HasOrder
     {
         return Request::input($this->getOrderKey(), null);
     }
+
+    public function sanitiseOrder(?string $value): string
+    {
+        return in_array($value, [self::ASCENDING, self::DESCENDING]) ? $value : config('table.sorting.default_order', self::ASCENDING);
+    }
+
+    public function getOrder(): string
+    {
+        return $this->sanitiseOrder($this->getOrderFromRequest());
+    }
 }
