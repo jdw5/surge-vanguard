@@ -13,21 +13,18 @@ trait Paginates
     use HasPaginationType;
     use HasShowKey;
 
-
-    protected function setDefaultPagination(int $defaultPagination): void
-    {
-        $this->defaultPagination = $defaultPagination;
-    }
-
     public function getPaginationCount(): int|array
     {
         return $this->getPerPage() ?? $this->getDefaultPerPage();
     }
 
+    /**
+     * Alias
+     */
     public function setPagination(int|array|null $pagination): void
     {
         if (is_null($pagination)) return;
-        $this->pagination = $pagination;
+        $this->perPage = $pagination;
     }
 
     public function getPagination(int $active = null): array

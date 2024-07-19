@@ -21,12 +21,8 @@ use Conquest\Table\Actions\Concerns\HasActions;
 use Conquest\Table\Columns\Concerns\HasColumns;
 use Conquest\Table\Concerns\Remember\Remembers;
 use Conquest\Table\Filters\Concerns\HasFilters;
-use Conquest\Table\Pagination\Concerns\HasShowKey;
 use Conquest\Table\Pagination\Enums\PaginationType;
-use Conquest\Table\Pagination\Concerns\HasPagination;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Conquest\Table\Pagination\Concerns\HasPaginationKey;
-use Conquest\Table\Pagination\Concerns\HasPaginationType;
 use Conquest\Table\Pagination\Concerns\Paginates;
 
 class Table extends Primitive implements Tables
@@ -38,9 +34,6 @@ class Table extends Primitive implements Tables
     use HasFilters;
     use HasSorts;
     use HasSearch;
-    // use HasPagination;
-    // use HasPaginationType;
-    // use HasShowKey;
     use HasMeta;
     use HasRecords;
     use Remembers;
