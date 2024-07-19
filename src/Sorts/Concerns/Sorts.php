@@ -9,20 +9,13 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Request;
 
-trait HasSorts
+trait Sorts
 {
-    use HasSortKey {
-        getSortKey as protected;
-    }
+    use HasSort;
+    use HasOrder;
 
     protected array $sorts;
 
-    protected function setSorts(array|null $sorts): void
-    {
-        if (is_null($sorts)) return;
-        $this->sorts = $sorts;
-    }
-    
     public function getSorts()
     {
         if (isset($this->sorts)) {
@@ -32,29 +25,28 @@ trait HasSorts
         if (method_exists($this, 'sorts')) {
             return $this->sorts();
         }
-
+        
         return [];
+    }
+
+    protected function setSorts(array|null $sorts): void
+    {
+        if (is_null($sorts)) return;
+        $this->sorts = $sorts;
     }
 
     public function getDefaultSort(): ?Sort
     {
-        // Find the first sort which is an instance of Sort and has default set to true
-        foreach ($this->getSorts() as $sort) {
-            if ($sort instanceof Sort && $sort->isDefault()) {
-                return $sort;
-            }
-        }
-        return null;
+        return collect($this->getSorts())->first(fn($sort) => $sort->isDefault());
     }
 
     public function sorting(): bool
     {
-        return Request::has($this->getSortKey()) && Request::input($this->getSortKey());
+        return !is_null($this->getSortNameFromRequest());
     }
 
     protected function applySorts(Builder|QueryBuilder $query, Collection $colSorts = null): void
     {
-        // Check that there is a sortKey in the query string
         if ($this->sorting()) {
             // $mergedSorts = array_merge($this->getSorts(), $colSorts);
             foreach ($this->getSorts() as $sort) {
@@ -65,5 +57,10 @@ trait HasSorts
         } else {
             $this->getDefaultSort()?->apply($query, true);
         }
+    }
+
+    public function sanitiseOrder(?string $value): string
+    {
+        return in_array($value, [self::ASCENDING, self::DESCENDING]) ? $value : config('table.sorting.default_order', self::ASCENDING);
     }
 }

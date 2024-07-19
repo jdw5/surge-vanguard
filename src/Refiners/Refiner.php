@@ -28,6 +28,7 @@ abstract class Refiner extends Primitive
         string|Closure|null $label = null,
         bool|Closure|null $authorize = null,
     ) {
+        parent::__construct();
         $this->setProperty($property);
         $this->setName($name ?? $this->toName($property));
         $this->setLabel($label ?? $this->toLabel($this->getName()));

@@ -7,10 +7,6 @@ use Conquest\Table\Columns\Enums\Breakpoint;
 
 class Column extends BaseColumn
 {
-
-    /**
-     * Statically create the column
-     */
     public static function make(
         string $name, 
         string $label = null,

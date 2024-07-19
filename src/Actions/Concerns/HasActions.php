@@ -25,7 +25,6 @@ trait HasActions
     public const PAGE_ACTION = 'action:page';
     public const EXPORT_ACTION = 'action:export';
     
-
     private Collection $cachedActions;
     protected $actions;
     protected $actionRoute;

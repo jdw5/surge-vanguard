@@ -51,7 +51,18 @@ class SelectFilter extends Filter
         array $options = [],
         bool|Closure|null $restrict = null,
     ): static {
-        return new static($property, $name, $label, $authorize, $clause, $operator, $negate, $multiple, $options, $restrict);
+        return resolve(static::class, compact(
+            'property',
+            'name',
+            'label',
+            'authorize',
+            'clause',
+            'operator',
+            'negate',
+            'multiple',
+            'options',
+            'restrict',
+        ));
     }
 
     public function apply(Builder|QueryBuilder $builder): void

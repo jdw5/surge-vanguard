@@ -18,20 +18,19 @@ abstract class BaseSort extends Refiner implements Sorts
 
     public function __construct(
         string|Closure $property,
-        string|Closure|null $name = null,
-        string|Closure|null $label = null,
-        bool|Closure|null $authorize = null,
+        string|Closure $name = null,
+        string|Closure $label = null,
+        bool|Closure $authorize = null,
+        array $metadata = null,
     ) {
-        $this->setProperty($property);
-        $this->setName($name ?? $this->toName($property));
-        $this->setLabel($label ?? $this->toLabel($this->getName()));
-        $this->setAuthorize($authorize);
+        parent::__construct($property, $name, $label, $authorize);
+        $this->setMetadata($metadata);
     }
 
     public function apply(Builder|QueryBuilder $builder): void
     {
         $request = request();
-
+ 
         $this->setActive($this->sorting($request));
 
         $builder->when(
@@ -50,15 +49,5 @@ abstract class BaseSort extends Refiner implements Sorts
         return $request->has($this->getSortKey()
             && $request->query($this->getSortKey()) === $this->getName()
             && $request->has($this->getOrderKey()));
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'name' => $this->getName(),
-            'label' => $this->getLabel(),
-            'metadata' => $this->getMetadata(),
-            'active' => $this->isActive(),
-        ];
     }
 }

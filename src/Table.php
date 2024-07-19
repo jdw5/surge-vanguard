@@ -61,9 +61,6 @@ class Table extends Primitive implements Tables
     
     /**
      * Create a new table instance.
-     * 
-     * @param Builder|QueryBuilder $data
-     * @return static
      */
     public static function make(
         Builder|QueryBuilder $resource = null,

@@ -26,7 +26,7 @@ return [
     */
     'remember' => [
         'default' => false,
-        'duration' => 30*24*60*60,
+        'duration' => 2592000,
         'toggle_key' => 'cols',
         'cookie' => false,
     ],
@@ -39,7 +39,8 @@ return [
     'sorting' => [
         'sort_key' => 'sort',
         'order_key' => 'order',
-        'default_order' => 'asc',
+        'default_order' => 'asc', // 'asc' or 'desc'
+        // 'signed' => false,
     ],
 
     /*
@@ -50,7 +51,6 @@ return [
     'pagination' => [
         'default' => 10,
         'name' => 'page',
-        // 'options' => null,
         'key' => 'show'
     ],
 

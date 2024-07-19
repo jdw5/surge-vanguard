@@ -19,11 +19,6 @@ trait HasDirection
         return $this;
     }
 
-    public function dir(string $direction): static
-    {
-        return $this->direction($direction);
-    }
-
     /**
      * Set the direction quietly.
      */
