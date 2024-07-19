@@ -12,7 +12,7 @@ trait HasSearch
 
     protected string $searchKey = 'q';
 
-    protected bool $useScout;
+    protected bool $usesScout;
 
     public static function setGlobalSearchKey(string $key): void
     {
@@ -56,12 +56,12 @@ trait HasSearch
 
     protected function usesScout(): bool
     {
-        if (isset($this->useScout)) {
-            return $this->useScout;
+        if (isset($this->usesScout)) {
+            return $this->usesScout;
         }
 
-        if (method_exists($this, 'useScout')) {
-            return $this->useScout();
+        if (method_exists($this, 'usesScout')) {
+            return $this->usesScout();
         }
 
         return false;

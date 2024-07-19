@@ -13,7 +13,10 @@ return [
     */
     'search' => [
         'key' => 'q',
-        'use_scout' => false,
+        'scout' => false,
+        'columns' => [
+            // 'name',
+        ],
     ],
 
     /*

@@ -17,13 +17,14 @@ use Conquest\Table\Concerns\HasResource;
 use Illuminate\Database\Eloquent\Builder;
 use Conquest\Table\Sorts\Concerns\HasSorts;
 use Conquest\Core\Exceptions\KeyDoesntExist;
+use Conquest\Table\Concerns\Search\Searches;
 use Conquest\Table\Actions\Concerns\HasActions;
 use Conquest\Table\Columns\Concerns\HasColumns;
 use Conquest\Table\Concerns\Remember\Remembers;
 use Conquest\Table\Filters\Concerns\HasFilters;
+use Conquest\Table\Pagination\Concerns\Paginates;
 use Conquest\Table\Pagination\Enums\PaginationType;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Conquest\Table\Pagination\Concerns\Paginates;
 
 class Table extends Primitive implements Tables
 {
@@ -33,11 +34,11 @@ class Table extends Primitive implements Tables
     use HasActions;
     use HasFilters;
     use HasSorts;
-    use HasSearch;
     use HasMeta;
     use HasRecords;
     use Remembers;
     use Paginates;
+    use Searches;
 
     public function __construct(
         Builder|QueryBuilder $resource = null,
@@ -190,7 +191,7 @@ class Table extends Primitive implements Tables
         // $this->applyToggleability();
         $this->applyFilters($builder);
         $this->applySorts($builder, $this->getSortableColumns()->map(fn ($column) => $column->getSort()));
-        $this->applySearch($builder, $this->getSearchTerm(request()));
+        $this->search($builder);
         
         [$records, $meta] = match ($this->getPaginateType()) {
             PaginationType::CURSOR => [
