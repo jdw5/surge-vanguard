@@ -44,7 +44,6 @@ abstract class BaseFilter extends Refiner implements Filters
         $value = $this->transformUsing($this->getValueFromRequest());
         $this->setValue($value);
         $this->setActive($this->filtering($value));
-
         $builder->when(
             $this->isActive() && $this->validateUsing($value),
             fn (Builder|QueryBuilder $builder) => $this->handle($builder),

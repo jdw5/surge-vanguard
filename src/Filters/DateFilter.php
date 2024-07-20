@@ -27,9 +27,9 @@ class DateFilter extends BaseFilter
 
     public function __construct(
         array|string|Closure $property,
-        string|Closure|null $name = null,
-        string|Closure|null $label = null,
-        bool|Closure|null $authorize = null,
+        string|Closure $name = null,
+        string|Closure $label = null,
+        bool|Closure $authorize = null,
         ?Closure $validator = null,
         ?Closure $transform = null,
         string|DateClause $dateClause = DateClause::DATE,
@@ -42,10 +42,10 @@ class DateFilter extends BaseFilter
     }
 
     public static function make(
-        array|string|Closure $property,
-        string|Closure|null $name = null,
-        string|Closure|null $label = null,
-        bool|Closure|null $authorize = null,
+        string|Closure $property,
+        string|Closure $name = null,
+        string|Closure $label = null,
+        bool|Closure $authorize = null,
         ?Closure $validator = null,
         ?Closure $transform = null,
         string|DateClause $dateClause = DateClause::DATE,
@@ -75,9 +75,10 @@ class DateFilter extends BaseFilter
             );
     }
 
-    public function getValueFromRequest(): mixed
+    public function getValueFromRequest(): ?Carbon
     {
         $v = Request::input($this->getName(), null);
+        if (is_null($v)) return null;
 
         try {
             return Carbon::parse($v);
@@ -85,4 +86,15 @@ class DateFilter extends BaseFilter
             return null;
         }
     }
-}
+
+    public function toArray(): array
+    {
+        return [
+            'name' => $this->getName(),
+            'label' => $this->getLabel(),
+            'type' => $this->getType(),
+            'active' => $this->isActive(),
+            'value' => $this->getValue()?->toDateTimeString(),
+            'metadata' => $this->getMetadata(),
+        ];
+    }}
