@@ -10,7 +10,7 @@ trait IsSearchable
 
     public function searchable(string|Closure|null $property = null): static
     {
-        $this->setSearchability(true, $property);
+        $this->setSearchable(true, $property);
 
         return $this;
     }

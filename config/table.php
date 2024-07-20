@@ -64,4 +64,20 @@ return [
         'size' => 500,
         // 'lazy' => false,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Fallbacks
+    |--------------------------------------------------------------------------
+    |
+    | Control the fallback values for columns when the value is null.
+    |
+    */
+    'fallbacks' => [
+        'default' => null,
+        'text' => '—',
+        'numeric' => 0,
+        'true' => 'true',
+        'false' => 'false',
+    ]
 ];

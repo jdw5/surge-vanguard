@@ -10,7 +10,6 @@ use Conquest\Table\Filters\Enums\Operator;
 use Conquest\Core\Options\Concerns\HasOptions;
 use Conquest\Core\Options\Option;
 use Conquest\Table\Filters\Concerns\HasClause;
-use Conquest\Table\Filters\Concerns\IsMultiple;
 use Conquest\Table\Filters\Concerns\HasOperator;
 use Conquest\Table\Filters\Concerns\IsRestrictable;
 use Illuminate\Database\Query\Builder as QueryBuilder;

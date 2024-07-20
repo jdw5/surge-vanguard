@@ -51,7 +51,7 @@ abstract class BaseColumn extends Primitive
         bool $srOnly = false,
         bool $sortable = false,
         bool $searchable = false,
-        bool $toggledOn = true,
+        bool $active = true,
         bool $isKey = false,
         array $metadata = null,
     ) {
@@ -67,7 +67,7 @@ abstract class BaseColumn extends Primitive
         $this->setHidden($hidden);
         $this->setSrOnly($srOnly);
         $this->setTransform($transform);
-        $this->setToggledOn($toggledOn);
+        $this->setToggledOn($active);
         $this->setKey($isKey);
         $this->setMetadata($metadata);
     }
@@ -84,7 +84,7 @@ abstract class BaseColumn extends Primitive
             'label' => $this->getLabel(),
             'metadata' => $this->getMetadata(),
             'fallback' => $this->getFallback(),
-            'on' => $this->isToggledOn(),
+            'active' => $this->isToggledOn(),
             'hidden' => $this->isHidden(),
             'breakpoint' => $this->getBreakpoint(),
             'srOnly' => $this->isSrOnly(),

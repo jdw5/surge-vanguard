@@ -21,55 +21,62 @@ class DateColumn extends BaseColumn
     public function __construct(
         string|Closure $name, 
         string|Closure $label = null,
+        bool $hidden = false,
+        mixed $fallback = null,
+        Closure|bool $authorize = null,
+        Closure $transform = null,
+        Breakpoint|string $breakpoint = null,
+        bool $srOnly = false,
         bool $sortable = false,
         bool $searchable = false,
-        string|Breakpoint $breakpoint = null,
-        bool|Closure $authorize = null,
-        mixed $fallback = null,
-        bool $hidden = false,
-        bool $srOnly = false,
-        Closure $transform = null,
+        bool $active = true,
+        bool $isKey = false,
         string|Closure $format = null,
+        array $metadata = null,
     ) {
-        parent::__construct($name, $label, $sortable, $searchable, $breakpoint, $authorize, $fallback, $hidden, $srOnly, $transform);
+        parent::__construct($name, $label, $hidden, $fallback, $authorize, $transform, $breakpoint, $srOnly, $sortable, $searchable, $active, $isKey, $metadata);
         $this->setFormat($format);
     }
 
     public static function make(
-        string $name, 
-        string $label = null,
+        string|Closure $name, 
+        string|Closure $label = null,
+        bool $hidden = false,
+        mixed $fallback = null,
+        Closure|bool $authorize = null,
+        Closure $transform = null,
+        Breakpoint|string $breakpoint = null,
+        bool $srOnly = false,
         bool $sortable = false,
         bool $searchable = false,
-        bool $toggleable = false,
-        Breakpoint|string $breakpoint = null,
-        Closure|bool $authorize = null,
-        mixed $fallback = null,
-        bool $hidden = false,
-        bool $srOnly = false,
-        Closure $transform = null,
+        bool $active = true,
+        bool $isKey = false,
         string|Closure $format = null,
+        array $metadata = null,
     ): static {
         return resolve(static::class, compact(
-            'name', 
-            'label', 
-            'sortable', 
-            'searchable', 
-            'toggleable', 
-            'breakpoint', 
-            'authorize', 
-            'fallback', 
-            'hidden', 
-            'srOnly', 
+            'name',
+            'label',
+            'hidden',
+            'fallback',
+            'authorize',
             'transform',
+            'breakpoint',
+            'srOnly',
+            'sortable',
+            'searchable',
+            'active',
+            'isKey',
             'format',
+            'metadata',
         ));
     }
 
     public function apply(mixed $value): mixed
     {
-        if ($this->canTransform()) $value = $this->transformUsing($value);
-
         if (is_null($value)) return $this->getFallback();
+        
+        if ($this->canTransform()) $value = $this->transformUsing($value);
 
         if ($this->hasFormat()) {
             try {

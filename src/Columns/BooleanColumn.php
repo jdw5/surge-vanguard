@@ -4,68 +4,71 @@ namespace Conquest\Table\Columns;
 
 use Closure;
 use Conquest\Table\Columns\Enums\Breakpoint;
-use Conquest\Table\Columns\Concerns\HasTruthLabels;
+use Conquest\Table\Columns\Concerns\HasBooleanLabels;
 
 class BooleanColumn extends BaseColumn
 {
-    use HasTruthLabels;
+    use HasBooleanLabels;
 
     public function setUp(): void
     {
-        $this->setType('col:boolean');
+        $this->setType('col:bool');
     }
 
     public function __construct(
         string|Closure $name, 
         string|Closure $label = null,
-        bool $sortable = false,
-        bool $searchable = false,
-        Breakpoint|string $breakpoint = null,
-        Closure|bool $authorize = null,
         bool $hidden = false,
-        bool $srOnly = false,
+        Closure|bool $authorize = null,
         Closure $transform = null,
-        Closure|string $truthLabel = 'Yes',
-        Closure|string $falseLabel = 'No',
+        Breakpoint|string $breakpoint = null,
+        bool $srOnly = false,
+        bool $sortable = false,
+        bool $active = true,
+        string|Closure $truthLabel = null,
+        string|Closure $falseLabel = null,
+        array $metadata = null,
     ) {
-        parent::__construct($name, $label, $sortable, $searchable, $breakpoint, $authorize, null, $hidden, $srOnly, $transform);
-        $this->truthLabel($truthLabel);
-        $this->falseLabel($falseLabel);
+        parent::__construct($name, $label, $hidden, null, $authorize, $transform, $breakpoint, $srOnly, $sortable, false, $active, false, $metadata);
+        $this->setTruthLabel($truthLabel);
+        $this->setFalseLabel($falseLabel);
     }
 
     public static function make(
         string|Closure $name, 
         string|Closure $label = null,
+        bool $hidden = false,
+        Closure|bool $authorize = null,
+        Closure $transform = null,
+        Breakpoint|string $breakpoint = null,
+        bool $srOnly = false,
         bool $sortable = false,
         bool $searchable = false,
-        Breakpoint|string $breakpoint = null,
-        Closure|bool $authorize = null,
-        bool $hidden = false,
-        bool $srOnly = false,
-        Closure $transform = null,
-        Closure|string $truthLabel = 'Yes',
-        Closure|string $falseLabel = 'No',
+        bool $active = true,
+        string|Closure $truthLabel = 'Active',
+        string|Closure $falseLabel = 'Inactive',
+        array $metadata = null,
     ): static {
         return resolve(static::class, compact(
             'name',
             'label',
+            'hidden',
+            'authorize',
+            'transform',
+            'breakpoint',
+            'srOnly',
             'sortable',
             'searchable',
-            'breakpoint',
-            'authorize',
-            'hidden',
-            'srOnly',
-            'transform',
+            'active',
             'truthLabel',
-            'falseLabel'
+            'falseLabel',
+            'metadata',
         ));
     }
 
     public function apply(mixed $value): mixed
     {
         if ($this->canTransform()) $value = $this->transformUsing($value);
-        
-        if (!!$value) return $this->getTruthLabel();
-        return $this->getFalseLabel();
+        return !!$value ? $this->getTruthLabel() : $this->getFalseLabel();
     }
 }

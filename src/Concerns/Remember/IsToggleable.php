@@ -13,13 +13,13 @@ trait IsToggleable
 
     public function off(): static
     {
-        $this->setToggleability(false);
+        $this->setToggledOn(false);
         return $this;
     }
 
     public function on(): static
     {
-        $this->setToggleability(true);
+        $this->setToggledOn(true);
         return $this;
     }
 
