@@ -49,6 +49,11 @@ trait HasColumns
         return $this->getTableColumns()->filter(fn (BaseColumn $column): bool => $column->hasSort())->values();
     }
 
+    public function getSearchableColumns(): Collection
+    {
+        return $this->getTableColumns()->filter(fn (BaseColumn $column): bool => $column->isSearchable())->pluck('name');
+    }
+
     /**
      * Retrieve the key column for the table if one exists
      * 

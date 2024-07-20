@@ -34,9 +34,9 @@ trait HasResource
                 // If it's a string (class name), create a query
                 return $this->resource::query();
             }
-            if ($this->resource instanceof \Illuminate\Database\Eloquent\Model) {
-                return $this->resource->newQuery();
-            }
+            // if ($this->resource instanceof \Illuminate\Database\Eloquent\Model) {
+            //     return $this->resource->newQuery();
+            // }
             return $this->isBuilderInstance() ? $this->resource : $this->resource->query();
         }
 

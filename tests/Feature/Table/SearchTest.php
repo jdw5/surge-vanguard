@@ -29,7 +29,7 @@ it('can change search key', function () {
 
 it('can set search', function () {
     $this->table->setSearch('name');
-    expect($this->table->getSearch())->toBe('name');
+    expect($this->table->getSearch())->toBe(['name']);
 });
 
 it('can set search to array', function () {
@@ -52,7 +52,7 @@ it('allows for empty query string', function () {
 });
 
 it('prevents searching if not enabled', function () {
-    $this->table->search($q = Product::query());
+    $this->table->search($q = Product::query(), $this->table->combinedSearch());
     expect($q->toSql())->not->toContain('where');
 });
 
@@ -63,7 +63,7 @@ it('can search on the database', function () {
         'category_id' => 1,
     ]);
     Request::merge(['q' => 'search term']);
-    $this->table->search($q = Product::query());
+    $this->table->search($q = Product::query(), $this->table->combinedSearch());
     expect($q->toSql())->toContain('where')
         ->toContain('or');
     expect($q->get())->toHaveCount(1);

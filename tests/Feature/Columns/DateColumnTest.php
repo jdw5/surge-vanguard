@@ -120,3 +120,20 @@ it('can format a date', function () {
     expect($col->apply('01-01-2001'))->toBe('01 Jan 2001');
     expect($col->apply(null))->toBeNull();
 });
+
+it('has array form', function () {
+    $col = DateColumn::make('name');
+    expect($col->toArray())->toEqual([
+        'name' => 'name',
+        'label' => 'Name',
+        'hidden' => false,
+        'active' => true,
+        'breakpoint' => null,
+        'srOnly' => false,
+        'sort' => false,
+        'sorting' => false,
+        'direction' => null,
+        'metadata' => [],
+        'fallback' => config('table.fallback.default'),
+    ]);
+});

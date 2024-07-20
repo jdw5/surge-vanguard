@@ -45,13 +45,17 @@ trait Sorts
         return !is_null($this->getSort());
     }
 
-    protected function applySorts(Builder|QueryBuilder $query, Collection $colSorts = null): void
+    /**
+     * Apply the sorting to the query
+     * 
+     * @param Builder|QueryBuilder $query
+     * @param array<Sort> $sorts
+     */
+    protected function sort(Builder|QueryBuilder $query, array $sorts): void
     {
         if ($this->sorting()) {
-            // $mergedSorts = array_merge($this->getSorts(), $colSorts);
-            foreach ($this->getSorts() as $sort) {
+            foreach ($sorts as $sort) {
                 $sort->apply($query, $this->getSort(), $this->getOrder());
-                // Only apply one sort
                 if ($sort->isActive()) break;
             }
         } else {

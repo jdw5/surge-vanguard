@@ -112,3 +112,20 @@ it('can apply a column and fallbacks with value', function () {
     expect($col->apply('test'))->toBe('TEST');
     expect($col->apply(null))->toBe(config('table.fallback.numeric'));
 });
+
+it('has array form', function () {
+    $col = NumericColumn::make('name');
+    expect($col->toArray())->toEqual([
+        'name' => 'name',
+        'label' => 'Name',
+        'hidden' => false,
+        'active' => true,
+        'breakpoint' => null,
+        'srOnly' => false,
+        'sort' => false,
+        'sorting' => false,
+        'direction' => null,
+        'metadata' => [],
+        'fallback' => config('table.fallback.numeric'),
+    ]);
+});

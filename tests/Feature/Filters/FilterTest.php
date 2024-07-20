@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\Request;
 
 it('can create a filter', function () {
     $filter = new Filter($n = 'name');
-    expect($filter->getProperty())->toBe($n);
-    expect($filter->getName())->toBe($n);
-    expect($filter->getLabel())->toBe('Name');
-    expect($filter->isAuthorised())->toBeTrue();
-    expect($filter->getClause())->toBe(Clause::IS);
-    expect($filter->getOperator())->toBe(Operator::EQUAL);
+    expect($filter)->getProperty()->toBe($n)
+        ->getName()->toBe($n)
+        ->getLabel()->toBe('Name')
+        ->isAuthorised()->toBeTrue()
+        ->getClause()->toBe(Clause::IS)
+        ->getOperator()->toBe(Operator::EQUAL);
 });
 
 it('can create a filter with arguments', function () {
@@ -25,12 +25,12 @@ it('can create a filter with arguments', function () {
         operator: Operator::NOT_EQUAL,
     );
 
-    expect($filter->getProperty())->toBe('name');
-    expect($filter->getName())->toBe('username');
-    expect($filter->getLabel())->toBe('Username');
-    expect($filter->isAuthorised())->toBeFalse();
-    expect($filter->getClause())->toBe(Clause::IS_NOT);
-    expect($filter->getOperator())->toBe(Operator::NOT_EQUAL);
+    expect($filter)->getProperty()->toBe('name')
+        ->getName()->toBe('username')
+        ->getLabel()->toBe('Username')
+        ->isAuthorised()->toBeFalse()
+        ->getClause()->toBe(Clause::IS_NOT)
+        ->getOperator()->toBe(Operator::NOT_EQUAL);
 });
 
 it('can make a filter', function () {
@@ -46,12 +46,12 @@ it('can chain methods on a filter', function () {
         ->clause(Clause::IS_NOT)
         ->operator(Operator::NOT_EQUAL);
     
-    expect($filter->getProperty())->toBe('name');
-    expect($filter->getName())->toBe('username');
-    expect($filter->getLabel())->toBe('Name'); // Uses property to generate label
-    expect($filter->isAuthorised())->toBeFalse();
-    expect($filter->getClause())->toBe(Clause::IS_NOT);
-    expect($filter->getOperator())->toBe(Operator::NOT_EQUAL);
+    expect($filter)->getProperty()->toBe('name')
+        ->getName()->toBe('username')
+        ->getLabel()->toBe('Name')
+        ->isAuthorised()->toBeFalse()
+        ->getClause()->toBe(Clause::IS_NOT)
+        ->getOperator()->toBe(Operator::NOT_EQUAL);
 });
 
 it('can apply a filter to an eloquent builder', function () {
@@ -69,5 +69,5 @@ it('can apply a filter to a query builder', function () {
     Request::merge(['name' => 'test']);
     $filter->apply($builder);
     expect($builder->toSql())->toBe('select * from "products" where "name" = ?');
+    expect($filter->isActive())->toBeTrue();
 });
-

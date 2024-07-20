@@ -114,3 +114,19 @@ it('can apply a boolean', function () {
     expect($col->apply(-1))->toBe('Inactive');
     expect($col->apply(1))->toBe('Active');
 });
+
+it('has array form', function () {
+    $col = BooleanColumn::make('name');
+    expect($col->toArray())->toEqual([
+        'name' => 'name',
+        'label' => 'Name',
+        'hidden' => false,
+        'active' => true,
+        'breakpoint' => null,
+        'srOnly' => false,
+        'sort' => false,
+        'sorting' => false,
+        'direction' => null,
+        'metadata' => [],
+    ]);
+});

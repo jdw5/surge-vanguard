@@ -116,3 +116,20 @@ it('can apply a column and fallbacks with value', function () {
 it('does not allow the name to be "actions"', function () {
     expect(fn () => new Column('actions'))->toThrow(Exception::class, 'Column name cannot be "actions"');
 });
+
+it('has array form', function () {
+    $col = Column::make('name');
+    expect($col->toArray())->toEqual([
+        'name' => 'name',
+        'label' => 'Name',
+        'hidden' => false,
+        'active' => true,
+        'breakpoint' => null,
+        'srOnly' => false,
+        'sort' => false,
+        'sorting' => false,
+        'direction' => null,
+        'metadata' => [],
+        'fallback' => config('table.fallback.default'),
+    ]);
+});

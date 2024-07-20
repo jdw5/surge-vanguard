@@ -134,20 +134,20 @@ class Table extends Primitive implements Tables
             'meta' => $this->getTableMeta(),
             'sorts' => $this->getSorts(),
             'filters' => $this->getFilters(),
+            'columns' => $this->getTableColumns(),
+            'pagination' => $this->getPagination($this->usePerPage()),
             'actions' => [
                 'inline' => $this->getInlineActions(),
                 'bulk' => $this->getBulkActions(),
                 'page' => $this->getPageActions(),
                 'default' => $this->getDefaultAction(),
             ],
-            'columns' => $this->getTableColumns(),
-            'pagination' => $this->getPagination($this->usePerPage()),
             'keys' => [
                 'id' => $this->getTableKey(),
                 'sort' => $this->getSortKey(),
                 'order' => $this->getOrderKey(),
                 'show' => $this->getShowKey(),
-                'action' => $this->getActionRoute(),
+                'post' => $this->getActionRoute(),
                 'search' => $this->getSearchKey(),
                 'toggle' => $this->getToggleKey(),
             ]
@@ -183,15 +183,13 @@ class Table extends Primitive implements Tables
      */
     protected function create(): void
     {
-        if ($this->hasRecords()) {
-            return;
-        }
+        if ($this->hasRecords()) return;
 
         $builder = $this->getResource();
         // $this->applyToggleability();
-        $this->applyFilters($builder);
-        $this->applySorts($builder, $this->getSortableColumns()->map(fn ($column) => $column->getSort()));
-        $this->search($builder);
+        $this->filter($builder);
+        $this->sort($builder, $this->combinedSorts());
+        $this->search($builder, $this->combinedSearch());
         
         [$records, $meta] = match ($this->getPaginateType()) {
             PaginationType::CURSOR => [
@@ -225,6 +223,22 @@ class Table extends Primitive implements Tables
             
         $this->setRecords($records);
         $this->setMeta($meta);
+    }
+
+    public function combinedSearch(): array
+    {
+        return array_merge($this->getSearch(), $this->getSearchableColumns()->toArray());
+    }
+
+    public function combinedSorts(): array
+    {
+        return array_merge($this->getSorts(), $this->getSortableColumns()->map(fn ($column) => $column->getSort())->toArray());
+    }
+
+    public function toggle(): void
+    {
+
+        // $this->applyToggleability();
     }
 
     // private function getToggledColumns(): array

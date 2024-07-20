@@ -23,9 +23,7 @@ trait HasQuery
 
     protected function setQuery(?Closure $query): void
     {
-        if (is_null($query)) {
-            return;
-        }
+        if (is_null($query)) return;
         $this->query = $query;
     }
 
@@ -37,4 +35,6 @@ trait HasQuery
 
         return $this->query;
     }
+
+
 }

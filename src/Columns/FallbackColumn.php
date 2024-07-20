@@ -5,8 +5,6 @@ namespace Conquest\Table\Columns;
 use Closure;
 use Conquest\Table\Columns\Enums\Breakpoint;
 use Conquest\Table\Columns\Concerns\HasFallback;
-use Conquest\Table\Columns\Concerns\SharedConstructor;
-use Conquest\Table\Columns\Concerns\SharedCreation;
 
 abstract class FallbackColumn extends BaseColumn
 {

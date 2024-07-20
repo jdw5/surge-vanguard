@@ -4,9 +4,7 @@ namespace Conquest\Table\Columns;
 
 use Closure;
 use Conquest\Table\Columns\Enums\Breakpoint;
-use Conquest\Table\Columns\Concerns\SharedCreation;
 use Conquest\Table\Columns\Concerns\HasBooleanLabels;
-use Conquest\Table\Columns\Concerns\SharedConstructor;
 
 class BooleanColumn extends BaseColumn
 {

@@ -6,10 +6,10 @@ trait HasSearch
 {
     protected $search;
 
-    public function getSearch(): string|array
+    public function getSearch(): array
     {
         if (isset($this->search)) {
-            return $this->search;
+            return is_array($this->search) ? $this->search : [$this->search];
         }
 
         return config('table.search.columns', []);

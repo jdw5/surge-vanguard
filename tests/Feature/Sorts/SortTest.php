@@ -7,13 +7,13 @@ use Illuminate\Support\Facades\DB;
 
 it('can create a sort', function () {
     $sort = new Sort($n = 'name');
-    expect($sort->getProperty())->toBe($n);
-    expect($sort->getName())->toBe($n);
-    expect($sort->getLabel())->toBe('Name');
-    expect($sort->isAuthorised())->toBeTrue();
-    expect($sort->hasDirection())->toBeFalse();
-    expect($sort->isDefault())->toBeFalse();
-    expect($sort->hasMetadata())->toBeFalse();
+    expect($sort)->getProperty()->toBe($n)
+        ->getName()->toBe($n)
+        ->getLabel()->toBe('Name')
+        ->isAuthorised()->toBeTrue()
+        ->hasDirection()->toBeFalse()
+        ->isDefault()->toBeFalse()
+        ->hasMetadata()->toBeFalse();
 });
 
 it('can create a sort with arguments', function () {
@@ -27,13 +27,13 @@ it('can create a sort with arguments', function () {
         metadata: ['foo' => 'bar']
     );
 
-    expect($sort->getProperty())->toBe('name');
-    expect($sort->getName())->toBe('username');
-    expect($sort->getLabel())->toBe('Name');
-    expect($sort->isAuthorised())->toBeFalse();
-    expect($sort->getDirection())->toBe('asc');
-    expect($sort->isDefault())->toBeTrue();
-    expect($sort->hasMetadata())->toBeTrue();
+    expect($sort)->getProperty()->toBe('name')
+        ->getName()->toBe('username')
+        ->getLabel()->toBe('Name')
+        ->isAuthorised()->toBeFalse()
+        ->getDirection()->toBe('asc')
+        ->isDefault()->toBeTrue()
+        ->hasMetadata()->toBeTrue();
 });
 
 it('can make a sort', function () {

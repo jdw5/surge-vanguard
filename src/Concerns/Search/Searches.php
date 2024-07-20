@@ -11,9 +11,9 @@ trait Searches
     use HasSearch;
     use HasSearchKey;
 
-    public function search(Builder|QueryBuilder $query): void
+    public function search(Builder|QueryBuilder $query, array $fields): void
     {
-        if ($this->lacksSearch()) return;
+        if ($this->lacksSearch() && !$this->usesScout()) return;
 
         if (is_null($q = $this->getSearchFromRequest())) return;
 

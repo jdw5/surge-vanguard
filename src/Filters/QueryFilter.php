@@ -29,7 +29,7 @@ class QueryFilter extends BaseFilter
         ?Closure $query = null,
         array $metadata = null,
     ) {
-        parent::__construct($name, $label, $authorize, $validator, $transform, $metadata);
+        parent::__construct($name, $name, $label, $authorize, $validator, $transform, $metadata);
         $this->setQuery($query);
     }
 
