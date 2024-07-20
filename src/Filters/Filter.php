@@ -10,7 +10,7 @@ use Conquest\Table\Filters\Enums\Operator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class Filter extends BaseFilter
+class Filter extends PropertyFilter
 {
     use HasClause;
     use HasOperator;
@@ -31,7 +31,15 @@ class Filter extends BaseFilter
         string|Operator $operator = Operator::EQUAL,
         array $metadata = null,
     ) {
-        parent::__construct($property, $name, $label, $authorize, $validator, $transform, $metadata);
+        parent::__construct(
+            property: $property, 
+            name: $name, 
+            label: $label, 
+            authorize: $authorize, 
+            validator: $validator, 
+            transform: $transform, 
+            metadata: $metadata
+        );
         $this->setClause($clause);
         $this->setOperator($operator);
     }

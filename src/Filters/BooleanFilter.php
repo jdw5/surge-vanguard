@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Request;
 /**
  * Interpolates a value in the query parameter as true, then executes
  */
-class BooleanFilter extends BaseFilter
+class BooleanFilter extends PropertyFilter
 {
     use HasClause;
     use HasOperator;
@@ -29,15 +29,20 @@ class BooleanFilter extends BaseFilter
     public function __construct(
         array|string|Closure $property,
         string|Closure $name = null,
-        mixed $value = true,
         string|Closure $label = null,
+        mixed $value = true,
         bool|Closure $authorize = null,
         string|Clause $clause = Clause::IS,
         string|Operator $operator = Operator::EQUAL,
         array $metadata = null,
     ) {
-        // Needs to accept value
-        parent::__construct($property, $name, $label, $authorize, $metadata);
+        parent::__construct(
+            property: $property, 
+            name: $name, 
+            label: $label, 
+            authorize: $authorize, 
+            metadata: $metadata
+        );
         $this->setValue($value);
         $this->setClause($clause);
         $this->setOperator($operator);
@@ -46,8 +51,8 @@ class BooleanFilter extends BaseFilter
     public static function make(
         array|string|Closure $property,
         string|Closure $name = null,
-        mixed $value = true,
         string|Closure $label = null,
+        mixed $value = true,
         bool|Closure $authorize = null,
         string|Clause $clause = Clause::IS,
         string|Operator $operator = Operator::EQUAL,

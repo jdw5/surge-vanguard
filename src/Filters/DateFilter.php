@@ -15,7 +15,7 @@ use Conquest\Table\Filters\Concerns\IsNegatable;
 use Conquest\Table\Filters\Concerns\HasDateClause;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class DateFilter extends BaseFilter
+class DateFilter extends PropertyFilter
 {
     use HasDateClause;
     use HasOperator;
@@ -36,7 +36,15 @@ class DateFilter extends BaseFilter
         string|Operator $operator = Operator::EQUAL,
         array $metadata = null,
     ) {
-        parent::__construct($property, $name, $label, $authorize, $validator, $transform, $metadata);
+        parent::__construct(
+            property: $property, 
+            name: $name, 
+            label: $label, 
+            authorize: $authorize, 
+            validator: $validator, 
+            transform: $transform, 
+            metadata: $metadata
+        );
         $this->setDateClause($dateClause);
         $this->setOperator($operator);
     }

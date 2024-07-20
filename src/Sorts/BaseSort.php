@@ -3,15 +3,28 @@
 namespace Conquest\Table\Sorts;
 
 use Closure;
-use Conquest\Table\Refiners\Refiner;
+use Conquest\Core\Concerns\CanAuthorize;
+use Conquest\Core\Concerns\HasLabel;
+use Conquest\Core\Concerns\HasMetadata;
+use Conquest\Core\Concerns\HasName;
+use Conquest\Core\Concerns\HasProperty;
+use Conquest\Core\Concerns\HasType;
+use Conquest\Core\Concerns\IsActive;
+use Conquest\Core\Primitive;
 use Conquest\Table\Sorts\Concerns\HasDirection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Support\Facades\Request;
 
-abstract class BaseSort extends Refiner
+abstract class BaseSort extends Primitive
 {
     use HasDirection;
+    use CanAuthorize;
+    use HasLabel;
+    use HasMetadata;
+    use HasName;
+    use HasType;
+    use IsActive;
+    use HasProperty;
 
     public function __construct(
         string|Closure $property,
@@ -21,7 +34,12 @@ abstract class BaseSort extends Refiner
         string $direction = null,
         array $metadata = null,
     ) {
-        parent::__construct($property, $name, $label, $authorize, $metadata);
+        parent::__construct();
+        $this->setProperty($property);
+        $this->setName($name ?? $this->toName($property));
+        $this->setLabel($label ?? $this->toLabel($this->getName()));
+        $this->setAuthorize($authorize);
+        $this->setMetadata($metadata);
         $this->setDirection($direction);
     }
 
@@ -50,8 +68,13 @@ abstract class BaseSort extends Refiner
 
     public function toArray(): array
     {
-        return array_merge(parent::toArray(), [
+        return [
+            'name' => $this->getName(),
+            'label' => $this->getLabel(),
+            'type' => $this->getType(),
+            'metadata' => $this->getMetadata(),
+            'active' => $this->isActive(),
             'direction' => $this->getDirection(),
-        ]);
+        ];
     }
 }

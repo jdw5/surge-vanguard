@@ -7,7 +7,6 @@ use Conquest\Core\Concerns\CanAuthorize;
 use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Concerns\HasMetadata;
 use Conquest\Core\Concerns\HasName;
-use Conquest\Core\Concerns\HasProperty;
 use Conquest\Core\Concerns\HasType;
 use Conquest\Core\Concerns\IsActive;
 use Conquest\Core\Primitive;
@@ -18,12 +17,10 @@ abstract class Refiner extends Primitive
     use HasLabel;
     use HasMetadata;
     use HasName;
-    use HasProperty;
     use HasType;
     use IsActive;
 
     public function __construct(
-        string|Closure $property,
         string|Closure|null $name = null,
         string|Closure|null $label = null,
         bool|Closure|null $authorize = null,

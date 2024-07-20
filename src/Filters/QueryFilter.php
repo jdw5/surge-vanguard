@@ -3,6 +3,8 @@
 namespace Conquest\Table\Filters;
 
 use Closure;
+use Conquest\Core\Concerns\CanTransform;
+use Conquest\Core\Concerns\CanValidate;
 use Conquest\Table\Filters\Concerns\HasQuery;
 use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,6 +16,8 @@ use Illuminate\Database\Eloquent\Builder;
 class QueryFilter extends BaseFilter
 {
     use HasQuery;
+    use CanValidate;
+    use CanTransform;
 
     public function setUp(): void
     {
@@ -29,8 +33,15 @@ class QueryFilter extends BaseFilter
         ?Closure $query = null,
         array $metadata = null,
     ) {
-        parent::__construct($name, $name, $label, $authorize, $validator, $transform, $metadata);
+        parent::__construct(
+            name: $name, 
+            label: $label, 
+            authorize: $authorize,
+            metadata: $metadata
+        );
         $this->setQuery($query);
+        $this->setTransform($transform);
+        $this->setValidator($validator);
     }
 
     public static function make(
@@ -51,6 +62,17 @@ class QueryFilter extends BaseFilter
             'query',
             'metadata'
         ));
+    }
+
+    public function apply(Builder|QueryBuilder $builder): void
+    {
+        $value = $this->transformUsing($this->getValueFromRequest());
+        $this->setValue($value);
+        $this->setActive($this->filtering($value));
+        $builder->when(
+            $this->isActive() && $this->validateUsing($value),
+            fn (Builder|QueryBuilder $builder) => $this->handle($builder),
+        );
     }
 
     public function handle(Builder|QueryBuilder $builder): void

@@ -14,7 +14,7 @@ use Conquest\Table\Filters\Concerns\HasOperator;
 use Conquest\Table\Filters\Concerns\IsRestrictable;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class SetFilter extends BaseFilter
+class SetFilter extends PropertyFilter
 {
     use HasOptions;
     use IsRestrictable;
@@ -116,6 +116,7 @@ class SetFilter extends BaseFilter
             );
             $flag = $flag || $option->isActive();
         });
+        
         return $this->isRestricted() && $flag;
     }
 

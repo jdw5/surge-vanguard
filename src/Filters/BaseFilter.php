@@ -3,59 +3,47 @@
 namespace Conquest\Table\Filters;
 
 use Closure;
-use Conquest\Core\Concerns\CanTransform;
-use Conquest\Core\Concerns\CanValidate;
+use Conquest\Core\Primitive;
+use Conquest\Core\Concerns\HasName;
+use Conquest\Core\Concerns\HasType;
+use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Concerns\HasValue;
-use Conquest\Table\Filters\Contracts\Filters;
-use Conquest\Table\Filters\Exceptions\CannotResolveNameFromProperty;
-use Conquest\Table\Refiners\Refiner;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Builder as QueryBuilder;
+use Conquest\Core\Concerns\CanValidate;
+use Conquest\Core\Concerns\HasMetadata;
 use Illuminate\Support\Facades\Request;
+use Conquest\Core\Concerns\CanAuthorize;
+use Conquest\Core\Concerns\CanTransform;
+use Conquest\Core\Concerns\IsActive;
+use Conquest\Table\Filters\Contracts\Filters;
 
-abstract class BaseFilter extends Refiner implements Filters
+abstract class BaseFilter extends Primitive implements Filters
 {
     use CanTransform;
     use CanValidate;
     use HasValue;
+    use CanAuthorize;
+    use HasLabel;
+    use HasMetadata;
+    use HasName;
+    use HasType;
+    use IsActive;
 
     public function __construct(
-        array|string|Closure $property,
         string|Closure $name = null,
         string|Closure $label = null,
         bool|Closure $authorize = null,
-        ?Closure $validator = null,
-        ?Closure $transform = null,
         array $metadata = null,
     ) {
-        if (is_array($property) && is_null($name)) throw new CannotResolveNameFromProperty($property);
-        parent::__construct($property, $name, $label, $authorize, $metadata);
-        $this->setValidator($validator);
-        $this->setTransform($transform);
+        parent::__construct();
+        $this->setName($name);
+        $this->setLabel($label ?? $this->toLabel($this->getName()));
+        $this->setAuthorize($authorize);
+        $this->setMetadata($metadata);
     }
 
     public function getValueFromRequest(): mixed
     {
         return Request::input($this->getName(), null);
-    }
-
-    public function apply(Builder|QueryBuilder $builder): void
-    {
-        $value = $this->transformUsing($this->getValueFromRequest());
-        $this->setValue($value);
-        $this->setActive($this->filtering($value));
-        $builder->when(
-            $this->isActive() && $this->validateUsing($value),
-            fn (Builder|QueryBuilder $builder) => $this->handle($builder),
-        );
-    }
-
-    public function handle(Builder|QueryBuilder $builder): void
-    {
-        $builder->where(
-            column: $builder->qualifyColumn($this->getProperty()),
-            value: $this->getValue(),
-        );
     }
 
     public function filtering(mixed $value): bool
