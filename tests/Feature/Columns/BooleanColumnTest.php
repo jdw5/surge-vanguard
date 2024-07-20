@@ -9,15 +9,13 @@ it('can create a boolean column', function () {
         ->getType()->toBe('col:bool')
         ->getName()->toBe('name')
         ->getLabel()->toBe('Name')
-        ->hasSort()->toBeFalse()
-        ->isSearchable()->toBeFalse()
-        ->getBreakpoint()->toBeNull()
-        ->isAuthorized()->toBeTrue()
         ->isHidden()->toBeFalse()
-        ->isSrOnly()->toBeFalse()
+        ->isAuthorized()->toBeTrue()
         ->canTransform()->toBeFalse()
-        ->isToggledOn()->toBeTrue()
-        ->isKey()->toBeFalse()
+        ->getBreakpoint()->toBeNull()
+        ->isSrOnly()->toBeFalse()
+        ->hasSort()->toBeFalse()
+        ->isActive()->toBeTrue()
         ->getTruthLabel()->toBe('Active')
         ->getFalseLabel()->toBe('Inactive')
         ->hasMetadata()->toBeFalse();
@@ -34,7 +32,7 @@ it('can make a boolean column', function () {
         ->getBreakpoint()->toBeNull()
         ->isSrOnly()->toBeFalse()
         ->hasSort()->toBeFalse()
-        ->isToggledOn()->toBeTrue()
+        ->isActive()->toBeTrue()
         ->getTruthLabel()->toBe('Active')
         ->getFalseLabel()->toBe('Inactive')
         ->hasMetadata()->toBeFalse();
@@ -60,13 +58,13 @@ it('can create a boolean column with arguments', function () {
         ->getType()->toBe('col:bool')
         ->getName()->toBe('name')
         ->getLabel()->toBe($label)
-        ->hasSort()->toBeTrue()
-        ->getBreakpoint()->toBe('xs')
-        ->isAuthorized()->toBeFalse()
         ->isHidden()->toBeTrue()
-        ->isSrOnly()->toBeTrue()
+        ->isAuthorized()->toBeFalse()
         ->canTransform()->toBeTrue()
-        ->isToggledOn()->toBeFalse()
+        ->getBreakpoint()->toBe('xs')
+        ->isSrOnly()->toBeTrue()
+        ->hasSort()->toBeTrue()
+        ->isActive()->toBeFalse()
         ->getTruthLabel()->toBe('Yes')
         ->getFalseLabel()->toBe('No')
         ->hasMetadata()->toBeTrue();
@@ -77,15 +75,16 @@ it('can create a boolean column with arguments', function () {
 it('can chain methods on a boolean column', function () {
     $col = BooleanColumn::make('name')
         ->label($label = 'Username')
-        ->sortable()
-        ->breakpoint('xs')
-        ->authorize(fn () => false)
         ->hidden()
-        ->srOnly()
+        ->authorize(fn () => false)
         ->transform(fn ($value) => strtoupper($value))
-        ->off()
+        ->breakpoint('xs')
+        ->srOnly()
+        ->sortable()
+        ->active(false)
         ->falseLabel(fn () => 'No')
-        ->truthLabel(fn () => 'Yes');
+        ->truthLabel(fn () => 'Yes')
+        ->metadata(['key' => 'value']);
         
     expect($col)->toBeInstanceOf(BooleanColumn::class)
         ->getType()->toBe('col:bool')
@@ -97,10 +96,10 @@ it('can chain methods on a boolean column', function () {
         ->getBreakpoint()->toBe('xs')
         ->isSrOnly()->toBeTrue()
         ->hasSort()->toBeTrue()
-        ->isToggledOn()->toBeFalse()
-        ->hasMetadata()->toBeFalse()
+        ->isActive()->toBeFalse()
         ->getTruthLabel()->toBe('Yes')
-        ->getFalseLabel()->toBe('No');
+        ->getFalseLabel()->toBe('No')
+        ->hasMetadata()->toBeTrue();
 });
 
 it('does not allow the name to be "actions"', function () {

@@ -17,7 +17,7 @@ it('can create a date column', function () {
         ->isHidden()->toBeFalse()
         ->isSrOnly()->toBeFalse()
         ->canTransform()->toBeFalse()
-        ->isToggledOn()->toBeTrue()
+        ->isActive()->toBeTrue()
         ->isKey()->toBeFalse()
         ->hasFormat()->toBeFalse()
         ->hasMetadata()->toBeFalse();
@@ -36,7 +36,7 @@ it('can make a date column', function () {
         ->isSrOnly()->toBeFalse()
         ->hasSort()->toBeFalse()
         ->isSearchable()->toBeFalse()
-        ->isToggledOn()->toBeTrue()
+        ->isActive()->toBeTrue()
         ->isKey()->toBeFalse()
         ->hasFormat()->toBeFalse()
         ->hasMetadata()->toBeFalse();
@@ -55,7 +55,7 @@ it('can create a date column with arguments', function () {
         sortable: true,
         searchable: true,
         active: false,
-        isKey: true,
+        key: true,
         format: 'd M Y',
         metadata: ['key' => 'value'],
     );
@@ -72,7 +72,7 @@ it('can create a date column with arguments', function () {
         ->isHidden()->toBeTrue()
         ->isSrOnly()->toBeTrue()
         ->canTransform()->toBeTrue()
-        ->isToggledOn()->toBeFalse()
+        ->isActive()->toBeFalse()
         ->isKey()->toBeTrue()
         ->getFormat()->toBe('d M Y')
         ->hasMetadata()->toBeTrue();
@@ -105,7 +105,7 @@ it('can chain methods on a date column', function () {
         ->isSrOnly()->toBeTrue()
         ->hasSort()->toBeTrue()
         ->isSearchable()->toBeTrue()
-        ->isToggledOn()->toBeTrue()
+        ->isActive()->toBeTrue()
         ->isKey()->toBeFalse()
         ->hasMetadata()->toBeFalse()
         ->getFormat()->toBe('d M Y');

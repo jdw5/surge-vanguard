@@ -73,7 +73,7 @@ return [
     | Control the fallback values for columns when the value is null.
     |
     */
-    'fallbacks' => [
+    'fallback' => [
         'default' => null,
         'text' => '—',
         'numeric' => 0,

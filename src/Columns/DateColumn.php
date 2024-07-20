@@ -8,8 +8,10 @@ use Carbon\Carbon;
 use Conquest\Table\Columns\Column;
 use Conquest\Table\Columns\Enums\Breakpoint;
 use Conquest\Table\Columns\Concerns\HasFormat;
+use Conquest\Table\Columns\Concerns\SharedConstructor;
+use Conquest\Table\Columns\Concerns\SharedCreation;
 
-class DateColumn extends BaseColumn
+class DateColumn extends FallbackColumn
 {
     use HasFormat;
 
@@ -30,11 +32,25 @@ class DateColumn extends BaseColumn
         bool $sortable = false,
         bool $searchable = false,
         bool $active = true,
-        bool $isKey = false,
+        bool $key = false,
         string|Closure $format = null,
         array $metadata = null,
     ) {
-        parent::__construct($name, $label, $hidden, $fallback, $authorize, $transform, $breakpoint, $srOnly, $sortable, $searchable, $active, $isKey, $metadata);
+        parent::__construct(...compact(
+            'name',
+            'label',
+            'hidden',
+            'fallback',
+            'authorize',
+            'transform',
+            'breakpoint',
+            'srOnly',
+            'sortable',
+            'searchable',
+            'active',
+            'key',
+            'metadata',
+        ));
         $this->setFormat($format);
     }
 
@@ -50,7 +66,7 @@ class DateColumn extends BaseColumn
         bool $sortable = false,
         bool $searchable = false,
         bool $active = true,
-        bool $isKey = false,
+        bool $key = false,
         string|Closure $format = null,
         array $metadata = null,
     ): static {
@@ -66,7 +82,7 @@ class DateColumn extends BaseColumn
             'sortable',
             'searchable',
             'active',
-            'isKey',
+            'key',
             'format',
             'metadata',
         ));

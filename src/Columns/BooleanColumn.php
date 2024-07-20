@@ -4,7 +4,9 @@ namespace Conquest\Table\Columns;
 
 use Closure;
 use Conquest\Table\Columns\Enums\Breakpoint;
+use Conquest\Table\Columns\Concerns\SharedCreation;
 use Conquest\Table\Columns\Concerns\HasBooleanLabels;
+use Conquest\Table\Columns\Concerns\SharedConstructor;
 
 class BooleanColumn extends BaseColumn
 {
@@ -24,12 +26,25 @@ class BooleanColumn extends BaseColumn
         Breakpoint|string $breakpoint = null,
         bool $srOnly = false,
         bool $sortable = false,
+        bool $searchable = false,
         bool $active = true,
         string|Closure $truthLabel = null,
         string|Closure $falseLabel = null,
         array $metadata = null,
     ) {
-        parent::__construct($name, $label, $hidden, null, $authorize, $transform, $breakpoint, $srOnly, $sortable, false, $active, false, $metadata);
+        parent::__construct(...compact(
+            'name',
+            'label',
+            'hidden',
+            'authorize',
+            'transform',
+            'breakpoint',
+            'srOnly',
+            'sortable',
+            'searchable',
+            'active',
+            'metadata',
+        ));
         $this->setTruthLabel($truthLabel);
         $this->setFalseLabel($falseLabel);
     }

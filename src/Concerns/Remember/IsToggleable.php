@@ -6,7 +6,7 @@ trait IsToggleable
 {
     protected bool $toggledOn = true;
     
-    public function isToggledOn(): bool
+    public function isActive(): bool
     {
         return $this->toggledOn;
     }
