@@ -22,9 +22,9 @@ class Filter extends BaseFilter
 
     public function __construct(
         array|string|Closure $property,
-        string|Closure|null $name = null,
-        string|Closure|null $label = null,
-        bool|Closure|null $authorize = null,
+        string|Closure $name = null,
+        string|Closure $label = null,
+        bool|Closure $authorize = null,
         ?Closure $validator = null,
         ?Closure $transform = null,
         string|Clause $clause = Clause::IS,

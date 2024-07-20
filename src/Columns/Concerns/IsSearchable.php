@@ -20,19 +20,7 @@ trait IsSearchable
         return $this->search($property);
     }
 
-    public function notSearchable(): static
-    {
-        $this->setSearchability(false);
-
-        return $this;
-    }
-
-    public function dontSearch(): static
-    {
-        return $this->notSearchable();
-    }
-
-    protected function setSearchability(bool $searchable, string|Closure|null $property = null): void
+    protected function setSearchable(bool $searchable, string|Closure|null $property = null): void
     {
         $this->searchable = $searchable;
         $this->setProperty($property);
@@ -41,15 +29,5 @@ trait IsSearchable
     public function isSearchable(): bool
     {
         return $this->searchable;
-    }
-
-    public function searches(): bool
-    {
-        return $this->isSearchable();
-    }
-
-    public function searchesUsing(): string
-    {
-        return $this->getProperty();
     }
 }

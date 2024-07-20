@@ -17,19 +17,6 @@ enum Operator: string
         return is_null($value) && ! in_array($this, [self::EQUAL, self::NOT_EQUAL]);
     }
 
-    public function negate(): Operator
-    {
-        return match ($this) {
-            self::EQUAL => self::NOT_EQUAL,
-            self::NOT_EQUAL => self::EQUAL,
-            self::GREATER_THAN => self::LESS_THAN_OR_EQUAL,
-            self::GREATER_THAN_OR_EQUAL => self::LESS_THAN,
-            self::LESS_THAN => self::GREATER_THAN_OR_EQUAL,
-            self::LESS_THAN_OR_EQUAL => self::GREATER_THAN,
-            self::LIKE => self::LIKE,
-        };
-    }
-
     public function label(): string
     {
         return match ($this) {
@@ -42,8 +29,6 @@ enum Operator: string
             self::LIKE => 'Contains',
         };
     }
-
-
 
     public function value(): string
     {

@@ -42,7 +42,7 @@ trait Sorts
 
     public function sorting(): bool
     {
-        return !is_null($this->getSortNameFromRequest());
+        return !is_null($this->getSort());
     }
 
     protected function applySorts(Builder|QueryBuilder $query, Collection $colSorts = null): void

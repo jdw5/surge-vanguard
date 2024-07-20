@@ -5,6 +5,7 @@ use Conquest\Table\Filters\Filter;
 use Conquest\Table\Filters\Enums\Clause;
 use Conquest\Table\Filters\Enums\Operator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 
 it('can create a filter', function () {
     $filter = new Filter($n = 'name');
@@ -14,7 +15,6 @@ it('can create a filter', function () {
     expect($filter->isAuthorised())->toBeTrue();
     expect($filter->getClause())->toBe(Clause::IS);
     expect($filter->getOperator())->toBe(Operator::EQUAL);
-    expect($filter->isNegated())->toBeFalse();
 });
 
 it('can create a filter with arguments', function () {
@@ -23,7 +23,6 @@ it('can create a filter with arguments', function () {
         authorize: fn () => false,
         clause: Clause::IS_NOT,
         operator: Operator::NOT_EQUAL,
-        negate: true,
     );
 
     expect($filter->getProperty())->toBe('name');
@@ -32,7 +31,6 @@ it('can create a filter with arguments', function () {
     expect($filter->isAuthorised())->toBeFalse();
     expect($filter->getClause())->toBe(Clause::IS_NOT);
     expect($filter->getOperator())->toBe(Operator::NOT_EQUAL);
-    expect($filter->isNegated())->toBeTrue();
 });
 
 it('can make a filter', function () {
@@ -46,8 +44,7 @@ it('can chain methods on a filter', function () {
         ->name('username')
         ->authorize(fn () => false)
         ->clause(Clause::IS_NOT)
-        ->operator(Operator::NOT_EQUAL)
-        ->negate();
+        ->operator(Operator::NOT_EQUAL);
     
     expect($filter->getProperty())->toBe('name');
     expect($filter->getName())->toBe('username');
@@ -55,22 +52,21 @@ it('can chain methods on a filter', function () {
     expect($filter->isAuthorised())->toBeFalse();
     expect($filter->getClause())->toBe(Clause::IS_NOT);
     expect($filter->getOperator())->toBe(Operator::NOT_EQUAL);
-    expect($filter->isNegated())->toBeTrue();
 });
 
 it('can apply a filter to an eloquent builder', function () {
     $filter = Filter::make('name');
     $builder = Product::query();
     // Requires a request to work
-    request()->merge(['name' => 'test']);
+    Request::merge(['name' => 'test']);
     $filter->apply($builder);
     expect($builder->toSql())->toBe('select * from "products" where "name" = ?');
 });
 
 it('can apply a filter to a query builder', function () {
     $filter = Filter::make('name');
-    $builder = DB::table('products');
-    request()->merge(['name' => 'test']);
+    $builder = DB::table('products')  ;
+    Request::merge(['name' => 'test']);
     $filter->apply($builder);
     expect($builder->toSql())->toBe('select * from "products" where "name" = ?');
 });

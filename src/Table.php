@@ -130,7 +130,7 @@ class Table extends Primitive implements Tables
 
         return [
             'records' => $this->getTableRecords(),
-            'columns' => $this->getHeadingColumns(),
+            'headings' => $this->getHeadingColumns(),
             'meta' => $this->getTableMeta(),
             'sorts' => $this->getSorts(),
             'filters' => $this->getFilters(),
@@ -140,7 +140,7 @@ class Table extends Primitive implements Tables
                 'page' => $this->getPageActions(),
                 'default' => $this->getDefaultAction(),
             ],
-            'properties' => $this->getTableColumns(),
+            'columns' => $this->getTableColumns(),
             'pagination' => $this->getPagination($this->usePerPage()),
             'keys' => [
                 'id' => $this->getTableKey(),

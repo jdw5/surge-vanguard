@@ -7,6 +7,11 @@ use Conquest\Table\Columns\Enums\Breakpoint;
 
 class Column extends BaseColumn
 {
+    public function setUp(): void
+    {
+        $this->setType('col');
+    }
+    
     public static function make(
         string $name, 
         string $label = null,

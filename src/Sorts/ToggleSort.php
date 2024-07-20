@@ -2,6 +2,7 @@
 
 namespace Conquest\Table\Sorts;
 
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
@@ -11,7 +12,32 @@ class ToggleSort extends BaseSort
     {
         $this->setType('sort:toggle');
     }
-    
+
+    public function __construct(
+        string|Closure $property, 
+        string|Closure $name = null,
+        string|Closure $label = null,
+        bool|Closure $authorize = null,
+        array $metadata = null,
+    ) {
+        parent::__construct($property, $name, $label, $authorize, $metadata);
+    }
+
+    public static function make(
+        string|Closure $property, 
+        string|Closure $name = null,
+        string|Closure $label = null,
+        bool|Closure $authorize = null,
+        array $metadata = null,
+    ): static {
+        return resolve(static::class, compact(
+            'property', 
+            'name', 
+            'label', 
+            'authorize', 
+            'metadata',
+        ));
+    }    
     public function apply(Builder|QueryBuilder $builder, ?string $sortBy = null, ?string $direction = null): void
     {
         $this->setDirection($direction);

@@ -23,7 +23,7 @@ trait IsToggleable
         return $this;
     }
 
-    public function setToggleability(bool|null $toggle): void
+    public function setToggledOn(bool|null $toggle): void
     {
         if (is_null($toggle)) return;
         $this->toggledOn = $toggle;
