@@ -42,7 +42,15 @@ class SetFilter extends PropertyFilter
         bool|Closure|null $restrict = null,
         array $metadata = null,
     ) {
-        parent::__construct($property, $name, $label, $authorize, $validator, $transform, $metadata);
+        parent::__construct(
+            property: $property, 
+            name: $name, 
+            label: $label, 
+            authorize: $authorize, 
+            validator: $validator, 
+            transform: $transform, 
+            metadata: $metadata
+        );
         $this->setMultiple($multiple);
         $this->setClause($clause);
         $this->setOperator($operator);
@@ -76,7 +84,7 @@ class SetFilter extends PropertyFilter
             'multiple',
             'options',
             'restrict',
-            'metadata,'
+            'metadata'
         ));
     }
 
@@ -132,7 +140,7 @@ class SetFilter extends PropertyFilter
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [
-            'multiple' => $this->hasMultiple(),
+            'multiple' => $this->isMultiple(),
             'options' => $this->getOptions(),
         ]);
     }
@@ -146,7 +154,7 @@ class SetFilter extends PropertyFilter
     public function setMultiple(bool|null $multiple): void
     {
         if (is_null($multiple)) return;
-        if ($multiple && !$this->getClause()->isMultiple()) $this->setClause(Clause::CONTAINS);
+        if ($multiple && !$this->getClause()?->isMultiple()) $this->setClause(Clause::CONTAINS);
         $this->multiple = $multiple;
     }
 

@@ -26,9 +26,8 @@ abstract class PropertyFilter extends BaseFilter
         ?Closure $transform = null,
         array $metadata = null,
     ) {
-        if (is_array($property) && is_null($name)) {
-            throw new CannotResolveNameFromProperty($property);
-        }
+        if (is_array($property) && is_null($name)) throw new CannotResolveNameFromProperty($property);
+        
         $name = $name ?? $this->toName($this->evaluate($property));
         parent::__construct(
             name: $name, 

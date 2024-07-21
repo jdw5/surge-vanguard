@@ -6,45 +6,31 @@ trait IsRestrictable
 {
     protected bool $restricted = false;
 
-    public function restrict(): static
+    public function restrict(bool $restrict = true): static
     {
-        $this->setRestricted(true);
-
+        $this->setRestricted($restrict);
         return $this;
     }
 
-    public function unrestricted(): static
+    public function unrestricted(bool $restrict = false): static
     {
-        $this->setRestricted(false);
-
+        $this->setRestricted($restrict);
         return $this;
-    }
-
-    public function restrictToOptions(): static
-    {
-        return $this->restrict();
-    }
-
-    public function dontRestrictToOptions(): static
-    {
-        return $this->unrestricted();
     }
 
     protected function setRestricted(?bool $restricted): void
     {
-        if (is_null($restricted)) {
-            return;
-        }
-        $this->restrictions = $restricted;
+        if (is_null($restricted)) return;
+        $this->restricted = $restricted;
     }
-
-    public function getRestriction(): bool
-    {
-        return $this->evaluate($this->restrictions);
-    }
-
+    
     public function isRestricted(): bool
     {
-        return $this->getRestriction();
+        return $this->evaluate($this->restricted);
+    }
+
+    public function isNotRestricted(): bool
+    {
+        return  ! $this->isRestricted();
     }
 }
