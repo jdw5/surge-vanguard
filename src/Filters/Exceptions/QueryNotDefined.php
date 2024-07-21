@@ -6,8 +6,8 @@ use Exception;
 
 class QueryNotDefined extends Exception
 {
-    public function __construct(string $name)
+    public function __construct()
     {
-        parent::__construct("The query for filter [{$name}] has not been provided.");
+        parent::__construct('Query for filter [{}] has not been provided.');
     }
 }

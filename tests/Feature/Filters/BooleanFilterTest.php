@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Request;
 use Conquest\Table\Filters\Enums\Operator;
 use Conquest\Table\Filters\Enums\Clause;
 
-it('can create a date filter', function () {
+it('can create a boolean filter', function () {
     $filter = new BooleanFilter($n = 'name');
     expect($filter)->getProperty()->toBe($n)
         ->getName()->toBe($n)
@@ -41,170 +41,137 @@ it('can create a boolean filter with arguments', function () {
         ->getMetadata()->toBe(['key' => 'value']);
 });
 
-// it('can make a date filter', function () {
-//     expect(BooleanFilter::make($n = 'name'))->toBeInstanceOf(DateFilter::class)
-//         ->getProperty()->toBe($n)
-//         ->getName()->toBe($n)
-//         ->getLabel()->toBe('Name')
-//         ->isAuthorised()->toBeTrue()
-//         ->canValidate()->toBeFalse()
-//         ->canTransform()->toBeFalse()
-//         ->getClause()->toBe(DateClause::DATE)
-//         ->getOperator()->toBe(Operator::EQUAL)
-//         ->hasMetadata()->toBeFalse();
-// });
+it('can make a boolean filter', function () {
+    expect(BooleanFilter::make($n = 'name'))->toBeInstanceOf(BooleanFilter::class)
+        ->getProperty()->toBe($n)
+        ->getName()->toBe($n)
+        ->getLabel()->toBe('Name')
+        ->getValue()->toBeTrue()
+        ->isAuthorised()->toBeTrue()
+        ->getClause()->toBe(Clause::IS)
+        ->getOperator()->toBe(Operator::EQUAL)
+        ->hasMetadata()->toBeFalse();
+});
 
-// it('can chain methods on a date filter', function () {
-//     $filter = DateFilter::make('name')
-//         ->name('username')
-//         ->authorize(fn () => false)
-//         ->validator(fn () => true)
-//         ->transform(fn ($value) => $value)
-//         ->month()
-//         ->gt()
-//         ->metadata(['key' => 'value']);
+it('can chain methods on a boolean filter', function () {
+    $filter = BooleanFilter::make('name')
+        ->name('username')
+        ->label('Enter name')
+        ->value(10)
+        ->authorize(fn () => false)
+        ->isNot()
+        ->gt()
+        ->metadata(['key' => 'value']);
 
-//     expect($filter)->toBeInstanceOf(DateFilter::class)
-//         ->getProperty()->toBe('name')
-//         ->getName()->toBe('username')
-//         ->getLabel()->toBe('Name')
-//         ->isAuthorised()->toBeFalse()
-//         ->canValidate()->toBeTrue()
-//         ->canTransform()->toBeTrue()
-//         ->getClause()->toBe(DateClause::MONTH)
-//         ->getOperator()->toBe(Operator::GREATER_THAN)
-//         ->getMetadata()->toBe(['key' => 'value']);
-// });
+    expect($filter)->toBeInstanceOf(BooleanFilter::class)
+        ->getProperty()->toBe('name')
+        ->getName()->toBe('username')
+        ->getLabel()->toBe('Enter name')
+        ->getValue()->toBe(10)
+        ->isAuthorised()->toBeFalse()
+        ->getClause()->toBe(Clause::IS_NOT)
+        ->getOperator()->toBe(Operator::GREATER_THAN)
+        ->getMetadata()->toBe(['key' => 'value']);
+});
 
-// it('can apply a base date filter to an eloquent builder', function () {
-//     $filter = DateFilter::make('created_at', 'is');
-//     $builder = Product::query();
-//     Request::merge(['is' => '2000-01-01']);
-//     $filter->apply($builder);
-//     expect($builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") = cast(? as text)');
-//     expect($filter->isActive())->toBeTrue();
-// });
+it('can apply a base boolean filter to an eloquent builder using 1', function () {
+    $filter = BooleanFilter::make('best_seller', 'favourite');
+    $builder = Product::query();
+    Request::merge(['favourite' => '1']);
+    $filter->apply($builder);
+    expect($builder->toSql())->toBe('select * from "products" where "best_seller" = ?');
+    expect($filter->isActive())->toBeTrue();
+});
 
-// it('can apply a base date filter to a query builder', function () {
-//     $filter = DateFilter::make('created_at', 'is');
-//     $builder = DB::table('products');
-//     Request::merge(['is' => '2000-01-01']);
-//     $filter->apply($builder);
-//     expect($builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") = cast(? as text)');
-//     expect($filter->isActive())->toBeTrue();
-// });
+it('can apply a base boolean filter to a query builder using 1', function () {
+    $filter = BooleanFilter::make('best_seller', 'favourite');
+    $builder = DB::table('products');
+    Request::merge(['favourite' => '1']);
+    $filter->apply($builder);
+    expect($builder->toSql())->toBe('select * from "products" where "best_seller" = ?');
+    expect($filter->isActive())->toBeTrue();
+});
 
-// it('does not apply a date filter if name not provided', function () {
-//     $filter = DateFilter::make('created_at', 'is');
-//     $builder = Product::query();
-//     $filter->apply($builder);
-//     expect($builder->toSql())->toBe('select * from "products"');
-//     expect($filter->isActive())->toBeFalse();
-// });
+it('can apply a base boolean filter to a builder using true', function () {
+    $filter = BooleanFilter::make('best_seller', 'favourite');
+    $builder = Product::query();
+    Request::merge(['favourite' => 'true']);
+    $filter->apply($builder);
+    expect($builder->toSql())->toBe('select * from "products" where "best_seller" = ?');
+    expect($filter->isActive())->toBeTrue();
+});
 
+it('can apply a base boolean filter to a builder using yes', function () {
+    $filter = BooleanFilter::make('best_seller', 'favourite');
+    $builder = Product::query();
+    Request::merge(['favourite' => 'yes']);
+    $filter->apply($builder);
+    expect($builder->toSql())->toBe('select * from "products" where "best_seller" = ?');
+    expect($filter->isActive())->toBeTrue();
+});
 
-// it('does not apply a date filter if name not equal', function () {
-//     $filter = DateFilter::make('created_at', 'is');
-//     $builder = Product::query();
-//     Request::merge(['created_at' => '2000-01-01']);
-//     $filter->apply($builder);
-//     expect($builder->toSql())->toBe('select * from "products"');
-//     expect($filter->isActive())->toBeFalse();
-// });
+it('does not apply a boolean filter if name not provided', function () {
+    $filter = BooleanFilter::make('best_seller', 'favourite');
+    $builder = Product::query();
+    $filter->apply($builder);
+    expect($builder->toSql())->toBe('select * from "products"');
+    expect($filter->isActive())->toBeFalse();
+});
 
-// it('has array representation', function () {
-//     $filter = DateFilter::make('name');
-//     expect($filter->toArray())->toEqual([
-//         'name' => 'name',
-//         'label' => 'Name',
-//         'type' => 'filter:date',
-//         'active' => false,
-//         'value' => null,
-//         'metadata' => [],
-//     ]);
-// });
+it('does not apply a boolean filter if name not equal', function () {
+    $filter = BooleanFilter::make('best_seller', 'favourite');
+    $builder = Product::query();
+    Request::merge(['best_seller' => '1']);
+    $filter->apply($builder);
+    expect($builder->toSql())->toBe('select * from "products"');
+    expect($filter->isActive())->toBeFalse();
+});
 
-// it('changes array representation if date filter applied', function () {
-//     $f = DateFilter::make('created_at', 'created');
-//     $f2 = DateFilter::make('updated_at', 'updated');
-//     Request::merge(['created' => $d = '2000-01-01']);
-//     $builder = Product::query();
-//     $f->apply($builder);
-//     $f2->apply($builder);
+it('does not apply a boolean filter if value not boolean', function () {
+    $filter = BooleanFilter::make('best_seller', 'favourite');
+    $builder = Product::query();
+    Request::merge(['best_seller' => 'false']);
+    $filter->apply($builder);
+    expect($builder->toSql())->toBe('select * from "products"');
+    expect($filter->isActive())->toBeFalse();
+});
 
-//     expect($f->isActive())->toBeTrue();
-//     expect($f2->isActive())->toBeFalse();
-//     expect($builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") = cast(? as text)');
+it('has array representation', function () {
+    $filter = BooleanFilter::make('name');
+    expect($filter->toArray())->toEqual([
+        'name' => 'name',
+        'label' => 'Name',
+        'type' => 'filter:boolean',
+        'active' => false,
+        'metadata' => [],
+    ]);
+});
 
-//     expect($f->toArray())->toEqual([
-//         'name' => 'created',
-//         'label' => 'Created',
-//         'type' => 'filter:date',
-//         'active' => true,
-//         'value' => Carbon::parse($d)->toDateTimeString(),
-//         'metadata' => [],
-//     ]);
+it('changes array representation if boolean filter applied', function () {
+    $f = BooleanFilter::make('price')->value(10);
+    $f2 = BooleanFilter::make('best_seller', 'favourite');
+    Request::merge(['price' => '1']);
+    $builder = Product::query();
+    $f->apply($builder);
+    $f2->apply($builder);
 
-//     expect($f2->toArray())->toEqual([
-//         'name' => 'updated',
-//         'label' => 'Updated',
-//         'type' => 'filter:date',
-//         'active' => false,
-//         'value' => null,
-//         'metadata' => [],
-//     ]);
-// });
+    expect($f->isActive())->toBeTrue();
+    expect($f2->isActive())->toBeFalse();
+    expect($builder->toSql())->toBe('select * from "products" where "price" = ?');
 
-// it('can use date clause', function () {
-//     $filter = DateFilter::make('created_at', 'is')->date();
-//     $builder = Product::query();
-//     Request::merge(['is' => '2000-01-01']);
-//     $filter->apply($builder);
-//     expect($builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") = cast(? as text)');
-//     expect($filter->isActive())->toBeTrue();
-// });
+    expect($f->toArray())->toEqual([
+        'name' => 'price',
+        'label' => 'Price',
+        'type' => 'filter:boolean',
+        'active' => true,
+        'metadata' => [],
+    ]);
 
-// it('can use year date clause', function () {
-//     $filter = DateFilter::make('created_at', 'is')->year();
-//     $builder = Product::query();
-//     Request::merge(['is' => '2000-01-01']);
-//     $filter->apply($builder);
-//     expect($builder->toSql())->toBe('select * from "products" where strftime(\'%Y\', "created_at") = cast(? as text)');
-//     expect($filter->isActive())->toBeTrue();
-// });
-
-// it('can use month date clause', function () {
-//     $filter = DateFilter::make('created_at', 'is')->month();
-//     $builder = Product::query();
-//     Request::merge(['is' => '2000-01-01']);
-//     $filter->apply($builder);
-//     expect($builder->toSql())->toBe('select * from "products" where strftime(\'%m\', "created_at") = cast(? as text)');
-//     expect($filter->isActive())->toBeTrue();
-// });
-
-// it('can use day date clause', function () {
-//     $filter = DateFilter::make('created_at', 'is')->day();
-//     $builder = Product::query();
-//     Request::merge(['is' => '2000-01-01']);
-//     $filter->apply($builder);
-//     expect($builder->toSql())->toBe('select * from "products" where strftime(\'%d\', "created_at") = cast(? as text)');
-//     expect($filter->isActive())->toBeTrue();
-// });
-
-// it('can use time date clause', function () {
-//     $filter = DateFilter::make('created_at', 'is')->time();
-//     $builder = Product::query();
-//     Request::merge(['is' => '13:00:00']);
-//     $filter->apply($builder);
-//     expect($builder->toSql())->toBe('select * from "products" where strftime(\'%H:%M:%S\', "created_at") = cast(? as text)');
-//     expect($filter->isActive())->toBeTrue();
-// });
-
-// it('can change the operator', function () {
-//     $filter = DateFilter::make('created_at', 'is')->gt();
-//     $builder = Product::query();
-//     Request::merge(['is' => '2000-01-01']);
-//     $filter->apply($builder);
-//     expect($builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") > cast(? as text)');
-//     expect($filter->isActive())->toBeTrue();
-// });
+    expect($f2->toArray())->toEqual([
+        'name' => 'favourite',
+        'label' => 'Favourite',
+        'type' => 'filter:boolean',
+        'active' => false,
+        'metadata' => [],
+    ]);
+});

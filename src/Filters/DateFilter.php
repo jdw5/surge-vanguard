@@ -3,7 +3,6 @@
 namespace Conquest\Table\Filters;
 
 use Closure;
-use Exception;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Support\Facades\Request;
@@ -11,7 +10,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Conquest\Table\Filters\Enums\Operator;
 use Conquest\Table\Filters\Enums\DateClause;
 use Conquest\Table\Filters\Concerns\HasOperator;
-use Conquest\Table\Filters\Concerns\IsNegatable;
 use Conquest\Table\Filters\Concerns\HasDateClause;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 

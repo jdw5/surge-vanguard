@@ -4,11 +4,9 @@ namespace Conquest\Table\Filters;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
-use Conquest\Table\Filters\BaseFilter;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Conquest\Table\Filters\Concerns\HasClause;
 use Conquest\Table\Filters\Concerns\HasOperator;
-use Conquest\Table\Filters\Concerns\IsNegatable;
 use Conquest\Table\Filters\Enums\Clause;
 use Conquest\Table\Filters\Enums\Operator;
 use Illuminate\Support\Facades\Request;
@@ -87,5 +85,12 @@ class BooleanFilter extends PropertyFilter
                 $this->getOperator(),
                 $this->getValue()
             );
+    }
+
+    public function toArray(): array
+    {
+        $array = parent::toArray();
+        unset($array['value']);
+        return $array;
     }
 }

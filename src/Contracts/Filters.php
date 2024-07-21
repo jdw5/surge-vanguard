@@ -1,6 +1,6 @@
 <?php
 
-namespace Conquest\Table\Filters\Contracts;
+namespace Conquest\Table\Contracts;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;

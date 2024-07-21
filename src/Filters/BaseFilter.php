@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Request;
 use Conquest\Core\Concerns\CanAuthorize;
 use Conquest\Core\Concerns\CanTransform;
 use Conquest\Core\Concerns\IsActive;
-use Conquest\Table\Filters\Contracts\Filters;
+use Conquest\Table\Contracts\Filters;
 
 abstract class BaseFilter extends Primitive implements Filters
 {

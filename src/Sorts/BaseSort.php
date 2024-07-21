@@ -11,11 +11,12 @@ use Conquest\Core\Concerns\HasProperty;
 use Conquest\Core\Concerns\HasType;
 use Conquest\Core\Concerns\IsActive;
 use Conquest\Core\Primitive;
+use Conquest\Table\Contracts\Sorts;
 use Conquest\Table\Sorts\Concerns\HasDirection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-abstract class BaseSort extends Primitive
+abstract class BaseSort extends Primitive implements Sorts
 {
     use HasDirection;
     use CanAuthorize;

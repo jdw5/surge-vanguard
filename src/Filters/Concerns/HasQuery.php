@@ -30,7 +30,7 @@ trait HasQuery
     public function getQuery(): Closure
     {
         if (! isset($this->query)) {
-            throw new QueryNotDefined($this->getName());
+            throw new QueryNotDefined();
         }
 
         return $this->query;
