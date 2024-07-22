@@ -3,7 +3,7 @@
 namespace Conquest\Table\Filters\Concerns;
 
 use Closure;
-use Conquest\Table\Filters\Exceptions\QueryNotDefined;
+use Conquest\Table\Exceptions\QueryNotDefined;
 
 trait HasQuery
 {

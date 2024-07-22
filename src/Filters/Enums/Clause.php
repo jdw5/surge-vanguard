@@ -94,7 +94,7 @@ enum Clause: string
         };
     }
 
-    public function formatProperty(string $property)
+    public function formatProperty(string|array $property)
     {
         return match ($this) {
             self::ALL, self::ANY => is_array($property) ? $property : [$property],

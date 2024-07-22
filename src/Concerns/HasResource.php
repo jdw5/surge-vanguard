@@ -73,7 +73,7 @@ trait HasResource
         }
 
         if ($resource instanceof QueryBuilder) {
-            return DB::table($resource->from);
+            return $resource->from;
         }
         throw new \RuntimeException("Unable to get base model for resource");
     }

@@ -94,7 +94,7 @@ class SetFilter extends PropertyFilter
         $this->setValue($value);
         $this->setActive($this->filtering($value));
 
-        if (!$this->validateOptions($value)) return;
+        if (!$this->validateOptions()) return;
 
         $builder->when(
             $this->isActive() && $this->validateUsing($value),

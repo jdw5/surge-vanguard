@@ -6,7 +6,7 @@ use Closure;
 use Conquest\Core\Concerns\CanTransform;
 use Conquest\Core\Concerns\CanValidate;
 use Conquest\Core\Concerns\HasProperty;
-use Conquest\Table\Filters\Exceptions\CannotResolveNameFromProperty;
+use Conquest\Table\Exceptions\CannotResolveNameFromProperty;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Request;

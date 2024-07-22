@@ -15,7 +15,7 @@ use Conquest\Table\DataObjects\ActionData;
 use Conquest\Table\DataObjects\ActionTypeData;
 use Conquest\Table\DataObjects\BulkActionData;
 use Conquest\Table\DataObjects\InlineActionData;
-use Conquest\Table\Actions\Exceptions\InvalidActionException;
+use Conquest\Table\Exceptions\InvalidActionException;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 trait HasActions
@@ -95,13 +95,13 @@ trait HasActions
     public function getDefaultAction(): ?BaseAction
     {
         return $this->getInlineActions()
-            ->first(fn (BaseAction $action): bool => $action->isDefault());
+            ->first(fn (InlineAction $action): bool => $action->isDefault());
     }
     // Need to be able to run actions against records
     public function applyRecordToActions(Model $record): Collection
     {
-        return $this->getTableActions()
-            ->map(fn (BaseAction $action): BaseAction => $action->applyRecord($record));
+        return $this->getTableActions();
+            // ->map(fn (BaseAction $action): BaseAction => $action->applyRecord($record));
     }
 
 
@@ -124,7 +124,7 @@ trait HasActions
         try {
             $action = $this->resolveAction($type);
         } catch (InvalidActionException $e) {
-            static::redirectOrExit(back());
+            return;
         }
         
         match (get_class($action)) {

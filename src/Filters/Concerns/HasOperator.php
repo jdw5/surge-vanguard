@@ -2,9 +2,7 @@
 
 namespace Conquest\Table\Filters\Concerns;
 
-use Exception;
 use Conquest\Table\Filters\Enums\Operator;
-use Conquest\Table\Filters\Exceptions\InvalidOperator;
 
 trait HasOperator
 {
@@ -34,13 +32,8 @@ trait HasOperator
         
         if ($operator instanceof Operator) {
             $this->operator = $operator;
-        } 
-        else {
-            try {
-                $this->operator = operator::from($operator);
-            } catch (Exception $e) {
-                throw new InvalidOperator($operator);
-            }
+        } else {
+            $this->operator = Operator::tryFrom($operator);
         }
     }
 

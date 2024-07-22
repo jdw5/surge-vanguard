@@ -2,9 +2,7 @@
 
 namespace Conquest\Table\Filters\Concerns;
 
-use Exception;
 use Conquest\Table\Filters\Enums\Operator;
-use Conquest\Table\Filters\Exceptions\InvalidOperator;
 use Illuminate\Support\Collection;
 
 trait HasOperators
@@ -35,6 +33,11 @@ trait HasOperators
         $this->operators = $operators;
     }
 
+    /**
+     * Get the operators to be used.
+     * 
+     * @return array<Operator>
+     */
     public function getOperators(): array
     {
         return $this->operators;
@@ -44,11 +47,11 @@ trait HasOperators
      * Get the operators.
      * 
      * @param string|null $active
-     * @return Collection<Operator>
+     * @return Collection
      */
     public function getOperatorOptions(?string $active = null): Collection
     {
-        return collect($this->operators)->map(fn (Operator $operator) => [
+        return collect($this->getOperators())->map(fn (Operator $operator) => [
             'value' => $operator->value,
             'label' => $operator->label(),
             'active' => $operator->value === $active,

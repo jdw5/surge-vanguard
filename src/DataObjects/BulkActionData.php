@@ -18,13 +18,13 @@ class BulkActionData extends ActionData
 
     public static function from(Request $request): static
     {
-        return new static(
-            name: $request->string('name'),
-            type: $request->string('type'),
-            all: $request->boolean('all'),
-            except: $request->input('except', []),
-            only: $request->input('only', []),
-        );
+        return resolve(static::class, [
+            'name' => $request->string('name'),
+            'type' => $request->string('type'),
+            'all' => $request->boolean('all'),
+            'except' => $request->input('except', []),
+            'only' => $request->input('only', []),
+        ]);
     }
 
     public function isAll(): bool

@@ -25,7 +25,7 @@ trait HasShowKey
 
     public function getPerPageFromRequest(): ?int
     {
-        return Request::integer($this->getShowKey(), null);
+        return (int)Request::input($this->getShowKey(), null);
     }
 }
 

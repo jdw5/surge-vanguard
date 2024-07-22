@@ -1,12 +1,9 @@
 <?php
 
 use Workbench\App\Models\Product;
-use Illuminate\Support\Facades\DB;
 use Conquest\Table\Filters\QueryFilter;
 use Illuminate\Support\Facades\Request;
-use Conquest\Table\Filters\Enums\Clause;
-use Conquest\Table\Filters\Enums\Operator;
-use Conquest\Table\Filters\Exceptions\QueryNotDefined;
+use Conquest\Table\Exceptions\QueryNotDefined;
 
 it('can create a query filter', function () {
     $filter = new QueryFilter($n = 'name');

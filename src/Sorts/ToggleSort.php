@@ -20,7 +20,13 @@ class ToggleSort extends BaseSort
         bool|Closure $authorize = null,
         array $metadata = null,
     ) {
-        parent::__construct($property, $name, $label, $authorize, $metadata);
+        parent::__construct(
+            property: $property, 
+            name: $name, 
+            label: $label, 
+            authorize: $authorize, 
+            metadata: $metadata
+        );
     }
 
     public static function make(

@@ -1,6 +1,6 @@
 <?php
 
-namespace Conquest\Table\Actions\Exceptions;
+namespace Conquest\Table\Exceptions;
 
 use Exception;
 

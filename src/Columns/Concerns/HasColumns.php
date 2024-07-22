@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 trait HasColumns
 {
     protected Collection $cachedColumns;
+    protected array $columns;
 
     protected function setColumns(array|null $columns): void
     {
@@ -33,9 +34,14 @@ trait HasColumns
         return [];
     }
 
+    /**
+     * Retrieve the columns for the table
+     * 
+     * @return Collection
+     */
     public function getTableColumns(): Collection
     {
-        return $this->cahcedColumns ??= collect($this->getColumns())
+        return $this->cachedColumns ??= collect($this->getColumns())
             ->filter(fn (BaseColumn $column): bool => $column->authorized());
     }
 
@@ -49,6 +55,11 @@ trait HasColumns
         return $this->getTableColumns()->filter(fn (BaseColumn $column): bool => $column->hasSort())->values();
     }
 
+    /**
+     * Retrieve the searchable columns for the table
+     * 
+     * @return Collection
+     */
     public function getSearchableColumns(): Collection
     {
         return $this->getTableColumns()->filter(fn (BaseColumn $column): bool => $column->isSearchable())->pluck('name');
@@ -57,7 +68,7 @@ trait HasColumns
     /**
      * Retrieve the key column for the table if one exists
      * 
-     * @return Column|null
+     * @return BaseColumn|null
      */
     public function getKeyColumn(): ?BaseColumn
     {

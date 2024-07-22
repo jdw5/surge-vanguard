@@ -10,7 +10,7 @@ trait HasDirection
     /**
      * Set the direction
      *
-     * @param  string|null  $direction
+     * @param  string  $direction
      */
     public function direction(string $direction): static
     {
@@ -21,6 +21,8 @@ trait HasDirection
 
     /**
      * Set the direction quietly.
+     * 
+     * @param string|null $direction
      */
     protected function setDirection(?string $direction): void
     {
@@ -29,6 +31,8 @@ trait HasDirection
 
     /**
      * Get the direction
+     * 
+     * @return string|null
      */
     public function getDirection(): ?string
     {
@@ -37,6 +41,8 @@ trait HasDirection
 
     /**
      * Set the direction to descending
+     * 
+     * @return static
      */
     public function desc(): static
     {
@@ -45,6 +51,8 @@ trait HasDirection
 
     /**
      * Set the direction to ascending
+     * 
+     * @return static
      */
     public function asc(): static
     {

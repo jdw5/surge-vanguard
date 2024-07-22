@@ -19,10 +19,10 @@ trait Searches
 
 
         if ($this->usesScout()) {
-            $query->search($q);
+            $query->search($q); // @phpstan-ignore-line
         } else {
             $query->whereAny(
-                is_array($s = $this->getSearch()) ? $s : [$this->getSearch()], 
+                $this->getSearch(), 
                 'LIKE', 
                 "%$q%"
             );

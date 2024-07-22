@@ -3,18 +3,17 @@
 namespace Conquest\Table\Filters\Concerns;
 
 use Conquest\Table\Filters\Enums\DateClause;
-use Conquest\Table\Filters\Exceptions\InvalidClause;
-use Exception;
 
 trait HasDateClause
 {
     /** Default to be exact */
-    protected DateClause $dateClause = DateClause::DATE;
+    protected ?DateClause $dateClause = null;
 
     /**
      * Set the clause to be used.
      *
-     * @throws InvalidClause
+     * @param string|DateClause $dateClause
+     * @return static
      */
     public function dateClause(string|DateClause $dateClause): static
     {
@@ -24,9 +23,30 @@ trait HasDateClause
     }
 
     /**
+     * Check if the clause is not set.
+     * 
+     * @return bool
+     */
+    public function lacksDateClause(): bool
+    {
+        return is_null($this->dateClause);
+    }
+
+    /**
+     * Check if the clause is set.
+     * 
+     * @return bool
+     */
+    public function hasDateClause(): bool
+    {
+        return !$this->lacksDateClause();
+    }
+
+    /**
      * Set the clause to be used quietly.
      *
-     * @throws InvalidClause
+     * @param string|DateClause|null $dateClause
+     * @return void
      */
     protected function setDateClause(string|DateClause|null $dateClause): void
     {
@@ -37,24 +57,24 @@ trait HasDateClause
         if ($dateClause instanceof DateClause) {
             $this->dateClause = $dateClause;
         } else {
-            try {
-                $this->dateClause = DateClause::from($dateClause);
-            } catch (Exception $e) {
-                throw new InvalidClause($dateClause);
-            }
+            $this->dateClause = DateClause::tryFrom($dateClause);
         }
     }
 
     /**
      * Retrieve the clause property.
+     * 
+     * @return DateClause|null
      */
-    public function getClause(): DateClause
+    public function getClause(): ?DateClause
     {
         return $this->dateClause;
     }
 
     /**
      * Set the clause to be 'exact'.
+     * 
+     * @return static
      */
     public function date(): static
     {
@@ -63,6 +83,8 @@ trait HasDateClause
 
     /**
      * Set the clause to be 'day'.
+     * 
+     * @return static
      */
     public function day(): static
     {
@@ -71,6 +93,8 @@ trait HasDateClause
 
     /**
      * Set the clause to be 'month'.
+     * 
+     * @return static
      */
     public function month(): static
     {
@@ -79,6 +103,8 @@ trait HasDateClause
 
     /**
      * Set the clause to be 'year'.
+     * 
+     * @return static
      */
     public function year(): static
     {
@@ -87,6 +113,8 @@ trait HasDateClause
 
     /**
      * Set the clause to be 'time'.
+     * 
+     * @return static
      */
     public function time(): static
     {

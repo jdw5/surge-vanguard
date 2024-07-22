@@ -4,19 +4,16 @@ namespace Conquest\Table\Filters\Concerns;
 
 use Exception;
 use Conquest\Table\Filters\Enums\Clause;
-use Conquest\Table\Filters\Exceptions\InvalidClause;
 
 trait HasClause
 {
-    /** Default to be exact */
-    protected Clause $clause = Clause::IS;
+    protected ?Clause $clause = null;
     
     /**
      * Set the clause to be used.
      * 
      * @param string|Clause $clause
      * @return static
-     * @throws InvalidClause 
      */
     public function clause(string|Clause $clause): static
     {
@@ -29,7 +26,6 @@ trait HasClause
      * 
      * @param string|Clause $clause
      * @return void
-     * @throws InvalidClause
      */
     protected function setClause(string|Clause|null $clause): void
     {
@@ -37,13 +33,8 @@ trait HasClause
         
         if ($clause instanceof Clause) {
             $this->clause = $clause;
-        }
-        else {
-            try {
-                $this->clause = Clause::from($clause);
-            } catch (Exception $e) {
-                throw new InvalidClause($clause);
-            }
+        } else {
+            $this->clause = Clause::tryFrom($clause);
         }
     }
 
@@ -52,7 +43,7 @@ trait HasClause
      * 
      * @return Clause
      */
-    public function getClause(): Clause
+    public function getClause(): ?Clause
     {
         return $this->clause;
     }
