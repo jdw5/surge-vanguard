@@ -14,7 +14,7 @@ trait HasOperators
     /**
      * Set the operators to be used, chainable.
      * 
-     * @param string|Operator $operator
+     * @param array<Operator> $operators
      * @return static
      */
     public function operators(array $operators): static
@@ -26,7 +26,7 @@ trait HasOperators
     /**
      * Set the operators to be used quietly.
      * 
-     * @param string|Operator $operator
+     * @param array<Operator>|null $operators
      * @return void
      */
     public function setOperators(?array $operators): void
@@ -35,6 +35,12 @@ trait HasOperators
         $this->operators = $operators;
     }
 
+    /**
+     * Get the operators.
+     * 
+     * @param string|null $active
+     * @return Collection<Operator>
+     */
     public function getOperators(?string $active): Collection
     {
         return collect($this->operators)->map(fn (Operator $operator) => [

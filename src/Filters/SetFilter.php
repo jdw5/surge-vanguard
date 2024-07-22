@@ -124,8 +124,7 @@ class SetFilter extends PropertyFilter
             );
             $flag = $flag || $option->isActive();
         });
-        
-        return $this->isRestricted() && $flag;
+        return $this->isRestricted() ? $flag : true;
     }
 
     public function getValueFromRequest(): mixed

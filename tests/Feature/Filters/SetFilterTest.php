@@ -125,7 +125,6 @@ it('does not apply a set filter if name not provided', function () {
     expect($filter->isActive())->toBeFalse();
 });
 
-
 it('does not apply a date filter if name not equal', function () {
     $filter = SetFilter::make('name', 'username');
     $builder = Product::query();
@@ -133,6 +132,65 @@ it('does not apply a date filter if name not equal', function () {
     $filter->apply($builder);
     expect($builder->toSql())->toBe('select * from "products"');
     expect($filter->isActive())->toBeFalse();
+});
+
+it('can have options', function () {
+    $filter = SetFilter::make('name', 'username')
+        ->options([
+            Option::make('value', 'Label'),
+            Option::make('value2', 'Label2'),
+        ]);
+    
+    expect($filter)->hasOptions()->toBeTrue()
+        ->getOptions()->toBeArray()
+        ->getOptions()->toHaveCount(2)
+        ->getOptions()->each->toBeInstanceOf(Option::class);
+});
+
+it('splits values if multiple from request', function () {
+    $filter = SetFilter::make('name')->multiple();
+    Request::merge(['name' => 'test,test2']);
+    expect($filter->getValueFromRequest())->toBeArray()->toHaveCount(2)->toEqual(['test', 'test2']);
+    Request::merge(['name' => 'test']);
+    expect($filter->getValueFromRequest())->toEqual(['test']);
+});
+
+it('does not split if not multiple', function () {
+    $filter = SetFilter::make('name');
+    Request::merge(['name' => 'test,test2']);
+    expect($filter->getValueFromRequest())->toBe('test,test2');
+    Request::merge(['name' => 'test']);
+    expect($filter->getValueFromRequest())->toBe('test');
+});
+
+it('restricts only to provided options', function () {
+    $filter = SetFilter::make('name', 'username')
+        ->options([
+            Option::make('value', 'Label'),
+            Option::make('value2', 'Label2'),
+        ])
+        ->restrict();
+    Request::merge(['username' => 'value']);
+    $builder = Product::query();
+    $filter->apply($builder);
+    expect($builder->toSql())->toBe('select * from "products" where "name" = ?');
+    expect($filter->isActive())->toBeTrue();
+    expect(collect($filter->getOptions())->first())->isActive()->toBeTrue();
+});
+
+it('prevents not provided options from being applied', function () {
+    $filter = SetFilter::make('name', 'username')
+        ->options([
+            Option::make('value', 'Label'),
+            Option::make('value2', 'Label2'),
+        ])
+        ->restrict();
+    Request::merge(['username' => 'value_']);
+    $builder = Product::query();
+    $filter->apply($builder);
+    expect($builder->toSql())->toBe('select * from "products"');
+    expect($filter->isActive())->toBeTrue();
+    expect(collect($filter->getOptions())->first())->isActive()->toBeFalse();
 });
 
 it('has array representation', function () {
