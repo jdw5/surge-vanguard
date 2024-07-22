@@ -35,18 +35,33 @@ trait HasOperators
         $this->operators = $operators;
     }
 
+    public function getOperators(): array
+    {
+        return $this->operators;
+    }
+
     /**
      * Get the operators.
      * 
      * @param string|null $active
      * @return Collection<Operator>
      */
-    public function getOperators(?string $active): Collection
+    public function getOperatorOptions(?string $active = null): Collection
     {
         return collect($this->operators)->map(fn (Operator $operator) => [
             'value' => $operator->value,
             'label' => $operator->label(),
             'active' => $operator->value === $active,
         ]);
+    }
+
+    public function hasOperators(): bool
+    {
+        return count($this->operators) > 0;
+    }
+
+    public function lacksOperators(): bool
+    {
+        return ! $this->hasOperators();
     }
 }

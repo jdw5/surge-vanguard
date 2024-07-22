@@ -13,12 +13,11 @@ use Conquest\Table\Filters\Concerns\HasOperator;
 use Conquest\Table\Filters\Concerns\HasOperators;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class OperatorFilter extends BaseFilter
+class OperatorFilter extends PropertyFilter
 {
     use HasClause;
     use HasOperators;
-
-    protected ?Operator $operator = null;
+    use HasOperator;
 
     public function setUp(): void
     {
@@ -65,26 +64,10 @@ class OperatorFilter extends BaseFilter
         ));
     }
 
-    public function getOperator(): Operator
-    {
-        return $this->operator;
-    }
-
-    public function setOperator(?Operator $operator): void
-    {
-        if (is_null($operator)) return;
-        $this->operator = $operator;
-    }
-
     public function getOperatorFromRequest(): ?Operator
     {
-        $q = Request::input('['.$this->getName().']', null);
-
-        try {
-            return Operator::from($q);
-        } catch (Exception $e) {
-            return null;
-        }
+        $q = Request::string('['.$this->getName().']');
+        return Operator::tryFrom($q);
     }
 
     public function apply(Builder|QueryBuilder $builder): void
@@ -92,7 +75,7 @@ class OperatorFilter extends BaseFilter
         $value = $this->transformUsing($this->getValueFromRequest());
         $this->setOperator($this->getOperatorFromRequest());
         $this->setValue($value);
-        $this->setActive($this->filtering($value) && !is_null($this->operator));
+        $this->setActive($this->filtering($value));
 
         $builder->when(
             $this->isActive() && $this->validateUsing($value),
@@ -110,10 +93,16 @@ class OperatorFilter extends BaseFilter
             );
     }
 
+    public function filtering(mixed $value): bool
+    {
+        return !is_null($value) && 
+            collect($this->getOperators())->some(fn ($operator) => $operator->value === $this->getOperator()?->value);
+    }
+
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [
-            'operators' => $this->getOperators($this->getOperator()?->value),
+            'operators' => $this->getOperatorOptions($this->getOperator()?->value)->toArray(),
         ]);
     }
 }

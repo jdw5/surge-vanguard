@@ -8,7 +8,7 @@ use Conquest\Table\Filters\Exceptions\InvalidOperator;
 
 trait HasOperator
 {
-    protected Operator $operator = Operator::EQUAL;
+    protected ?Operator $operator = null;
 
     /**
      * Set the operator to be used, chainable.
@@ -49,7 +49,7 @@ trait HasOperator
      * 
      * @return Operator
      */
-    public function getOperator(): Operator
+    public function getOperator(): ?Operator
     {
         return $this->evaluate($this->operator);
     }
