@@ -10,6 +10,9 @@ trait HasColumns
     protected Collection $cachedColumns;
     protected array $columns;
 
+    /**
+     * @param array<BaseColumn>|null $columns
+     */
     protected function setColumns(array|null $columns): void
     {
         if (is_null($columns)) return;
@@ -17,9 +20,7 @@ trait HasColumns
     }
 
     /**
-     * Define the columns for the table.
-     * 
-     * @return array
+     * @return array<BaseColumn>
      */
     protected function getColumns(): array
     {
@@ -34,50 +35,27 @@ trait HasColumns
         return [];
     }
 
-    /**
-     * Retrieve the columns for the table
-     * 
-     * @return Collection
-     */
     public function getTableColumns(): Collection
     {
         return $this->cachedColumns ??= collect($this->getColumns())
             ->filter(fn (BaseColumn $column): bool => $column->authorized());
     }
 
-    /**
-     * Retrieve the sortable columns for the table
-     * 
-     * @return Collection
-     */
     public function getSortableColumns(): Collection
     {
         return $this->getTableColumns()->filter(fn (BaseColumn $column): bool => $column->hasSort())->values();
     }
 
-    /**
-     * Retrieve the searchable columns for the table
-     * 
-     * @return Collection
-     */
     public function getSearchableColumns(): Collection
     {
         return $this->getTableColumns()->filter(fn (BaseColumn $column): bool => $column->isSearchable())->pluck('name');
     }
 
-    /**
-     * Retrieve the key column for the table if one exists
-     * 
-     * @return BaseColumn|null
-     */
     public function getKeyColumn(): ?BaseColumn
     {
         return $this->getTableColumns()->first(fn (BaseColumn $column): bool => $column->isKey());
     }
 
-    /**
-     * 
-     */
     public function getHeadingColumns(): Collection
     {
         return $this->getTableColumns()->filter(fn (BaseColumn $column): bool => $column->isActive())->values();

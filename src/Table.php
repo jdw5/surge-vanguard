@@ -153,12 +153,7 @@ class Table extends Primitive implements Tables
             ]
         ];
     }
-
-    /**
-     * Retrieve the records from the table.
-     * 
-     * @return Collection
-     */
+    
     public function getTableRecords(): Collection
     {
         $this->create();
@@ -166,9 +161,7 @@ class Table extends Primitive implements Tables
     }
 
     /**
-     * Retrieve the metadata from the table.
-     * 
-     * @return array
+     * @return array<string, mixed>
      */
     public function getTableMeta(): array
     {
@@ -176,11 +169,6 @@ class Table extends Primitive implements Tables
         return $this->getMeta();
     }
 
-    /**
-     * Perform the pipeline by executing the query, applying the refinements and paginating the data.
-     * 
-     * @return void
-     */
     protected function create(): void
     {
         if ($this->hasRecords()) return;
@@ -225,11 +213,17 @@ class Table extends Primitive implements Tables
         $this->setMeta($meta);
     }
 
+    /**
+     * @return array<string>
+     */
     public function combinedSearch(): array
     {
         return array_merge($this->getSearch(), $this->getSearchableColumns()->toArray());
     }
 
+    /**
+     * @return array<BaseSort>
+     */
     public function combinedSorts(): array
     {
         return array_merge($this->getSorts(), $this->getSortableColumns()->map(fn ($column) => $column->getSort())->toArray());
