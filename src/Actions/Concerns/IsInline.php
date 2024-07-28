@@ -4,7 +4,7 @@ namespace Conquest\Table\Actions\Concerns;
 
 use Closure;
 
-trait CanBeInline
+trait IsInline
 {
     protected bool|Closure|null $inline = false;
 

@@ -4,7 +4,7 @@ namespace Conquest\Table\Actions\Concerns;
 
 use Closure;
 
-trait CanBeBulk
+trait IsBulk
 {
     protected bool|Closure|null $bulk = false;
 

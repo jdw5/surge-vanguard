@@ -98,6 +98,6 @@ class DateColumn extends FallbackColumn
                 if ($this->hasFallback()) return $this->getFallback();
             }
         }
-        return $value;
+        return $this->modifyAsString($value);
     }
 }

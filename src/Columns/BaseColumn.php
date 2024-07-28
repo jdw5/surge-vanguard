@@ -20,6 +20,8 @@ use Conquest\Table\Columns\Enums\Breakpoint;
 use Conquest\Table\Columns\Concerns\IsSearchable;
 use Conquest\Table\Columns\Concerns\HasBreakpoint;
 use Conquest\Table\Columns\Concerns\HasAccessibility;
+use Conquest\Table\Columns\Concerns\HasPrefix;
+use Conquest\Table\Columns\Concerns\HasSuffix;
 
 abstract class BaseColumn extends Primitive
 {
@@ -38,6 +40,8 @@ abstract class BaseColumn extends Primitive
     use HasType;
     use HasMetadata;
     use HasProperty;
+    use HasSuffix;
+    use HasPrefix;
 
     public function __construct(
         string|Closure $name, 
@@ -87,6 +91,15 @@ abstract class BaseColumn extends Primitive
 
     public function apply(mixed $value): mixed
     {
-        return $this->transformUsing($value);
+        $value = $this->transformUsing($value);
+        return $this->modifyAsString($value);
+    }
+
+    protected function modifyAsString(mixed $value): string
+    {
+        if ($this->hasPrefix()) $value = $this->getPrefix() . $value;
+        if ($this->hasSuffix()) $value = $value . $this->getSuffix();
+        return $value;
+
     }
 }
