@@ -6,7 +6,7 @@ use Closure;
 
 trait IsInline
 {
-    protected bool|Closure|null $inline = false;
+    protected bool|Closure $inline = false;
 
     public function inline(bool|Closure $inline = true): static
     {

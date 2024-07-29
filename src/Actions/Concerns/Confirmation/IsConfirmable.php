@@ -7,7 +7,7 @@ use Closure;
 
 trait IsConfirmable
 {
-    protected bool|Closure|null $confirm = false;
+    protected bool|Closure $confirm = false;
 
     public function confirmable(bool|Closure $confirm = true): static
     {

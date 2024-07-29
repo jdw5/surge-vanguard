@@ -1,18 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Conquest\Table\Columns\Concerns;
+namespace Conquest\Table\Actions\Concerns\Confirmation;
 
 use Closure;
-use Conquest\Table\Actions\Concerns\Confirmation\ConfirmationType;
-use Conquest\Table\Actions\Concerns\Confirmation\IsConfirmable;
 
 trait HasConfirmationType
 {
     use IsConfirmable;
     use HasConfirmationType;
-    // use HasConfirmationMessage;
-    // use HasConfirmationTitle;
+    use HasConfirmationMessage;
+    use HasConfirmationTitle;
 
     public function confirm(string|ConfirmationType $type = null, string|Closure $title = null, string|Closure $message = null): static
     {

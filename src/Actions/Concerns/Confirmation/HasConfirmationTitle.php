@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Conquest\Table\Columns\Concerns;
+namespace Conquest\Table\Actions\Concerns\Confirmation;
 
 use Closure;
 

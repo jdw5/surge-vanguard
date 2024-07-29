@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Conquest\Table\Columns\Concerns;
 
@@ -6,50 +7,42 @@ use Closure;
 
 trait IsSortable
 {
-    protected bool $sortable = false;
+    protected bool|Closure $sortable = false;
+    protected string|Closure|null $sortProperty = null;
 
-    public function sort(string|Closure|null $property = null): static
+    public function sortable(string|Closure $property = null): static
     {
-        $this->setSortability(true, $property);
-
+        $this->setSortable(true);
+        $this->setSortProperty($property);
         return $this;
     }
 
-    public function sortable(string|Closure|null $property = null): static
+    public function setSortable(bool|Closure|null $sortable): void
     {
-        return $this->search($property);
-    }
-
-    public function dontSort(): static
-    {
-        $this->setSortability(false);
-
-        return $this;
-    }
-
-    public function notSortable(): static
-    {
-        return $this->dontSort();
-    }
-
-    protected function setSortability(bool $sortable, string|Closure|null $property = null): void
-    {
+        if (is_null($sortable)) return;
         $this->sortable = $sortable;
-        $this->setProperty($property);
+    }
+
+    public function setSortProperty(string|Closure|null $property): void
+    {
+        if (is_null($property)) return;
+        $this->sortProperty = $property;
     }
 
     public function isSortable(): bool
     {
-        return $this->sortable;
+        return $this->evaluate($this->sortable);
     }
 
-    public function sorts(): bool
+    public function isNotSortable(): bool
     {
-        return $this->isSortable();
+        return !$this->isSortable();
     }
 
-    public function sortsUsing(): string
+    public function getSortProperty(): ?string
     {
-        return $this->getProperty();
+        return $this->evaluate(
+            value: $this->sortProperty,
+        );
     }
 }

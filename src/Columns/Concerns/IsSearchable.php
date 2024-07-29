@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Conquest\Table\Columns\Concerns;
 
@@ -6,28 +7,42 @@ use Closure;
 
 trait IsSearchable
 {
-    protected bool $searchable = false;
+    protected bool|Closure $searchable = false;
+    protected string|Closure|null $searchProperty = null;
 
-    public function searchable(string|Closure|null $property = null): static
+    public function searchable(string|Closure $property = null): static
     {
-        $this->setSearchable(true, $property);
-
+        $this->setSearchable(true);
+        $this->setSearchProperty($property);
         return $this;
     }
 
-    public function search(string|Closure|null $property = null): static
+    public function setSearchable(bool|Closure|null $searchable): void
     {
-        return $this->search($property);
+        if (is_null($searchable)) return;
+        $this->searchable = $searchable;
     }
 
-    protected function setSearchable(bool $searchable, string|Closure|null $property = null): void
+    public function setSearchProperty(string|Closure|null $property): void
     {
-        $this->searchable = $searchable;
-        $this->setProperty($property);
+        if (is_null($property)) return;
+        $this->searchProperty = $property;
     }
 
     public function isSearchable(): bool
     {
-        return $this->searchable;
+        return $this->evaluate($this->searchable);
+    }
+
+    public function isNotSearchable(): bool
+    {
+        return !$this->isSearchable();
+    }
+
+    public function getSearchProperty(): ?string
+    {
+        return $this->evaluate(
+            value: $this->searchProperty,
+        );
     }
 }

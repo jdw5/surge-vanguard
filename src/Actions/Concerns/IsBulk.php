@@ -6,7 +6,7 @@ use Closure;
 
 trait IsBulk
 {
-    protected bool|Closure|null $bulk = false;
+    protected bool|Closure $bulk = false;
 
     public function bulk(bool|Closure $bulk = true): static
     {

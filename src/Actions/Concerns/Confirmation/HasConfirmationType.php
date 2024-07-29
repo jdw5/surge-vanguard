@@ -1,10 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Conquest\Table\Columns\Concerns;
-
-use Closure;
-use Conquest\Table\Actions\Concerns\Confirmation\ConfirmationType;
+namespace Conquest\Table\Actions\Concerns\Confirmation;
 
 trait HasConfirmationType
 {
