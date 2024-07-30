@@ -1,122 +1,120 @@
 <?php
 
-use Conquest\Table\Columns\BooleanColumn;
+use Conquest\Table\Columns\NumericColumn;
 use Conquest\Table\Columns\Enums\Breakpoint;
 
-it('can create a boolean column', function () {
-    $col = new BooleanColumn('name');
-    expect($col)->toBeInstanceOf(BooleanColumn::class)
-        ->getType()->toBe('col:bool')
+it('can create a numeric column', function () {
+    $col = new NumericColumn('name');
+    expect($col)->toBeInstanceOf(NumericColumn::class)
+        ->getType()->toBe('col:numeric')
         ->getName()->toBe('name')
         ->getLabel()->toBe('Name')
         ->isHidden()->toBeFalse()
+        ->getFallback()->toBe(config('table.fallback.numeric'))
         ->isAuthorized()->toBeTrue()
         ->canTransform()->toBeFalse()
         ->getBreakpoint()->toBeNull()
         ->isSrOnly()->toBeFalse()
         ->hasSort()->toBeFalse()
         ->isActive()->toBeTrue()
-        ->getTruthLabel()->toBe('Active')
-        ->getFalseLabel()->toBe('Inactive')
-        ->hasMetadata()->toBeFalse();
+        ->isKey()->toBeFalse()
+        ->hasMeta()->toBeFalse();
 });
 
-it('can make a boolean column', function () {
-    expect(BooleanColumn::make('name'))->toBeInstanceOf(BooleanColumn::class)
-        ->getType()->toBe('col:bool')
+it('can make a numeric column', function () {
+    expect(NumericColumn::make('name'))->toBeInstanceOf(NumericColumn::class)
+        ->getType()->toBe('col:numeric')
         ->getName()->toBe('name')
         ->getLabel()->toBe('Name')
         ->isHidden()->toBeFalse()
+        ->getFallback()->toBe(0)
         ->isAuthorized()->toBeTrue()
         ->canTransform()->toBeFalse()
         ->getBreakpoint()->toBeNull()
         ->isSrOnly()->toBeFalse()
         ->hasSort()->toBeFalse()
         ->isActive()->toBeTrue()
-        ->getTruthLabel()->toBe('Active')
-        ->getFalseLabel()->toBe('Inactive')
-        ->hasMetadata()->toBeFalse();
+        ->isKey()->toBeFalse()
+        ->hasMeta()->toBeFalse();
 });
 
-it('can create a boolean column with arguments', function () {
-    $col = new BooleanColumn(
+it('can create a numeric column with arguments', function () {
+    $col = new NumericColumn(
         name: 'name',
         label: $label = 'Username',
         hidden: true,
+        fallback: 'N/A',
         authorize: fn () => false,
         transform: fn ($value) => $value,
         breakpoint: Breakpoint::XS,
         srOnly: true,
         sortable: true,
         active: false,
-        truthLabel: 'Yes',
-        falseLabel: 'No',
-        metadata: ['key' => 'value'],
+        key: true,
+        meta: ['key' => 'value'],
     );
 
-    expect($col)->toBeInstanceOf(BooleanColumn::class)
-        ->getType()->toBe('col:bool')
+    expect($col)->toBeInstanceOf(NumericColumn::class)
+        ->getType()->toBe('col:numeric')
         ->getName()->toBe('name')
         ->getLabel()->toBe($label)
         ->isHidden()->toBeTrue()
+        ->getFallback()->toBe('N/A')
         ->isAuthorized()->toBeFalse()
         ->canTransform()->toBeTrue()
         ->getBreakpoint()->toBe('xs')
         ->isSrOnly()->toBeTrue()
         ->hasSort()->toBeTrue()
         ->isActive()->toBeFalse()
-        ->getTruthLabel()->toBe('Yes')
-        ->getFalseLabel()->toBe('No')
-        ->hasMetadata()->toBeTrue();
+        ->isKey()->toBeTrue()
+        ->hasMeta()->toBeTrue();
 });
 
 
 
-it('can chain methods on a boolean column', function () {
-    $col = BooleanColumn::make('name')
+it('can chain methods on a numeric column', function () {
+    $col = NumericColumn::make('name')
         ->label($label = 'Username')
         ->hidden()
+        ->fallback('N/A')
         ->authorize(fn () => false)
         ->transform(fn ($value) => strtoupper($value))
         ->breakpoint('xs')
         ->srOnly()
         ->sortable()
         ->active(false)
-        ->falseLabel(fn () => 'No')
-        ->truthLabel(fn () => 'Yes')
-        ->metadata(['key' => 'value']);
+        ->key()
+        ->meta(['key' => 'value']);
         
-    expect($col)->toBeInstanceOf(BooleanColumn::class)
-        ->getType()->toBe('col:bool')
+    expect($col)->toBeInstanceOf(NumericColumn::class)
+        ->getType()->toBe('col:numeric')
         ->getName()->toBe('name')
         ->getLabel()->toBe($label)
         ->isHidden()->toBeTrue()
+        ->getFallback()->toBe('N/A')
         ->isAuthorized()->toBeFalse()
         ->canTransform()->toBeTrue()
         ->getBreakpoint()->toBe('xs')
         ->isSrOnly()->toBeTrue()
         ->hasSort()->toBeTrue()
         ->isActive()->toBeFalse()
-        ->getTruthLabel()->toBe('Yes')
-        ->getFalseLabel()->toBe('No')
-        ->hasMetadata()->toBeTrue();
+        ->isKey()->toBeTrue()
+        ->hasMeta()->toBeTrue();
 });
 
 it('does not allow the name to be "actions"', function () {
-    expect(fn () => new BooleanColumn('actions'))->toThrow(Exception::class, 'Column name cannot be "actions"');
+    expect(fn () => new NumericColumn('actions'))->toThrow(Exception::class, 'Column name cannot be "actions"');
 });
 
-it('can apply a boolean', function () {
-    $col = BooleanColumn::make('created_at');
-    expect($col->apply(null))->toBe('Inactive');
-    expect($col->apply(1))->toBe('Active');
-    $col->transform(fn ($value) => $value > 0);
-    expect($col->apply(-1))->toBe('Inactive');
-    expect($col->apply(1))->toBe('Active');
+it('can apply a column and fallbacks with value', function () {
+    $fn = fn ($value) => strtoupper($value);
+    $col = NumericColumn::make('name')->transform($fn);
+    expect($col->apply('test'))->toBe('TEST');
+    expect($col->apply(null))->toBe(config('table.fallback.numeric'));
 });
 
 it('has array form', function () {
-    $col = BooleanColumn::make('name');
+    $col = NumericColumn::make('name');
     expect($col->toArray())->toEqual([
         'name' => 'name',
         'label' => 'Name',
@@ -127,6 +125,7 @@ it('has array form', function () {
         'sort' => false,
         'sorting' => false,
         'direction' => null,
-        'metadata' => [],
+        'meta' => [],
+        'fallback' => config('table.fallback.numeric'),
     ]);
 });

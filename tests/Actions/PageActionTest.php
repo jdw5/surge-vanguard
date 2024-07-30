@@ -11,7 +11,7 @@ it('can create a page action', function () {
     expect($action->getType())->toBe(Table::PAGE_ACTION);
     expect($action->getResolvedRoute())->toBeNull();
     expect($action->getMethod())->toBeNull();
-    expect($action->getMetadata())->toBe([]);
+    expect($action->getMeta())->toBe([]);
 });
 
 it('can make a page action', function () {

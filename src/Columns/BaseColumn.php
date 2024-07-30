@@ -10,9 +10,9 @@ use Conquest\Core\Concerns\HasName;
 use Conquest\Core\Concerns\HasType;
 use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Concerns\IsHidden;
-use Conquest\Core\Concerns\HasMetadata;
+use Conquest\Core\Concerns\HasMeta;
 use Conquest\Core\Concerns\HasProperty;
-use Conquest\Core\Concerns\CanAuthorize;
+use Conquest\Core\Concerns\IsAuthorized;
 use Conquest\Core\Concerns\CanTransform;
 use Conquest\Core\Concerns\IsActive;
 use Conquest\Table\Columns\Concerns\HasSort;
@@ -21,6 +21,7 @@ use Conquest\Table\Columns\Concerns\IsSearchable;
 use Conquest\Table\Columns\Concerns\HasBreakpoint;
 use Conquest\Table\Columns\Concerns\HasAccessibility;
 use Conquest\Table\Columns\Concerns\HasPrefix;
+use Conquest\Table\Columns\Concerns\HasSeparator;
 use Conquest\Table\Columns\Concerns\HasSuffix;
 
 abstract class BaseColumn extends Primitive
@@ -28,7 +29,7 @@ abstract class BaseColumn extends Primitive
     use HasName;
     use HasLabel;
     use IsHidden;
-    use CanAuthorize;
+    use IsAuthorized;
     use CanTransform;
     use HasBreakpoint;
     use HasAccessibility;
@@ -38,10 +39,11 @@ abstract class BaseColumn extends Primitive
     use IsSearchable;
     use IsActive;
     use HasType;
-    use HasMetadata;
+    use HasMeta;
     use HasProperty;
     use HasSuffix;
     use HasPrefix;
+    use HasSeparator;
 
     public function __construct(
         string|Closure $name, 
@@ -55,7 +57,7 @@ abstract class BaseColumn extends Primitive
         bool $searchable = false,
         bool $active = true,
         bool $key = false,
-        array $metadata = null,
+        array $meta = null,
     ) {
         if ($name === 'actions') throw new Exception('Column name cannot be "actions"');
         parent::__construct();
@@ -70,7 +72,7 @@ abstract class BaseColumn extends Primitive
         $this->setTransform($transform);
         $this->setActive($active);
         $this->setKey($key);
-        $this->setMetadata($metadata);
+        $this->setMeta($meta);
     }
     
     public function toArray(): array
@@ -85,17 +87,17 @@ abstract class BaseColumn extends Primitive
             'sort' => $this->hasSort(),
             'sorting' => $this->isSorting(),
             'direction' => $this->getSort()?->getDirection(),
-            'metadata' => $this->getMetadata(),
+            'meta' => $this->getMeta(),
         ];
     }
 
     public function apply(mixed $value): mixed
     {
         $value = $this->transformUsing($value);
-        return $this->modifyAsString($value);
+        return $this->formatValue($value);
     }
 
-    protected function modifyAsString(mixed $value): string
+    protected function formatValue(mixed $value): string
     {
         if ($this->hasPrefix()) $value = $this->getPrefix() . $value;
         if ($this->hasSuffix()) $value = $value . $this->getSuffix();

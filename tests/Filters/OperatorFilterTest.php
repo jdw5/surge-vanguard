@@ -19,7 +19,7 @@ it('can create a operator filter', function () {
         ->canTransform()->toBeFalse()
         ->getClause()->toBe(Clause::IS)
         ->hasOperators()->toBeFalse()
-        ->hasMetadata()->toBeFalse();
+        ->hasMeta()->toBeFalse();
 });
 
 it('can create a operators filter with arguments', function () {
@@ -33,7 +33,7 @@ it('can create a operators filter with arguments', function () {
             Operator::EQUAL,
             Operator::NOT_EQUAL,
         ],
-        metadata: ['key' => 'value'],
+        meta: ['key' => 'value'],
     );
 
     expect($filter)->getType()->toBe('filter:operator')
@@ -46,7 +46,7 @@ it('can create a operators filter with arguments', function () {
         ->getClause()->toBe(Clause::IS)
         ->hasOperators()->toBeTrue()
         ->getOperators()->toHaveLength(2)
-        ->getMetadata()->toBe(['key' => 'value']);
+        ->getMeta()->toBe(['key' => 'value']);
 });
 
 it('can make am operator filter', function () {
@@ -60,7 +60,7 @@ it('can make am operator filter', function () {
         ->canTransform()->toBeFalse()
         ->getClause()->toBe(Clause::IS)
         ->hasOperators()->toBeFalse()
-        ->hasMetadata()->toBeFalse();
+        ->hasMeta()->toBeFalse();
 });
 
 it('can chain methods on an operator filter', function () {
@@ -74,7 +74,7 @@ it('can chain methods on an operator filter', function () {
             Operator::EQUAL,
             Operator::NOT_EQUAL,
         ])
-        ->metadata(['key' => 'value']);
+        ->meta(['key' => 'value']);
 
     expect($filter)->toBeInstanceOf(OperatorFilter::class)
         ->getType()->toBe('filter:operator')
@@ -87,7 +87,7 @@ it('can chain methods on an operator filter', function () {
         ->getClause()->toBe(Clause::IS_NOT)
         ->hasOperators()->toBeTrue()
         ->getOperators()->toHaveLength(2)
-        ->getMetadata()->toBe(['key' => 'value']);
+        ->getMeta()->toBe(['key' => 'value']);
 
 });
 
@@ -152,7 +152,7 @@ it('has array representation', function () {
         'type' => 'filter:operator',
         'active' => false,
         'value' => null,
-        'metadata' => [],
+        'meta' => [],
         'operators' => []
     ]);
 });
@@ -187,7 +187,7 @@ it('changes array representation if operator filter applied', function () {
                 'active' => false,
             ],
         ],
-        'metadata' => [],
+        'meta' => [],
     ]);
 
     expect($f2->toArray())->toEqual([
@@ -208,7 +208,7 @@ it('changes array representation if operator filter applied', function () {
                 'active' => false,
             ],
         ],
-        'metadata' => [],
+        'meta' => [],
     ]);
 });
 
@@ -242,7 +242,7 @@ it('can apply multiple operator filters', function () {
                 'active' => true,
             ],
         ],
-        'metadata' => [],
+        'meta' => [],
     ]);
 
     expect($f2->toArray())->toEqual([
@@ -263,6 +263,6 @@ it('can apply multiple operator filters', function () {
                 'active' => false,
             ],
         ],
-        'metadata' => [],
+        'meta' => [],
     ]);
 });

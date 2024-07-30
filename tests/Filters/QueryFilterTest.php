@@ -13,7 +13,7 @@ it('can create a query filter', function () {
         ->hasValidator()->toBeFalse()
         ->isAuthorised()->toBeTrue()
         ->hasTransform()->toBeFalse()
-        ->hasMetadata()->toBeFalse();
+        ->hasMeta()->toBeFalse();
 
     expect(fn() => $filter->getQuery())->toThrow(QueryNotDefined::class, 'Query for filter [{}] has not been provided.');
 });
@@ -26,7 +26,7 @@ it('can create a filter with arguments', function () {
         validator: fn () => true,
         transform: fn ($value) => $value,
         query: fn ($builder, $value) => $builder->where('name', $value),
-        metadata: ['key' => 'value'],
+        meta: ['key' => 'value'],
     );
 
     expect($filter)->getName()->toBe('name')
@@ -34,7 +34,7 @@ it('can create a filter with arguments', function () {
         ->isAuthorised()->toBeFalse()
         ->hasValidator()->toBeTrue()
         ->canTransform()->toBeTrue()
-        ->hasMetadata()->toBeTrue();
+        ->hasMeta()->toBeTrue();
     
     expect(fn() => $filter->getQuery())->not->toThrow(QueryNotDefined::class, 'Query for filter [{}] has not been provided.');
 });
@@ -46,7 +46,7 @@ it('can make a filter', function () {
         ->hasValidator()->toBeFalse()
         ->isAuthorised()->toBeTrue()
         ->hasTransform()->toBeFalse()
-        ->hasMetadata()->toBeFalse();
+        ->hasMeta()->toBeFalse();
     
     expect(fn() => $f->getQuery())->toThrow(QueryNotDefined::class, 'Query for filter [{}] has not been provided.');
     
@@ -60,14 +60,14 @@ it('can chain methods on a filter', function () {
         validator: fn () => true,
         transform: fn ($value) => $value,
         query: fn ($builder, $value) => $builder->where('name', $value),
-        metadata: ['key' => 'value'],
+        meta: ['key' => 'value'],
     );
     expect($q)->getName()->toBe('name')
         ->getLabel()->toBe('Username')
         ->isAuthorised()->toBeFalse()
         ->hasValidator()->toBeTrue()
         ->canTransform()->toBeTrue()
-        ->hasMetadata()->toBeTrue()
+        ->hasMeta()->toBeTrue()
         ->getQuery()->toBeInstanceOf(Closure::class);
 });
 

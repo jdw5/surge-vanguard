@@ -1,16 +1,16 @@
 <?php
 
-use Conquest\Table\Columns\NumericColumn;
+use Conquest\Table\Columns\TextColumn;
 use Conquest\Table\Columns\Enums\Breakpoint;
 
-it('can create a numeric column', function () {
-    $col = new NumericColumn('name');
-    expect($col)->toBeInstanceOf(NumericColumn::class)
-        ->getType()->toBe('col:numeric')
+it('can create a text column', function () {
+    $col = new TextColumn('name');
+    expect($col)->toBeInstanceOf(TextColumn::class)
+        ->getType()->toBe('col:text')
         ->getName()->toBe('name')
         ->getLabel()->toBe('Name')
         ->isHidden()->toBeFalse()
-        ->getFallback()->toBe(config('table.fallback.numeric'))
+        ->getFallback()->toBe(config('table.fallback.text'))
         ->isAuthorized()->toBeTrue()
         ->canTransform()->toBeFalse()
         ->getBreakpoint()->toBeNull()
@@ -18,16 +18,16 @@ it('can create a numeric column', function () {
         ->hasSort()->toBeFalse()
         ->isActive()->toBeTrue()
         ->isKey()->toBeFalse()
-        ->hasMetadata()->toBeFalse();
+        ->hasMeta()->toBeFalse();
 });
 
-it('can make a numeric column', function () {
-    expect(NumericColumn::make('name'))->toBeInstanceOf(NumericColumn::class)
-        ->getType()->toBe('col:numeric')
+it('can make a text column', function () {
+    expect(TextColumn::make('name'))->toBeInstanceOf(TextColumn::class)
+        ->getType()->toBe('col:text')
         ->getName()->toBe('name')
         ->getLabel()->toBe('Name')
         ->isHidden()->toBeFalse()
-        ->getFallback()->toBe(0)
+        ->getFallback()->toBe(config('table.fallback.text'))
         ->isAuthorized()->toBeTrue()
         ->canTransform()->toBeFalse()
         ->getBreakpoint()->toBeNull()
@@ -35,11 +35,11 @@ it('can make a numeric column', function () {
         ->hasSort()->toBeFalse()
         ->isActive()->toBeTrue()
         ->isKey()->toBeFalse()
-        ->hasMetadata()->toBeFalse();
+        ->hasMeta()->toBeFalse();
 });
 
-it('can create a numeric column with arguments', function () {
-    $col = new NumericColumn(
+it('can create a text column with arguments', function () {
+    $col = new TextColumn(
         name: 'name',
         label: $label = 'Username',
         hidden: true,
@@ -51,11 +51,11 @@ it('can create a numeric column with arguments', function () {
         sortable: true,
         active: false,
         key: true,
-        metadata: ['key' => 'value'],
+        meta: ['key' => 'value'],
     );
 
-    expect($col)->toBeInstanceOf(NumericColumn::class)
-        ->getType()->toBe('col:numeric')
+    expect($col)->toBeInstanceOf(TextColumn::class)
+        ->getType()->toBe('col:text')
         ->getName()->toBe('name')
         ->getLabel()->toBe($label)
         ->isHidden()->toBeTrue()
@@ -67,13 +67,13 @@ it('can create a numeric column with arguments', function () {
         ->hasSort()->toBeTrue()
         ->isActive()->toBeFalse()
         ->isKey()->toBeTrue()
-        ->hasMetadata()->toBeTrue();
+        ->hasMeta()->toBeTrue();
 });
 
 
 
-it('can chain methods on a numeric column', function () {
-    $col = NumericColumn::make('name')
+it('can chain methods on a text column', function () {
+    $col = TextColumn::make('name')
         ->label($label = 'Username')
         ->hidden()
         ->fallback('N/A')
@@ -84,10 +84,10 @@ it('can chain methods on a numeric column', function () {
         ->sortable()
         ->active(false)
         ->key()
-        ->metadata(['key' => 'value']);
+        ->meta(['key' => 'value']);
         
-    expect($col)->toBeInstanceOf(NumericColumn::class)
-        ->getType()->toBe('col:numeric')
+    expect($col)->toBeInstanceOf(TextColumn::class)
+        ->getType()->toBe('col:text')
         ->getName()->toBe('name')
         ->getLabel()->toBe($label)
         ->isHidden()->toBeTrue()
@@ -99,22 +99,22 @@ it('can chain methods on a numeric column', function () {
         ->hasSort()->toBeTrue()
         ->isActive()->toBeFalse()
         ->isKey()->toBeTrue()
-        ->hasMetadata()->toBeTrue();
+        ->hasMeta()->toBeTrue();
 });
 
 it('does not allow the name to be "actions"', function () {
-    expect(fn () => new NumericColumn('actions'))->toThrow(Exception::class, 'Column name cannot be "actions"');
+    expect(fn () => new TextColumn('actions'))->toThrow(Exception::class, 'Column name cannot be "actions"');
 });
 
 it('can apply a column and fallbacks with value', function () {
     $fn = fn ($value) => strtoupper($value);
-    $col = NumericColumn::make('name')->transform($fn);
+    $col = TextColumn::make('name')->transform($fn);
     expect($col->apply('test'))->toBe('TEST');
-    expect($col->apply(null))->toBe(config('table.fallback.numeric'));
+    expect($col->apply(null))->toBe(config('table.fallback.text'));
 });
 
 it('has array form', function () {
-    $col = NumericColumn::make('name');
+    $col = TextColumn::make('name');
     expect($col->toArray())->toEqual([
         'name' => 'name',
         'label' => 'Name',
@@ -125,7 +125,7 @@ it('has array form', function () {
         'sort' => false,
         'sorting' => false,
         'direction' => null,
-        'metadata' => [],
-        'fallback' => config('table.fallback.numeric'),
+        'meta' => [],
+        'fallback' => config('table.fallback.text'),
     ]);
 });

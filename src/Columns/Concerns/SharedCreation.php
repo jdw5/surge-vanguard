@@ -20,7 +20,7 @@ trait SharedCreation
         bool $searchable = false,
         bool $active = true,
         bool $key = false,
-        array $metadata = null,
+        array $meta = null,
     ): static {
         return resolve(static::class, compact(
             'name',
@@ -35,7 +35,7 @@ trait SharedCreation
             'searchable',
             'active',
             'key',
-            'metadata',
+            'meta',
         ));
     }
 }

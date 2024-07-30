@@ -24,7 +24,7 @@ abstract class PropertyFilter extends BaseFilter
         bool|Closure $authorize = null,
         ?Closure $validator = null,
         ?Closure $transform = null,
-        array $metadata = null,
+        array $meta = null,
     ) {
         if (is_array($property) && is_null($name)) throw new CannotResolveNameFromProperty($property);
         
@@ -33,7 +33,7 @@ abstract class PropertyFilter extends BaseFilter
             name: $name, 
             label: $label, 
             authorize: $authorize, 
-            metadata:$metadata
+            meta:$meta
         );
         $this->setTransform($transform);
         $this->setValidator($validator);

@@ -31,13 +31,13 @@ class QueryFilter extends BaseFilter
         ?Closure $validator = null,
         ?Closure $transform = null,
         ?Closure $query = null,
-        array $metadata = null,
+        array $meta = null,
     ) {
         parent::__construct(
             name: $name, 
             label: $label, 
             authorize: $authorize,
-            metadata: $metadata
+            meta: $meta
         );
         $this->setQuery($query);
         $this->setTransform($transform);
@@ -51,7 +51,7 @@ class QueryFilter extends BaseFilter
         ?Closure $validator = null,
         ?Closure $transform = null,
         ?Closure $query = null,
-        array $metadata = null,
+        array $meta = null,
     ): static {
         return resolve(static::class, compact(
             'name',
@@ -60,7 +60,7 @@ class QueryFilter extends BaseFilter
             'validator',
             'transform',
             'query',
-            'metadata'
+            'meta'
         ));
     }
 

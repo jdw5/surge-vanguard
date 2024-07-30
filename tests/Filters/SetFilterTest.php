@@ -20,7 +20,7 @@ it('can create a set filter', function () {
         ->getClause()->toBe(Clause::IS)
         ->getOperator()->toBe(Operator::EQUAL)
         ->isMultiple()->toBeFalse()
-        ->hasMetadata()->toBeFalse()
+        ->hasMeta()->toBeFalse()
         ->hasOptions()->toBeFalse()
         ->isRestricted()->toBeFalse()
         ->getType()->toBe('filter:set');
@@ -39,7 +39,7 @@ it('can create a set filter with arguments', function () {
         multiple: true,
         options: [Option::make('value', 'Label')],
         restrict: true,
-        metadata: ['key' => 'value'],
+        meta: ['key' => 'value'],
     );
 
     expect($filter)->getProperty()->toBe('name')
@@ -53,7 +53,7 @@ it('can create a set filter with arguments', function () {
         ->isMultiple()->toBeTrue()
         ->hasOptions()->toBeTrue()
         ->isRestricted()->toBeTrue()
-        ->getMetadata()->toBe(['key' => 'value']);
+        ->getMeta()->toBe(['key' => 'value']);
 });
 
 it('can make a set filter', function () {
@@ -67,7 +67,7 @@ it('can make a set filter', function () {
         ->getClause()->toBe(Clause::IS)
         ->getOperator()->toBe(Operator::EQUAL)
         ->isMultiple()->toBeFalse()
-        ->hasMetadata()->toBeFalse()
+        ->hasMeta()->toBeFalse()
         ->hasOptions()->toBeFalse()
         ->isRestricted()->toBeFalse()
         ->getType()->toBe('filter:set');
@@ -83,7 +83,7 @@ it('can chain methods on a set filter', function () {
         ->lte()
         ->multiple()
         ->restrict()
-        ->metadata(['key' => 'value']);
+        ->meta(['key' => 'value']);
 
     expect($filter)->toBeInstanceOf(SetFilter::class)
         ->getProperty()->toBe('name')
@@ -95,7 +95,7 @@ it('can chain methods on a set filter', function () {
         ->getClause()->toBe(Clause::CONTAINS)
         ->getOperator()->toBe(Operator::LESS_THAN_OR_EQUAL)
         ->isMultiple()->toBeTrue()
-        ->getMetadata()->toBe(['key' => 'value']);
+        ->getMeta()->toBe(['key' => 'value']);
 });
 
 it('can apply a base set filter to an eloquent builder', function () {
@@ -201,7 +201,7 @@ it('has array representation', function () {
         'type' => 'filter:set',
         'active' => false,
         'value' => null,
-        'metadata' => [],
+        'meta' => [],
         'options' => [],
         'multiple' => false,
     ]);
@@ -224,7 +224,7 @@ it('changes array representation if set filter applied', function () {
         'type' => 'filter:set',
         'active' => true,
         'value' => 'test',
-        'metadata' => [],
+        'meta' => [],
         'options' => [],
         'multiple' => false,
     ]);
@@ -235,7 +235,7 @@ it('changes array representation if set filter applied', function () {
         'type' => 'filter:set',
         'active' => false,
         'value' => null,
-        'metadata' => [],
+        'meta' => [],
         'options' => [],
         'multiple' => false,
     ]);
@@ -261,7 +261,7 @@ it('changes array representation if set filter applied and multiple', function (
         'value' => [
             'test'
         ],
-        'metadata' => [],
+        'meta' => [],
         'options' => [],
         'multiple' => true,
     ]);
@@ -272,7 +272,7 @@ it('changes array representation if set filter applied and multiple', function (
         'type' => 'filter:set',
         'active' => false,
         'value' => null,
-        'metadata' => [],
+        'meta' => [],
         'options' => [],
         'multiple' => false,
     ]);

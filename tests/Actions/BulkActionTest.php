@@ -13,7 +13,7 @@ it('can create a bulk action', function () {
     expect($action->hasAction())->toBeFalse();
     expect($action->getChunkMethod())->toBe('chunkById');
     expect($action->getChunkSize())->toBe(500);
-    expect($action->getMetadata())->toBe([]);
+    expect($action->getMeta())->toBe([]);
     expect($action->getConfirmation())->toBeNull();
 });
 

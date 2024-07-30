@@ -1,12 +1,12 @@
 <?php
 
-use Conquest\Table\Columns\Column;
+use Conquest\Table\Columns\DateColumn;
 use Conquest\Table\Columns\Enums\Breakpoint;
 
-it('can create a column', function () {
-    $col = new Column('name');
-    expect($col)->toBeInstanceOf(Column::class)
-        ->getType()->toBe('col')
+it('can create a date column', function () {
+    $col = new DateColumn('name');
+    expect($col)->toBeInstanceOf(DateColumn::class)
+        ->getType()->toBe('col:date')
         ->getName()->toBe('name')
         ->getLabel()->toBe('Name')
         ->hasSort()->toBeFalse()
@@ -18,13 +18,14 @@ it('can create a column', function () {
         ->isSrOnly()->toBeFalse()
         ->canTransform()->toBeFalse()
         ->isActive()->toBeTrue()
-        ->hasMetadata()->toBeFalse()
-        ->isKey()->toBeFalse();
+        ->isKey()->toBeFalse()
+        ->hasFormat()->toBeFalse()
+        ->hasMeta()->toBeFalse();
 });
 
-it('can make a column', function () {
-    expect(Column::make('name'))->toBeInstanceOf(Column::class)
-        ->getType()->toBe('col')
+it('can make a date column', function () {
+    expect(DateColumn::make('name'))->toBeInstanceOf(DateColumn::class)
+        ->getType()->toBe('col:date')
         ->getName()->toBe('name')
         ->getLabel()->toBe('Name')
         ->isHidden()->toBeFalse()
@@ -37,11 +38,12 @@ it('can make a column', function () {
         ->isSearchable()->toBeFalse()
         ->isActive()->toBeTrue()
         ->isKey()->toBeFalse()
-        ->hasMetadata()->toBeFalse();
+        ->hasFormat()->toBeFalse()
+        ->hasMeta()->toBeFalse();
 });
 
-it('can create a column with arguments', function () {
-    $col = new Column(
+it('can create a date column with arguments', function () {
+    $col = new DateColumn(
         name: 'name',
         label: $label = 'Username',
         hidden: true,
@@ -54,11 +56,12 @@ it('can create a column with arguments', function () {
         searchable: true,
         active: false,
         key: true,
-        metadata: ['key' => 'value'],
+        format: 'd M Y',
+        meta: ['key' => 'value'],
     );
 
-    expect($col)->toBeInstanceOf(Column::class)
-        ->getType()->toBe('col')
+    expect($col)->toBeInstanceOf(DateColumn::class)
+        ->getType()->toBe('col:date')
         ->getName()->toBe('name')
         ->getLabel()->toBe($label)
         ->hasSort()->toBeTrue()
@@ -71,13 +74,14 @@ it('can create a column with arguments', function () {
         ->canTransform()->toBeTrue()
         ->isActive()->toBeFalse()
         ->isKey()->toBeTrue()
-        ->hasMetadata()->toBeTrue();
+        ->getFormat()->toBe('d M Y')
+        ->hasMeta()->toBeTrue();
 });
 
 
 
-it('can chain methods on a column', function () {
-    $col = Column::make('name')
+it('can chain methods on a date column', function () {
+    $col = DateColumn::make('name')
         ->label($label = 'Username')
         ->sortable()
         ->searchable()
@@ -86,10 +90,11 @@ it('can chain methods on a column', function () {
         ->fallback('N/A')
         ->hidden()
         ->srOnly()
-        ->transform(fn ($value) => strtoupper($value));
+        ->transform(fn ($value) => strtoupper($value))
+        ->format('d M Y');
         
-    expect($col)->toBeInstanceOf(Column::class)
-        ->getType()->toBe('col')
+    expect($col)->toBeInstanceOf(DateColumn::class)
+        ->getType()->toBe('col:date')
         ->getName()->toBe('name')
         ->getLabel()->toBe($label)
         ->isHidden()->toBeTrue()
@@ -102,23 +107,22 @@ it('can chain methods on a column', function () {
         ->isSearchable()->toBeTrue()
         ->isActive()->toBeTrue()
         ->isKey()->toBeFalse()
-        ->hasMetadata()->toBeFalse();
-});
-
-it('can apply a column and fallbacks with value', function () {
-    $fn = fn ($value) => strtoupper($value);
-    $col = Column::make('name')->fallback('Exists')->transform($fn);
-
-    expect($col->apply('test'))->toBe('TEST');
-    expect($col->apply(null))->toBe('Exists');
+        ->hasMeta()->toBeFalse()
+        ->getFormat()->toBe('d M Y');
 });
 
 it('does not allow the name to be "actions"', function () {
-    expect(fn () => new Column('actions'))->toThrow(Exception::class, 'Column name cannot be "actions"');
+    expect(fn () => new DateColumn('actions'))->toThrow(Exception::class, 'Column name cannot be "actions"');
+});
+
+it('can format a date', function () {
+    $col = DateColumn::make('created_at')->format('d M Y');
+    expect($col->apply('01-01-2001'))->toBe('01 Jan 2001');
+    expect($col->apply(null))->toBeNull();
 });
 
 it('has array form', function () {
-    $col = Column::make('name');
+    $col = DateColumn::make('name');
     expect($col->toArray())->toEqual([
         'name' => 'name',
         'label' => 'Name',
@@ -129,7 +133,7 @@ it('has array form', function () {
         'sort' => false,
         'sorting' => false,
         'direction' => null,
-        'metadata' => [],
+        'meta' => [],
         'fallback' => config('table.fallback.default'),
     ]);
 });

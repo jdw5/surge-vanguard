@@ -26,9 +26,9 @@ class Sort extends BaseSort
         bool|Closure $authorize = null,
         string $direction = null,
         bool $default = false,
-        array $metadata = null,
+        array $meta = null,
     ) {
-        parent::__construct($property, $name, $label, $authorize, $direction, $metadata);
+        parent::__construct($property, $name, $label, $authorize, $direction, $meta);
         $this->setDefault($default);
     }
 
@@ -39,7 +39,7 @@ class Sort extends BaseSort
         bool|Closure $authorize = null,
         string $direction = null,
         bool $default = false,
-        array $metadata = null,
+        array $meta = null,
     ): static {
         return resolve(static::class, compact(
             'property', 
@@ -48,7 +48,7 @@ class Sort extends BaseSort
             'authorize', 
             'direction', 
             'default',
-            'metadata',
+            'meta',
         ));
     }
 

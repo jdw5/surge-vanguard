@@ -40,7 +40,7 @@ class SetFilter extends PropertyFilter
         bool $multiple = false,
         array $options = [],
         bool|Closure|null $restrict = null,
-        array $metadata = null,
+        array $meta = null,
     ) {
         parent::__construct(
             property: $property, 
@@ -49,7 +49,7 @@ class SetFilter extends PropertyFilter
             authorize: $authorize, 
             validator: $validator, 
             transform: $transform, 
-            metadata: $metadata
+            meta: $meta
         );
         $this->setMultiple($multiple);
         $this->setClause($clause);
@@ -70,7 +70,7 @@ class SetFilter extends PropertyFilter
         bool $multiple = false,
         array $options = [],
         bool|Closure $restrict = null,
-        array $metadata = null,
+        array $meta = null,
     ): static {
         return resolve(static::class, compact(
             'property',
@@ -84,7 +84,7 @@ class SetFilter extends PropertyFilter
             'multiple',
             'options',
             'restrict',
-            'metadata'
+            'meta'
         ));
     }
 

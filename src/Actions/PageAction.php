@@ -24,9 +24,9 @@ class PageAction extends BaseAction
         bool|Closure $authorize = null,
         string|Closure $route = null,
         string $method = null,
-        array $metadata = [],
+        array $meta = [],
     ) {
-        parent::__construct($label, $name, $authorize, $metadata);
+        parent::__construct($label, $name, $authorize, $meta);
         $this->setRoute($route);
         $this->setMethod($method);
     }
@@ -37,7 +37,7 @@ class PageAction extends BaseAction
         bool|Closure $authorize = null,
         string|Closure $route = null,
         string $method = null,
-        array $metadata = [],
+        array $meta = [],
     ): static
     {
         return resolve(static::class, compact(
@@ -46,7 +46,7 @@ class PageAction extends BaseAction
             'authorize',
             'route',
             'method', 
-            'metadata'
+            'meta'
         ));
     }
 

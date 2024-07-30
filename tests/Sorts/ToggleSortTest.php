@@ -9,5 +9,5 @@ it('can create a toggle sort', function () {
     expect($sort->getLabel())->toBe('Name');
     expect($sort->isAuthorised())->toBeTrue();
     // expect($sort->getDirection())->toBe('asc');
-    expect($sort->hasMetadata())->toBeFalse();
+    expect($sort->hasMeta())->toBeFalse();
 });

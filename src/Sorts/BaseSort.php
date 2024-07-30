@@ -3,9 +3,9 @@
 namespace Conquest\Table\Sorts;
 
 use Closure;
-use Conquest\Core\Concerns\CanAuthorize;
+use Conquest\Core\Concerns\IsAuthorized;
 use Conquest\Core\Concerns\HasLabel;
-use Conquest\Core\Concerns\HasMetadata;
+use Conquest\Core\Concerns\HasMeta;
 use Conquest\Core\Concerns\HasName;
 use Conquest\Core\Concerns\HasProperty;
 use Conquest\Core\Concerns\HasType;
@@ -19,9 +19,9 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 abstract class BaseSort extends Primitive implements Sorts
 {
     use HasDirection;
-    use CanAuthorize;
+    use IsAuthorized;
     use HasLabel;
-    use HasMetadata;
+    use HasMeta;
     use HasName;
     use HasType;
     use IsActive;
@@ -33,14 +33,14 @@ abstract class BaseSort extends Primitive implements Sorts
         string|Closure $label = null,
         bool|Closure $authorize = null,
         string $direction = null,
-        array $metadata = null,
+        array $meta = null,
     ) {
         parent::__construct();
         $this->setProperty($property);
         $this->setName($name ?? $this->toName($property));
         $this->setLabel($label ?? $this->toLabel($this->getName()));
         $this->setAuthorize($authorize);
-        $this->setMetadata($metadata);
+        $this->setMeta($meta);
         $this->setDirection($direction);
     }
 
@@ -73,7 +73,7 @@ abstract class BaseSort extends Primitive implements Sorts
             'name' => $this->getName(),
             'label' => $this->getLabel(),
             'type' => $this->getType(),
-            'metadata' => $this->getMetadata(),
+            'meta' => $this->getMeta(),
             'active' => $this->isActive(),
             'direction' => $this->getDirection(),
         ];

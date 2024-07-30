@@ -31,7 +31,7 @@ class DateColumn extends FallbackColumn
         bool $active = true,
         bool $key = false,
         string|Closure $format = null,
-        array $metadata = null,
+        array $meta = null,
     ) {
         parent::__construct(...compact(
             'name',
@@ -46,7 +46,7 @@ class DateColumn extends FallbackColumn
             'searchable',
             'active',
             'key',
-            'metadata',
+            'meta',
         ));
         $this->setFormat($format);
     }
@@ -65,7 +65,7 @@ class DateColumn extends FallbackColumn
         bool $active = true,
         bool $key = false,
         string|Closure $format = null,
-        array $metadata = null,
+        array $meta = null,
     ): static {
         return resolve(static::class, compact(
             'name',
@@ -81,7 +81,7 @@ class DateColumn extends FallbackColumn
             'active',
             'key',
             'format',
-            'metadata',
+            'meta',
         ));
     }
 

@@ -29,7 +29,7 @@ trait HasMeta
     }
 
     /**
-     * Generate the metadata for an unpaginated collection.
+     * Generate the meta for an unpaginated collection.
      */
     public function getCollectionMeta(Collection $collection): array
     {
@@ -40,7 +40,7 @@ trait HasMeta
     }
 
     /**
-     * Generate the metadata for a cursor paginated collection.
+     * Generate the meta for a cursor paginated collection.
      */
     public function getCursorMeta(CursorPaginator $paginator): array
     {
@@ -56,7 +56,7 @@ trait HasMeta
     }
 
     /**
-     * Generate the metadata for a length aware paginated collection.
+     * Generate the meta for a length aware paginated collection.
      */
     public function getPaginateMeta(LengthAwarePaginator $paginator): array
     {

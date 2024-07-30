@@ -13,7 +13,7 @@ it('can create a sort', function () {
         ->isAuthorised()->toBeTrue()
         ->hasDirection()->toBeFalse()
         ->isDefault()->toBeFalse()
-        ->hasMetadata()->toBeFalse();
+        ->hasMeta()->toBeFalse();
 });
 
 it('can create a sort with arguments', function () {
@@ -24,7 +24,7 @@ it('can create a sort with arguments', function () {
         authorize: false,
         direction: Table::ASCENDING,
         default: true,
-        metadata: ['foo' => 'bar']
+        meta: ['foo' => 'bar']
     );
 
     expect($sort)->getProperty()->toBe('name')
@@ -33,7 +33,7 @@ it('can create a sort with arguments', function () {
         ->isAuthorised()->toBeFalse()
         ->getDirection()->toBe('asc')
         ->isDefault()->toBeTrue()
-        ->hasMetadata()->toBeTrue();
+        ->hasMeta()->toBeTrue();
 });
 
 it('can make a sort', function () {

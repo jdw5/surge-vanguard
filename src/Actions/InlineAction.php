@@ -3,13 +3,13 @@
 namespace Conquest\Table\Actions;
 
 use Closure;
+use Conquest\Table\Table;
 use Conquest\Core\Concerns\HasRoute;
 use Conquest\Core\Concerns\IsDefault;
 use Conquest\Table\Actions\BaseAction;
 use Conquest\Core\Concerns\HasHttpMethod;
 use Conquest\Table\Actions\Concerns\HasAction;
-use Conquest\Table\Actions\Concerns\HasConfirmation;
-use Conquest\Table\Table;
+use Conquest\Table\Actions\Concerns\Confirmation\Confirms;
 
 class InlineAction extends BaseAction
 {
@@ -17,7 +17,7 @@ class InlineAction extends BaseAction
     use HasRoute;
     use HasHttpMethod;
     use HasAction;
-    use HasConfirmation;
+    use Confirms;
 
     public function setUp(): void
     {
@@ -33,9 +33,9 @@ class InlineAction extends BaseAction
         Closure $action = null,
         string|Closure $confirmation = null,
         bool|Closure $default = null,
-        array $metadata = [],
+        array $meta = [],
     ) {
-        parent::__construct($label, $name, $authorize, $metadata);
+        parent::__construct($label, $name, $authorize, $meta);
         $this->setRoute($route);
         $this->setMethod($method);
         $this->setAction($action);
@@ -52,7 +52,7 @@ class InlineAction extends BaseAction
         Closure $action = null,
         string|Closure $confirmation = null,
         bool|Closure $default = null,
-        array $metadata = [],
+        array $meta = [],
     ): static
     {
         return resolve(static::class, compact(
@@ -64,7 +64,7 @@ class InlineAction extends BaseAction
             'action',
             'confirmation',
             'default',
-            'metadata',
+            'meta',
         ));
     }
 

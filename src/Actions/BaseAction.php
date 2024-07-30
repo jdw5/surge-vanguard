@@ -3,32 +3,32 @@
 namespace Conquest\Table\Actions;
 
 use Closure;
-use Conquest\Core\Concerns\CanAuthorize;
+use Conquest\Core\Concerns\IsAuthorized;
 use Conquest\Core\Concerns\HasLabel;
-use Conquest\Core\Concerns\HasMetadata;
+use Conquest\Core\Concerns\HasMeta;
 use Conquest\Core\Concerns\HasName;
 use Conquest\Core\Concerns\HasType;
 use Conquest\Core\Primitive;
 
 abstract class BaseAction extends Primitive
 {
-    use CanAuthorize;
+    use IsAuthorized;
     use HasName;
     use HasLabel;
-    use HasMetadata;
+    use HasMeta;
     use HasType;
 
     public function __construct(
         string $label, 
         string $name = null,
         Closure|bool $authorize = null,
-        array $metadata = [],
+        array $meta = [],
     ) {
         parent::__construct();
         $this->setLabel($label);
         $this->setName($name ?? $this->toName($label));
         $this->setAuthorize($authorize);
-        $this->setMetadata($metadata);
+        $this->setMeta($meta);
     }
 
     /**
@@ -39,7 +39,7 @@ abstract class BaseAction extends Primitive
         return [
             'name' => $this->getName(),
             'label' => $this->getLabel(),
-            'metadata' => $this->getMetadata(),
+            'meta' => $this->getMeta(),
             'type' => $this->getType(),
         ];
     }

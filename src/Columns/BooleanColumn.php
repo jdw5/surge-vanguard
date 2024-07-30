@@ -28,7 +28,7 @@ class BooleanColumn extends BaseColumn
         bool $active = true,
         string|Closure $truthLabel = null,
         string|Closure $falseLabel = null,
-        array $metadata = null,
+        array $meta = null,
     ) {
         parent::__construct(...compact(
             'name',
@@ -41,7 +41,7 @@ class BooleanColumn extends BaseColumn
             'sortable',
             'searchable',
             'active',
-            'metadata',
+            'meta',
         ));
         $this->setTruthLabel($truthLabel);
         $this->setFalseLabel($falseLabel);
@@ -60,7 +60,7 @@ class BooleanColumn extends BaseColumn
         bool $active = true,
         string|Closure $truthLabel = 'Active',
         string|Closure $falseLabel = 'Inactive',
-        array $metadata = null,
+        array $meta = null,
     ): static {
         return resolve(static::class, compact(
             'name',
@@ -75,7 +75,7 @@ class BooleanColumn extends BaseColumn
             'active',
             'truthLabel',
             'falseLabel',
-            'metadata',
+            'meta',
         ));
     }
 

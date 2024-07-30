@@ -98,7 +98,7 @@ it('has array representation', function () {
         'type' => 'filter',
         'active' => false,
         'value' => null,
-        'metadata' => [],
+        'meta' => [],
     ]);
 });
 
@@ -120,7 +120,7 @@ it('changes array representation if filter applied', function () {
         'type' => 'filter',
         'active' => true,
         'value' => 'test',
-        'metadata' => [],
+        'meta' => [],
     ]);
 
     expect($f2->toArray())->toEqual([
@@ -129,6 +129,6 @@ it('changes array representation if filter applied', function () {
         'type' => 'filter',
         'active' => false,
         'value' => null,
-        'metadata' => [],
+        'meta' => [],
     ]);
 });

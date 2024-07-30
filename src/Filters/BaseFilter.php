@@ -9,9 +9,9 @@ use Conquest\Core\Concerns\HasType;
 use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Concerns\HasValue;
 use Conquest\Core\Concerns\CanValidate;
-use Conquest\Core\Concerns\HasMetadata;
+use Conquest\Core\Concerns\HasMeta;
 use Illuminate\Support\Facades\Request;
-use Conquest\Core\Concerns\CanAuthorize;
+use Conquest\Core\Concerns\IsAuthorized;
 use Conquest\Core\Concerns\CanTransform;
 use Conquest\Core\Concerns\IsActive;
 use Conquest\Table\Contracts\Filters;
@@ -21,9 +21,9 @@ abstract class BaseFilter extends Primitive implements Filters
     use CanTransform;
     use CanValidate;
     use HasValue;
-    use CanAuthorize;
+    use IsAuthorized;
     use HasLabel;
-    use HasMetadata;
+    use HasMeta;
     use HasName;
     use HasType;
     use IsActive;
@@ -32,13 +32,13 @@ abstract class BaseFilter extends Primitive implements Filters
         string|Closure $name = null,
         string|Closure $label = null,
         bool|Closure $authorize = null,
-        array $metadata = null,
+        array $meta = null,
     ) {
         parent::__construct();
         $this->setName($name);
         $this->setLabel($label ?? $this->toLabel($this->getName()));
         $this->setAuthorize($authorize);
-        $this->setMetadata($metadata);
+        $this->setMeta($meta);
     }
 
     public function getValueFromRequest(): mixed
@@ -59,7 +59,7 @@ abstract class BaseFilter extends Primitive implements Filters
             'type' => $this->getType(),
             'active' => $this->isActive(),
             'value' => $this->getValue(),
-            'metadata' => $this->getMetadata(),
+            'meta' => $this->getMeta(),
         ];
     }
 }

@@ -13,7 +13,7 @@ it('can create an inline action', function () {
     expect($action->getMethod())->toBeNull();
     expect($action->getType())->toBe(Table::INLINE_ACTION);
     expect($action->hasAction())->toBeFalse();
-    expect($action->getMetadata())->toBe([]);
+    expect($action->getMeta())->toBe([]);
     expect($action->getConfirmation())->toBeNull();
     expect($action->isDefault())->toBeFalse();
 });

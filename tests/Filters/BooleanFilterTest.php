@@ -17,7 +17,7 @@ it('can create a boolean filter', function () {
         ->isAuthorised()->toBeTrue()
         ->getClause()->toBe(Clause::IS)
         ->getOperator()->toBe(Operator::EQUAL)
-        ->hasMetadata()->toBeFalse();
+        ->hasMeta()->toBeFalse();
 });
 
 it('can create a boolean filter with arguments', function () {
@@ -28,7 +28,7 @@ it('can create a boolean filter with arguments', function () {
         value: 5,
         clause: Clause::IS_NOT,
         operator: Operator::GREATER_THAN,
-        metadata: ['key' => 'value'],
+        meta: ['key' => 'value'],
     );
 
     expect($filter)->getProperty()->toBe('name')
@@ -38,7 +38,7 @@ it('can create a boolean filter with arguments', function () {
         ->isAuthorised()->toBeFalse()
         ->getClause()->toBe(Clause::IS_NOT)
         ->getOperator()->toBe(Operator::GREATER_THAN)
-        ->getMetadata()->toBe(['key' => 'value']);
+        ->getMeta()->toBe(['key' => 'value']);
 });
 
 it('can make a boolean filter', function () {
@@ -50,7 +50,7 @@ it('can make a boolean filter', function () {
         ->isAuthorised()->toBeTrue()
         ->getClause()->toBe(Clause::IS)
         ->getOperator()->toBe(Operator::EQUAL)
-        ->hasMetadata()->toBeFalse();
+        ->hasMeta()->toBeFalse();
 });
 
 it('can chain methods on a boolean filter', function () {
@@ -61,7 +61,7 @@ it('can chain methods on a boolean filter', function () {
         ->authorize(fn () => false)
         ->isNot()
         ->gt()
-        ->metadata(['key' => 'value']);
+        ->meta(['key' => 'value']);
 
     expect($filter)->toBeInstanceOf(BooleanFilter::class)
         ->getProperty()->toBe('name')
@@ -71,7 +71,7 @@ it('can chain methods on a boolean filter', function () {
         ->isAuthorised()->toBeFalse()
         ->getClause()->toBe(Clause::IS_NOT)
         ->getOperator()->toBe(Operator::GREATER_THAN)
-        ->getMetadata()->toBe(['key' => 'value']);
+        ->getMeta()->toBe(['key' => 'value']);
 });
 
 it('can apply a base boolean filter to an eloquent builder using 1', function () {
@@ -143,7 +143,7 @@ it('has array representation', function () {
         'label' => 'Name',
         'type' => 'filter:boolean',
         'active' => false,
-        'metadata' => [],
+        'meta' => [],
     ]);
 });
 
@@ -164,7 +164,7 @@ it('changes array representation if boolean filter applied', function () {
         'label' => 'Price',
         'type' => 'filter:boolean',
         'active' => true,
-        'metadata' => [],
+        'meta' => [],
     ]);
 
     expect($f2->toArray())->toEqual([
@@ -172,6 +172,6 @@ it('changes array representation if boolean filter applied', function () {
         'label' => 'Favourite',
         'type' => 'filter:boolean',
         'active' => false,
-        'metadata' => [],
+        'meta' => [],
     ]);
 });

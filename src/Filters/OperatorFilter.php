@@ -33,9 +33,9 @@ class OperatorFilter extends PropertyFilter
         ?Closure $transform = null,
         string|Clause $clause = Clause::IS,
         array $operators = null,
-        array $metadata = null,
+        array $meta = null,
     ) {
-        parent::__construct($property, $name, $label, $authorize, $validator, $transform, $metadata);
+        parent::__construct($property, $name, $label, $authorize, $validator, $transform, $meta);
         $this->setClause($clause);
         $this->setOperators($operators);
     }
@@ -49,7 +49,7 @@ class OperatorFilter extends PropertyFilter
         ?Closure $transform = null,
         string|Clause $clause = Clause::IS,
         array $operators = null,
-        array $metadata = null,
+        array $meta = null,
     ): static {
         return resolve(static::class, compact(
             'property',
@@ -60,7 +60,7 @@ class OperatorFilter extends PropertyFilter
             'transform',
             'clause',
             'operators',
-            'metadata',
+            'meta',
         ));
     }
 

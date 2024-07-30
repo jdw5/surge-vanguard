@@ -7,6 +7,7 @@ namespace Conquest\Table\Concerns\Formatters;
 use Closure;
 use Conquest\Table\Columns\Concerns\Formatters\CanSetCurrency;
 use Conquest\Table\Columns\Concerns\Formatters\CanSetDivideBy;
+use Conquest\Table\Columns\Concerns\Formatters\CanSetLocale;
 use Conquest\Table\Columns\Concerns\Formatters\CanSetVerbose;
 
 trait FormatsMoney
@@ -14,15 +15,17 @@ trait FormatsMoney
     use CanSetDivideBy;
     use CanSetVerbose;
     use CanSetCurrency;
+    use CanSetLocale;
 
     protected bool $money = false;
 
-    public function money(string|Closure $currency = null, int|Closure $divideBy = null, bool|Closure $verbose = false): static
+    public function money(string|Closure $currency = null, int|Closure $divideBy = null, string|Closure $locale = null, bool|Closure $verbose = false): static
     {
-        $this->setDivideBy($divideBy);
-        $this->setCurrency($currency);
-        $this->setVerbose($verbose);
         $this->money = true;
+        $this->setCurrency($currency);
+        $this->setDivideBy($divideBy);
+        $this->setLocale($locale);
+        $this->setVerbose($verbose);
         return $this;
     }
     

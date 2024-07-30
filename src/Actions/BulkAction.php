@@ -28,9 +28,9 @@ class BulkAction extends BaseAction
         string|Closure $confirmation = null,
         int $chunkSize = null,
         bool $chunkById = true,
-        array $metadata = [],
+        array $meta = [],
     ) {
-        parent::__construct($label, $name, $authorize, $metadata);
+        parent::__construct($label, $name, $authorize, $meta);
         $this->setAction($action);
         $this->setChunkSize($chunkSize);
         $this->setChunkById($chunkById);
@@ -45,14 +45,14 @@ class BulkAction extends BaseAction
         string|Closure $confirmation = null,
         int $chunkSize = null,
         bool $chunkById = true,
-        array $metadata = [],
+        array $meta = [],
     ): static
     {
         return resolve(static::class, compact(
             'label', 
             'name', 
             'authorize',
-            'metadata',
+            'meta',
             'action',
             'confirmation',
             'chunkSize',

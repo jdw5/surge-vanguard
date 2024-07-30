@@ -23,7 +23,7 @@ abstract class FallbackColumn extends BaseColumn
         bool $searchable = false,
         bool $active = true,
         bool $key = false,
-        array $metadata = null,
+        array $meta = null,
     ) {
         parent::__construct(...compact(
             'name',
@@ -37,7 +37,7 @@ abstract class FallbackColumn extends BaseColumn
             'searchable',
             'active',
             'key',
-            'metadata',
+            'meta',
         ));
         $this->setFallback($fallback ?? $this->defaultFallback());        
     }

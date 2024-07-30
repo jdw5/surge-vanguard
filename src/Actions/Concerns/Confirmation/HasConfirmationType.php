@@ -16,12 +16,7 @@ trait HasConfirmationType
     public function setConfirmationType(ConfirmationType|string|null $confirmationType): void
     {
         if (is_null($confirmationType)) return;
-
-        if ($confirmationType instanceof ConfirmationType) {
-            $this->confirmationType = $confirmationType;
-        } else {
-            $this->confirmationType = ConfirmationType::tryFrom($confirmationType);
-        }
+        $this->confirmationType = $confirmationType instanceof ConfirmationType ? $confirmationType : ConfirmationType::tryFrom($confirmationType);
     }
 
     public function hasConfirmationType(): bool

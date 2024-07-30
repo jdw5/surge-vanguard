@@ -32,7 +32,7 @@ class DateFilter extends PropertyFilter
         ?Closure $transform = null,
         string|DateClause $dateClause = DateClause::DATE,
         string|Operator $operator = Operator::EQUAL,
-        array $metadata = null,
+        array $meta = null,
     ) {
         parent::__construct(
             property: $property, 
@@ -41,7 +41,7 @@ class DateFilter extends PropertyFilter
             authorize: $authorize, 
             validator: $validator, 
             transform: $transform, 
-            metadata: $metadata
+            meta: $meta
         );
         $this->setDateClause($dateClause);
         $this->setOperator($operator);
@@ -56,7 +56,7 @@ class DateFilter extends PropertyFilter
         ?Closure $transform = null,
         string|DateClause $dateClause = DateClause::DATE,
         string|Operator $operator = Operator::EQUAL,
-        array $metadata = null,
+        array $meta = null,
     ): static {
         return resolve(static::class, compact(
             'property',
@@ -67,7 +67,7 @@ class DateFilter extends PropertyFilter
             'transform',
             'dateClause',
             'operator',
-            'metadata',
+            'meta',
         ));
     }
 
@@ -101,6 +101,6 @@ class DateFilter extends PropertyFilter
             'type' => $this->getType(),
             'active' => $this->isActive(),
             'value' => $this->getValue()?->toDateTimeString(),
-            'metadata' => $this->getMetadata(),
+            'meta' => $this->getMeta(),
         ];
     }}

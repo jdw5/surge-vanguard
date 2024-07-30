@@ -5,7 +5,7 @@ namespace Conquest\Table\Actions\Concerns\Confirmation;
 
 use Closure;
 
-trait HasConfirmationType
+trait Confirms
 {
     use IsConfirmable;
     use HasConfirmationType;

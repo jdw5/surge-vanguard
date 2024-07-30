@@ -18,14 +18,14 @@ class ToggleSort extends BaseSort
         string|Closure $name = null,
         string|Closure $label = null,
         bool|Closure $authorize = null,
-        array $metadata = null,
+        array $meta = null,
     ) {
         parent::__construct(
             property: $property, 
             name: $name, 
             label: $label, 
             authorize: $authorize, 
-            metadata: $metadata
+            meta: $meta
         );
     }
 
@@ -34,14 +34,14 @@ class ToggleSort extends BaseSort
         string|Closure $name = null,
         string|Closure $label = null,
         bool|Closure $authorize = null,
-        array $metadata = null,
+        array $meta = null,
     ): static {
         return resolve(static::class, compact(
             'property', 
             'name', 
             'label', 
             'authorize', 
-            'metadata',
+            'meta',
         ));
     }    
     public function apply(Builder|QueryBuilder $builder, ?string $sortBy = null, ?string $direction = null): void

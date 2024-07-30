@@ -18,7 +18,7 @@ it('can create a date filter', function () {
         ->canTransform()->toBeFalse()
         ->getClause()->toBe(DateClause::DATE)
         ->getOperator()->toBe(Operator::EQUAL)
-        ->hasMetadata()->toBeFalse();
+        ->hasMeta()->toBeFalse();
 });
 
 it('can create a date filter with arguments', function () {
@@ -29,7 +29,7 @@ it('can create a date filter with arguments', function () {
         transform: fn ($value) => $value,
         dateClause: DateClause::MONTH,
         operator: Operator::GREATER_THAN,
-        metadata: ['key' => 'value'],
+        meta: ['key' => 'value'],
     );
 
     expect($filter)->getProperty()->toBe('name')
@@ -40,7 +40,7 @@ it('can create a date filter with arguments', function () {
         ->canTransform()->toBeTrue()
         ->getClause()->toBe(DateClause::MONTH)
         ->getOperator()->toBe(Operator::GREATER_THAN)
-        ->getMetadata()->toBe(['key' => 'value']);
+        ->getMeta()->toBe(['key' => 'value']);
 });
 
 it('can make a date filter', function () {
@@ -53,7 +53,7 @@ it('can make a date filter', function () {
         ->canTransform()->toBeFalse()
         ->getClause()->toBe(DateClause::DATE)
         ->getOperator()->toBe(Operator::EQUAL)
-        ->hasMetadata()->toBeFalse();
+        ->hasMeta()->toBeFalse();
 });
 
 it('can chain methods on a date filter', function () {
@@ -64,7 +64,7 @@ it('can chain methods on a date filter', function () {
         ->transform(fn ($value) => $value)
         ->month()
         ->gt()
-        ->metadata(['key' => 'value']);
+        ->meta(['key' => 'value']);
 
     expect($filter)->toBeInstanceOf(DateFilter::class)
         ->getProperty()->toBe('name')
@@ -75,7 +75,7 @@ it('can chain methods on a date filter', function () {
         ->canTransform()->toBeTrue()
         ->getClause()->toBe(DateClause::MONTH)
         ->getOperator()->toBe(Operator::GREATER_THAN)
-        ->getMetadata()->toBe(['key' => 'value']);
+        ->getMeta()->toBe(['key' => 'value']);
 });
 
 it('can apply a base date filter to an eloquent builder', function () {
@@ -122,7 +122,7 @@ it('has array representation', function () {
         'type' => 'filter:date',
         'active' => false,
         'value' => null,
-        'metadata' => [],
+        'meta' => [],
     ]);
 });
 
@@ -144,7 +144,7 @@ it('changes array representation if date filter applied', function () {
         'type' => 'filter:date',
         'active' => true,
         'value' => Carbon::parse($d)->toDateTimeString(),
-        'metadata' => [],
+        'meta' => [],
     ]);
 
     expect($f2->toArray())->toEqual([
@@ -153,7 +153,7 @@ it('changes array representation if date filter applied', function () {
         'type' => 'filter:date',
         'active' => false,
         'value' => null,
-        'metadata' => [],
+        'meta' => [],
     ]);
 });
 
