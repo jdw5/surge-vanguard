@@ -41,8 +41,6 @@ trait IsSearchable
 
     public function getSearchProperty(): ?string
     {
-        return $this->evaluate(
-            value: $this->searchProperty,
-        );
+        return $this->evaluate($this->searchProperty);
     }
 }

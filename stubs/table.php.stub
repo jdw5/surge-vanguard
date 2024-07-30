@@ -12,8 +12,8 @@ use Conquest\Table\Actions\InlineAction;
 
 final class {{ class }} extends Table
 {
-    protected $search;
-    protected $pagination = [10];
+    protected $search = [];
+    protected $pagination = 10;
 
     protected function resource()
     {

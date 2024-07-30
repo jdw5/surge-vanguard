@@ -41,8 +41,6 @@ trait IsSortable
 
     public function getSortProperty(): ?string
     {
-        return $this->evaluate(
-            value: $this->sortProperty,
-        );
+        return $this->evaluate($this->sortProperty);
     }
 }

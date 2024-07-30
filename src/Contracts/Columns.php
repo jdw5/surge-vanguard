@@ -1,6 +1,6 @@
 <?php
 
-namespace Conquest\Table\Columns\Contracts;
+namespace Conquest\Table\Contracts;
 
 interface Columns
 {
