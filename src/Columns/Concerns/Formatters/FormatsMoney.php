@@ -2,13 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Conquest\Table\Concerns\Formatters;
+namespace Conquest\Table\Columns\Concerns\Formatters;
 
 use Closure;
-use Conquest\Table\Columns\Concerns\Formatters\CanSetCurrency;
-use Conquest\Table\Columns\Concerns\Formatters\CanSetDivideBy;
-use Conquest\Table\Columns\Concerns\Formatters\CanSetLocale;
-use Conquest\Table\Columns\Concerns\Formatters\CanSetVerbose;
 
 trait FormatsMoney
 {

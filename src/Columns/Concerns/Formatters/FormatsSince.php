@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Conquest\Table\Concerns\Formatters;
+namespace Conquest\Table\Columns\Concerns\Formatters;
 
 use Carbon\Carbon;
 

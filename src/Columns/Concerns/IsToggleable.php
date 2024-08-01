@@ -11,7 +11,7 @@ trait IsToggleable
 
     public function toggleable(): static
     {
-        $this->setConfirm(true);
+        $this->setToggleable(true);
         return $this;
     }
 

@@ -7,7 +7,7 @@ namespace Conquest\Table\Columns;
 use Exception;
 use Carbon\Carbon;
 use Conquest\Table\Columns\Concerns\HasFormat;
-use Conquest\Table\Concerns\Formatters\FormatsSince;
+use Conquest\Table\Columns\Concerns\Formatters\FormatsSince;
 
 class DateColumn extends FallbackColumn
 {
@@ -23,8 +23,6 @@ class DateColumn extends FallbackColumn
     {
         if (is_null($value)) return $this->getFallback();
         
-        $value = $this->applyTransform($value);
-
         if ($this->isSince()) {
             try {
                 return $this->formatSince($value);

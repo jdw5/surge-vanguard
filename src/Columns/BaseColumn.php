@@ -6,24 +6,26 @@ use Closure;
 use Exception;
 use Conquest\Core\Primitive;
 use Conquest\Core\Concerns\IsKey;
+use Conquest\Core\Concerns\HasMeta;
 use Conquest\Core\Concerns\HasName;
 use Conquest\Core\Concerns\HasType;
 use Conquest\Core\Concerns\HasLabel;
-use Conquest\Core\Concerns\IsHidden;
-use Conquest\Core\Concerns\HasMeta;
-use Conquest\Core\Concerns\HasProperty;
-use Conquest\Core\Concerns\IsAuthorized;
-use Conquest\Core\Concerns\CanTransform;
 use Conquest\Core\Concerns\IsActive;
+use Conquest\Core\Concerns\IsHidden;
+use Conquest\Core\Concerns\HasProperty;
+use Conquest\Core\Concerns\CanTransform;
+use Conquest\Core\Concerns\HasPlaceholder;
+use Conquest\Core\Concerns\IsAuthorized;
 use Conquest\Table\Columns\Concerns\HasSort;
 use Conquest\Table\Columns\Enums\Breakpoint;
-use Conquest\Table\Columns\Concerns\IsSearchable;
-use Conquest\Table\Columns\Concerns\HasBreakpoint;
 use Conquest\Table\Columns\Concerns\IsSrOnly;
 use Conquest\Table\Columns\Concerns\HasPrefix;
-use Conquest\Table\Columns\Concerns\HasSeparator;
 use Conquest\Table\Columns\Concerns\HasSuffix;
+use Conquest\Table\Columns\Concerns\IsToggledOff;
+use Conquest\Table\Columns\Concerns\HasSeparator;
+use Conquest\Table\Columns\Concerns\IsSearchable;
 use Conquest\Table\Columns\Concerns\IsToggleable;
+use Conquest\Table\Columns\Concerns\HasBreakpoint;
 
 abstract class BaseColumn extends Primitive
 {
@@ -39,13 +41,14 @@ abstract class BaseColumn extends Primitive
     use IsKey;
     use IsSearchable;
     use IsToggleable;
-    use IsActive;
+    use IsToggledOff;
     use HasType;
     use HasMeta;
     use HasProperty;
     use HasSuffix;
     use HasPrefix;
     use HasSeparator;
+    use HasPlaceholder;
 
     public function __construct(string|Closure $name, string|Closure $label = null) {
         if ($name === 'actions') throw new Exception('Column name cannot be "actions"');
@@ -65,7 +68,8 @@ abstract class BaseColumn extends Primitive
             'name' => $this->getName(),
             'label' => $this->getLabel(),
             'hidden' => $this->isHidden(),
-            'active' => $this->isActive(),
+            'placeholder' => $this->getPlaceholder(),
+            'toggled' => $this->isToggledOff(),
             'breakpoint' => $this->getBreakpoint(),
             'srOnly' => $this->isSrOnly(),
             'sort' => $this->hasSort(),

@@ -2,8 +2,8 @@
 
 namespace Conquest\Table\Columns;
 
-use Conquest\Table\Concerns\Formatters\FormatsMoney;
-use Conquest\Table\Concerns\Formatters\FormatsNumeric;
+use Conquest\Table\Columns\Concerns\Formatters\FormatsMoney;
+use Conquest\Table\Columns\Concerns\Formatters\FormatsNumeric;
 
 class NumericColumn extends FallbackColumn
 {
