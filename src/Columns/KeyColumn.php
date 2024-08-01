@@ -5,19 +5,17 @@ namespace Conquest\Table\Columns;
 use Closure;
 use Conquest\Table\Columns\Concerns\Formatters\FormatsBoolean;
 
-class BooleanColumn extends BaseColumn
+class KeyColumn extends BaseColumn
 {
-    use FormatsBoolean;
-
     public function setUp(): void
     {
         $this->setType('col:bool');
-        $this->boolean();
+        $this->setKey(true);
+        $this->setHidden(true);
     }
 
     public function apply(mixed $value): mixed
     {
-        $value = $this->applyTransform($value);
-        return $this->formatBoolean($value);
+        return $value;
     }
 }

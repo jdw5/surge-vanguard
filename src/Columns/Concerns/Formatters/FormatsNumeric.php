@@ -37,7 +37,6 @@ trait FormatsNumeric
 
     public function formatNumeric(mixed $value)
     {
-        if ($this->isNotNumeric()) return $value;
         if (!is_numeric($value)) return $value;
         
         if ($this->hasDivideBy()) {
