@@ -17,27 +17,11 @@ abstract class PropertyFilter extends BaseFilter
     use CanTransform;
     use CanValidate;
 
-    public function __construct(
-        array|string|Closure $property,
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null,
-        ?Closure $validator = null,
-        ?Closure $transform = null,
-        array $meta = null,
-    ) {
+    public function __construct(array|string|Closure $property, string|Closure $name = null, string|Closure $label = null)
+    {
         if (is_array($property) && is_null($name)) throw new CannotResolveNameFromProperty($property);
-        
-        $name = $name ?? $this->toName($this->evaluate($property));
-        parent::__construct(
-            name: $name, 
-            label: $label, 
-            authorize: $authorize, 
-            meta:$meta
-        );
-        $this->setTransform($transform);
-        $this->setValidator($validator);
         $this->setProperty($property);
+        parent::__construct($name ?? $this->toName($this->evaluate($property)), $label);
     }
 
     public function apply(Builder|QueryBuilder $builder): void

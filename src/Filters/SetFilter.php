@@ -26,66 +26,8 @@ class SetFilter extends PropertyFilter
     public function setUp(): void
     {
         $this->setType('filter:set');
-    }
-
-    public function __construct(
-        array|string|Closure $property,
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null,
-        ?Closure $validator = null,
-        ?Closure $transform = null,
-        string|Clause $clause = Clause::IS,
-        string|Operator $operator = Operator::EQUAL,
-        bool $multiple = false,
-        array $options = [],
-        bool|Closure|null $restrict = null,
-        array $meta = null,
-    ) {
-        parent::__construct(
-            property: $property, 
-            name: $name, 
-            label: $label, 
-            authorize: $authorize, 
-            validator: $validator, 
-            transform: $transform, 
-            meta: $meta
-        );
-        $this->setMultiple($multiple);
-        $this->setClause($clause);
-        $this->setOperator($operator);
-        $this->setOptions($options);
-        $this->setRestricted($restrict);
-    }
-
-    public static function make(
-        array|string|Closure $property,
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null,
-        ?Closure $validator = null,
-        ?Closure $transform = null,
-        string|Clause $clause = Clause::IS,
-        string|Operator $operator = Operator::EQUAL,
-        bool $multiple = false,
-        array $options = [],
-        bool|Closure $restrict = null,
-        array $meta = null,
-    ): static {
-        return resolve(static::class, compact(
-            'property',
-            'name',
-            'label',
-            'authorize',
-            'validator',
-            'transform',
-            'clause',
-            'operator',
-            'multiple',
-            'options',
-            'restrict',
-            'meta'
-        ));
+        $this->setClause(Clause::IS);
+        $this->setOperator(Operator::EQUAL);
     }
 
     public function apply(Builder|QueryBuilder $builder): void

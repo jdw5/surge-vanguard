@@ -28,17 +28,10 @@ abstract class BaseFilter extends Primitive implements Filters
     use HasType;
     use IsActive;
 
-    public function __construct(
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null,
-        array $meta = null,
-    ) {
+    public function __construct(string|Closure $name = null, string|Closure $label = null) {
         parent::__construct();
         $this->setName($name);
         $this->setLabel($label ?? $this->toLabel($this->getName()));
-        $this->setAuthorize($authorize);
-        $this->setMeta($meta);
     }
 
     public function getValueFromRequest(): mixed

@@ -24,43 +24,18 @@ class QueryFilter extends BaseFilter
         $this->setType('filter:query');
     }
 
-    public function __construct(
-        string|Closure $name,
-        string|Closure|null $label = null,
-        bool|Closure|null $authorize = null,
-        ?Closure $validator = null,
-        ?Closure $transform = null,
-        ?Closure $query = null,
-        array $meta = null,
-    ) {
-        parent::__construct(
-            name: $name, 
-            label: $label, 
-            authorize: $authorize,
-            meta: $meta
-        );
+    public function __construct(string|Closure $name, string|Closure|null $label = null, Closure $query = null) 
+    {
+        parent::__construct($name, $label);
         $this->setQuery($query);
-        $this->setTransform($transform);
-        $this->setValidator($validator);
     }
 
-    public static function make(
-        string|Closure $name,
-        string|Closure|null $label = null,
-        bool|Closure|null $authorize = null,
-        ?Closure $validator = null,
-        ?Closure $transform = null,
-        ?Closure $query = null,
-        array $meta = null,
-    ): static {
+    public static function make(string|Closure $name, string|Closure|null $label = null, Closure $query = null): static 
+    {
         return resolve(static::class, compact(
             'name',
             'label',
-            'authorize',
-            'validator',
-            'transform',
             'query',
-            'meta'
         ));
     }
 

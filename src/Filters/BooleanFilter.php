@@ -22,50 +22,8 @@ class BooleanFilter extends PropertyFilter
     public function setUp(): void
     {
         $this->setType('filter:boolean');
-    }
-
-    public function __construct(
-        array|string|Closure $property,
-        string|Closure $name = null,
-        string|Closure $label = null,
-        mixed $value = true,
-        bool|Closure $authorize = null,
-        string|Clause $clause = Clause::IS,
-        string|Operator $operator = Operator::EQUAL,
-        array $meta = null,
-    ) {
-        parent::__construct(
-            property: $property, 
-            name: $name, 
-            label: $label, 
-            authorize: $authorize, 
-            meta: $meta
-        );
-        $this->setValue($value);
-        $this->setClause($clause);
-        $this->setOperator($operator);
-    }
-
-    public static function make(
-        array|string|Closure $property,
-        string|Closure $name = null,
-        string|Closure $label = null,
-        mixed $value = true,
-        bool|Closure $authorize = null,
-        string|Clause $clause = Clause::IS,
-        string|Operator $operator = Operator::EQUAL,
-        array $meta = null,
-    ): static {
-        return resolve(static::class, compact(
-            'property',
-            'name',
-            'value',
-            'label',
-            'authorize',
-            'clause',
-            'operator',
-            'meta',
-        ));
+        $this->setClause(Clause::IS);
+        $this->setOperator(Operator::EQUAL);
     }
 
     public function apply(Builder|QueryBuilder $builder): void

@@ -22,46 +22,7 @@ class OperatorFilter extends PropertyFilter
     public function setUp(): void
     {
         $this->setType('filter:operator');
-    }
-
-    public function __construct(
-        array|string|Closure $property,
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null,
-        ?Closure $validator = null,
-        ?Closure $transform = null,
-        string|Clause $clause = Clause::IS,
-        array $operators = null,
-        array $meta = null,
-    ) {
-        parent::__construct($property, $name, $label, $authorize, $validator, $transform, $meta);
-        $this->setClause($clause);
-        $this->setOperators($operators);
-    }
-
-    public static function make(
-        array|string|Closure $property,
-        string|Closure|null $name = null,
-        string|Closure|null $label = null,
-        bool|Closure|null $authorize = null,
-        ?Closure $validator = null,
-        ?Closure $transform = null,
-        string|Clause $clause = Clause::IS,
-        array $operators = null,
-        array $meta = null,
-    ): static {
-        return resolve(static::class, compact(
-            'property',
-            'name',
-            'label',
-            'authorize',
-            'validator',
-            'transform',
-            'clause',
-            'operators',
-            'meta',
-        ));
+        $this->setClause(Clause::IS);
     }
 
     public function getOperatorFromRequest(): ?Operator

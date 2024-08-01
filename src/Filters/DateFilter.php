@@ -21,54 +21,8 @@ class DateFilter extends PropertyFilter
     public function setUp(): void
     {
         $this->setType('filter:date');
-    }
-
-    public function __construct(
-        array|string|Closure $property,
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null,
-        ?Closure $validator = null,
-        ?Closure $transform = null,
-        string|DateClause $dateClause = DateClause::DATE,
-        string|Operator $operator = Operator::EQUAL,
-        array $meta = null,
-    ) {
-        parent::__construct(
-            property: $property, 
-            name: $name, 
-            label: $label, 
-            authorize: $authorize, 
-            validator: $validator, 
-            transform: $transform, 
-            meta: $meta
-        );
-        $this->setDateClause($dateClause);
-        $this->setOperator($operator);
-    }
-
-    public static function make(
-        string|Closure $property,
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null,
-        ?Closure $validator = null,
-        ?Closure $transform = null,
-        string|DateClause $dateClause = DateClause::DATE,
-        string|Operator $operator = Operator::EQUAL,
-        array $meta = null,
-    ): static {
-        return resolve(static::class, compact(
-            'property',
-            'name',
-            'label',
-            'authorize',
-            'validator',
-            'transform',
-            'dateClause',
-            'operator',
-            'meta',
-        ));
+        $this->setDateClause(DateClause::DATE);
+        $this->setOperator(Operator::EQUAL);
     }
 
     public function handle(Builder|QueryBuilder $builder): void
@@ -95,12 +49,7 @@ class DateFilter extends PropertyFilter
 
     public function toArray(): array
     {
-        return [
-            'name' => $this->getName(),
-            'label' => $this->getLabel(),
-            'type' => $this->getType(),
-            'active' => $this->isActive(),
+        return array_merge(parent::toArray(), [
             'value' => $this->getValue()?->toDateTimeString(),
-            'meta' => $this->getMeta(),
-        ];
+        ]);
     }}
