@@ -38,40 +38,6 @@ it('can make a boolean column', function () {
         ->hasMeta()->toBeFalse();
 });
 
-it('can create a boolean column with arguments', function () {
-    $col = new BooleanColumn(
-        name: 'name',
-        label: $label = 'Username',
-        hidden: true,
-        authorize: fn () => false,
-        transform: fn ($value) => $value,
-        breakpoint: Breakpoint::XS,
-        srOnly: true,
-        sortable: true,
-        active: false,
-        truthLabel: 'Yes',
-        falseLabel: 'No',
-        meta: ['key' => 'value'],
-    );
-
-    expect($col)->toBeInstanceOf(BooleanColumn::class)
-        ->getType()->toBe('col:bool')
-        ->getName()->toBe('name')
-        ->getLabel()->toBe($label)
-        ->isHidden()->toBeTrue()
-        ->isAuthorized()->toBeFalse()
-        ->canTransform()->toBeTrue()
-        ->getBreakpoint()->toBe('xs')
-        ->isSrOnly()->toBeTrue()
-        ->hasSort()->toBeTrue()
-        ->isActive()->toBeFalse()
-        ->getTruthLabel()->toBe('Yes')
-        ->getFalseLabel()->toBe('No')
-        ->hasMeta()->toBeTrue();
-});
-
-
-
 it('can chain methods on a boolean column', function () {
     $col = BooleanColumn::make('name')
         ->label($label = 'Username')

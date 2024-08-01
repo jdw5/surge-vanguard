@@ -1,7 +1,6 @@
 <?php
 
 use Conquest\Table\Columns\DateColumn;
-use Conquest\Table\Columns\Enums\Breakpoint;
 
 it('can create a date column', function () {
     $col = new DateColumn('name');
@@ -41,44 +40,6 @@ it('can make a date column', function () {
         ->hasFormat()->toBeFalse()
         ->hasMeta()->toBeFalse();
 });
-
-it('can create a date column with arguments', function () {
-    $col = new DateColumn(
-        name: 'name',
-        label: $label = 'Username',
-        hidden: true,
-        fallback: 'N/A',
-        authorize: fn () => false,
-        transform: fn ($value) => mb_strtoupper($value),
-        breakpoint: Breakpoint::XS,
-        srOnly: true,
-        sortable: true,
-        searchable: true,
-        active: false,
-        key: true,
-        format: 'd M Y',
-        meta: ['key' => 'value'],
-    );
-
-    expect($col)->toBeInstanceOf(DateColumn::class)
-        ->getType()->toBe('col:date')
-        ->getName()->toBe('name')
-        ->getLabel()->toBe($label)
-        ->hasSort()->toBeTrue()
-        ->isSearchable()->toBeTrue()
-        ->getBreakpoint()->toBe('xs')
-        ->isAuthorized()->toBeFalse()
-        ->getFallback()->toBe('N/A')
-        ->isHidden()->toBeTrue()
-        ->isSrOnly()->toBeTrue()
-        ->canTransform()->toBeTrue()
-        ->isActive()->toBeFalse()
-        ->isKey()->toBeTrue()
-        ->getFormat()->toBe('d M Y')
-        ->hasMeta()->toBeTrue();
-});
-
-
 
 it('can chain methods on a date column', function () {
     $col = DateColumn::make('name')

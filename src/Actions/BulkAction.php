@@ -4,16 +4,16 @@ namespace Conquest\Table\Actions;
 
 use Closure;
 use Conquest\Table\Actions\BaseAction;
+use Conquest\Table\Actions\Concerns\Confirmation\Confirms;
 use Conquest\Table\Actions\Concerns\HasAction;
 use Conquest\Table\Actions\Concerns\HasChunking;
-use Conquest\Table\Actions\Concerns\HasConfirmation;
 use Conquest\Table\Table;
 
 class BulkAction extends BaseAction
 {
     use HasChunking;
     use HasAction;
-    use HasConfirmation;
+    use Confirms;
 
     public function setUp(): void
     {

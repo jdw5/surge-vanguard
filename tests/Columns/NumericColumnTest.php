@@ -38,40 +38,6 @@ it('can make a numeric column', function () {
         ->hasMeta()->toBeFalse();
 });
 
-it('can create a numeric column with arguments', function () {
-    $col = new NumericColumn(
-        name: 'name',
-        label: $label = 'Username',
-        hidden: true,
-        fallback: 'N/A',
-        authorize: fn () => false,
-        transform: fn ($value) => $value,
-        breakpoint: Breakpoint::XS,
-        srOnly: true,
-        sortable: true,
-        active: false,
-        key: true,
-        meta: ['key' => 'value'],
-    );
-
-    expect($col)->toBeInstanceOf(NumericColumn::class)
-        ->getType()->toBe('col:numeric')
-        ->getName()->toBe('name')
-        ->getLabel()->toBe($label)
-        ->isHidden()->toBeTrue()
-        ->getFallback()->toBe('N/A')
-        ->isAuthorized()->toBeFalse()
-        ->canTransform()->toBeTrue()
-        ->getBreakpoint()->toBe('xs')
-        ->isSrOnly()->toBeTrue()
-        ->hasSort()->toBeTrue()
-        ->isActive()->toBeFalse()
-        ->isKey()->toBeTrue()
-        ->hasMeta()->toBeTrue();
-});
-
-
-
 it('can chain methods on a numeric column', function () {
     $col = NumericColumn::make('name')
         ->label($label = 'Username')

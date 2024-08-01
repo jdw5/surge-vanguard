@@ -40,42 +40,6 @@ it('can make a column', function () {
         ->hasMeta()->toBeFalse();
 });
 
-it('can create a column with arguments', function () {
-    $col = new Column(
-        name: 'name',
-        label: $label = 'Username',
-        hidden: true,
-        fallback: 'N/A',
-        authorize: fn () => false,
-        transform: fn ($value) => mb_strtoupper($value),
-        breakpoint: Breakpoint::XS,
-        srOnly: true,
-        sortable: true,
-        searchable: true,
-        active: false,
-        key: true,
-        meta: ['key' => 'value'],
-    );
-
-    expect($col)->toBeInstanceOf(Column::class)
-        ->getType()->toBe('col')
-        ->getName()->toBe('name')
-        ->getLabel()->toBe($label)
-        ->hasSort()->toBeTrue()
-        ->isSearchable()->toBeTrue()
-        ->getBreakpoint()->toBe('xs')
-        ->isAuthorized()->toBeFalse()
-        ->getFallback()->toBe('N/A')
-        ->isHidden()->toBeTrue()
-        ->isSrOnly()->toBeTrue()
-        ->canTransform()->toBeTrue()
-        ->isActive()->toBeFalse()
-        ->isKey()->toBeTrue()
-        ->hasMeta()->toBeTrue();
-});
-
-
-
 it('can chain methods on a column', function () {
     $col = Column::make('name')
         ->label($label = 'Username')

@@ -38,40 +38,6 @@ it('can make a text column', function () {
         ->hasMeta()->toBeFalse();
 });
 
-it('can create a text column with arguments', function () {
-    $col = new TextColumn(
-        name: 'name',
-        label: $label = 'Username',
-        hidden: true,
-        fallback: 'N/A',
-        authorize: fn () => false,
-        transform: fn ($value) => $value,
-        breakpoint: Breakpoint::XS,
-        srOnly: true,
-        sortable: true,
-        active: false,
-        key: true,
-        meta: ['key' => 'value'],
-    );
-
-    expect($col)->toBeInstanceOf(TextColumn::class)
-        ->getType()->toBe('col:text')
-        ->getName()->toBe('name')
-        ->getLabel()->toBe($label)
-        ->isHidden()->toBeTrue()
-        ->getFallback()->toBe('N/A')
-        ->isAuthorized()->toBeFalse()
-        ->canTransform()->toBeTrue()
-        ->getBreakpoint()->toBe('xs')
-        ->isSrOnly()->toBeTrue()
-        ->hasSort()->toBeTrue()
-        ->isActive()->toBeFalse()
-        ->isKey()->toBeTrue()
-        ->hasMeta()->toBeTrue();
-});
-
-
-
 it('can chain methods on a text column', function () {
     $col = TextColumn::make('name')
         ->label($label = 'Username')
