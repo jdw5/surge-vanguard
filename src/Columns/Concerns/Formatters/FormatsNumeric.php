@@ -46,7 +46,10 @@ trait FormatsNumeric
             $value = round($value / $this->getRoundToNearest()) * $this->getRoundToNearest();
         }
 
-        return Number::format($value, precision: $this->getDecimalPlaces(), locale: $this->getLocale());
+        if ($this->hasDecimalPlaces() || $this->hasLocale()) {
+            return Number::format($value, precision: $this->getDecimalPlaces(), locale: $this->getLocale());
+        }
+        return (string) $value;
     }
 
 }

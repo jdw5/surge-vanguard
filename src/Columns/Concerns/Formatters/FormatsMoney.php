@@ -24,14 +24,9 @@ trait FormatsMoney
         return $this;
     }
 
-    public function isMoney(): bool
+    public function formatsMoney(): bool
     {
         return $this->money;
-    }
-
-    public function isNotMoney(): bool
-    {
-        return ! $this->isMoney();
     }
 
     public function formatMoney(mixed $value): mixed
@@ -40,7 +35,9 @@ trait FormatsMoney
             return $value;
         }
 
-        $value /= $this->getDivideBy();
+        if ($this->hasDivideBy()) {
+            $value /= $this->getDivideBy();
+        }
 
         return Number::currency($value, $this->getCurrency() ?? config('app.currency', 'USD'), $this->getLocale());
     }
