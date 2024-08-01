@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Conquest\Table\Columns\Concerns\Formatters;
 
 use Closure;
+use Illuminate\Support\Number;
 
 trait FormatsNumeric
 {
@@ -36,24 +37,21 @@ trait FormatsNumeric
         return ! $this->isNumeric();
     }
 
-    public function formatNumeric(mixed $value)
+    public function formatNumeric(mixed $value): mixed
     {
         if (! is_numeric($value)) {
             return $value;
         }
 
         if ($this->hasDivideBy()) {
-            $value = $value / $this->getDivideBy();
+            $value /= $this->getDivideBy();
         }
 
         if ($this->hasRoundToNearest()) {
             $value = round($value / $this->getRoundToNearest()) * $this->getRoundToNearest();
         }
 
-        if ($this->hasDecimalPlaces()) {
-            $value = number_format($value, $this->getDecimalPlaces(), '.', ',');
-        }
-
-        return $value;
+        return Number::format($value, precision: $this->getDecimalPlaces(), locale: $this->getLocale());
     }
+
 }

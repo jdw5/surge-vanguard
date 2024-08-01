@@ -28,8 +28,8 @@ trait CanSetDivideBy
         return is_null($this->divideBy);
     }
 
-    protected function getDivideBy(): ?int
+    protected function getDivideBy(): int
     {
-        return $this->evaluate($this->divideBy);
+        return $this->evaluate($this->divideBy) ?? 1;
     }
 }

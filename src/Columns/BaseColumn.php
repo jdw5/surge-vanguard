@@ -23,6 +23,7 @@ use Conquest\Table\Columns\Concerns\HasSort;
 use Conquest\Table\Columns\Concerns\HasSuffix;
 use Conquest\Table\Columns\Concerns\HasTooltip;
 use Conquest\Table\Columns\Concerns\IsSearchable;
+use Conquest\Table\Columns\Concerns\IsSortable;
 use Conquest\Table\Columns\Concerns\IsSrOnly;
 use Conquest\Table\Columns\Concerns\IsToggleable;
 use Exception;
@@ -36,8 +37,8 @@ abstract class BaseColumn extends Primitive
     use HasName;
     use HasPlaceholder;
     use HasPrefix;
-    use HasProperty;
-    use HasSort;
+    // use HasProperty;
+    // use HasSort;
     use HasSuffix;
     use HasTooltip;
     use HasType;
@@ -48,6 +49,7 @@ abstract class BaseColumn extends Primitive
     use IsSearchable;
     use IsSrOnly;
     use IsToggleable;
+    use IsSortable;
 
     public function __construct(string|Closure $name, string|Closure|null $label = null)
     {

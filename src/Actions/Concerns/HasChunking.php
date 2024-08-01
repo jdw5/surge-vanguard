@@ -16,7 +16,7 @@ trait HasChunking
         return $this;
     }
 
-    protected function setChunkSize(?int $size): void
+    public function setChunkSize(?int $size): void
     {
         if (is_null($size)) {
             return;
@@ -24,7 +24,7 @@ trait HasChunking
         $this->chunkSize = $size;
     }
 
-    protected function setChunkById(?bool $byId): void
+    public function setChunkById(?bool $byId): void
     {
         if (is_null($byId)) {
             return;
