@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Conquest\Table\Columns\Concerns\Formatters;
@@ -11,13 +12,15 @@ trait CanSetRoundToNearest
 
     protected function setRoundToNearest(int|Closure|null $roundToNearest): void
     {
-        if (is_null($roundToNearest)) return;
+        if (is_null($roundToNearest)) {
+            return;
+        }
         $this->roundToNearest = $roundToNearest;
     }
 
     protected function hasRoundToNearest(): bool
     {
-        return !$this->lacksRoundToNearest();
+        return ! $this->lacksRoundToNearest();
     }
 
     protected function lacksRoundToNearest(): bool

@@ -11,9 +11,6 @@ trait HasDateClause
 
     /**
      * Set the clause to be used.
-     *
-     * @param string|DateClause $dateClause
-     * @return static
      */
     public function dateClause(string|DateClause $dateClause): static
     {
@@ -24,8 +21,6 @@ trait HasDateClause
 
     /**
      * Check if the clause is not set.
-     * 
-     * @return bool
      */
     public function lacksDateClause(): bool
     {
@@ -34,19 +29,14 @@ trait HasDateClause
 
     /**
      * Check if the clause is set.
-     * 
-     * @return bool
      */
     public function hasDateClause(): bool
     {
-        return !$this->lacksDateClause();
+        return ! $this->lacksDateClause();
     }
 
     /**
      * Set the clause to be used quietly.
-     *
-     * @param string|DateClause|null $dateClause
-     * @return void
      */
     protected function setDateClause(string|DateClause|null $dateClause): void
     {
@@ -63,8 +53,6 @@ trait HasDateClause
 
     /**
      * Retrieve the clause property.
-     * 
-     * @return DateClause|null
      */
     public function getClause(): ?DateClause
     {
@@ -73,8 +61,6 @@ trait HasDateClause
 
     /**
      * Set the clause to be 'exact'.
-     * 
-     * @return static
      */
     public function date(): static
     {
@@ -83,8 +69,6 @@ trait HasDateClause
 
     /**
      * Set the clause to be 'day'.
-     * 
-     * @return static
      */
     public function day(): static
     {
@@ -93,8 +77,6 @@ trait HasDateClause
 
     /**
      * Set the clause to be 'month'.
-     * 
-     * @return static
      */
     public function month(): static
     {
@@ -103,8 +85,6 @@ trait HasDateClause
 
     /**
      * Set the clause to be 'year'.
-     * 
-     * @return static
      */
     public function year(): static
     {
@@ -113,8 +93,6 @@ trait HasDateClause
 
     /**
      * Set the clause to be 'time'.
-     * 
-     * @return static
      */
     public function time(): static
     {

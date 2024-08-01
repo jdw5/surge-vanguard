@@ -1,9 +1,9 @@
 <?php
 
-use Conquest\Table\Table;
-use Workbench\App\Models\Product;
 use Conquest\Table\Columns\Column;
+use Conquest\Table\Table;
 use Illuminate\Support\Facades\Request;
+use Workbench\App\Models\Product;
 
 beforeEach(function () {
     $this->table = Table::make(

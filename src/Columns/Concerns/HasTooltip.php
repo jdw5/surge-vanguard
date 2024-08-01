@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Conquest\Table\Columns\Concerns;
@@ -12,18 +13,21 @@ trait HasTooltip
     public function tooltip(string|Closure $tooltip): static
     {
         $this->setTooltip($tooltip);
+
         return $this;
     }
 
     public function setTooltip(string|Closure|null $tooltip): void
     {
-        if (is_null($tooltip)) return;
+        if (is_null($tooltip)) {
+            return;
+        }
         $this->tooltip = $tooltip;
     }
 
     public function hasTooltip(): bool
     {
-        return !$this->lacksTooltip();
+        return ! $this->lacksTooltip();
     }
 
     public function lacksTooltip(): bool

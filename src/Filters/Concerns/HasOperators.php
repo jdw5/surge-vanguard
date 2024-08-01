@@ -11,31 +11,32 @@ trait HasOperators
 
     /**
      * Set the operators to be used, chainable.
-     * 
-     * @param array<Operator> $operators
-     * @return static
+     *
+     * @param  array<Operator>  $operators
      */
     public function operators(array $operators): static
     {
         $this->setOperators($operators);
+
         return $this;
     }
 
     /**
      * Set the operators to be used quietly.
-     * 
-     * @param array<Operator>|null $operators
-     * @return void
+     *
+     * @param  array<Operator>|null  $operators
      */
     public function setOperators(?array $operators): void
     {
-        if (is_null($operators)) return;
+        if (is_null($operators)) {
+            return;
+        }
         $this->operators = $operators;
     }
 
     /**
      * Get the operators to be used.
-     * 
+     *
      * @return array<Operator>
      */
     public function getOperators(): array
@@ -45,9 +46,6 @@ trait HasOperators
 
     /**
      * Get the operators.
-     * 
-     * @param string|null $active
-     * @return Collection
      */
     public function getOperatorOptions(?string $active = null): Collection
     {

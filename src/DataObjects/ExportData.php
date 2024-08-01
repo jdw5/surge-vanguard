@@ -2,6 +2,4 @@
 
 namespace Conquest\Table\DataObjects;
 
-class ExportData extends BulkActionData {
-    
-}
+class ExportData extends BulkActionData {}

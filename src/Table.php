@@ -2,50 +2,49 @@
 
 namespace Conquest\Table;
 
-use Conquest\Core\Primitive;
-use Illuminate\Support\Collection;
-use Conquest\Table\Concerns\HasMeta;
-use Conquest\Table\Contracts\Tables;
-use Conquest\Table\Columns\BaseColumn;
 use Conquest\Core\Concerns\RequiresKey;
+use Conquest\Core\Exceptions\KeyDoesntExist;
+use Conquest\Core\Primitive;
+use Conquest\Table\Actions\Concerns\HasActions;
+use Conquest\Table\Columns\BaseColumn;
+use Conquest\Table\Columns\Concerns\HasColumns;
+use Conquest\Table\Concerns\HasMeta;
 use Conquest\Table\Concerns\HasRecords;
 use Conquest\Table\Concerns\HasResource;
-use Illuminate\Database\Eloquent\Builder;
-use Conquest\Core\Exceptions\KeyDoesntExist;
-use Conquest\Table\Concerns\Search\Searches;
-use Conquest\Table\Actions\Concerns\HasActions;
-use Conquest\Table\Columns\Concerns\HasColumns;
 use Conquest\Table\Concerns\Remember\Remembers;
+use Conquest\Table\Concerns\Search\Searches;
+use Conquest\Table\Contracts\Tables;
 use Conquest\Table\Filters\Concerns\HasFilters;
 use Conquest\Table\Pagination\Concerns\Paginates;
 use Conquest\Table\Pagination\Enums\PaginationType;
 use Conquest\Table\Sorts\Concerns\Sorts;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Collection;
 
 class Table extends Primitive implements Tables
 {
-    use RequiresKey;
-    use HasResource;
-    use HasColumns;
     use HasActions;
+    use HasColumns;
     use HasFilters;
-    use Sorts;
     use HasMeta;
     use HasRecords;
-    use Remembers;
+    use HasResource;
     use Paginates;
+    use Remembers;
+    use RequiresKey;
     use Searches;
+    use Sorts;
 
     public function __construct(
-        Builder|QueryBuilder $resource = null,
-        array $columns = null,
-        array $actions = null,
-        array $filters = null,
-        array $sorts = null,
-        array|string $search = null,
-        array|int $pagination = null,
-    )
-    {
+        Builder|QueryBuilder|null $resource = null,
+        ?array $columns = null,
+        ?array $actions = null,
+        ?array $filters = null,
+        ?array $sorts = null,
+        array|string|null $search = null,
+        array|int|null $pagination = null,
+    ) {
         $this->setResource($resource);
         $this->setColumns($columns);
         $this->setActions($actions);
@@ -54,20 +53,19 @@ class Table extends Primitive implements Tables
         $this->setSearch($search);
         $this->setPagination($pagination);
     }
-    
+
     /**
      * Create a new table instance.
      */
     public static function make(
-        Builder|QueryBuilder $resource = null,
-        array $columns = null,
-        array $actions = null,
-        array $filters = null,
-        array $sorts = null,
-        array|string $search = null,
-        array|int $pagination = null,
-    ): static
-    {
+        Builder|QueryBuilder|null $resource = null,
+        ?array $columns = null,
+        ?array $actions = null,
+        ?array $filters = null,
+        ?array $sorts = null,
+        array|string|null $search = null,
+        array|int|null $pagination = null,
+    ): static {
         return resolve(static::class, compact(
             'resource',
             'columns',
@@ -83,13 +81,13 @@ class Table extends Primitive implements Tables
      * Alias for make
      */
     public static function build(
-        Builder|QueryBuilder $resource = null,
-        array $columns = null,
-        array $actions = null,
-        array $filters = null,
-        array $sorts = null,
-        array|string $search = null,
-        array|int $pagination = null,
+        Builder|QueryBuilder|null $resource = null,
+        ?array $columns = null,
+        ?array $actions = null,
+        ?array $filters = null,
+        ?array $sorts = null,
+        array|string|null $search = null,
+        array|int|null $pagination = null,
     ): static {
         return static::make(
             $resource,
@@ -104,25 +102,20 @@ class Table extends Primitive implements Tables
 
     /**
      * Get the key for the table.
-     * 
-     * @return string
+     *
      * @throws KeyDoesntExist
-     * @return string
      */
-    public function getTableKey(): string 
+    public function getTableKey(): string
     {
-        try { 
+        try {
             return $this->getKey();
-        } 
-        catch (KeyDoesntExist $e) {
+        } catch (KeyDoesntExist $e) {
             return $this->getKeyColumn()?->getName() ?? throw $e;
         }
     }
 
     /**
      * Retrieve the table as an array
-     * 
-     * @return array
      */
     public function toArray(): array
     {
@@ -150,13 +143,14 @@ class Table extends Primitive implements Tables
                 'post' => $this->getActionRoute(),
                 'search' => $this->getSearchKey(),
                 'toggle' => $this->getToggleKey(),
-            ]
+            ],
         ];
     }
-    
+
     public function getTableRecords(): Collection
     {
         $this->create();
+
         return $this->getRecords();
     }
 
@@ -166,37 +160,40 @@ class Table extends Primitive implements Tables
     public function getTableMeta(): array
     {
         $this->create();
+
         return $this->getMeta();
     }
 
     protected function create(): void
     {
-        if ($this->hasRecords()) return;
+        if ($this->hasRecords()) {
+            return;
+        }
 
         $builder = $this->getResource();
         // $this->applyToggleability();
         $this->filter($builder);
         $this->sort($builder, $this->combinedSorts());
         $this->search($builder, $this->combinedSearch());
-        
+
         [$records, $meta] = match ($this->getPaginateType()) {
             PaginationType::CURSOR => [
                 $data = $builder->cursorPaginate(
                     perPage: $this->usePerPage(),
                     cursorName: $this->getPageName(),
                 )->withQueryString(),
-                $this->getCursorMeta($data)
+                $this->getCursorMeta($data),
             ],
             PaginationType::NONE => [
                 $data = $builder->get(),
-                $this->getCollectionMeta($data)
+                $this->getCollectionMeta($data),
             ],
             default => [
                 $data = $builder->paginate(
                     perPage: $this->usePerPage(),
                     pageName: $this->getPageName(),
                 )->withQueryString(),
-                $this->getPaginateMeta($data)
+                $this->getPaginateMeta($data),
             ],
         };
 
@@ -205,10 +202,11 @@ class Table extends Primitive implements Tables
                 return $this->getTableColumns()->reduce(function ($filteredRecord, BaseColumn $column) use ($record) {
                     $columnName = $column->getName();
                     $filteredRecord[$columnName] = $column->apply($record[$columnName] ?? null);
+
                     return $filteredRecord;
                 }, []);
             });
-            
+
         $this->setRecords($records);
         $this->setMeta($meta);
     }

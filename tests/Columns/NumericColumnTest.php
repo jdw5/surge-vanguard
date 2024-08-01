@@ -1,7 +1,6 @@
 <?php
 
 use Conquest\Table\Columns\NumericColumn;
-use Conquest\Table\Columns\Enums\Breakpoint;
 
 it('can create a numeric column', function () {
     $col = new NumericColumn('name');
@@ -51,7 +50,7 @@ it('can chain methods on a numeric column', function () {
         ->active(false)
         ->key()
         ->meta(['key' => 'value']);
-        
+
     expect($col)->toBeInstanceOf(NumericColumn::class)
         ->getType()->toBe('col:numeric')
         ->getName()->toBe('name')

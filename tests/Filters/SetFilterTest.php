@@ -1,13 +1,12 @@
 <?php
 
-use Carbon\Carbon;
 use Conquest\Core\Options\Option;
-use Workbench\App\Models\Product;
-use Illuminate\Support\Facades\DB;
-use Conquest\Table\Filters\SetFilter;
-use Illuminate\Support\Facades\Request;
-use Conquest\Table\Filters\Enums\Operator;
 use Conquest\Table\Filters\Enums\Clause;
+use Conquest\Table\Filters\Enums\Operator;
+use Conquest\Table\Filters\SetFilter;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
+use Workbench\App\Models\Product;
 
 it('can create a set filter', function () {
     $filter = new SetFilter($n = 'name');
@@ -28,7 +27,7 @@ it('can create a set filter', function () {
 
 it('can create a set filter with arguments', function () {
     $filter = new SetFilter(
-        property: 'name', 
+        property: 'name',
         name: 'username',
         label: 'Name',
         authorize: fn () => false,
@@ -140,7 +139,7 @@ it('can have options', function () {
             Option::make('value', 'Label'),
             Option::make('value2', 'Label2'),
         ]);
-    
+
     expect($filter)->hasOptions()->toBeTrue()
         ->getOptions()->toBeArray()
         ->getOptions()->toHaveCount(2)
@@ -241,7 +240,6 @@ it('changes array representation if set filter applied', function () {
     ]);
 });
 
-
 it('changes array representation if set filter applied and multiple', function () {
     $f = SetFilter::make('name')->multiple();
     $f2 = SetFilter::make('description');
@@ -259,7 +257,7 @@ it('changes array representation if set filter applied and multiple', function (
         'type' => 'filter:set',
         'active' => true,
         'value' => [
-            'test'
+            'test',
         ],
         'meta' => [],
         'options' => [],

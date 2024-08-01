@@ -2,32 +2,32 @@
 
 namespace Workbench\App\Tables;
 
-use Carbon\Carbon;
-use Conquest\Table\Table;
-use Conquest\Table\Sorts\Sort;
 use Conquest\Core\Options\Option;
-use Workbench\App\Models\Product;
-use Conquest\Table\Columns\Column;
-use Conquest\Table\Filters\Filter;
-use Workbench\App\Models\TestUser;
-use Conquest\Table\Actions\BaseAction;
 use Conquest\Table\Actions\BulkAction;
-use Conquest\Table\Actions\PageAction;
-use Conquest\Table\Columns\DateColumn;
-use Conquest\Table\Columns\TextColumn;
-use Conquest\Table\Filters\DateFilter;
-use Conquest\Table\Filters\QueryFilter;
 use Conquest\Table\Actions\InlineAction;
-use Conquest\Table\Filters\SelectFilter;
+use Conquest\Table\Actions\PageAction;
 use Conquest\Table\Columns\BooleanColumn;
+use Conquest\Table\Columns\Column;
+use Conquest\Table\Columns\DateColumn;
 use Conquest\Table\Columns\NumericColumn;
+use Conquest\Table\Columns\TextColumn;
 use Conquest\Table\Filters\BooleanFilter;
+use Conquest\Table\Filters\DateFilter;
+use Conquest\Table\Filters\Filter;
+use Conquest\Table\Filters\QueryFilter;
+use Conquest\Table\Filters\SelectFilter;
+use Conquest\Table\Sorts\Sort;
+use Conquest\Table\Table;
+use Workbench\App\Models\Product;
 
 final class ProductTable extends Table
 {
     protected $resource = Product::class;
+
     protected $search = ['name', 'description'];
+
     protected $pagination = [10, 50, 100];
+
     protected $toggleable = true;
 
     protected function columns(): array
@@ -37,9 +37,9 @@ final class ProductTable extends Table
             TextColumn::make('name')->sort(),
             TextColumn::make('description')->fallback('No description')->sort(),
             DateColumn::make('created_at')->format('d M Y'),
-            NumericColumn::make('price')->transform(fn ($value) => '$' . number_format($value, 2)),
+            NumericColumn::make('price')->transform(fn ($value) => '$'.number_format($value, 2)),
             BooleanColumn::make('best_seller', 'Favourite'),
-            Column::make('misc')->fallback('N/A')
+            Column::make('misc')->fallback('N/A'),
         ];
     }
 

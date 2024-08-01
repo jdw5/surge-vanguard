@@ -53,7 +53,7 @@ it('can chain methods on a date column', function () {
         ->srOnly()
         ->transform(fn ($value) => strtoupper($value))
         ->format('d M Y');
-        
+
     expect($col)->toBeInstanceOf(DateColumn::class)
         ->getType()->toBe('col:date')
         ->getName()->toBe('name')

@@ -3,7 +3,7 @@
 namespace Conquest\Table\Columns;
 
 class TextColumn extends FallbackColumn
-{    
+{
     public function setUp(): void
     {
         $this->setType('col:text');

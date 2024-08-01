@@ -15,9 +15,11 @@ trait UsesScout
         return config('table.search.scout', false);
     }
 
-    public function setScout(bool|null $usesScout): void
+    public function setScout(?bool $usesScout): void
     {
-        if (is_null($usesScout)) return;
+        if (is_null($usesScout)) {
+            return;
+        }
         $this->scout = $usesScout;
     }
 }

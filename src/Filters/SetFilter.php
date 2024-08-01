@@ -2,24 +2,23 @@
 
 namespace Conquest\Table\Filters;
 
-use Closure;
-use Illuminate\Support\Facades\Request;
-use Conquest\Table\Filters\Enums\Clause;
-use Illuminate\Database\Eloquent\Builder;
-use Conquest\Table\Filters\Enums\Operator;
 use Conquest\Core\Options\Concerns\HasOptions;
 use Conquest\Core\Options\Option;
 use Conquest\Table\Filters\Concerns\HasClause;
 use Conquest\Table\Filters\Concerns\HasOperator;
 use Conquest\Table\Filters\Concerns\IsRestrictable;
+use Conquest\Table\Filters\Enums\Clause;
+use Conquest\Table\Filters\Enums\Operator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Request;
 
 class SetFilter extends PropertyFilter
 {
-    use HasOptions;
-    use IsRestrictable;
     use HasClause;
     use HasOperator;
+    use HasOptions;
+    use IsRestrictable;
 
     protected bool $multiple = false;
 
@@ -36,7 +35,9 @@ class SetFilter extends PropertyFilter
         $this->setValue($value);
         $this->setActive($this->filtering($value));
 
-        if (!$this->validateOptions()) return;
+        if (! $this->validateOptions()) {
+            return;
+        }
 
         $builder->when(
             $this->isActive() && $this->validateUsing($value),
@@ -56,28 +57,33 @@ class SetFilter extends PropertyFilter
 
     public function validateOptions(): bool
     {
-        if (! $this->hasOptions()) return true;
+        if (! $this->hasOptions()) {
+            return true;
+        }
 
         $flag = false;
         collect($this->getOptions())->each(function (Option $option) use (&$flag) {
-            $option->setActive($this->isMultiple() ? 
-                in_array($option->getValue(), $this->getValue()) 
+            $option->setActive($this->isMultiple() ?
+                in_array($option->getValue(), $this->getValue())
                 : $option->getValue() === $this->getValue()
             );
             $flag = $flag || $option->isActive();
         });
+
         return $this->isRestricted() ? $flag : true;
     }
 
     public function getValueFromRequest(): mixed
     {
         $in = Request::input($this->getName(), null);
-        if (is_null($in)) return $in;
+        if (is_null($in)) {
+            return $in;
+        }
 
         return $this->isMultiple() ? $this->splitToMultiple($in) : $in;
 
     }
-    
+
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [
@@ -85,17 +91,22 @@ class SetFilter extends PropertyFilter
             'options' => $this->getOptions(),
         ]);
     }
-    
+
     public function multiple(): static
     {
         $this->setMultiple(true);
+
         return $this;
     }
-    
-    public function setMultiple(bool|null $multiple): void
+
+    public function setMultiple(?bool $multiple): void
     {
-        if (is_null($multiple)) return;
-        if ($multiple && !$this->getClause()?->isMultiple()) $this->setClause(Clause::CONTAINS);
+        if (is_null($multiple)) {
+            return;
+        }
+        if ($multiple && ! $this->getClause()?->isMultiple()) {
+            $this->setClause(Clause::CONTAINS);
+        }
         $this->multiple = $multiple;
     }
 
@@ -106,7 +117,10 @@ class SetFilter extends PropertyFilter
 
     public function splitToMultiple(?string $value): array
     {
-        if (is_null($value)) return [];
+        if (is_null($value)) {
+            return [];
+        }
+
         return array_map('trim', explode(',', $value));
     }
 }

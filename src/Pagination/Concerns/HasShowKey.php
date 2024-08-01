@@ -17,15 +17,16 @@ trait HasShowKey
         return config('table.pagination.key', 'show');
     }
 
-    public function setShowKey(string|null $key): void
+    public function setShowKey(?string $key): void
     {
-        if (is_null($key)) return;
+        if (is_null($key)) {
+            return;
+        }
         $this->showKey = $key;
     }
 
     public function getPerPageFromRequest(): ?int
     {
-        return (int)Request::input($this->getShowKey(), null);
+        return (int) Request::input($this->getShowKey(), null);
     }
 }
-

@@ -17,7 +17,10 @@ abstract class FallbackColumn extends BaseColumn
 
     public function apply(mixed $value): mixed
     {
-        if (is_null($value)) return $this->getFallback();
+        if (is_null($value)) {
+            return $this->getFallback();
+        }
+
         return parent::apply($value);
     }
 

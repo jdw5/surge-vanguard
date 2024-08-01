@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Conquest\Table\Actions\Concerns\Confirmation;
@@ -12,18 +13,21 @@ trait HasConfirmationTitle
     public function confirmationTitle(string|Closure $confirmationTitle): static
     {
         $this->setConfirmationTitle($confirmationTitle);
+
         return $this;
     }
 
     public function setConfirmationTitle(string|Closure|null $confirmationTitle): void
     {
-        if (is_null($confirmationTitle)) return;
+        if (is_null($confirmationTitle)) {
+            return;
+        }
         $this->confirmationTitle = $confirmationTitle;
     }
 
     public function hasConfirmationTitle(): bool
     {
-        return !$this->lacksConfirmationTitle();
+        return ! $this->lacksConfirmationTitle();
     }
 
     public function lacksConfirmationTitle(): bool

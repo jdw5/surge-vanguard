@@ -11,12 +11,15 @@ trait IsInline
     public function inline(bool|Closure $inline = true): static
     {
         $this->setInline($inline);
+
         return $this;
     }
 
     public function setInline(bool|Closure|null $inline): void
     {
-        if (is_null($inline)) return;
+        if (is_null($inline)) {
+            return;
+        }
         $this->inline = $inline;
     }
 
@@ -27,6 +30,6 @@ trait IsInline
 
     public function isNotInline(): bool
     {
-        return !$this->isInline();
+        return ! $this->isInline();
     }
 }

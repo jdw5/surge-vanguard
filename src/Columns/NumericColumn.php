@@ -20,4 +20,3 @@ class NumericColumn extends FallbackColumn
         return config('table.fallback.numeric', parent::defaultFallback());
     }
 }
-

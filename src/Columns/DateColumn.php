@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Conquest\Table\Columns;
 
-use Exception;
 use Carbon\Carbon;
-use Conquest\Table\Columns\Concerns\HasFormat;
 use Conquest\Table\Columns\Concerns\Formatters\FormatsSince;
+use Conquest\Table\Columns\Concerns\HasFormat;
+use Exception;
 
 class DateColumn extends FallbackColumn
 {
-    use HasFormat;
     use FormatsSince;
+    use HasFormat;
 
     public function setUp(): void
     {
@@ -21,23 +21,30 @@ class DateColumn extends FallbackColumn
 
     public function apply(mixed $value): mixed
     {
-        if (is_null($value)) return $this->getFallback();
-        
+        if (is_null($value)) {
+            return $this->getFallback();
+        }
+
         if ($this->isSince()) {
             try {
                 return $this->formatSince($value);
             } catch (Exception $e) {
-                if ($this->hasFallback()) return $this->getFallback();
+                if ($this->hasFallback()) {
+                    return $this->getFallback();
+                }
             }
         }
-        
+
         if ($this->hasFormat()) {
             try {
                 $value = Carbon::parse($value)->format($this->getFormat());
             } catch (Exception $e) {
-                if ($this->hasFallback()) return $this->getFallback();
+                if ($this->hasFallback()) {
+                    return $this->getFallback();
+                }
             }
         }
+
         return $this->formatValue($value);
     }
 }

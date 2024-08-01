@@ -9,17 +9,18 @@ use Conquest\Core\Concerns\HasProperty;
 use Conquest\Table\Exceptions\CannotResolveNameFromProperty;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Support\Facades\Request;
 
 abstract class PropertyFilter extends BaseFilter
 {
-    use HasProperty;
     use CanTransform;
     use CanValidate;
+    use HasProperty;
 
-    public function __construct(array|string|Closure $property, string|Closure $name = null, string|Closure $label = null)
+    public function __construct(array|string|Closure $property, string|Closure|null $name = null, string|Closure|null $label = null)
     {
-        if (is_array($property) && is_null($name)) throw new CannotResolveNameFromProperty($property);
+        if (is_array($property) && is_null($name)) {
+            throw new CannotResolveNameFromProperty($property);
+        }
         $this->setProperty($property);
         parent::__construct($name ?? $this->toName($this->evaluate($property)), $label);
     }

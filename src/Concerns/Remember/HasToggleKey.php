@@ -15,10 +15,11 @@ trait HasToggleKey
         return config('table.remember.toggle_key', 'cols');
     }
 
-    public function setToggleKey(string|null $key): void
+    public function setToggleKey(?string $key): void
     {
-        if (is_null($key)) return;
+        if (is_null($key)) {
+            return;
+        }
         $this->toggleKey = $key;
     }
-
 }

@@ -1,7 +1,7 @@
 <?php
 
-use Conquest\Table\Table;
 use Conquest\Table\Actions\PageAction;
+use Conquest\Table\Table;
 
 it('can create a page action', function () {
     $action = new PageAction($l = 'Page');

@@ -3,12 +3,7 @@
 namespace Conquest\Table\Actions\Concerns;
 
 use Closure;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\Model;
-use Conquest\Table\DataObjects\ActionTypeData;
-use Conquest\Table\DataObjects\InlineActionData;
-use Conquest\Table\Actions\DataTransferObjects\BulkActionData;
 
 trait HasAction
 {
@@ -17,12 +12,13 @@ trait HasAction
     public function action(Closure|string $action): static
     {
         $this->setAction($action);
+
         return $this;
     }
 
     public function hasAction(): bool
     {
-        return !is_null($this->action);
+        return ! is_null($this->action);
     }
 
     public function setAction(Closure|string|null $action): void

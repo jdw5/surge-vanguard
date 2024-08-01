@@ -2,16 +2,15 @@
 
 namespace Conquest\Table\Filters;
 
-use Closure;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Database\Eloquent\Builder;
-use Conquest\Table\Filters\Enums\Operator;
-use Conquest\Table\Filters\Enums\DateClause;
-use Conquest\Table\Filters\Concerns\HasOperator;
 use Conquest\Table\Filters\Concerns\HasDateClause;
+use Conquest\Table\Filters\Concerns\HasOperator;
+use Conquest\Table\Filters\Enums\DateClause;
+use Conquest\Table\Filters\Enums\Operator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Request;
 
 class DateFilter extends PropertyFilter
 {
@@ -38,7 +37,9 @@ class DateFilter extends PropertyFilter
     public function getValueFromRequest(): ?Carbon
     {
         $v = Request::input($this->getName(), null);
-        if (is_null($v)) return null;
+        if (is_null($v)) {
+            return null;
+        }
 
         try {
             return Carbon::parse($v);
@@ -52,4 +53,5 @@ class DateFilter extends PropertyFilter
         return array_merge(parent::toArray(), [
             'value' => $this->getValue()?->toDateTimeString(),
         ]);
-    }}
+    }
+}

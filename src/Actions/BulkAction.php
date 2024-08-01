@@ -3,7 +3,6 @@
 namespace Conquest\Table\Actions;
 
 use Closure;
-use Conquest\Table\Actions\BaseAction;
 use Conquest\Table\Actions\Concerns\Confirmation\Confirms;
 use Conquest\Table\Actions\Concerns\HasAction;
 use Conquest\Table\Actions\Concerns\HasChunking;
@@ -11,9 +10,9 @@ use Conquest\Table\Table;
 
 class BulkAction extends BaseAction
 {
-    use HasChunking;
-    use HasAction;
     use Confirms;
+    use HasAction;
+    use HasChunking;
 
     public function setUp(): void
     {
@@ -22,11 +21,11 @@ class BulkAction extends BaseAction
 
     public function __construct(
         string $label,
-        string $name = null,
-        bool|Closure $authorize = null,
-        Closure $action = null,
-        string|Closure $confirmation = null,
-        int $chunkSize = null,
+        ?string $name = null,
+        bool|Closure|null $authorize = null,
+        ?Closure $action = null,
+        string|Closure|null $confirmation = null,
+        ?int $chunkSize = null,
         bool $chunkById = true,
         array $meta = [],
     ) {
@@ -36,21 +35,20 @@ class BulkAction extends BaseAction
         $this->setChunkById($chunkById);
         $this->setConfirmation($confirmation);
     }
-    
+
     public static function make(
         string $label,
-        string $name = null,
-        Closure|bool $authorize = null,
-        Closure $action = null,
-        string|Closure $confirmation = null,
-        int $chunkSize = null,
+        ?string $name = null,
+        Closure|bool|null $authorize = null,
+        ?Closure $action = null,
+        string|Closure|null $confirmation = null,
+        ?int $chunkSize = null,
         bool $chunkById = true,
         array $meta = [],
-    ): static
-    {
+    ): static {
         return resolve(static::class, compact(
-            'label', 
-            'name', 
+            'label',
+            'name',
             'authorize',
             'meta',
             'action',

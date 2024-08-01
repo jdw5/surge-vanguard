@@ -7,8 +7,7 @@ abstract class ActionData
     public function __construct(
         public readonly string $type,
         public readonly string $name
-    ) {
-    }
+    ) {}
 
     public function getType(): string
     {

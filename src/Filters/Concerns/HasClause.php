@@ -2,35 +2,31 @@
 
 namespace Conquest\Table\Filters\Concerns;
 
-use Exception;
 use Conquest\Table\Filters\Enums\Clause;
 
 trait HasClause
 {
     protected ?Clause $clause = null;
-    
+
     /**
      * Set the clause to be used.
-     * 
-     * @param string|Clause $clause
-     * @return static
      */
     public function clause(string|Clause $clause): static
     {
         $this->setClause($clause);
+
         return $this;
     }
 
     /**
      * Set the clause to be used quietly.
-     * 
-     * @param string|Clause $clause
-     * @return void
      */
     protected function setClause(string|Clause|null $clause): void
     {
-        if (is_null($clause)) return;
-        
+        if (is_null($clause)) {
+            return;
+        }
+
         if ($clause instanceof Clause) {
             $this->clause = $clause;
         } else {
@@ -40,8 +36,6 @@ trait HasClause
 
     /**
      * Retrieve the clause property.
-     * 
-     * @return Clause
      */
     public function getClause(): ?Clause
     {
@@ -50,8 +44,6 @@ trait HasClause
 
     /**
      * Set the clause to be 'exact'.
-     * 
-     * @return static
      */
     public function is(): static
     {
@@ -60,8 +52,6 @@ trait HasClause
 
     /**
      * Set the clause to be 'loose'.
-     * 
-     * @return static
      */
     public function isNot(): static
     {
@@ -70,8 +60,6 @@ trait HasClause
 
     /**
      * Set the clause to be 'begins with'.
-     * 
-     * @return static
      */
     public function startsWith(): static
     {
@@ -85,8 +73,6 @@ trait HasClause
 
     /**
      * Set the clause to be 'ends with'.
-     * 
-     * @return static
      */
     public function endsWith(): static
     {

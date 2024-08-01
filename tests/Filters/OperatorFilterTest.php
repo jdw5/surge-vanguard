@@ -1,12 +1,11 @@
 <?php
 
-use Carbon\Carbon;
-use Workbench\App\Models\Product;
-use Illuminate\Support\Facades\DB;
-use Conquest\Table\Filters\OperatorFilter;
-use Illuminate\Support\Facades\Request;
-use Conquest\Table\Filters\Enums\Operator;
 use Conquest\Table\Filters\Enums\Clause;
+use Conquest\Table\Filters\Enums\Operator;
+use Conquest\Table\Filters\OperatorFilter;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
+use Workbench\App\Models\Product;
 
 it('can create a operator filter', function () {
     $filter = new OperatorFilter($n = 'name');
@@ -23,7 +22,7 @@ it('can create a operator filter', function () {
 });
 
 it('can create a operators filter with arguments', function () {
-    $filter = new OperatorFilter('name', 
+    $filter = new OperatorFilter('name',
         name: 'username',
         authorize: fn () => false,
         validator: fn () => true,
@@ -153,7 +152,7 @@ it('has array representation', function () {
         'active' => false,
         'value' => null,
         'meta' => [],
-        'operators' => []
+        'operators' => [],
     ]);
 });
 

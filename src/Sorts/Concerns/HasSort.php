@@ -13,13 +13,15 @@ trait HasSort
         if (isset($this->sort)) {
             return $this->sort;
         }
-        
+
         return config('table.sorting.sort_key', 'sort');
     }
 
-    public function setSortKey(string|null $sortKey): void
+    public function setSortKey(?string $sortKey): void
     {
-        if (is_null($sortKey)) return;
+        if (is_null($sortKey)) {
+            return;
+        }
         $this->sort = $sortKey;
     }
 

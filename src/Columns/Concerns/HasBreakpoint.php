@@ -4,11 +4,10 @@ namespace Conquest\Table\Columns\Concerns;
 
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Conquest\Table\Columns\Enums\Breakpoint;
 
 trait HasBreakpoint
 {
-    protected string|null $breakpoint = null;
+    protected ?string $breakpoint = null;
 
     public const BREAKPOINTS = ['xs', 'sm', 'md', 'lg', 'xl'];
 
@@ -18,6 +17,7 @@ trait HasBreakpoint
     public function breakpoint(string $breakpoint): static
     {
         $this->setBreakpoint($breakpoint);
+
         return $this;
     }
 
@@ -26,11 +26,13 @@ trait HasBreakpoint
      */
     public function setBreakpoint(?string $breakpoint): void
     {
-        if (is_null($breakpoint)) return;
+        if (is_null($breakpoint)) {
+            return;
+        }
         $breakpoint = Str::lower($breakpoint);
 
-        if (!in_array($breakpoint, self::BREAKPOINTS)) {
-            throw new InvalidArgumentException("The provided breakpoint [$breakpoint] is invalid. Please provide one of the following: " . implode(', ', self::BREAKPOINTS));
+        if (! in_array($breakpoint, self::BREAKPOINTS)) {
+            throw new InvalidArgumentException("The provided breakpoint [$breakpoint] is invalid. Please provide one of the following: ".implode(', ', self::BREAKPOINTS));
         }
         $this->breakpoint = $breakpoint;
     }
@@ -79,9 +81,4 @@ trait HasBreakpoint
     {
         return $this->breakpoint('xl');
     }
-
-    
-
-    
-
 }

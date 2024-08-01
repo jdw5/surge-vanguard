@@ -17,9 +17,11 @@ trait HasSearchKey
         return config('table.search.key', 'q');
     }
 
-    public function setSearchKey(string|null $key): void
+    public function setSearchKey(?string $key): void
     {
-        if (is_null($key)) return;
+        if (is_null($key)) {
+            return;
+        }
         $this->searchKey = $key;
     }
 

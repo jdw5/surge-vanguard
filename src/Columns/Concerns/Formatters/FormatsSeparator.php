@@ -13,12 +13,13 @@ trait FormatsSeparator
     public function separator(string|Closure $separator = ','): static
     {
         $this->separator = $separator;
+
         return $this;
     }
 
     public function hasSeparator(): bool
     {
-        return !$this->lacksSeparator();
+        return ! $this->lacksSeparator();
     }
 
     public function lacksSeparator(): bool
@@ -33,10 +34,10 @@ trait FormatsSeparator
 
     public function formatSeparator(mixed $value): string
     {
-        if (!is_array($value)) {
+        if (! is_array($value)) {
             return $value;
         }
-        
+
         return implode($this->getSeparator(), $value);
     }
 }

@@ -23,18 +23,18 @@ trait HasQuery
 
     protected function setQuery(?Closure $query): void
     {
-        if (is_null($query)) return;
+        if (is_null($query)) {
+            return;
+        }
         $this->query = $query;
     }
 
     public function getQuery(): Closure
     {
         if (! isset($this->query)) {
-            throw new QueryNotDefined();
+            throw new QueryNotDefined;
         }
 
         return $this->query;
     }
-
-
 }

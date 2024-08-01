@@ -1,12 +1,12 @@
 <?php
 
 use Carbon\Carbon;
-use Workbench\App\Models\Product;
-use Illuminate\Support\Facades\DB;
 use Conquest\Table\Filters\DateFilter;
-use Illuminate\Support\Facades\Request;
-use Conquest\Table\Filters\Enums\Operator;
 use Conquest\Table\Filters\Enums\DateClause;
+use Conquest\Table\Filters\Enums\Operator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
+use Workbench\App\Models\Product;
 
 it('can create a date filter', function () {
     $filter = new DateFilter($n = 'name');
@@ -22,7 +22,7 @@ it('can create a date filter', function () {
 });
 
 it('can create a date filter with arguments', function () {
-    $filter = new DateFilter('name', 
+    $filter = new DateFilter('name',
         name: 'username',
         authorize: fn () => false,
         validator: fn () => true,
@@ -103,7 +103,6 @@ it('does not apply a date filter if name not provided', function () {
     expect($builder->toSql())->toBe('select * from "products"');
     expect($filter->isActive())->toBeFalse();
 });
-
 
 it('does not apply a date filter if name not equal', function () {
     $filter = DateFilter::make('created_at', 'is');

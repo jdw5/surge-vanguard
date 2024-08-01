@@ -2,31 +2,35 @@
 
 namespace Conquest\Table\Actions\Concerns;
 
-use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Conquest\Table\Actions\BaseAction;
 use Conquest\Table\Actions\BulkAction;
-use Conquest\Table\Actions\PageAction;
-use Illuminate\Database\Eloquent\Model;
 use Conquest\Table\Actions\InlineAction;
-use Illuminate\Database\Eloquent\Builder;
+use Conquest\Table\Actions\PageAction;
 use Conquest\Table\DataObjects\ActionData;
 use Conquest\Table\DataObjects\ActionTypeData;
 use Conquest\Table\DataObjects\BulkActionData;
 use Conquest\Table\DataObjects\InlineActionData;
 use Conquest\Table\Exceptions\InvalidActionException;
+use Exception;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 trait HasActions
 {
     public const INLINE_ACTION = 'action:inline';
+
     public const BULK_ACTION = 'action:bulk';
+
     public const PAGE_ACTION = 'action:page';
+
     public const EXPORT_ACTION = 'action:export';
-    
+
     private Collection $cachedActions;
+
     protected $actions;
+
     protected $actionRoute;
 
     public function getActionRoute(): ?string
@@ -44,7 +48,7 @@ trait HasActions
 
     public function hasActionRoute(): bool
     {
-        return !is_null($this->getActionRoute());
+        return ! is_null($this->getActionRoute());
     }
 
     public function getActions(): array
@@ -60,7 +64,7 @@ trait HasActions
         return [];
     }
 
-    public function setActions(array|null $actions): void
+    public function setActions(?array $actions): void
     {
         if (is_null($actions)) {
             return;
@@ -97,13 +101,13 @@ trait HasActions
         return $this->getInlineActions()
             ->first(fn (InlineAction $action): bool => $action->isDefault());
     }
+
     // Need to be able to run actions against records
     public function applyRecordToActions(Model $record): Collection
     {
         return $this->getTableActions();
-            // ->map(fn (BaseAction $action): BaseAction => $action->applyRecord($record));
+        // ->map(fn (BaseAction $action): BaseAction => $action->applyRecord($record));
     }
-
 
     // Handler
 
@@ -120,13 +124,13 @@ trait HasActions
             static::BULK_ACTION => BulkActionData::from($request),
             default => static::redirectOrExit(back())
         };
-        
+
         try {
             $action = $this->resolveAction($type);
         } catch (InvalidActionException $e) {
             return;
         }
-        
+
         match (get_class($action)) {
             InlineAction::class => $this->executeInlineAction($action, $type),
             BulkAction::class => $this->executeBulkAction($action, $type),
@@ -142,7 +146,7 @@ trait HasActions
             default => throw new Exception('Invalid action data')
         };
 
-        if (!$action = $actions->first(fn (BaseAction $action) => $action->getName() === $data->getName())) {
+        if (! $action = $actions->first(fn (BaseAction $action) => $action->getName() === $data->getName())) {
             throw new InvalidActionException($data->getName());
         }
 
@@ -153,7 +157,7 @@ trait HasActions
     {
         $modelClass = $this->getModelClass();
         $record = $this->resolveModel($modelClass, $data->getId());
-        
+
         $action->applyAction($modelClass, $record);
     }
 
@@ -168,7 +172,7 @@ trait HasActions
             default => $query->whereIn($key, $data->getOnly())
         };
 
-        $query->{$action->getChunkMethod()}($action->getChunkSize(), 
+        $query->{$action->getChunkMethod()}($action->getChunkSize(),
             fn (Collection $records) => $records->each(
                 fn (Model $record) => $action->applyAction($modelClass, $record)
             )

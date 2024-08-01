@@ -15,9 +15,11 @@ trait HasDefaultPerPage
         return config('table.pagination.default', 10);
     }
 
-    public function setDefaultPerPage(int|null $perPage): void
+    public function setDefaultPerPage(?int $perPage): void
     {
-        if (is_null($perPage)) return;
+        if (is_null($perPage)) {
+            return;
+        }
         $this->defaultPerPage = $perPage;
     }
 }

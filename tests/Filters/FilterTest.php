@@ -1,11 +1,11 @@
 <?php
 
-use Workbench\App\Models\Product;
-use Conquest\Table\Filters\Filter;
 use Conquest\Table\Filters\Enums\Clause;
 use Conquest\Table\Filters\Enums\Operator;
+use Conquest\Table\Filters\Filter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
+use Workbench\App\Models\Product;
 
 it('can create a filter', function () {
     $filter = new Filter($n = 'name');
@@ -18,7 +18,7 @@ it('can create a filter', function () {
 });
 
 it('can create a filter with arguments', function () {
-    $filter = new Filter('name', 
+    $filter = new Filter('name',
         name: 'username',
         authorize: fn () => false,
         clause: Clause::IS_NOT,
@@ -45,7 +45,7 @@ it('can chain methods on a filter', function () {
         ->authorize(fn () => false)
         ->clause(Clause::IS_NOT)
         ->operator(Operator::NOT_EQUAL);
-    
+
     expect($filter)->getProperty()->toBe('name')
         ->getName()->toBe('username')
         ->getLabel()->toBe('Name')
@@ -65,13 +65,12 @@ it('can apply a filter to an eloquent builder', function () {
 
 it('can apply a filter to a query builder', function () {
     $filter = Filter::make('name');
-    $builder = DB::table('products')  ;
+    $builder = DB::table('products');
     Request::merge(['name' => 'test']);
     $filter->apply($builder);
     expect($builder->toSql())->toBe('select * from "products" where "name" = ?');
     expect($filter->isActive())->toBeTrue();
 });
-
 
 it('does not apply a filter if nothing in query', function () {
     $filter = Filter::make('name', 'n');

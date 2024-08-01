@@ -15,9 +15,11 @@ trait HasPageName
         return config('table.pagination.name', 'show');
     }
 
-    public function setPageName(string|null $key): void
+    public function setPageName(?string $key): void
     {
-        if (is_null($key)) return;
+        if (is_null($key)) {
+            return;
+        }
         $this->pageName = $key;
     }
 }

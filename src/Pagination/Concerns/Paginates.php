@@ -2,15 +2,14 @@
 
 namespace Conquest\Table\Pagination\Concerns;
 
-use Closure;
 use Conquest\Table\Pagination\Pagination;
 
 trait Paginates
 {
     use HasDefaultPerPage;
     use HasPageName;
-    use HasPerPage;
     use HasPaginationType;
+    use HasPerPage;
     use HasShowKey;
 
     public function getPaginationCount(): int|array
@@ -23,11 +22,13 @@ trait Paginates
      */
     public function setPagination(int|array|null $pagination): void
     {
-        if (is_null($pagination)) return;
+        if (is_null($pagination)) {
+            return;
+        }
         $this->perPage = $pagination;
     }
 
-    public function getPagination(int $active = null): array
+    public function getPagination(?int $active = null): array
     {
         if (! is_array($p = $this->getPaginationCount())) {
             return [Pagination::make($p, true)];
@@ -45,10 +46,13 @@ trait Paginates
     public function usePerPage(): int
     {
         $c = $this->getPaginationCount();
-        if (is_int($c)) return $c;
-        if (in_array($q = $this->getPerPageFromRequest(), $c)) return $q;
+        if (is_int($c)) {
+            return $c;
+        }
+        if (in_array($q = $this->getPerPageFromRequest(), $c)) {
+            return $q;
+        }
+
         return $this->getDefaultPerPage();
     }
-
-
 }

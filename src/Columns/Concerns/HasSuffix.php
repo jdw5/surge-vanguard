@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Conquest\Table\Columns\Concerns;
 
 use Closure;
@@ -14,18 +13,21 @@ trait HasSuffix
     public function suffix(string|Closure $suffix): static
     {
         $this->setSuffix($suffix);
+
         return $this;
     }
 
     public function setSuffix(string|Closure|null $suffix): void
     {
-        if (is_null($suffix)) return;
+        if (is_null($suffix)) {
+            return;
+        }
         $this->suffix = $suffix;
     }
 
     public function hasSuffix(): bool
     {
-        return !$this->lacksSuffix();
+        return ! $this->lacksSuffix();
     }
 
     public function lacksSuffix(): bool

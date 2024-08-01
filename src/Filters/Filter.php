@@ -2,7 +2,6 @@
 
 namespace Conquest\Table\Filters;
 
-use Closure;
 use Conquest\Table\Filters\Concerns\HasClause;
 use Conquest\Table\Filters\Concerns\HasOperator;
 use Conquest\Table\Filters\Enums\Clause;

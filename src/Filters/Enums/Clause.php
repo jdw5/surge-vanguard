@@ -55,11 +55,11 @@ enum Clause: string
     public function needsOperator(): bool
     {
         return match ($this) {
-            self::JSON_LENGTH, 
-            self::JSON_KEY, 
-            self::JSON_NOT_KEY, 
-            self::JSON_OVERLAPS, 
-            self::JSON_DOESNT_OVERLAP, 
+            self::JSON_LENGTH,
+            self::JSON_KEY,
+            self::JSON_NOT_KEY,
+            self::JSON_OVERLAPS,
+            self::JSON_DOESNT_OVERLAP,
             self::FULL_TEXT,
             self::CONTAINS,
             self::DOES_NOT_CONTAIN => false,
@@ -88,7 +88,7 @@ enum Clause: string
         return match ($this) {
             self::STARTS_WITH => "$value%",
             self::ENDS_WITH => "%$value",
-            self::SEARCH, self::LIKE => '%' . strtolower($value) . '%',
+            self::SEARCH, self::LIKE => '%'.strtolower($value).'%',
             $this->isMultiple() => is_array($value) ? $value : [$value],
             default => $value,
         };
@@ -105,22 +105,25 @@ enum Clause: string
 
     public function apply(Builder|QueryBuilder $builder, string $property, Operator $operator, mixed $value): void
     {
-        
+
         $operator = $this->overrideOperator($operator);
 
-        if ($operator->invalid($value)) return;
+        if ($operator->invalid($value)) {
+            return;
+        }
 
         if ($this->needsOperator()) {
             $builder->{$this->statement()} (
-                $this->formatProperty($property), 
-                $operator->value(), 
+                $this->formatProperty($property),
+                $operator->value(),
                 $this->formatValue($value)
             );
+
             return;
         }
 
         $builder->{$this->statement()}(
-            $this->formatProperty($property), 
+            $this->formatProperty($property),
             $this->formatValue($value)
         );
     }

@@ -1,9 +1,9 @@
 <?php
 
-use Workbench\App\Models\Product;
 use Conquest\Table\Sorts\Sort;
 use Conquest\Table\Table;
 use Illuminate\Support\Facades\DB;
+use Workbench\App\Models\Product;
 
 it('can create a sort', function () {
     $sort = new Sort($n = 'name');
@@ -18,7 +18,7 @@ it('can create a sort', function () {
 
 it('can create a sort with arguments', function () {
     $sort = new Sort(
-        property: 'name', 
+        property: 'name',
         name: 'username',
         label: 'Name',
         authorize: false,
@@ -50,7 +50,7 @@ it('can chain methods on a sort', function () {
         ->direction('asc')
         ->desc()
         ->default();
-    
+
     expect($sort)
         ->getProperty()->toBe('name')
         ->getName()->toBe('username')

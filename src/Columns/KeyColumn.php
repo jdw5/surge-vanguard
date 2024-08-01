@@ -2,9 +2,6 @@
 
 namespace Conquest\Table\Columns;
 
-use Closure;
-use Conquest\Table\Columns\Concerns\Formatters\FormatsBoolean;
-
 class KeyColumn extends BaseColumn
 {
     public function setUp(): void

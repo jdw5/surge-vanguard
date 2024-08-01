@@ -3,21 +3,20 @@
 namespace Conquest\Table\Actions;
 
 use Closure;
-use Conquest\Table\Table;
+use Conquest\Core\Concerns\HasHttpMethod;
 use Conquest\Core\Concerns\HasRoute;
 use Conquest\Core\Concerns\IsDefault;
-use Conquest\Table\Actions\BaseAction;
-use Conquest\Core\Concerns\HasHttpMethod;
-use Conquest\Table\Actions\Concerns\HasAction;
 use Conquest\Table\Actions\Concerns\Confirmation\Confirms;
+use Conquest\Table\Actions\Concerns\HasAction;
+use Conquest\Table\Table;
 
 class InlineAction extends BaseAction
 {
-    use IsDefault;
-    use HasRoute;
-    use HasHttpMethod;
-    use HasAction;
     use Confirms;
+    use HasAction;
+    use HasHttpMethod;
+    use HasRoute;
+    use IsDefault;
 
     public function setUp(): void
     {
@@ -25,14 +24,14 @@ class InlineAction extends BaseAction
     }
 
     public function __construct(
-        string $label, 
-        string $name = null,
-        bool|Closure $authorize = null,
-        string|Closure $route = null,
-        string $method = null,
-        Closure $action = null,
-        string|Closure $confirmation = null,
-        bool|Closure $default = null,
+        string $label,
+        ?string $name = null,
+        bool|Closure|null $authorize = null,
+        string|Closure|null $route = null,
+        ?string $method = null,
+        ?Closure $action = null,
+        string|Closure|null $confirmation = null,
+        bool|Closure|null $default = null,
         array $meta = [],
     ) {
         parent::__construct($label, $name, $authorize, $meta);
@@ -44,21 +43,20 @@ class InlineAction extends BaseAction
     }
 
     public static function make(
-        string $label, 
-        string $name = null,
-        bool|Closure $authorize = null,
-        string|Closure $route = null,
-        string $method = null,
-        Closure $action = null,
-        string|Closure $confirmation = null,
-        bool|Closure $default = null,
+        string $label,
+        ?string $name = null,
+        bool|Closure|null $authorize = null,
+        string|Closure|null $route = null,
+        ?string $method = null,
+        ?Closure $action = null,
+        string|Closure|null $confirmation = null,
+        bool|Closure|null $default = null,
         array $meta = [],
-    ): static
-    {
+    ): static {
         return resolve(static::class, compact(
-            'label', 
-            'name', 
-            'authorize', 
+            'label',
+            'name',
+            'authorize',
             'route',
             'method',
             'action',

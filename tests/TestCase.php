@@ -3,12 +3,12 @@
 namespace Conquest\Table\Tests;
 
 use Conquest\Table\TableServiceProvider;
-use Orchestra\Testbench\TestCase as Orchestra;
-use Workbench\Database\Seeders\DatabaseSeeder;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use function Orchestra\Testbench\workbench_path;
+use Orchestra\Testbench\TestCase as Orchestra;
 use Workbench\App\Providers\WorkbenchServiceProvider;
+use Workbench\Database\Seeders\DatabaseSeeder;
 
+use function Orchestra\Testbench\workbench_path;
 
 class TestCase extends Orchestra
 {
@@ -37,7 +37,7 @@ class TestCase extends Orchestra
 
     protected function getEnvironmentSetUp($app)
     {
-        
+
         $app['config']->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
 
         $app['config']->set('database.default', 'testing');

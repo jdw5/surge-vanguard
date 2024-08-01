@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Conquest\Table\Columns\Concerns\Formatters;
@@ -11,7 +12,9 @@ trait CanSetVerbose
 
     protected function setVerbose(bool|Closure|null $verbose): void
     {
-        if (is_null($verbose)) return;
+        if (is_null($verbose)) {
+            return;
+        }
         $this->verbose = $verbose;
     }
 
@@ -22,6 +25,6 @@ trait CanSetVerbose
 
     protected function lacksVerbose(): bool
     {
-        return !$this->isVerbose();
+        return ! $this->isVerbose();
     }
 }

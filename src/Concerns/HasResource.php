@@ -5,7 +5,6 @@ namespace Conquest\Table\Concerns;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Support\Facades\DB;
 
 trait HasResource
 {
@@ -14,8 +13,10 @@ trait HasResource
 
     protected function setResource($resource): void
     {
-        if (is_null($resource)) return;
-        
+        if (is_null($resource)) {
+            return;
+        }
+
         if (is_string($resource)) {
             if (class_exists($resource)) {
                 $this->resource = $resource;
@@ -34,6 +35,7 @@ trait HasResource
                 // If it's a string (class name), create a query
                 return $this->resource::query();
             }
+
             // if ($this->resource instanceof \Illuminate\Database\Eloquent\Model) {
             //     return $this->resource->newQuery();
             // }
@@ -57,7 +59,7 @@ trait HasResource
             return $modelClass::query();
         }
 
-        throw new \RuntimeException("Unable to resolve resource for " . static::class);
+        throw new \RuntimeException('Unable to resolve resource for '.static::class);
     }
 
     public function getModelClass(): string
@@ -75,7 +77,7 @@ trait HasResource
         if ($resource instanceof QueryBuilder) {
             return $resource->from;
         }
-        throw new \RuntimeException("Unable to get base model for resource");
+        throw new \RuntimeException('Unable to get base model for resource');
     }
 
     public function resolveModel(string $modelClass, string|int $key)

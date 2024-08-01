@@ -2,7 +2,6 @@
 
 namespace Conquest\Table\Columns;
 
-use Closure;
 use Conquest\Table\Columns\Concerns\Formatters\FormatsBoolean;
 
 class BooleanColumn extends BaseColumn
@@ -18,6 +17,7 @@ class BooleanColumn extends BaseColumn
     public function apply(mixed $value): mixed
     {
         $value = $this->applyTransform($value);
+
         return $this->formatBoolean($value);
     }
 }

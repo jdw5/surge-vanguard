@@ -17,15 +17,17 @@ trait HasSearch
 
     public function setSearch(string|array|null $key): void
     {
-        if (is_null($key)) return;
+        if (is_null($key)) {
+            return;
+        }
         $this->search = $key;
     }
 
     public function hasSearch(): bool
     {
-        return !$this->lacksSearch();
+        return ! $this->lacksSearch();
     }
-    
+
     public function lacksSearch(): bool
     {
         return empty($this->getSearch());

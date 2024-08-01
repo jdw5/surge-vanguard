@@ -3,15 +3,14 @@
 namespace Conquest\Table\Actions;
 
 use Closure;
-use Conquest\Core\Concerns\HasRoute;
-use Conquest\Table\Actions\BaseAction;
 use Conquest\Core\Concerns\HasHttpMethod;
+use Conquest\Core\Concerns\HasRoute;
 use Conquest\Table\Table;
 
 class PageAction extends BaseAction
 {
-    use HasRoute;
     use HasHttpMethod;
+    use HasRoute;
 
     public function setUp(): void
     {
@@ -19,11 +18,11 @@ class PageAction extends BaseAction
     }
 
     public function __construct(
-        string $label, 
-        string $name = null,
-        bool|Closure $authorize = null,
-        string|Closure $route = null,
-        string $method = null,
+        string $label,
+        ?string $name = null,
+        bool|Closure|null $authorize = null,
+        string|Closure|null $route = null,
+        ?string $method = null,
         array $meta = [],
     ) {
         parent::__construct($label, $name, $authorize, $meta);
@@ -33,19 +32,18 @@ class PageAction extends BaseAction
 
     public static function make(
         string $label,
-        string $name = null,
-        bool|Closure $authorize = null,
-        string|Closure $route = null,
-        string $method = null,
+        ?string $name = null,
+        bool|Closure|null $authorize = null,
+        string|Closure|null $route = null,
+        ?string $method = null,
         array $meta = [],
-    ): static
-    {
+    ): static {
         return resolve(static::class, compact(
-            'label', 
-            'name', 
+            'label',
+            'name',
             'authorize',
             'route',
-            'method', 
+            'method',
             'meta'
         ));
     }

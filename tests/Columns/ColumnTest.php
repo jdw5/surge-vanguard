@@ -1,7 +1,6 @@
 <?php
 
 use Conquest\Table\Columns\Column;
-use Conquest\Table\Columns\Enums\Breakpoint;
 
 it('can create a column', function () {
     $col = new Column('name');
@@ -51,7 +50,7 @@ it('can chain methods on a column', function () {
         ->hidden()
         ->srOnly()
         ->transform(fn ($value) => strtoupper($value));
-        
+
     expect($col)->toBeInstanceOf(Column::class)
         ->getType()->toBe('col')
         ->getName()->toBe('name')

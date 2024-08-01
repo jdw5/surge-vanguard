@@ -3,13 +3,13 @@
 namespace Conquest\Table\Sorts;
 
 use Closure;
-use Conquest\Core\Concerns\IsAuthorized;
 use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Concerns\HasMeta;
 use Conquest\Core\Concerns\HasName;
 use Conquest\Core\Concerns\HasProperty;
 use Conquest\Core\Concerns\HasType;
 use Conquest\Core\Concerns\IsActive;
+use Conquest\Core\Concerns\IsAuthorized;
 use Conquest\Core\Primitive;
 use Conquest\Table\Contracts\Sorts;
 use Conquest\Table\Sorts\Concerns\HasDirection;
@@ -19,21 +19,21 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 abstract class BaseSort extends Primitive implements Sorts
 {
     use HasDirection;
-    use IsAuthorized;
     use HasLabel;
     use HasMeta;
     use HasName;
+    use HasProperty;
     use HasType;
     use IsActive;
-    use HasProperty;
+    use IsAuthorized;
 
     public function __construct(
         string|Closure $property,
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null,
-        string $direction = null,
-        array $meta = null,
+        string|Closure|null $name = null,
+        string|Closure|null $label = null,
+        bool|Closure|null $authorize = null,
+        ?string $direction = null,
+        ?array $meta = null,
     ) {
         parent::__construct();
         $this->setProperty($property);

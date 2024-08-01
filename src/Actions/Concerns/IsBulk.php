@@ -11,12 +11,15 @@ trait IsBulk
     public function bulk(bool|Closure $bulk = true): static
     {
         $this->setBulk($bulk);
+
         return $this;
     }
 
     public function setBulk(bool|Closure|null $bulk): void
     {
-        if (is_null($bulk)) return;
+        if (is_null($bulk)) {
+            return;
+        }
         $this->bulk = $bulk;
     }
 
@@ -27,6 +30,6 @@ trait IsBulk
 
     public function isNotBulk(): bool
     {
-        return !$this->isBulk();
+        return ! $this->isBulk();
     }
 }

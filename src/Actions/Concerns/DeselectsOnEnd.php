@@ -9,6 +9,7 @@ trait DeselectsOnEnd
     public function deselectOnEnd(bool $deselectOnEnd = true): static
     {
         $this->setDeselectOnEnd($deselectOnEnd);
+
         return $this;
     }
 

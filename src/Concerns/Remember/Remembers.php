@@ -8,19 +8,20 @@ use Illuminate\Support\Facades\Request;
 trait Remembers
 {
     use HasCookie;
+    use HasCookieName;
     use HasRememberFor;
     use HasToggleKey;
-    use HasCookieName;
 
     protected $remember;
 
-    public function remember(string $cookieKey = null, int $duration = null, string $toggleKey = null, bool $cookie = null): static
+    public function remember(?string $cookieKey = null, ?int $duration = null, ?string $toggleKey = null, ?bool $cookie = null): static
     {
         $this->setRemember(true);
         $this->setCookieName($cookieKey);
         $this->setRememberFor($duration);
         $this->setCookie($cookie);
         $this->setToggleKey($toggleKey);
+
         return $this;
     }
 
@@ -33,15 +34,18 @@ trait Remembers
         return config('table.remember.default', false);
     }
 
-    public function setRemember(bool|null $remember): void
+    public function setRemember(?bool $remember): void
     {
-        if (is_null($remember)) return;
+        if (is_null($remember)) {
+            return;
+        }
         $this->remember = $remember;
     }
 
     public function getRememberedFromRequest(): array
     {
         $data = Request::input($this->getToggleKey());
+
         return explode(',', $data);
     }
 

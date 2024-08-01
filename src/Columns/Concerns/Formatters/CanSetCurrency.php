@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Conquest\Table\Columns\Concerns\Formatters;
@@ -11,13 +12,15 @@ trait CanSetCurrency
 
     protected function setCurrency(string|Closure|null $currency): void
     {
-        if (is_null($currency)) return;
+        if (is_null($currency)) {
+            return;
+        }
         $this->currency = $currency;
     }
 
     protected function hasCurrency(): bool
     {
-        return !$this->lacksCurrency();
+        return ! $this->lacksCurrency();
     }
 
     protected function lacksCurrency(): bool

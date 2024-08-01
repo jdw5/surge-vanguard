@@ -15,9 +15,11 @@ trait HasCookieName
         return str(class_basename($this))->snake();
     }
 
-    public function setCookieName(string|null $key): void
+    public function setCookieName(?string $key): void
     {
-        if (is_null($key)) return;
+        if (is_null($key)) {
+            return;
+        }
         $this->cookieName = $key;
     }
 }

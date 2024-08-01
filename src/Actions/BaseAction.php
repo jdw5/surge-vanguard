@@ -3,25 +3,25 @@
 namespace Conquest\Table\Actions;
 
 use Closure;
-use Conquest\Core\Concerns\IsAuthorized;
 use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Concerns\HasMeta;
 use Conquest\Core\Concerns\HasName;
 use Conquest\Core\Concerns\HasType;
+use Conquest\Core\Concerns\IsAuthorized;
 use Conquest\Core\Primitive;
 
 abstract class BaseAction extends Primitive
 {
-    use IsAuthorized;
-    use HasName;
     use HasLabel;
     use HasMeta;
+    use HasName;
     use HasType;
+    use IsAuthorized;
 
     public function __construct(
-        string $label, 
-        string $name = null,
-        Closure|bool $authorize = null,
+        string $label,
+        ?string $name = null,
+        Closure|bool|null $authorize = null,
         array $meta = [],
     ) {
         parent::__construct();

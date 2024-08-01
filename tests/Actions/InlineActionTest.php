@@ -1,8 +1,8 @@
 <?php
 
+use Conquest\Table\Actions\InlineAction;
 use Conquest\Table\Table;
 use Workbench\App\Models\Product;
-use Conquest\Table\Actions\InlineAction;
 
 it('can create an inline action', function () {
     $action = new InlineAction($l = 'Create');
@@ -31,7 +31,7 @@ it('can be made default', function () {
 });
 
 it('can set a confirmation message', function () {
-    expect(InlineAction::make('Delete', confirmation: $m ='Are you sure?')->getConfirmation())
+    expect(InlineAction::make('Delete', confirmation: $m = 'Are you sure?')->getConfirmation())
         ->toBe($m);
 });
 
@@ -41,7 +41,7 @@ it('can set a confirmation message using the action name', function () {
 });
 
 it('can set a confirmation message using the action', function () {
-    expect(InlineAction::make('Delete', confirmation: fn ($action) => "Are you want to ".$action->getLabel() ." this product?")->getConfirmation())
+    expect(InlineAction::make('Delete', confirmation: fn ($action) => 'Are you want to '.$action->getLabel().' this product?')->getConfirmation())
         ->toBe('Are you want to Delete this product?');
 });
 

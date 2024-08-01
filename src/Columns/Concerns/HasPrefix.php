@@ -13,18 +13,21 @@ trait HasPrefix
     public function prefix(string|Closure $prefix): static
     {
         $this->setPrefix($prefix);
+
         return $this;
     }
 
     public function setPrefix(string|Closure|null $prefix): void
     {
-        if (is_null($prefix)) return;
+        if (is_null($prefix)) {
+            return;
+        }
         $this->prefix = $prefix;
     }
 
     public function hasPrefix(): bool
     {
-        return !$this->lacksPrefix();
+        return ! $this->lacksPrefix();
     }
 
     public function lacksPrefix(): bool

@@ -1,9 +1,9 @@
 <?php
 
-use Workbench\App\Models\Product;
+use Conquest\Table\Exceptions\QueryNotDefined;
 use Conquest\Table\Filters\QueryFilter;
 use Illuminate\Support\Facades\Request;
-use Conquest\Table\Exceptions\QueryNotDefined;
+use Workbench\App\Models\Product;
 
 it('can create a query filter', function () {
     $filter = new QueryFilter($n = 'name');
@@ -15,7 +15,7 @@ it('can create a query filter', function () {
         ->hasTransform()->toBeFalse()
         ->hasMeta()->toBeFalse();
 
-    expect(fn() => $filter->getQuery())->toThrow(QueryNotDefined::class, 'Query for filter [{}] has not been provided.');
+    expect(fn () => $filter->getQuery())->toThrow(QueryNotDefined::class, 'Query for filter [{}] has not been provided.');
 });
 
 it('can create a filter with arguments', function () {
@@ -35,8 +35,8 @@ it('can create a filter with arguments', function () {
         ->hasValidator()->toBeTrue()
         ->canTransform()->toBeTrue()
         ->hasMeta()->toBeTrue();
-    
-    expect(fn() => $filter->getQuery())->not->toThrow(QueryNotDefined::class, 'Query for filter [{}] has not been provided.');
+
+    expect(fn () => $filter->getQuery())->not->toThrow(QueryNotDefined::class, 'Query for filter [{}] has not been provided.');
 });
 
 it('can make a filter', function () {
@@ -47,9 +47,9 @@ it('can make a filter', function () {
         ->isAuthorised()->toBeTrue()
         ->hasTransform()->toBeFalse()
         ->hasMeta()->toBeFalse();
-    
-    expect(fn() => $f->getQuery())->toThrow(QueryNotDefined::class, 'Query for filter [{}] has not been provided.');
-    
+
+    expect(fn () => $f->getQuery())->toThrow(QueryNotDefined::class, 'Query for filter [{}] has not been provided.');
+
 });
 
 it('can chain methods on a filter', function () {
@@ -84,8 +84,8 @@ it('can use a custom condition to apply the filter', function () {
         ->validate(fn ($value) => $value > 5);
     $builder = Product::query();
     Request::merge(['id' => 6]);
-    expect(fn() => $filter->apply($builder))->not->toThrow(QueryNotDefined::class);
-    expect($builder->toSql())->toBe('select * from "products" where "id" > ?'); 
+    expect(fn () => $filter->apply($builder))->not->toThrow(QueryNotDefined::class);
+    expect($builder->toSql())->toBe('select * from "products" where "id" > ?');
 });
 
 it('can use a custom condition to prevent the filter', function () {
@@ -94,6 +94,6 @@ it('can use a custom condition to prevent the filter', function () {
         ->validate(fn ($value) => $value > 5);
     $builder = Product::query();
     Request::merge(['id' => 5]);
-    expect(fn() => $filter->apply($builder))->not->toThrow(QueryNotDefined::class);
-    expect($builder->toSql())->toBe('select * from "products"'); 
+    expect(fn () => $filter->apply($builder))->not->toThrow(QueryNotDefined::class);
+    expect($builder->toSql())->toBe('select * from "products"');
 });

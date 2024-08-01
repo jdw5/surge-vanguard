@@ -10,7 +10,7 @@ class TableServiceProvider extends ServiceProvider
     /**
      * Register services.
      */
-    public function register(): void 
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/table.php', 'table');
     }

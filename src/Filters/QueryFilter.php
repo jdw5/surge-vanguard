@@ -15,22 +15,22 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class QueryFilter extends BaseFilter
 {
-    use HasQuery;
-    use CanValidate;
     use CanTransform;
+    use CanValidate;
+    use HasQuery;
 
     public function setUp(): void
     {
         $this->setType('filter:query');
     }
 
-    public function __construct(string|Closure $name, string|Closure|null $label = null, Closure $query = null) 
+    public function __construct(string|Closure $name, string|Closure|null $label = null, ?Closure $query = null)
     {
         parent::__construct($name, $label);
         $this->setQuery($query);
     }
 
-    public static function make(string|Closure $name, string|Closure|null $label = null, Closure $query = null): static 
+    public static function make(string|Closure $name, string|Closure|null $label = null, ?Closure $query = null): static
     {
         return resolve(static::class, compact(
             'name',

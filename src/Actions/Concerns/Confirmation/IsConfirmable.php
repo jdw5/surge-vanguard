@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Conquest\Table\Actions\Concerns\Confirmation;
@@ -12,12 +13,15 @@ trait IsConfirmable
     public function confirmable(bool|Closure $confirm = true): static
     {
         $this->setConfirm($confirm);
+
         return $this;
     }
 
     public function setConfirmable(bool|Closure|null $confirm): void
     {
-        if (is_null($confirm)) return;
+        if (is_null($confirm)) {
+            return;
+        }
         $this->confirm = $confirm;
     }
 
@@ -28,6 +32,6 @@ trait IsConfirmable
 
     public function isNotConfirmable(): bool
     {
-        return !$this->isConfirmable();
+        return ! $this->isConfirmable();
     }
 }

@@ -13,18 +13,21 @@ trait HasConfirmationMessage
     public function confirmationMessage(string|Closure $confirmationMessage): static
     {
         $this->setConfirmationMessage($confirmationMessage);
+
         return $this;
     }
 
     public function setConfirmationMessage(string|Closure|null $confirmationMessage): void
     {
-        if (is_null($confirmationMessage)) return;
+        if (is_null($confirmationMessage)) {
+            return;
+        }
         $this->confirmationMessage = $confirmationMessage;
     }
 
     public function hasConfirmationMessage(): bool
     {
-        return !$this->lacksConfirmationMessage();
+        return ! $this->lacksConfirmationMessage();
     }
 
     public function lacksConfirmationMessage(): bool

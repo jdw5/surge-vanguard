@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Conquest\Table\Columns\Concerns\Formatters;
@@ -11,13 +12,15 @@ trait CanSetLocale
 
     protected function setLocale(string|Closure|null $locale): void
     {
-        if (is_null($locale)) return;
+        if (is_null($locale)) {
+            return;
+        }
         $this->locale = $locale;
     }
 
     protected function hasLocale(): bool
     {
-        return !$this->lacksLocale();
+        return ! $this->lacksLocale();
     }
 
     protected function lacksLocale(): bool

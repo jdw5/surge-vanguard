@@ -8,27 +8,24 @@ trait HasRememberFor
 
     /**
      * Retrieve the remember duration (seconds)
-     * 
-     * @return int
      */
     public function getRememberFor(): int
     {
         if (isset($this->rememberFor)) {
             return $this->rememberFor;
         }
-        
-        return config('table.remember.duration', 30*24*60*60);
+
+        return config('table.remember.duration', 30 * 24 * 60 * 60);
     }
 
     /**
      * Set the remember duration (seconds) quietly.
-     * 
-     * @param int|null $seconds
-     * @return void
      */
-    public function setRememberFor(int|null $seconds): void
+    public function setRememberFor(?int $seconds): void
     {
-        if (is_null($seconds)) return;
+        if (is_null($seconds)) {
+            return;
+        }
         $this->rememberFor = $seconds;
     }
 }

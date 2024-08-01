@@ -3,7 +3,6 @@
 use Illuminate\Database\Eloquent\Builder;
 use Workbench\App\Models\Product;
 use Workbench\App\Tables\ProductTable;
-use function Pest\Laravel\get;
 
 beforeEach(function () {
     $this->table = ProductTable::make();
@@ -40,14 +39,14 @@ it('has actions', function () {
 
 it('has array form', function () {
     expect($this->table->toArray())->toHaveKeys([
-        'records', 
-        'headings', 
-        'meta', 
-        'sorts', 
-        'filters', 
-        'columns', 
-        'pagination', 
-        'actions', 
+        'records',
+        'headings',
+        'meta',
+        'sorts',
+        'filters',
+        'columns',
+        'pagination',
+        'actions',
         'keys']);
 
 });

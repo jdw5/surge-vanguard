@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Conquest\Table\Actions\Concerns\Confirmation;
@@ -7,16 +8,17 @@ use Closure;
 
 trait Confirms
 {
-    use IsConfirmable;
-    use HasConfirmationType;
     use HasConfirmationMessage;
     use HasConfirmationTitle;
+    use HasConfirmationType;
+    use IsConfirmable;
 
-    public function confirm(string|ConfirmationType $type = null, string|Closure $title = null, string|Closure $message = null): static
+    public function confirm(string|ConfirmationType|null $type = null, string|Closure|null $title = null, string|Closure|null $message = null): static
     {
         $this->confirmationType($type);
         $this->confirmationTitle($title);
         $this->confirmationMessage($message);
+
         return $this->confirmable(true);
     }
 
@@ -27,7 +29,7 @@ trait Confirms
     {
         if ($this->isNotConfirmable()) {
             return [
-                'confirm' => null
+                'confirm' => null,
             ];
         }
 
@@ -35,8 +37,8 @@ trait Confirms
             'confirm' => [
                 'type' => $this->getConfirmationTypeValue(),
                 'title' => $this->getConfirmationTitle(),
-                'message' => $this->getConfirmationMessage()
-            ]
+                'message' => $this->getConfirmationMessage(),
+            ],
         ];
     }
 }

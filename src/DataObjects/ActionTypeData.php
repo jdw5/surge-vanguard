@@ -9,12 +9,11 @@ final class ActionTypeData
     public function __construct(
         public readonly string $type,
         public readonly string $name
-    ) {
-    }
+    ) {}
 
     public static function from(Request $request): static
     {
-        return new static(
+        return new self(
             type: $request->string('type'),
             name: $request->string('name')
         );

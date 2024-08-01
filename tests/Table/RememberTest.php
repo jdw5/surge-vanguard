@@ -1,11 +1,11 @@
 <?php
 
-use Conquest\Table\Table;
-use Workbench\App\Models\Product;
 use Conquest\Table\Columns\Column;
+use Conquest\Table\Table;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Request;
+use Workbench\App\Models\Product;
 
 beforeEach(function () {
     $this->table = Table::make(
@@ -42,8 +42,8 @@ it('can encode a cookie from data', function () {
         ->getName()->toBe('remember');
 });
 
-it('can decode data from a cookie', function () {    
-    $request = new HttpRequest();
+it('can decode data from a cookie', function () {
+    $request = new HttpRequest;
     $request->cookies->set($this->table->getCookieName(), json_encode($cookieValue = ['a', 'b', 'c']));
     $this->app->instance('request', $request);
     expect($this->table->decodeCookie())->toBe($cookieValue);

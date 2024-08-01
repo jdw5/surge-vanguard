@@ -8,23 +8,24 @@ use Closure;
 
 trait FormatsMoney
 {
-    use CanSetDivideBy;
-    use CanSetVerbose;
     use CanSetCurrency;
+    use CanSetDivideBy;
     use CanSetLocale;
+    use CanSetVerbose;
 
     protected bool $money = false;
 
-    public function money(string|Closure $currency = null, int|Closure $divideBy = null, string|Closure $locale = null, bool|Closure $verbose = false): static
+    public function money(string|Closure|null $currency = null, int|Closure|null $divideBy = null, string|Closure|null $locale = null, bool|Closure $verbose = false): static
     {
         $this->money = true;
         $this->setCurrency($currency);
         $this->setDivideBy($divideBy);
         $this->setLocale($locale);
         $this->setVerbose($verbose);
+
         return $this;
     }
-    
+
     public function isMoney(): bool
     {
         return $this->money;
@@ -32,7 +33,7 @@ trait FormatsMoney
 
     public function isNotMoney(): bool
     {
-        return  ! $this->isMoney();
+        return ! $this->isMoney();
     }
 
     public function formatMoney(mixed $value)

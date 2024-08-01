@@ -10,26 +10,23 @@ trait HasOperator
 
     /**
      * Set the operator to be used, chainable.
-     * 
-     * @param string|Operator $operator
-     * @return static
      */
     public function operator(string|Operator $operator): static
     {
         $this->setOperator($operator);
+
         return $this;
     }
 
     /**
      * Set the operator to be used quietly.
-     * 
-     * @param string|Operator $operator
-     * @return void
      */
     public function setOperator(string|Operator|null $operator): void
     {
-        if (is_null($operator)) return;
-        
+        if (is_null($operator)) {
+            return;
+        }
+
         if ($operator instanceof Operator) {
             $this->operator = $operator;
         } else {
@@ -39,8 +36,6 @@ trait HasOperator
 
     /**
      * Get the operator to be used.
-     * 
-     * @return Operator
      */
     public function getOperator(): ?Operator
     {
@@ -49,67 +44,61 @@ trait HasOperator
 
     /**
      * Set the operator to be '>'.
-     * 
-     * @return static
      */
     public function gt(): static
     {
         $this->setOperator(Operator::GREATER_THAN);
+
         return $this;
     }
 
     /**
      * Set the operator to be '>='.
-     * 
-     * @return static
      */
     public function gte(): static
     {
         $this->setOperator(Operator::GREATER_THAN_OR_EQUAL);
+
         return $this;
     }
 
     /**
      * Set the operator to be '<'.
-     * 
-     * @return static
      */
     public function lt(): static
     {
         $this->setOperator(Operator::LESS_THAN);
+
         return $this;
     }
 
     /**
      * Set the operator to be '<='.
-     * 
-     * @return static
      */
     public function lte(): static
     {
         $this->setOperator(Operator::LESS_THAN_OR_EQUAL);
+
         return $this;
     }
 
     /**
      * Set the operator to be '='.
-     * 
-     * @return static
      */
     public function eq(): static
     {
         $this->setOperator(Operator::EQUAL);
+
         return $this;
     }
 
     /**
      * Set the operator to be '!='.
-     * 
-     * @return static
      */
     public function neq(): static
     {
         $this->setOperator(Operator::NOT_EQUAL);
+
         return $this;
     }
 
@@ -152,6 +141,7 @@ trait HasOperator
     public function fuzzy(): static
     {
         $this->setOperator(Operator::LIKE);
+
         return $this;
     }
 

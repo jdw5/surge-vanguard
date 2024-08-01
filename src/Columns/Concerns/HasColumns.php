@@ -8,14 +8,17 @@ use Illuminate\Support\Collection;
 trait HasColumns
 {
     protected Collection $cachedColumns;
+
     protected array $columns;
 
     /**
-     * @param array<BaseColumn>|null $columns
+     * @param  array<BaseColumn>|null  $columns
      */
-    protected function setColumns(array|null $columns): void
+    protected function setColumns(?array $columns): void
     {
-        if (is_null($columns)) return;
+        if (is_null($columns)) {
+            return;
+        }
         $this->columns = $columns;
     }
 

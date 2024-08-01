@@ -15,9 +15,11 @@ trait HasCookie
         return config('table.remember.cookie', false);
     }
 
-    public function setCookie(bool|null $cookie): void
+    public function setCookie(?bool $cookie): void
     {
-        if (is_null($cookie)) return;
+        if (is_null($cookie)) {
+            return;
+        }
         $this->cookie = $cookie;
     }
 }

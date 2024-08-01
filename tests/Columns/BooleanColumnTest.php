@@ -1,7 +1,6 @@
 <?php
 
 use Conquest\Table\Columns\BooleanColumn;
-use Conquest\Table\Columns\Enums\Breakpoint;
 
 it('can create a boolean column', function () {
     $col = new BooleanColumn('name');
@@ -51,7 +50,7 @@ it('can chain methods on a boolean column', function () {
         ->falseLabel(fn () => 'No')
         ->truthLabel(fn () => 'Yes')
         ->meta(['key' => 'value']);
-        
+
     expect($col)->toBeInstanceOf(BooleanColumn::class)
         ->getType()->toBe('col:bool')
         ->getName()->toBe('name')

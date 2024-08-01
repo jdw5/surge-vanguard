@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Conquest\Table\Columns\Concerns;
@@ -12,12 +13,15 @@ trait IsToggleable
     public function toggleable(bool|Closure $toggleable): static
     {
         $this->setToggleable($toggleable);
+
         return $this;
     }
 
     public function setToggleable(bool|Closure|null $toggleable): void
     {
-        if (is_null($toggleable)) return;
+        if (is_null($toggleable)) {
+            return;
+        }
         $this->toggleable = $toggleable;
     }
 
@@ -28,6 +32,6 @@ trait IsToggleable
 
     public function isNotToggleable(): bool
     {
-        return !$this->isToggleable();
+        return ! $this->isToggleable();
     }
 }

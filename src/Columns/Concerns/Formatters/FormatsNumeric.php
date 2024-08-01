@@ -8,23 +8,24 @@ use Closure;
 
 trait FormatsNumeric
 {
-    use CanSetDivideBy;
     use CanSetDecimalPlaces;
-    use CanSetRoundToNearest;
+    use CanSetDivideBy;
     use CanSetLocale;
+    use CanSetRoundToNearest;
 
     protected bool $numeric = false;
 
-    public function numeric(int|Closure $decimalPlaces = null, int|Closure $roundedToNearest = null, string|Closure $locale = null, int|Closure $divideBy = null): static
+    public function numeric(int|Closure|null $decimalPlaces = null, int|Closure|null $roundedToNearest = null, string|Closure|null $locale = null, int|Closure|null $divideBy = null): static
     {
         $this->numeric = true;
         $this->setDecimalPlaces($decimalPlaces);
         $this->setRoundToNearest($roundedToNearest);
         $this->setDivideBy($divideBy);
         $this->setLocale($locale);
+
         return $this;
     }
-    
+
     public function isNumeric(): bool
     {
         return $this->numeric;
@@ -32,13 +33,15 @@ trait FormatsNumeric
 
     public function isNotNumeric(): bool
     {
-        return  ! $this->isNumeric();
+        return ! $this->isNumeric();
     }
 
     public function formatNumeric(mixed $value)
     {
-        if (!is_numeric($value)) return $value;
-        
+        if (! is_numeric($value)) {
+            return $value;
+        }
+
         if ($this->hasDivideBy()) {
             $value = $value / $this->getDivideBy();
         }

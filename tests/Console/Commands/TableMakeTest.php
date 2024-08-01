@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Artisan;
+
 use function Pest\Laravel\artisan;
 
 beforeEach(function () {

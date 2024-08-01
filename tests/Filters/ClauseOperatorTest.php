@@ -1,12 +1,9 @@
 <?php
 
-use Carbon\Carbon;
-use Workbench\App\Models\Product;
-use Illuminate\Support\Facades\DB;
 use Conquest\Table\Filters\DateFilter;
-use Illuminate\Support\Facades\Request;
 use Conquest\Table\Filters\Enums\Operator;
-use Conquest\Table\Filters\Enums\DateClause;
+use Illuminate\Support\Facades\Request;
+use Workbench\App\Models\Product;
 
 // it('can use date clause', function () {
 //     $filter = DateFilter::make('created_at', 'is')->date();

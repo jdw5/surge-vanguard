@@ -1,7 +1,7 @@
 <?php
 
-use Conquest\Table\Table;
 use Conquest\Table\Actions\BulkAction;
+use Conquest\Table\Table;
 use Workbench\App\Models\Product;
 
 it('can create a bulk action', function () {
@@ -31,7 +31,7 @@ it('can change chunking parameters', function () {
 });
 
 it('can set a confirmation message', function () {
-    expect(BulkAction::make('Delete', confirmation: $m ='Are you sure?')->getConfirmation())
+    expect(BulkAction::make('Delete', confirmation: $m = 'Are you sure?')->getConfirmation())
         ->toBe($m);
 });
 
@@ -41,7 +41,7 @@ it('can set a confirmation message using the action name', function () {
 });
 
 it('can set a confirmation message using the action', function () {
-    expect(BulkAction::make('Delete', confirmation: fn ($action) => "Are you want to ".$action->getLabel() ." this product?")->getConfirmation())
+    expect(BulkAction::make('Delete', confirmation: fn ($action) => 'Are you want to '.$action->getLabel().' this product?')->getConfirmation())
         ->toBe('Are you want to Delete this product?');
 });
 

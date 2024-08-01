@@ -11,21 +11,21 @@ class Controller
     public function index(Request $request)
     {
         return response()->json([
-            'table' => ProductTable::make()
+            'table' => ProductTable::make(),
         ]);
     }
 
     public function show(Request $request, Product $product)
     {
         return response()->json([
-            'product' => $product
+            'product' => $product,
         ]);
     }
 
     public function edit(Request $request, Product $product)
     {
         return response()->json([
-            'product' => $product
+            'product' => $product,
         ]);
     }
 
@@ -38,5 +38,4 @@ class Controller
     {
         // return UserTab::handle($request);
     }
-    
 }

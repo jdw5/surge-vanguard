@@ -1,7 +1,6 @@
 <?php
 
 use Conquest\Table\Columns\TextColumn;
-use Conquest\Table\Columns\Enums\Breakpoint;
 
 it('can create a text column', function () {
     $col = new TextColumn('name');
@@ -51,7 +50,7 @@ it('can chain methods on a text column', function () {
         ->active(false)
         ->key()
         ->meta(['key' => 'value']);
-        
+
     expect($col)->toBeInstanceOf(TextColumn::class)
         ->getType()->toBe('col:text')
         ->getName()->toBe('name')

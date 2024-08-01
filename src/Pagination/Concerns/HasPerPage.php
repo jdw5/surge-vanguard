@@ -21,7 +21,9 @@ trait HasPerPage
 
     public function setPerPage(int|array|null $perPage): void
     {
-        if (is_null($perPage)) return;
+        if (is_null($perPage)) {
+            return;
+        }
         $this->perPage = $perPage;
     }
 }

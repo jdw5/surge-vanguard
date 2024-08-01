@@ -9,16 +9,19 @@ use Closure;
 trait IsSrOnly
 {
     protected bool|Closure $srOnly = false;
-    
+
     public function srOnly(bool|Closure $srOnly = true): static
     {
         $this->setSrOnly($srOnly);
+
         return $this;
     }
 
     public function setSrOnly(bool|Closure|null $srOnly): void
     {
-        if (is_null($srOnly)) return;
+        if (is_null($srOnly)) {
+            return;
+        }
         $this->srOnly = $srOnly;
     }
 
@@ -29,7 +32,6 @@ trait IsSrOnly
 
     public function isNotSrOnly(): bool
     {
-        return !$this->isSrOnly();
+        return ! $this->isSrOnly();
     }
 }
-

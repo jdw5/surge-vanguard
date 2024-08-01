@@ -13,6 +13,7 @@ trait HasFormat
     public function format(string|Closure $format): static
     {
         $this->setFormat($format);
+
         return $this;
     }
 
@@ -23,13 +24,15 @@ trait HasFormat
 
     protected function setFormat(string|Closure|null $format): void
     {
-        if (is_null($format)) return;
+        if (is_null($format)) {
+            return;
+        }
         $this->format = $format;
     }
 
     public function hasFormat(): bool
     {
-        return !is_null($this->format);
+        return ! is_null($this->format);
     }
 
     public function getFormat(): string

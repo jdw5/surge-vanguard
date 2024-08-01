@@ -11,9 +11,9 @@ use Conquest\Table\Columns\Concerns\Formatters\FormatsSeparator;
 
 class Column extends FallbackColumn
 {
+    use FormatsBoolean;
     use FormatsMoney;
     use FormatsNumeric;
-    use FormatsBoolean;
     use FormatsSeparator;
 
     public function setUp(): void

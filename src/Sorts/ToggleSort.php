@@ -14,36 +14,37 @@ class ToggleSort extends BaseSort
     }
 
     public function __construct(
-        string|Closure $property, 
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null,
-        array $meta = null,
+        string|Closure $property,
+        string|Closure|null $name = null,
+        string|Closure|null $label = null,
+        bool|Closure|null $authorize = null,
+        ?array $meta = null,
     ) {
         parent::__construct(
-            property: $property, 
-            name: $name, 
-            label: $label, 
-            authorize: $authorize, 
+            property: $property,
+            name: $name,
+            label: $label,
+            authorize: $authorize,
             meta: $meta
         );
     }
 
     public static function make(
-        string|Closure $property, 
-        string|Closure $name = null,
-        string|Closure $label = null,
-        bool|Closure $authorize = null,
-        array $meta = null,
+        string|Closure $property,
+        string|Closure|null $name = null,
+        string|Closure|null $label = null,
+        bool|Closure|null $authorize = null,
+        ?array $meta = null,
     ): static {
         return resolve(static::class, compact(
-            'property', 
-            'name', 
-            'label', 
-            'authorize', 
+            'property',
+            'name',
+            'label',
+            'authorize',
             'meta',
         ));
-    }    
+    }
+
     public function apply(Builder|QueryBuilder $builder, ?string $sortBy = null, ?string $direction = null): void
     {
         $this->setDirection($direction);

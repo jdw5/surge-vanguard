@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Conquest\Table\Columns\Concerns;
@@ -12,18 +13,21 @@ trait HasLimit
     public function limit(int|Closure $limit): static
     {
         $this->setLimit($limit);
+
         return $this;
     }
 
     public function setLimit(int|Closure|null $limit): void
     {
-        if (is_null($limit)) return;
+        if (is_null($limit)) {
+            return;
+        }
         $this->limit = $limit;
     }
 
     public function hasLimit(): bool
     {
-        return !$this->lacksLimit();
+        return ! $this->lacksLimit();
     }
 
     public function lacksLimit(): bool

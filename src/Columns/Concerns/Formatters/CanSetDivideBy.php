@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Conquest\Table\Columns\Concerns\Formatters;
@@ -11,13 +12,15 @@ trait CanSetDivideBy
 
     protected function setDivideBy(int|Closure|null $divideBy): void
     {
-        if (is_null($divideBy)) return;
+        if (is_null($divideBy)) {
+            return;
+        }
         $this->divideBy = $divideBy;
     }
 
     protected function hasDivideBy(): bool
     {
-        return !$this->lacksDivideBy();
+        return ! $this->lacksDivideBy();
     }
 
     protected function lacksDivideBy(): bool

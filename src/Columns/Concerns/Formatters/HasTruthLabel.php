@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Conquest\Table\Columns\Concerns\Formatters;
@@ -12,12 +13,15 @@ trait HasTruthLabel
     public function truthLabel(string|Closure $truthLabel): static
     {
         $this->setTruthLabel($truthLabel);
+
         return $this;
     }
 
     protected function setTruthLabel(string|Closure|null $truthLabel): void
     {
-        if (is_null($truthLabel)) return;
+        if (is_null($truthLabel)) {
+            return;
+        }
         $this->truthLabel = $truthLabel;
     }
 

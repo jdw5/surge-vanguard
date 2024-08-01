@@ -4,8 +4,8 @@ namespace Workbench\Database\Seeders;
 
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use Workbench\Database\Factories\ProductFactory;
 use Workbench\Database\Factories\CategoryFactory;
+use Workbench\Database\Factories\ProductFactory;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         Carbon::setTestNow(Carbon::parse('1st January 2000'));
-        
+
         CategoryFactory::new()
             ->count(6)
             ->has(ProductFactory::new()->count(20), 'products')
