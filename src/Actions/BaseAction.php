@@ -18,22 +18,18 @@ abstract class BaseAction extends Primitive
     use HasType;
     use IsAuthorized;
 
-    public function __construct(
-        string $label,
-        ?string $name = null,
-        Closure|bool|null $authorize = null,
-        array $meta = [],
-    ) {
+    public function __construct(string $label, string|Closure $name = null) 
+    {
         parent::__construct();
         $this->setLabel($label);
         $this->setName($name ?? $this->toName($label));
-        $this->setAuthorize($authorize);
-        $this->setMeta($meta);
     }
 
-    /**
-     * Retrieve the action as an array.
-     */
+    public static function make(string $label, string|Closure $name = null): static
+    {
+        return resolve(static::class, compact('label', 'name'));
+    }
+
     public function toArray(): array
     {
         return [
