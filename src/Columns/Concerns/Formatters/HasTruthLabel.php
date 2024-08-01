@@ -17,7 +17,7 @@ trait HasTruthLabel
         return $this;
     }
 
-    protected function setTruthLabel(string|Closure|null $truthLabel): void
+    public function setTruthLabel(string|Closure|null $truthLabel): void
     {
         if (is_null($truthLabel)) {
             return;
@@ -25,7 +25,7 @@ trait HasTruthLabel
         $this->truthLabel = $truthLabel;
     }
 
-    protected function getTruthLabel(): string
+    public function getTruthLabel(): string
     {
         return $this->evaluate($this->truthLabel) ?? config('table.fallback.true', 'Yes');
     }

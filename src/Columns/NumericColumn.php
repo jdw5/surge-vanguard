@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Conquest\Table\Columns;
 
 use Conquest\Table\Columns\Concerns\Formatters\FormatsMoney;

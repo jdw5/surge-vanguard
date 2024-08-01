@@ -18,17 +18,17 @@ trait CanSetLocale
         $this->locale = $locale;
     }
 
-    protected function hasLocale(): bool
+    public function hasLocale(): bool
     {
         return ! $this->lacksLocale();
     }
 
-    protected function lacksLocale(): bool
+    public function lacksLocale(): bool
     {
         return is_null($this->locale);
     }
 
-    protected function getLocale(): string
+    public function getLocale(): string
     {
         return $this->evaluate($this->locale) ?? app()->getLocale();
     }

@@ -17,7 +17,7 @@ trait HasFalseLabel
         return $this;
     }
 
-    protected function setFalseLabel(string|Closure|null $falseLabel): void
+    public function setFalseLabel(string|Closure|null $falseLabel): void
     {
         if (is_null($falseLabel)) {
             return;
@@ -25,7 +25,7 @@ trait HasFalseLabel
         $this->falseLabel = $falseLabel;
     }
 
-    protected function getFalseLabel(): string
+    public function getFalseLabel(): string
     {
         return $this->evaluate($this->falseLabel) ?? config('table.fallback.false', 'No');
     }

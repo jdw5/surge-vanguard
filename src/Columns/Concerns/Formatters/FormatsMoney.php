@@ -12,7 +12,6 @@ trait FormatsMoney
     use CanSetCurrency;
     use CanSetDivideBy;
     use CanSetLocale;
-    use CanSetVerbose;
 
     protected bool $money = false;
 

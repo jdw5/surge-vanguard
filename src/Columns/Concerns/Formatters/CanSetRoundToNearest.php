@@ -18,17 +18,17 @@ trait CanSetRoundToNearest
         $this->roundToNearest = $roundToNearest;
     }
 
-    protected function hasRoundToNearest(): bool
+    public function hasRoundToNearest(): bool
     {
         return ! $this->lacksRoundToNearest();
     }
 
-    protected function lacksRoundToNearest(): bool
+    public function lacksRoundToNearest(): bool
     {
         return is_null($this->roundToNearest);
     }
 
-    protected function getRoundToNearest(): ?int
+    public function getRoundToNearest(): ?int
     {
         return $this->evaluate($this->roundToNearest);
     }

@@ -16,25 +16,20 @@ trait FormatsNumeric
 
     protected bool $numeric = false;
 
-    public function numeric(int|Closure|null $decimalPlaces = null, int|Closure|null $roundedToNearest = null, string|Closure|null $locale = null, int|Closure|null $divideBy = null): static
+    public function numeric(int|Closure $decimalPlaces = null, int|Closure $roundToNearest = null, string|Closure $locale = null, int|Closure $divideBy = null): static
     {
         $this->numeric = true;
         $this->setDecimalPlaces($decimalPlaces);
-        $this->setRoundToNearest($roundedToNearest);
+        $this->setRoundToNearest($roundToNearest);
         $this->setDivideBy($divideBy);
         $this->setLocale($locale);
 
         return $this;
     }
 
-    public function isNumeric(): bool
+    public function formatsNumeric(): bool
     {
         return $this->numeric;
-    }
-
-    public function isNotNumeric(): bool
-    {
-        return ! $this->isNumeric();
     }
 
     public function formatNumeric(mixed $value): mixed

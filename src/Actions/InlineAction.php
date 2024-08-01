@@ -30,7 +30,7 @@ class InlineAction extends BaseAction
             [
                 'route' => $this->getResolvedRoute(),
                 'method' => $this->getMethod(),
-                'send' => $this->hasAction(),
+                'actionable' => $this->hasAction(),
             ]
         );
     }

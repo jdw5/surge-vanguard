@@ -18,17 +18,17 @@ trait CanSetCurrency
         $this->currency = $currency;
     }
 
-    protected function hasCurrency(): bool
+    public function hasCurrency(): bool
     {
         return ! $this->lacksCurrency();
     }
 
-    protected function lacksCurrency(): bool
+    public function lacksCurrency(): bool
     {
         return is_null($this->currency);
     }
 
-    protected function getCurrency(): ?string
+    public function getCurrency(): ?string
     {
         return $this->evaluate($this->currency);
     }

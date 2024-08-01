@@ -18,17 +18,17 @@ trait CanSetDecimalPlaces
         $this->decimalPlaces = $decimalPlaces;
     }
 
-    protected function hasDecimalPlaces(): bool
+    public function hasDecimalPlaces(): bool
     {
         return ! $this->lacksDecimalPlaces();
     }
 
-    protected function lacksDecimalPlaces(): bool
+    public function lacksDecimalPlaces(): bool
     {
         return is_null($this->decimalPlaces);
     }
 
-    protected function getDecimalPlaces(): ?int
+    public function getDecimalPlaces(): ?int
     {
         return $this->evaluate($this->decimalPlaces);
     }

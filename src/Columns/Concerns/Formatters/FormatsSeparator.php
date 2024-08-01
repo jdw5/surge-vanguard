@@ -10,22 +10,18 @@ trait FormatsSeparator
 {
     protected string|Closure|null $separator = null;
 
-    public function separator(string|Closure $separator = ','): static
+    public function separator(string|Closure $separator = ', '): static
     {
         $this->separator = $separator;
 
         return $this;
     }
 
-    public function hasSeparator(): bool
+    public function formatsSeparator(): bool
     {
-        return ! $this->lacksSeparator();
+        return ! is_null($this->separator);
     }
 
-    public function lacksSeparator(): bool
-    {
-        return is_null($this->separator);
-    }
 
     public function getSeparator(): ?string
     {

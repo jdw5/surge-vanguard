@@ -8,9 +8,6 @@ trait HasClause
 {
     protected ?Clause $clause = null;
 
-    /**
-     * Set the clause to be used.
-     */
     public function clause(string|Clause $clause): static
     {
         $this->setClause($clause);
@@ -18,9 +15,6 @@ trait HasClause
         return $this;
     }
 
-    /**
-     * Set the clause to be used quietly.
-     */
     protected function setClause(string|Clause|null $clause): void
     {
         if (is_null($clause)) {
@@ -34,33 +28,21 @@ trait HasClause
         }
     }
 
-    /**
-     * Retrieve the clause property.
-     */
     public function getClause(): ?Clause
     {
         return $this->clause;
     }
 
-    /**
-     * Set the clause to be 'exact'.
-     */
     public function is(): static
     {
         return $this->clause(Clause::IS);
     }
 
-    /**
-     * Set the clause to be 'loose'.
-     */
     public function isNot(): static
     {
         return $this->clause(Clause::IS_NOT);
     }
 
-    /**
-     * Set the clause to be 'begins with'.
-     */
     public function startsWith(): static
     {
         return $this->clause(Clause::STARTS_WITH);
@@ -71,9 +53,6 @@ trait HasClause
         return $this->startsWith();
     }
 
-    /**
-     * Set the clause to be 'ends with'.
-     */
     public function endsWith(): static
     {
         return $this->clause(Clause::ENDS_WITH);
@@ -89,11 +68,6 @@ trait HasClause
         return $this->clause(Clause::DOES_NOT_CONTAIN);
     }
 
-    public function doesntContain(): static
-    {
-        return $this->doesNotContain();
-    }
-
     public function all(): static
     {
         return $this->clause(Clause::ALL);
@@ -104,19 +78,9 @@ trait HasClause
         return $this->clause(Clause::ANY);
     }
 
-    public function jsonContains(): static
-    {
-        return $this->clause(Clause::JSON);
-    }
-
     public function json(): static
     {
         return $this->jsonContains();
-    }
-
-    public function jsonDoesNotContain(): static
-    {
-        return $this->clause(Clause::NOT_JSON);
     }
 
     public function notJson(): static
@@ -128,16 +92,6 @@ trait HasClause
     {
         return $this->clause(Clause::JSON_LENGTH);
     }
-
-    // public function multiple(): static
-    // {
-    //     return $this->clause(Clause::CONTAINS);
-    // }
-
-    // public function multipleNot(): static
-    // {
-    //     return $this->clause(Clause::DOES_NOT_CONTAIN);
-    // }
 
     public function fullText(): static
     {

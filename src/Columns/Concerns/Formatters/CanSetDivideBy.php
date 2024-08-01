@@ -18,17 +18,17 @@ trait CanSetDivideBy
         $this->divideBy = $divideBy;
     }
 
-    protected function hasDivideBy(): bool
+    public function hasDivideBy(): bool
     {
         return ! $this->lacksDivideBy();
     }
 
-    protected function lacksDivideBy(): bool
+    public function lacksDivideBy(): bool
     {
         return is_null($this->divideBy);
     }
 
-    protected function getDivideBy(): int
+    public function getDivideBy(): int
     {
         return $this->evaluate($this->divideBy) ?? 1;
     }

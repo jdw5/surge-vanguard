@@ -33,6 +33,7 @@ trait HasAction
         if (\is_string($action) && class_exists($action) && method_exists($action, '__invoke')) {
             $action = resolve($action)->__invoke(...);
         }
+        
         $this->action = $action;
     }
 
