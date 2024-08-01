@@ -17,12 +17,7 @@ trait HasFormat
         return $this;
     }
 
-    public function formatUsing(string|Closure $format): static
-    {
-        return $this->format($format);
-    }
-
-    protected function setFormat(string|Closure|null $format): void
+    public function setFormat(string|Closure|null $format): void
     {
         if (is_null($format)) {
             return;
@@ -32,10 +27,15 @@ trait HasFormat
 
     public function hasFormat(): bool
     {
-        return ! is_null($this->format);
+        return ! $this->lacksFormat();
     }
 
-    public function getFormat(): string
+    public function lacksFormat(): bool
+    {
+        return is_null($this->format);
+    }
+
+    public function getFormat(): ?string
     {
         return $this->evaluate($this->format);
     }
