@@ -2,9 +2,9 @@
 
 namespace Conquest\Table\Contracts;
 
-interface Columns
+interface ColumnContract
 {
     public function apply(mixed $value);
 
-    public function toArray(): array;
+    public function formatValue(mixed $value);
 }

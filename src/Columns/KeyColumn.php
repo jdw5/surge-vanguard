@@ -6,7 +6,7 @@ class KeyColumn extends BaseColumn
 {
     public function setUp(): void
     {
-        $this->setType('col:bool');
+        $this->setType('col:key');
         $this->setKey(true);
         $this->setHidden(true);
     }

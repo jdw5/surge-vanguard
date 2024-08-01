@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Conquest\Table\Columns;
 
 use Closure;
+use Conquest\Core\Primitive;
 use Conquest\Core\Concerns\CanTransform;
 use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Concerns\HasMeta;
@@ -16,7 +17,6 @@ use Conquest\Core\Concerns\IsActive;
 use Conquest\Core\Concerns\IsAuthorized;
 use Conquest\Core\Concerns\IsHidden;
 use Conquest\Core\Concerns\IsKey;
-use Conquest\Core\Primitive;
 use Conquest\Table\Columns\Concerns\HasBreakpoint;
 use Conquest\Table\Columns\Concerns\HasPrefix;
 use Conquest\Table\Columns\Concerns\HasSort;
@@ -36,7 +36,6 @@ abstract class BaseColumn extends Primitive
     use HasName;
     use HasPlaceholder;
     use HasPrefix;
-    use HasProperty;
     use HasProperty;
     use HasSort;
     use HasSuffix;
@@ -97,6 +96,7 @@ abstract class BaseColumn extends Primitive
         if ($this->hasPrefix()) {
             $value = $this->getPrefix().$value;
         }
+        
         if ($this->hasSuffix()) {
             $value = $value.$this->getSuffix();
         }

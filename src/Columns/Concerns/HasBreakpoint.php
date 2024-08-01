@@ -42,6 +42,16 @@ trait HasBreakpoint
         return $this->evaluate($this->breakpoint);
     }
 
+    public function hasBreakpoint(): bool
+    {
+        return ! $this->lacksBreakpoint();
+    }
+
+    public function lacksBreakpoint(): bool
+    {
+        return is_null($this->getBreakpoint());
+    }
+
     /**
      * @throws InvalidArgumentException
      */

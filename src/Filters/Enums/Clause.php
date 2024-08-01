@@ -84,11 +84,14 @@ enum Clause: string
 
     public function formatValue(mixed $value): mixed
     {
+        if ($this->isMultiple()) {
+            return is_array($value) ? $value : [$value];
+        }
+
         return match ($this) {
             self::STARTS_WITH => "$value%",
             self::ENDS_WITH => "%$value",
-            self::SEARCH, self::LIKE => '%'.strtolower($value).'%',
-            $this->isMultiple() => is_array($value) ? $value : [$value],
+            self::SEARCH, self::LIKE => '%' . strtolower($value) . '%',
             default => $value,
         };
     }
