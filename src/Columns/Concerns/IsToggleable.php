@@ -10,7 +10,7 @@ trait IsToggleable
 {
     protected bool|Closure $toggleable = false;
 
-    public function toggleable(bool|Closure $toggleable): static
+    public function toggleable(bool|Closure $toggleable = true): static
     {
         $this->setToggleable($toggleable);
 
