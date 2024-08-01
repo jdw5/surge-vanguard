@@ -27,21 +27,17 @@ abstract class BaseSort extends Primitive implements Sorts
     use IsActive;
     use IsAuthorized;
 
-    public function __construct(
-        string|Closure $property,
-        string|Closure|null $name = null,
-        string|Closure|null $label = null,
-        bool|Closure|null $authorize = null,
-        ?string $direction = null,
-        ?array $meta = null,
-    ) {
+    public function __construct(string|Closure $property, string|Closure|null $name = null, string|Closure|null $label = null)
+    {
         parent::__construct();
         $this->setProperty($property);
         $this->setName($name ?? $this->toName($property));
         $this->setLabel($label ?? $this->toLabel($this->getName()));
-        $this->setAuthorize($authorize);
-        $this->setMeta($meta);
-        $this->setDirection($direction);
+    }
+
+    public static function make(string|Closure $property, string|Closure|null $name = null, string|Closure|null $label = null): static
+    {
+        return resolve(static::class, compact('property', 'name', 'label'));
     }
 
     public function apply(Builder|QueryBuilder $builder, ?string $sortBy = null, ?string $direction = null): void

@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Conquest\Table\Columns;
 
-use Exception;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
-use Conquest\Table\Columns\Concerns\HasFormat;
 use Conquest\Table\Columns\Concerns\Formatters\FormatsSince;
+use Conquest\Table\Columns\Concerns\HasFormat;
 
 class DateColumn extends FallbackColumn
 {

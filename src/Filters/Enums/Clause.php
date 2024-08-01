@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 enum Clause: string
 {
-    /** Any and all allow for columns as array */
     case IS = 'is';
     case IS_NOT = 'is_not';
     case SEARCH = 'search';

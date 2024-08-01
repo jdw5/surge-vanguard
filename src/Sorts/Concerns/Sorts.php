@@ -2,8 +2,8 @@
 
 namespace Conquest\Table\Sorts\Concerns;
 
-use Conquest\Table\Sorts\Sort;
 use Conquest\Table\Sorts\BaseSort;
+use Conquest\Table\Sorts\Sort;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 

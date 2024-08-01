@@ -18,14 +18,14 @@ abstract class BaseAction extends Primitive
     use HasType;
     use IsAuthorized;
 
-    public function __construct(string $label, string|Closure $name = null) 
+    public function __construct(string $label, string|Closure|null $name = null)
     {
         parent::__construct();
         $this->setLabel($label);
         $this->setName($name ?? $this->toName($label));
     }
 
-    public static function make(string $label, string|Closure $name = null): static
+    public static function make(string $label, string|Closure|null $name = null): static
     {
         return resolve(static::class, compact('label', 'name'));
     }
