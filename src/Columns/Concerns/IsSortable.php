@@ -50,4 +50,14 @@ trait IsSortable
     {
         return $this->evaluate($this->sortProperty);
     }
+
+    public function lacksSortProperty(): bool
+    {
+        return is_null($this->sortProperty);
+    }
+
+    public function hasSortProperty(): bool
+    {
+        return ! $this->lacksSortProperty();
+    }
 }

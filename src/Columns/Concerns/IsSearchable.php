@@ -50,4 +50,14 @@ trait IsSearchable
     {
         return $this->evaluate($this->searchProperty);
     }
+
+    public function lacksSearchProperty(): bool
+    {
+        return is_null($this->searchProperty);
+    }
+
+    public function hasSearchProperty(): bool
+    {
+        return ! $this->lacksSearchProperty();
+    }
 }
