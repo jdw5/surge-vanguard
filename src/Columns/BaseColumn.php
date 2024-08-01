@@ -19,10 +19,11 @@ use Conquest\Table\Columns\Concerns\HasSort;
 use Conquest\Table\Columns\Enums\Breakpoint;
 use Conquest\Table\Columns\Concerns\IsSearchable;
 use Conquest\Table\Columns\Concerns\HasBreakpoint;
-use Conquest\Table\Columns\Concerns\HasAccessibility;
+use Conquest\Table\Columns\Concerns\IsSrOnly;
 use Conquest\Table\Columns\Concerns\HasPrefix;
 use Conquest\Table\Columns\Concerns\HasSeparator;
 use Conquest\Table\Columns\Concerns\HasSuffix;
+use Conquest\Table\Columns\Concerns\IsToggleable;
 
 abstract class BaseColumn extends Primitive
 {
@@ -32,11 +33,12 @@ abstract class BaseColumn extends Primitive
     use IsAuthorized;
     use CanTransform;
     use HasBreakpoint;
-    use HasAccessibility;
+    use IsSrOnly;
     use HasProperty;
     use HasSort;
     use IsKey;
     use IsSearchable;
+    use IsToggleable;
     use IsActive;
     use HasType;
     use HasMeta;
@@ -45,34 +47,16 @@ abstract class BaseColumn extends Primitive
     use HasPrefix;
     use HasSeparator;
 
-    public function __construct(
-        string|Closure $name, 
-        string|Closure $label = null,
-        bool $hidden = false,
-        Closure|bool $authorize = null,
-        Closure $transform = null,
-        Breakpoint|string $breakpoint = null,
-        bool $srOnly = false,
-        bool $sortable = false,
-        bool $searchable = false,
-        bool $active = true,
-        bool $key = false,
-        array $meta = null,
-    ) {
+    public function __construct(string|Closure $name, string|Closure $label = null) {
         if ($name === 'actions') throw new Exception('Column name cannot be "actions"');
         parent::__construct();
         $this->setName($name);
         $this->setLabel($label ?? $this->toLabel($this->getName()));
-        if ($sortable) $this->setSort();
-        $this->setSearchable($searchable);
-        $this->setBreakpoint($breakpoint);
-        $this->setAuthorize($authorize);
-        $this->setHidden($hidden);
-        $this->setSrOnly($srOnly);
-        $this->setTransform($transform);
-        $this->setActive($active);
-        $this->setKey($key);
-        $this->setMeta($meta);
+    }
+
+    public static function make(string|Closure $name, string|Closure $label = null): static 
+    {
+        return resolve(static::class, compact('name', 'label'));
     }
     
     public function toArray(): array
@@ -93,15 +77,14 @@ abstract class BaseColumn extends Primitive
 
     public function apply(mixed $value): mixed
     {
-        $value = $this->transformUsing($value);
+        $value = $this->applyTransform($value);
         return $this->formatValue($value);
     }
 
-    protected function formatValue(mixed $value): string
+    public function formatValue(mixed $value): mixed
     {
         if ($this->hasPrefix()) $value = $this->getPrefix() . $value;
         if ($this->hasSuffix()) $value = $value . $this->getSuffix();
         return $value;
-
     }
 }

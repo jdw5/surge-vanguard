@@ -1,96 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Conquest\Table\Columns;
 
-use Closure;
 use Exception;
 use Carbon\Carbon;
-use Conquest\Table\Columns\Enums\Breakpoint;
 use Conquest\Table\Columns\Concerns\HasFormat;
+use Conquest\Table\Concerns\Formatters\FormatsSince;
 
 class DateColumn extends FallbackColumn
 {
     use HasFormat;
+    use FormatsSince;
 
     public function setUp(): void
     {
         $this->setType('col:date');
     }
 
-    public function __construct(
-        string|Closure $name, 
-        string|Closure $label = null,
-        bool $hidden = false,
-        mixed $fallback = null,
-        Closure|bool $authorize = null,
-        Closure $transform = null,
-        Breakpoint|string $breakpoint = null,
-        bool $srOnly = false,
-        bool $sortable = false,
-        bool $searchable = false,
-        bool $active = true,
-        bool $key = false,
-        string|Closure $format = null,
-        array $meta = null,
-    ) {
-        parent::__construct(...compact(
-            'name',
-            'label',
-            'hidden',
-            'fallback',
-            'authorize',
-            'transform',
-            'breakpoint',
-            'srOnly',
-            'sortable',
-            'searchable',
-            'active',
-            'key',
-            'meta',
-        ));
-        $this->setFormat($format);
-    }
-
-    public static function make(
-        string|Closure $name, 
-        string|Closure $label = null,
-        bool $hidden = false,
-        mixed $fallback = null,
-        Closure|bool $authorize = null,
-        Closure $transform = null,
-        Breakpoint|string $breakpoint = null,
-        bool $srOnly = false,
-        bool $sortable = false,
-        bool $searchable = false,
-        bool $active = true,
-        bool $key = false,
-        string|Closure $format = null,
-        array $meta = null,
-    ): static {
-        return resolve(static::class, compact(
-            'name',
-            'label',
-            'hidden',
-            'fallback',
-            'authorize',
-            'transform',
-            'breakpoint',
-            'srOnly',
-            'sortable',
-            'searchable',
-            'active',
-            'key',
-            'format',
-            'meta',
-        ));
-    }
-
     public function apply(mixed $value): mixed
     {
         if (is_null($value)) return $this->getFallback();
         
-        if ($this->canTransform()) $value = $this->transformUsing($value);
+        $value = $this->applyTransform($value);
 
+        if ($this->isSince()) {
+            try {
+                return $this->formatSince($value);
+            } catch (Exception $e) {
+                if ($this->hasFallback()) return $this->getFallback();
+            }
+        }
+        
         if ($this->hasFormat()) {
             try {
                 $value = Carbon::parse($value)->format($this->getFormat());
@@ -98,6 +40,6 @@ class DateColumn extends FallbackColumn
                 if ($this->hasFallback()) return $this->getFallback();
             }
         }
-        return $this->modifyAsString($value);
+        return $this->formatValue($value);
     }
 }

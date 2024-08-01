@@ -2,18 +2,20 @@
 
 namespace Conquest\Table\Columns;
 
-use Conquest\Table\Columns\Concerns\SharedCreation;
+use Conquest\Table\Concerns\Formatters\FormatsMoney;
+use Conquest\Table\Concerns\Formatters\FormatsNumeric;
 
 class NumericColumn extends FallbackColumn
 {
-    use SharedCreation;
+    use FormatsMoney;
+    use FormatsNumeric;
 
     public function setUp(): void
     {
         $this->setType('col:numeric');
     }
-    
-    protected function defaultFallback(): mixed
+
+    public function defaultFallback(): mixed
     {
         return config('table.fallback.numeric', parent::defaultFallback());
     }

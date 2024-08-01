@@ -77,7 +77,7 @@ return [
         'default' => null,
         'text' => '—',
         'numeric' => 0,
-        'true' => 'true',
-        'false' => 'false',
+        'true' => 'yes',
+        'false' => 'no',
     ]
 ];
