@@ -13,27 +13,22 @@ trait FormatsBoolean
 
     protected bool $boolean = false;
 
-    public function boolean(string|Closure|null $truthLabel = null, string|Closure|null $falseLabel = null): static
+    public function boolean(string|Closure|null $true = null, string|Closure|null $false = null): static
     {
         $this->boolean = true;
-        $this->setTruthLabel($truthLabel);
-        $this->setFalseLabel($falseLabel);
+        $this->setTruthLabel($true);
+        $this->setFalseLabel($false);
 
         return $this;
     }
 
-    public function isBoolean(): bool
+    public function formatsBoolean(): bool
     {
         return $this->boolean;
     }
 
-    public function isNotBoolean(): bool
-    {
-        return ! $this->isBoolean();
-    }
-
     public function formatBoolean(mixed $value)
     {
-        return (bool) ($value ? $this->getTruthLabel() : $this->getFalseLabel());
+        return $this->evaluate($value) ? $this->getTruthLabel() : $this->getFalseLabel();
     }
 }
