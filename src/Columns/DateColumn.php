@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Conquest\Table\Columns;
 
-use Carbon\Carbon;
-use Conquest\Table\Columns\Concerns\Formatters\FormatsSince;
-use Conquest\Table\Columns\Concerns\HasFormat;
 use Exception;
+use Carbon\Carbon;
+use Carbon\Exceptions\InvalidFormatException;
+use Conquest\Table\Columns\Concerns\HasFormat;
+use Conquest\Table\Columns\Concerns\Formatters\FormatsSince;
 
 class DateColumn extends FallbackColumn
 {
@@ -28,7 +29,7 @@ class DateColumn extends FallbackColumn
         if ($this->isSince()) {
             try {
                 return $this->formatSince($value);
-            } catch (Exception $e) {
+            } catch (InvalidFormatException $e) {
                 if ($this->hasFallback()) {
                     return $this->getFallback();
                 }
@@ -38,7 +39,7 @@ class DateColumn extends FallbackColumn
         if ($this->hasFormat()) {
             try {
                 $value = Carbon::parse($value)->format($this->getFormat());
-            } catch (Exception $e) {
+            } catch (InvalidFormatException $e) {
                 if ($this->hasFallback()) {
                     return $this->getFallback();
                 }

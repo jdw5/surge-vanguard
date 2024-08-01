@@ -47,7 +47,7 @@ trait Sorts
     /**
      * Apply the sorting to the query
      *
-     * @param  array<Sort>  $sorts
+     * @param  array<BaseSort>  $sorts
      */
     protected function sort(Builder|QueryBuilder $query, array $sorts): void
     {

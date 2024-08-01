@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Conquest\Table\Columns\Concerns\Formatters;
 
 use Carbon\Carbon;
+use Carbon\Exceptions\InvalidFormatException;
 
 trait FormatsSince
 {
@@ -28,7 +29,7 @@ trait FormatsSince
     }
 
     /**
-     * @throws InvalidArgumentException
+     * @throws InvalidFormatException
      */
     public function formatSince(mixed $value): string
     {

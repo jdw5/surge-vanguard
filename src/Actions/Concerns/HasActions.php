@@ -75,7 +75,7 @@ trait HasActions
     public function getTableActions(): Collection
     {
         return $this->cachedActions ??= collect($this->getActions())
-            ->filter(static fn (BaseAction $action): bool => $action->authorized());
+            ->filter(static fn (BaseAction $action): bool => $action->isAuthorized());
     }
 
     public function getInlineActions(): Collection

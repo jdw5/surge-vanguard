@@ -4,6 +4,7 @@ namespace Conquest\Table;
 
 use Conquest\Core\Concerns\RequiresKey;
 use Conquest\Core\Exceptions\KeyDoesntExist;
+use Conquest\Core\Exceptions\MissingRequiredAttributeException;
 use Conquest\Core\Primitive;
 use Conquest\Table\Actions\Concerns\HasActions;
 use Conquest\Table\Columns\BaseColumn;
@@ -103,13 +104,13 @@ class Table extends Primitive implements Tables
     /**
      * Get the key for the table.
      *
-     * @throws KeyDoesntExist
+     * @throws MissingRequiredAttributeException
      */
     public function getTableKey(): string
     {
         try {
             return $this->getKey();
-        } catch (KeyDoesntExist $e) {
+        } catch (MissingRequiredAttributeException $e) {
             return $this->getKeyColumn()?->getName() ?? throw $e;
         }
     }

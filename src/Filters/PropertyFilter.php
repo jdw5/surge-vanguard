@@ -27,12 +27,12 @@ abstract class PropertyFilter extends BaseFilter
 
     public function apply(Builder|QueryBuilder $builder): void
     {
-        $value = $this->transformUsing($this->getValueFromRequest());
+        $value = $this->applyTransform($this->getValueFromRequest());
         $this->setValue($value);
         $this->setActive($this->filtering($value));
 
         $builder->when(
-            $this->isActive() && $this->validateUsing($value),
+            $this->isActive() && $this->isValid($value),
             fn (Builder|QueryBuilder $builder) => $this->handle($builder),
         );
     }

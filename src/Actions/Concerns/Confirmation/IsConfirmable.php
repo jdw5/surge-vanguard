@@ -12,7 +12,7 @@ trait IsConfirmable
 
     public function confirmable(bool|Closure $confirm = true): static
     {
-        $this->setConfirm($confirm);
+        $this->setConfirmable($confirm);
 
         return $this;
     }

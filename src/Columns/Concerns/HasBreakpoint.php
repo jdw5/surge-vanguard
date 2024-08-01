@@ -39,7 +39,7 @@ trait HasBreakpoint
 
     public function getBreakpoint(): ?string
     {
-        return $this->breakpoint?->value ?? null;
+        return $this->evaluate($this->breakpoint);
     }
 
     /**

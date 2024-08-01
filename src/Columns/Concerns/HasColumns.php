@@ -41,7 +41,7 @@ trait HasColumns
     public function getTableColumns(): Collection
     {
         return $this->cachedColumns ??= collect($this->getColumns())
-            ->filter(fn (BaseColumn $column): bool => $column->authorized());
+            ->filter(fn (BaseColumn $column): bool => $column->isAuthorized());
     }
 
     public function getSortableColumns(): Collection
