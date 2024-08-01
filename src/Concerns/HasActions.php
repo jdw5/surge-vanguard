@@ -1,6 +1,6 @@
 <?php
 
-namespace Conquest\Table\Actions\Concerns;
+namespace Conquest\Table\Concerns;
 
 use Conquest\Table\Actions\BaseAction;
 use Conquest\Table\Actions\BulkAction;

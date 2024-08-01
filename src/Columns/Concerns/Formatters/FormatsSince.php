@@ -18,14 +18,9 @@ trait FormatsSince
         return $this;
     }
 
-    public function isSince(): bool
+    public function formatsSince(): bool
     {
         return $this->since;
-    }
-
-    public function isNotSince(): bool
-    {
-        return ! $this->isSince();
     }
 
     /**

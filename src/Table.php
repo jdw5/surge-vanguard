@@ -2,23 +2,23 @@
 
 namespace Conquest\Table;
 
+use Conquest\Core\Primitive;
 use Conquest\Core\Concerns\RequiresKey;
 use Conquest\Core\Exceptions\MissingRequiredAttributeException;
-use Conquest\Core\Primitive;
-use Conquest\Table\Actions\Concerns\HasActions;
-use Conquest\Table\Columns\BaseColumn;
-use Conquest\Table\Columns\Concerns\HasColumns;
+use Conquest\Table\Concerns\HasActions;
+use Conquest\Table\Concerns\HasColumns;
 use Conquest\Table\Concerns\HasMeta;
 use Conquest\Table\Concerns\HasRecords;
 use Conquest\Table\Concerns\HasResource;
+use Conquest\Table\Concerns\HasFilters;
+use Conquest\Table\Concerns\Sorts;
+use Conquest\Table\Columns\BaseColumn;
 use Conquest\Table\Concerns\Remember\Remembers;
 use Conquest\Table\Concerns\Search\Searches;
 use Conquest\Table\Contracts\Tables;
-use Conquest\Table\Filters\Concerns\HasFilters;
 use Conquest\Table\Pagination\Concerns\Paginates;
 use Conquest\Table\Pagination\Enums\PaginationType;
 use Conquest\Table\Sorts\BaseSort;
-use Conquest\Table\Sorts\Concerns\Sorts;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Collection;

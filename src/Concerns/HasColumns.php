@@ -1,6 +1,6 @@
 <?php
 
-namespace Conquest\Table\Columns\Concerns;
+namespace Conquest\Table\Concerns;
 
 use Conquest\Table\Columns\BaseColumn;
 use Illuminate\Support\Collection;

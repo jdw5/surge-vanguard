@@ -25,7 +25,7 @@ class DateColumn extends FallbackColumn
             return $this->getFallback();
         }
 
-        if ($this->isSince()) {
+        if ($this->formatsSince()) {
             try {
                 return $this->formatSince($value);
             } catch (InvalidFormatException $e) {

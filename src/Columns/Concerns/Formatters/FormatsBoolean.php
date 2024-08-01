@@ -29,6 +29,6 @@ trait FormatsBoolean
 
     public function formatBoolean(mixed $value)
     {
-        return $this->evaluate($value) ? $this->getTruthLabel() : $this->getFalseLabel();
+        return (bool) $this->evaluate($value) ? $this->getTruthLabel() : $this->getFalseLabel();
     }
 }

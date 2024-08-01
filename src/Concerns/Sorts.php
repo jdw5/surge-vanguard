@@ -1,10 +1,12 @@
 <?php
 
-namespace Conquest\Table\Sorts\Concerns;
+namespace Conquest\Table\Concerns;
 
-use Conquest\Table\Sorts\BaseSort;
 use Conquest\Table\Sorts\Sort;
+use Conquest\Table\Sorts\BaseSort;
 use Illuminate\Database\Eloquent\Builder;
+use Conquest\Table\Sorts\Concerns\HasSort;
+use Conquest\Table\Sorts\Concerns\HasOrder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 trait Sorts
