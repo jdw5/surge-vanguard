@@ -77,8 +77,8 @@ abstract class BaseColumn extends Primitive
             'active' => $this->isToggledOn(),
 
             'sortable' => $this->isSortable(),
-            // 'sorting' => $this->isSorting(),
-            // 'direction' => $this->getSort()?->getDirection(),
+            'sorting' => $this->isSorting(),
+            'direction' => $this->getSort()?->getDirection(),
 
             'meta' => $this->getMeta(),
             'prefix' => $this->getPrefix(),

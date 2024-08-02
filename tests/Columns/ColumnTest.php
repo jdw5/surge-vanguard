@@ -1,6 +1,7 @@
 <?php
 
 use Conquest\Table\Columns\Column;
+use Conquest\Table\Sorts\ToggleSort;
 
 it('can instantiate a column', function () {
     $col = new Column('name');
@@ -9,7 +10,6 @@ it('can instantiate a column', function () {
         ->getLabel()->toBe('Name')
         ->getType()->toBeNull()
         ->isSortable()->toBeFalse()
-        ->hasSortProperty()->toBeFalse()
         ->isSearchable()->toBeFalse()
         ->hasSearchProperty()->toBeFalse()
         ->isToggleable()->toBeFalse()
@@ -43,7 +43,6 @@ describe('base make', function () {
             ->getLabel()->toBe('Name')
             ->getType()->toBeNull()
             ->isSortable()->toBeFalse()
-            ->hasSortProperty()->toBeFalse()
             ->isSearchable()->toBeFalse()
             ->hasSearchProperty()->toBeFalse()
             ->isToggleable()->toBeFalse()
@@ -79,8 +78,8 @@ describe('base make', function () {
             'toggleable' => false,
             'active' => true,
             'sortable' => false,
-            // 'sorting' => false,
-            // 'direction' => null,
+            'sorting' => false,
+            'direction' => null,
             'meta' => [],
             'prefix' => null,
             'suffix' => null,
@@ -119,8 +118,7 @@ describe('chain make', function () {
             ->getLabel()->toBe('Username')
             ->getType()->toBeNull()
             ->isSortable()->toBeTrue()
-            ->hasSortProperty()->toBeTrue()
-            ->getSortProperty()->toBe('uuid')
+            ->getSort()->toBeInstanceOf(ToggleSort::class)
             ->isSearchable()->toBeTrue()
             ->hasSearchProperty()->toBeTrue()
             ->getSearchProperty()->toBe('description')
@@ -164,8 +162,8 @@ describe('chain make', function () {
             'toggleable' => true,
             'active' => false,
             'sortable' => true,
-            // 'sorting' => false,
-            // 'direction' => null,
+            'sorting' => false,
+            'direction' => null,
             'meta' => ['key' => 'value'],
             'prefix' => 'Mr ',
             'suffix' => '.',

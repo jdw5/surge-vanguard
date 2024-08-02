@@ -8,7 +8,7 @@ class TextColumn extends FallbackColumn
 {
     public function setUp(): void
     {
-        $this->setType('col:text');
+        $this->setType('text');
     }
 
     public function defaultFallback(): mixed
