@@ -23,7 +23,6 @@ use Conquest\Table\Columns\Concerns\HasTooltip;
 use Conquest\Table\Columns\Concerns\IsSortable;
 use Conquest\Table\Columns\Concerns\IsSrOnly;
 use Conquest\Table\Columns\Concerns\IsToggleable;
-use Exception;
 use InvalidArgumentException;
 
 abstract class BaseColumn extends Primitive

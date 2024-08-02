@@ -16,7 +16,7 @@ class DateColumn extends FallbackColumn
 
     public function setUp(): void
     {
-        $this->setType('col:date');
+        $this->setType('date');
     }
 
     public function apply(mixed $value): mixed
@@ -24,6 +24,8 @@ class DateColumn extends FallbackColumn
         if (is_null($value)) {
             return $this->getFallback();
         }
+
+        $value = $this->applyTransform($value);
 
         if ($this->formatsSince()) {
             try {

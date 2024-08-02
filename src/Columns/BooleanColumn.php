@@ -12,7 +12,7 @@ class BooleanColumn extends BaseColumn
 
     public function setUp(): void
     {
-        $this->setType('col:bool');
+        $this->setType('boolean');
         $this->boolean();
     }
 

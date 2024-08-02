@@ -1,100 +1,191 @@
 <?php
 
+use Carbon\Carbon;
+use Conquest\Table\Sorts\ToggleSort;
 use Conquest\Table\Columns\DateColumn;
 
-it('can create a date column', function () {
-    $col = new DateColumn('name');
+beforeEach(function () {
+    Carbon::setTestNow('2000-01-01 00:00:00');
+});
+
+it('can instantiate a date column', function () {
+    $col = new DateColumn('created_at');
     expect($col)->toBeInstanceOf(DateColumn::class)
-        ->getType()->toBe('col:date')
-        ->getName()->toBe('name')
-        ->getLabel()->toBe('Name')
-        ->hasSort()->toBeFalse()
-        ->isSearchable()->toBeFalse()
-        ->getBreakpoint()->toBeNull()
+        ->getName()->toBe('created_at')
+        ->getLabel()->toBe('Created at')
+        ->getType()->toBe('date')
+        ->isSortable()->toBeFalse()
+        ->isToggleable()->toBeFalse()
+        ->isToggledOn()->toBeTrue()
+        ->hasBreakpoint()->toBeFalse()
         ->isAuthorized()->toBeTrue()
-        ->getFallback()->toBeNull()
+        ->hasFallback()->toBeFalse()
         ->isHidden()->toBeFalse()
         ->isSrOnly()->toBeFalse()
         ->canTransform()->toBeFalse()
-        ->isActive()->toBeTrue()
-        ->isKey()->toBeFalse()
-        ->hasFormat()->toBeFalse()
-        ->hasMeta()->toBeFalse();
-});
-
-it('can make a date column', function () {
-    expect(DateColumn::make('name'))->toBeInstanceOf(DateColumn::class)
-        ->getType()->toBe('col:date')
-        ->getName()->toBe('name')
-        ->getLabel()->toBe('Name')
-        ->isHidden()->toBeFalse()
-        ->getFallback()->toBeNull()
-        ->isAuthorized()->toBeTrue()
-        ->canTransform()->toBeFalse()
-        ->getBreakpoint()->toBeNull()
-        ->isSrOnly()->toBeFalse()
-        ->hasSort()->toBeFalse()
-        ->isSearchable()->toBeFalse()
-        ->isActive()->toBeTrue()
-        ->isKey()->toBeFalse()
-        ->hasFormat()->toBeFalse()
-        ->hasMeta()->toBeFalse();
-});
-
-it('can chain methods on a date column', function () {
-    $col = DateColumn::make('name')
-        ->label($label = 'Username')
-        ->sortable()
-        ->searchable()
-        ->breakpoint('xs')
-        ->authorize(fn () => false)
-        ->fallback('N/A')
-        ->hidden()
-        ->srOnly()
-        ->transform(fn ($value) => strtoupper($value))
-        ->format('d M Y');
-
-    expect($col)->toBeInstanceOf(DateColumn::class)
-        ->getType()->toBe('col:date')
-        ->getName()->toBe('name')
-        ->getLabel()->toBe($label)
-        ->isHidden()->toBeTrue()
-        ->getFallback()->toBe('N/A')
-        ->isAuthorized()->toBeFalse()
-        ->canTransform()->toBeTrue()
-        ->getBreakpoint()->toBe('xs')
-        ->isSrOnly()->toBeTrue()
-        ->hasSort()->toBeTrue()
-        ->isSearchable()->toBeTrue()
-        ->isActive()->toBeTrue()
-        ->isKey()->toBeFalse()
         ->hasMeta()->toBeFalse()
-        ->getFormat()->toBe('d M Y');
+        ->isKey()->toBeFalse()
+        ->hasPrefix()->toBeFalse()
+        ->hasSuffix()->toBeFalse()
+        ->hasTooltip()->toBeFalse()
+        ->hasPlaceholder()->toBeFalse()
+        ->hasFormat()->toBeFalse()
+        ->formatsSince()->toBeFalse();
 });
 
-it('does not allow the name to be "actions"', function () {
-    expect(fn () => new DateColumn('actions'))->toThrow(Exception::class, 'Column name cannot be "actions"');
+describe('base make', function () {
+    beforeEach(function () {
+        $this->col = DateColumn::make('created_at');
+    });
+
+    it('can make a date column', function () {
+        expect($this->col)->toBeInstanceOf(DateColumn::class)
+            ->getName()->toBe('created_at')
+            ->getLabel()->toBe('Created at')
+            ->getType()->toBe('date')
+            ->isSortable()->toBeFalse()
+            ->isToggleable()->toBeFalse()
+            ->isToggledOn()->toBeTrue()
+            ->hasBreakpoint()->toBeFalse()
+            ->isAuthorized()->toBeTrue()
+            ->hasFallback()->toBeFalse()
+            ->isHidden()->toBeFalse()
+            ->isSrOnly()->toBeFalse()
+            ->canTransform()->toBeFalse()
+            ->hasMeta()->toBeFalse()
+            ->isKey()->toBeFalse()
+            ->hasPrefix()->toBeFalse()
+            ->hasSuffix()->toBeFalse()
+            ->hasTooltip()->toBeFalse()
+            ->hasPlaceholder()->toBeFalse()
+            ->hasFormat()->toBeFalse()
+            ->formatsSince()->toBeFalse();
+    });
+
+    it('has array form', function () {
+        expect($this->col->toArray())->toEqual([
+            'name' => 'created_at',
+            'label' => 'Created at',
+            'type' => 'date',
+            'hidden' => false,
+            'placeholder' => null,
+            'tooltip' => null,
+            'breakpoint' => null,
+            'sr' => false,
+            'toggleable' => false,
+            'active' => true,
+            'sortable' => false,
+            'sorting' => false,
+            'direction' => null,
+            'meta' => [],
+            'prefix' => null,
+            'suffix' => null,
+        ]);
+    });
 });
 
-it('can format a date', function () {
-    $col = DateColumn::make('created_at')->format('d M Y');
-    expect($col->apply('01-01-2001'))->toBe('01 Jan 2001');
-    expect($col->apply(null))->toBeNull();
+describe('chain make', function () {
+    beforeEach(function () {
+        $this->col = DateColumn::make('created_at')
+            ->label('When')
+            ->sortable()
+            ->toggleable(false)
+            ->breakpoint('md')
+            ->authorize(fn () => false)
+            ->fallback('nil')
+            ->tooltip('Tooltip')
+            ->placeholder('No date')
+            ->hidden()
+            ->srOnly()
+            ->transform(fn ($value) => mb_strtoupper($value))
+            ->key()
+            ->meta(['key' => 'value'])
+            ->suffix('.')
+            ->prefix('@')
+            ->format('Y-m-d H:i:s')
+            ->since();
+    });
+
+    it('can chain methods on a date column', function () {       
+        expect($this->col)->toBeInstanceOf(DateColumn::class)
+            ->getName()->toBe('created_at')
+            ->getLabel()->toBe('When')
+            ->getType()->toBe('date')
+            ->isSortable()->toBeTrue()
+            ->getSort()->toBeInstanceOf(ToggleSort::class)
+            ->isToggleable()->toBeTrue()
+            ->isToggledOn()->toBeFalse()
+            ->hasBreakpoint()->toBeTrue()
+            ->getBreakpoint()->toBe('md')
+            ->isAuthorized()->toBeFalse()
+            ->hasFallback()->toBeTrue()
+            ->getFallback()->toBe('nil')
+            ->isHidden()->toBeTrue()
+            ->isSrOnly()->toBeTrue()
+            ->canTransform()->toBeTrue()
+            ->hasMeta()->toBeTrue()
+            ->getMeta()->toBe(['key' => 'value'])
+            ->isKey()->toBeTrue()
+            ->hasPrefix()->toBeTrue()
+            ->getPrefix()->toBe('@')
+            ->hasSuffix()->toBeTrue()
+            ->getSuffix()->toBe('.')
+            ->hasTooltip()->toBeTrue()
+            ->getTooltip()->toBe('Tooltip')
+            ->hasPlaceholder()->toBeTrue()
+            ->getPlaceholder()->toBe('No date')
+            ->formatsSince()->toBeTrue()
+            ->hasFormat()->toBeTrue()
+            ->getFormat()->toBe('Y-m-d H:i:s');
+    });
+
+    it('has array form', function () {
+        expect($this->col->toArray())->toEqual([
+            'name' => 'created_at',
+            'label' => 'When',
+            'type' => 'date',
+            'hidden' => true,
+            'placeholder' => 'No date',
+            'tooltip' => 'Tooltip',
+            'breakpoint' => 'md',
+            'sr' => true,
+            'toggleable' => true,
+            'active' => false,
+            'sortable' => true,
+            'sorting' => false,
+            'direction' => null,
+            'meta' => ['key' => 'value'],
+            'prefix' => '@',
+            'suffix' => '.',
+        ]);
+    });
 });
 
-it('has array form', function () {
-    $col = DateColumn::make('name');
-    expect($col->toArray())->toEqual([
-        'name' => 'name',
-        'label' => 'Name',
-        'hidden' => false,
-        'active' => true,
-        'breakpoint' => null,
-        'srOnly' => false,
-        'sort' => false,
-        'sorting' => false,
-        'direction' => null,
-        'meta' => [],
-        'fallback' => config('table.fallback.default'),
-    ]);
+
+it('does not allow date column name to be actions from instantiation', function () {
+    $col = new DateColumn('actions');
+})->throws(InvalidArgumentException::class, 'Column name cannot be "actions"');
+
+it('does not allow date column name to be actions from make', function () {
+    $col = DateColumn::make('actions');
+})->throws(InvalidArgumentException::class, 'Column name cannot be "actions"');
+
+it('can apply a date column and fallbacks with value', function () {
+    $col = DateColumn::make('created_at')->fallback('Exists');
+    expect($col->apply(null))->toBe('Exists');
+});
+
+it('can apply a date column and transforms value', function () {
+    $col = DateColumn::make('created_at')->transform(fn ($value) => strtoupper($value));
+    expect($col->apply('a'))->toBe('A');
+});
+
+it('can apply a date column and uses format', function () {
+    $col = DateColumn::make('created_at')->format('Y-m-d H:i:s');
+    expect($col->apply('2021-01-01'))->toBe('2021-01-01 00:00:00');
+});
+
+it('can apply a date column and formats since value', function () {
+    $col = DateColumn::make('created_at')->since();
+    expect($col->apply(now()->subDay()))->toBe('1 day ago');
 });

@@ -1,97 +1,163 @@
 <?php
 
+use Carbon\Carbon;
+use Conquest\Table\Sorts\ToggleSort;
 use Conquest\Table\Columns\BooleanColumn;
 
-it('can create a boolean column', function () {
-    $col = new BooleanColumn('name');
+
+it('can instantiate a boolean column', function () {
+    $col = new BooleanColumn('active');
     expect($col)->toBeInstanceOf(BooleanColumn::class)
-        ->getType()->toBe('col:bool')
-        ->getName()->toBe('name')
-        ->getLabel()->toBe('Name')
-        ->isHidden()->toBeFalse()
+        ->getName()->toBe('active')
+        ->getLabel()->toBe('Active')
+        ->getType()->toBe('boolean')
+        ->isSortable()->toBeFalse()
+        ->getSort()->toBeNull()
+        ->isToggleable()->toBeFalse()
+        ->isToggledOn()->toBeTrue()
+        ->hasBreakpoint()->toBeFalse()
         ->isAuthorized()->toBeTrue()
-        ->canTransform()->toBeFalse()
-        ->getBreakpoint()->toBeNull()
-        ->isSrOnly()->toBeFalse()
-        ->hasSort()->toBeFalse()
-        ->isActive()->toBeTrue()
-        ->getTruthLabel()->toBe('Active')
-        ->getFalseLabel()->toBe('Inactive')
-        ->hasMeta()->toBeFalse();
-});
-
-it('can make a boolean column', function () {
-    expect(BooleanColumn::make('name'))->toBeInstanceOf(BooleanColumn::class)
-        ->getType()->toBe('col:bool')
-        ->getName()->toBe('name')
-        ->getLabel()->toBe('Name')
         ->isHidden()->toBeFalse()
-        ->isAuthorized()->toBeTrue()
-        ->canTransform()->toBeFalse()
-        ->getBreakpoint()->toBeNull()
         ->isSrOnly()->toBeFalse()
-        ->hasSort()->toBeFalse()
-        ->isActive()->toBeTrue()
-        ->getTruthLabel()->toBe('Active')
-        ->getFalseLabel()->toBe('Inactive')
-        ->hasMeta()->toBeFalse();
+        ->canTransform()->toBeFalse()
+        ->hasMeta()->toBeFalse()
+        ->hasPrefix()->toBeFalse()
+        ->hasSuffix()->toBeFalse()
+        ->hasTooltip()->toBeFalse();
 });
 
-it('can chain methods on a boolean column', function () {
-    $col = BooleanColumn::make('name')
-        ->label($label = 'Username')
-        ->hidden()
-        ->authorize(fn () => false)
-        ->transform(fn ($value) => strtoupper($value))
-        ->breakpoint('xs')
-        ->srOnly()
-        ->sortable()
-        ->active(false)
-        ->falseLabel(fn () => 'No')
-        ->truthLabel(fn () => 'Yes')
-        ->meta(['key' => 'value']);
+describe('base make', function () {
+    beforeEach(function () {
+        $this->col = BooleanColumn::make('active');
+    });
 
-    expect($col)->toBeInstanceOf(BooleanColumn::class)
-        ->getType()->toBe('col:bool')
-        ->getName()->toBe('name')
-        ->getLabel()->toBe($label)
-        ->isHidden()->toBeTrue()
-        ->isAuthorized()->toBeFalse()
-        ->canTransform()->toBeTrue()
-        ->getBreakpoint()->toBe('xs')
-        ->isSrOnly()->toBeTrue()
-        ->hasSort()->toBeTrue()
-        ->isActive()->toBeFalse()
-        ->getTruthLabel()->toBe('Yes')
-        ->getFalseLabel()->toBe('No')
-        ->hasMeta()->toBeTrue();
+    it('can make a boolean column', function () {
+        expect($this->col)->toBeInstanceOf(BooleanColumn::class)
+            ->getName()->toBe('active')
+            ->getLabel()->toBe('Active')
+            ->getType()->toBe('boolean')
+            ->isSortable()->toBeFalse()
+            ->getSort()->toBeNull()
+            ->isToggleable()->toBeFalse()
+            ->isToggledOn()->toBeTrue()
+            ->hasBreakpoint()->toBeFalse()
+            ->isAuthorized()->toBeTrue()
+            ->isHidden()->toBeFalse()
+            ->isSrOnly()->toBeFalse()
+            ->canTransform()->toBeFalse()
+            ->hasMeta()->toBeFalse()
+            ->hasPrefix()->toBeFalse()
+            ->hasSuffix()->toBeFalse()
+            ->hasTooltip()->toBeFalse();
+    });
+
+    it('has array form', function () {
+        expect($this->col->toArray())->toEqual([
+            'name' => 'active',
+            'label' => 'Active',
+            'type' => 'boolean',
+            'hidden' => false,
+            'placeholder' => null,
+            'tooltip' => null,
+            'breakpoint' => null,
+            'sr' => false,
+            'toggleable' => false,
+            'active' => true,
+            'sortable' => false,
+            'sorting' => false,
+            'direction' => null,
+            'meta' => [],
+            'prefix' => null,
+            'suffix' => null,
+        ]);
+    });
 });
 
-it('does not allow the name to be "actions"', function () {
-    expect(fn () => new BooleanColumn('actions'))->toThrow(Exception::class, 'Column name cannot be "actions"');
+describe('chain make', function () {
+    beforeEach(function () {
+        $this->col = BooleanColumn::make('active')
+            ->label('When')
+            ->sortable()
+            ->toggleable(false)
+            ->breakpoint('md')
+            ->authorize(fn () => false)
+            ->tooltip('Tooltip')
+            ->placeholder('No boolean')
+            ->hidden()
+            ->srOnly()
+            ->transform(fn ($value) => mb_strtoupper($value))
+            ->meta(['key' => 'value'])
+            ->suffix('.')
+            ->prefix('@');
+    });
+
+    it('can chain methods on a boolean column', function () {       
+        expect($this->col)->toBeInstanceOf(BooleanColumn::class)
+            ->getName()->toBe('active')
+            ->getLabel()->toBe('When')
+            ->getType()->toBe('boolean')
+            ->isSortable()->toBeTrue()
+            ->getSort()->toBeInstanceOf(ToggleSort::class)
+            ->isToggleable()->toBeTrue()
+            ->isToggledOn()->toBeFalse()
+            ->hasBreakpoint()->toBeTrue()
+            ->getBreakpoint()->toBe('md')
+            ->isAuthorized()->toBeFalse()
+            ->isHidden()->toBeTrue()
+            ->isSrOnly()->toBeTrue()
+            ->canTransform()->toBeTrue()
+            ->hasMeta()->toBeTrue()
+            ->getMeta()->toBe(['key' => 'value'])
+            ->hasPrefix()->toBeTrue()
+            ->getPrefix()->toBe('@')
+            ->hasSuffix()->toBeTrue()
+            ->getSuffix()->toBe('.')
+            ->hasTooltip()->toBeTrue()
+            ->getTooltip()->toBe('Tooltip');
+    });
+
+    it('has array form', function () {
+        expect($this->col->toArray())->toEqual([
+            'name' => 'active',
+            'label' => 'When',
+            'type' => 'boolean',
+            'hidden' => true,
+            'placeholder' => 'No boolean',
+            'tooltip' => 'Tooltip',
+            'breakpoint' => 'md',
+            'sr' => true,
+            'toggleable' => true,
+            'active' => false,
+            'sortable' => true,
+            'sorting' => false,
+            'direction' => null,
+            'meta' => ['key' => 'value'],
+            'prefix' => '@',
+            'suffix' => '.',
+        ]);
+    });
 });
 
-it('can apply a boolean', function () {
-    $col = BooleanColumn::make('created_at');
-    expect($col->apply(null))->toBe('Inactive');
-    expect($col->apply(1))->toBe('Active');
-    $col->transform(fn ($value) => $value > 0);
-    expect($col->apply(-1))->toBe('Inactive');
-    expect($col->apply(1))->toBe('Active');
+
+it('does not allow boolean column name to be actions from instantiation', function () {
+    $col = new BooleanColumn('actions');
+})->throws(InvalidArgumentException::class, 'Column name cannot be "actions"');
+
+it('does not allow boolean column name to be actions from make', function () {
+    $col = BooleanColumn::make('actions');
+})->throws(InvalidArgumentException::class, 'Column name cannot be "actions"');
+
+it('can apply a boolean column for falsy values', function () {
+    $col = BooleanColumn::make('active');
+    expect($col->apply(null))->toBe('No');
 });
 
-it('has array form', function () {
-    $col = BooleanColumn::make('name');
-    expect($col->toArray())->toEqual([
-        'name' => 'name',
-        'label' => 'Name',
-        'hidden' => false,
-        'active' => true,
-        'breakpoint' => null,
-        'srOnly' => false,
-        'sort' => false,
-        'sorting' => false,
-        'direction' => null,
-        'meta' => [],
-    ]);
+it('can apply a boolean column for truthy values', function () {
+    $col = BooleanColumn::make('active');
+    expect($col->apply(1))->toBe('Yes');
+});
+
+it('can apply a boolean column and transforms value', function () {
+    $col = BooleanColumn::make('active')->transform(fn ($value) => !$value);
+    expect($col->apply('Example'))->toBe('No');
 });
