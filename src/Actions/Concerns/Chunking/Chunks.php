@@ -9,7 +9,7 @@ use Closure;
 trait Chunks
 {
     use HasChunkSize;
-    use IsChunkingById;
+    use HasChunkById;
 
     public function chunk(int|Closure $size = null, int|Closure $chunkById = null): static
     {

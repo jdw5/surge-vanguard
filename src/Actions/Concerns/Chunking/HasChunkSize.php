@@ -25,14 +25,14 @@ trait HasChunkSize
         $this->chunkSize = $chunkSize;
     }
 
-    public function getChunkSize(): ?int
+    public function getChunkSize(): int
     {
-        return $this->evaluate($this->chunkSize);
+        return $this->evaluate($this->chunkSize) ?? config('table.chunking.size');
     }
 
     public function hasChunkSize(): bool
     {
-        return ! is_null($this->getChunkSize());
+        return ! is_null($this->chunkSize);
     }
 
     public function lacksChunkSize(): bool

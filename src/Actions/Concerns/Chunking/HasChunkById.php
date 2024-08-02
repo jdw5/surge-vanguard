@@ -6,14 +6,13 @@ namespace Conquest\Table\Actions\Concerns\Chunking;
 
 use Closure;
 
-trait IsChunkingById
+trait HasChunkById
 {
-    protected bool|Closure $chunkById = false;
+    protected bool|Closure|null $chunkById = false;
 
     public function chunkById(bool|Closure $chunkById = true): static
     {
         $this->setChunkById($chunkById);
-
         return $this;
     }
 
@@ -25,13 +24,18 @@ trait IsChunkingById
         $this->chunkById = $chunkById;
     }
 
-    public function isChunkingById(): bool
+    public function getChunkById(): int
     {
-        return $this->evaluate($this->chunkById);
+        return $this->evaluate($this->chunkById) ?? config('table.chunking.by_id');
     }
 
-    public function isNotChunkById(): bool
+    public function hasChunkById(): bool
     {
-        return ! $this->isChunkingById();
+        return ! is_null($this->chunkById);
+    }
+
+    public function lacksChunkById(): bool
+    {
+        return ! $this->hasChunkById();
     }
 }
