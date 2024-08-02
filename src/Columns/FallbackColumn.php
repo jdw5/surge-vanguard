@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Conquest\Table\Columns;
 
 use Conquest\Table\Columns\Concerns\HasFallback;
+use Conquest\Table\Columns\Concerns\IsSearchable;
 
 abstract class FallbackColumn extends BaseColumn
 {
     use HasFallback {
         getFallback as protected getFallbackAttribute;
     }
+    use IsSearchable;
 
     protected function defaultFallback(): mixed
     {

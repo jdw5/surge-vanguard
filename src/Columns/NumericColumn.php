@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Conquest\Table\Columns;
 
-use Conquest\Table\Columns\Concerns\IsSearchable;
 use Conquest\Table\Columns\Concerns\Formatters\FormatsMoney;
 use Conquest\Table\Columns\Concerns\Formatters\FormatsNumeric;
 
@@ -12,7 +11,6 @@ class NumericColumn extends FallbackColumn
 {
     use FormatsMoney;
     use FormatsNumeric;
-    use IsSearchable;
 
     public function setUp(): void
     {

@@ -10,7 +10,6 @@ class KeyColumn extends BaseColumn
     {
         $this->setType('key');
         $this->setKey(true);
-        $this->setHidden(true);
     }
 
     public function apply(mixed $value): mixed
