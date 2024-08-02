@@ -19,13 +19,13 @@ use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 trait HasActions
 {
-    public const INLINE_ACTION = 'action:inline';
+    public const INLINE_ACTION = 'inline';
 
-    public const BULK_ACTION = 'action:bulk';
+    public const BULK_ACTION = 'bulk';
 
-    public const PAGE_ACTION = 'action:page';
+    public const PAGE_ACTION = 'page';
 
-    public const EXPORT_ACTION = 'action:export';
+    public const EXPORT_ACTION = 'export';
 
     private Collection $cachedActions;
 
