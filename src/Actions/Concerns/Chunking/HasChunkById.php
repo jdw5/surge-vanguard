@@ -8,7 +8,7 @@ use Closure;
 
 trait HasChunkById
 {
-    protected bool|Closure|null $chunkById = false;
+    protected bool|Closure|null $chunkById = null;
 
     public function chunkById(bool|Closure $chunkById = true): static
     {
@@ -24,7 +24,7 @@ trait HasChunkById
         $this->chunkById = $chunkById;
     }
 
-    public function getChunkById(): int
+    public function getChunkById(): bool
     {
         return $this->evaluate($this->chunkById) ?? config('table.chunking.by_id');
     }

@@ -11,7 +11,7 @@ trait Chunks
     use HasChunkSize;
     use HasChunkById;
 
-    public function chunk(int|Closure $size = null, int|Closure $chunkById = null): static
+    public function chunk(int|Closure $size = null, bool|Closure $chunkById = null): static
     {
         $this->setChunkSize($size);
         $this->setChunkById($chunkById);
@@ -21,6 +21,6 @@ trait Chunks
 
     public function getChunkMethod(): string
     {
-        return $this->isChunkingById() ? 'chunkById' : 'chunk';
+        return $this->getChunkById() ? 'chunkById' : 'chunk';
     }
 }
