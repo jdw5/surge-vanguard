@@ -3,7 +3,7 @@
 use Conquest\Table\Actions\BulkAction;
 
 beforeEach(function () {
-    $this->action = BulkAction::make('name');
+    $this->action = BulkAction::make('Delete');
 });
 
 it('is not inline by default', function () {

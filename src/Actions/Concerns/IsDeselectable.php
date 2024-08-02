@@ -6,31 +6,39 @@ use Closure;
 
 trait IsDeselectable
 {
-    protected bool|Closure $deselect = true;
+    protected bool|Closure $deselectable = true;
 
-    public function deselect(bool|Closure $deselect = true): static
+    public function deselectable(bool|Closure $deselectable = false): static
     {
-        $this->setDeselect($deselect);
+        $this->setDeselectable($deselectable);
 
         return $this;
     }
 
-    public function setDeselect(bool|Closure|null $deselect): void
+    /**
+     * Alias for deselectable.
+     */
+    public function deselect(bool|Closure $deselectable = false): static
     {
-        if (is_null($deselect)) {
+        return $this->deselectable($deselectable);
+    }
+
+    public function setDeselectable(bool|Closure|null $deselectable): void
+    {
+        if (is_null($deselectable)) {
             return;
         }
 
-        $this->deselect = $deselect;
+        $this->deselectable = $deselectable;
     }
 
     public function isDeselectable(): bool
     {
-        return (bool) $this->evaluate($this->deselect);
+        return (bool) $this->evaluate($this->deselectable);
     }
 
     public function isNotDeselectable(): bool
     {
-        return (bool) $this->evaluate($this->deselect);
+        return ! $this->isDeselectable();
     }
 }
