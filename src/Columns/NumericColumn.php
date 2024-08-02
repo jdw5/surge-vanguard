@@ -14,11 +14,24 @@ class NumericColumn extends FallbackColumn
 
     public function setUp(): void
     {
-        $this->setType('col:numeric');
+        $this->setType('numeric');
     }
 
     public function defaultFallback(): mixed
     {
         return config('table.fallback.numeric', parent::defaultFallback());
+    }
+
+    public function formatValue(mixed $value): mixed
+    {
+        if ($this->formatsNumeric()) {
+            return $this->formatNumeric($value);
+        }
+
+        if ($this->formatsMoney()) {
+            return $this->formatMoney($value);
+        }
+
+        return parent::formatValue($value);
     }
 }

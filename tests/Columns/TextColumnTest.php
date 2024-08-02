@@ -3,7 +3,7 @@
 use Conquest\Table\Columns\TextColumn;
 use Conquest\Table\Sorts\ToggleSort;
 
-it('can instantiate a column', function () {
+it('can instantiate a text column', function () {
     $col = new TextColumn('name');
     expect($col)->toBeInstanceOf(TextColumn::class)
         ->getName()->toBe('name')
@@ -34,7 +34,7 @@ describe('base make', function () {
         $this->col = TextColumn::make('name');
     });
 
-    it('can make a column', function () {
+    it('can make a text column', function () {
         expect($this->col)->toBeInstanceOf(TextColumn::class)
             ->getName()->toBe('name')
             ->getLabel()->toBe('Name')
@@ -102,7 +102,7 @@ describe('chain make', function () {
             ->prefix('Mr ');
     });
 
-    it('can chain methods on a column', function () {       
+    it('can chain methods on a text column', function () {       
         expect($this->col)->toBeInstanceOf(TextColumn::class)
             ->getName()->toBe('name')
             ->getLabel()->toBe('Username')
@@ -166,12 +166,12 @@ it('does not allow column name to be actions from make', function () {
     $col = TextColumn::make('actions');
 })->throws(InvalidArgumentException::class, 'Column name cannot be "actions"');
 
-it('can apply a column and fallbacks with text fallback', function () {
+it('can apply a text column and fallbacks with text fallback', function () {
     $col = TextColumn::make('name');
     expect($col->apply(null))->toBe(config('table.fallback.text'));
 });
 
-it('can apply a column and transforms value', function () {
+it('can apply a text column and transforms value', function () {
     $col = TextColumn::make('name')->transform(fn ($value) => strtoupper($value));
     expect($col->apply('a'))->toBe('A');
 });
