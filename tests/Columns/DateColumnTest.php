@@ -189,3 +189,23 @@ it('can apply a date column and formats since value', function () {
     $col = DateColumn::make('created_at')->since();
     expect($col->apply(now()->subDay()))->toBe('1 day ago');
 });
+
+it('catches invalid format exceptions on since and provides fallback', function () {
+    $col = DateColumn::make('created_at')->fallback('-')->since();
+    expect($col->apply('Invalid'))->toBe('-');
+});
+
+it('catches invalid format exceptions on since and continues', function () {
+    $col = DateColumn::make('created_at')->since();
+    expect($col->apply('Invalid'))->toBe('Invalid');
+});
+
+it('catches invalid format exceptions on format and provides fallback', function () {
+    $col = DateColumn::make('created_at')->fallback('-')->format('Y-m-d H:i:s');
+    expect($col->apply('Invalid'))->toBe('-');
+});
+
+it('catches invalid format exceptions on format and continues', function () {
+    $col = DateColumn::make('created_at')->format('Y-m-d H:i:s');
+    expect($col->apply('Invalid'))->toBe('Invalid');
+});

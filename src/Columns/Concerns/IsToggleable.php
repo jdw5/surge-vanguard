@@ -49,7 +49,7 @@ trait IsToggleable
         return $this->evaluate($this->toggledOn);
     }
 
-    public function isToggledOffByDefault(): bool
+    public function isNotToggledOn(): bool
     {
         return ! $this->isToggledOn();
     }
