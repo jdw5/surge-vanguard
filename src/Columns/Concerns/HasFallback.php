@@ -27,7 +27,7 @@ trait HasFallback
 
     public function lacksFallback(): bool
     {
-        return is_null($this->fallback);
+        return is_null($this->getFallback());
     }
 
     public function getFallback(): mixed
