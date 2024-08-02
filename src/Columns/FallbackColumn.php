@@ -10,7 +10,7 @@ use Conquest\Table\Columns\Concerns\IsSearchable;
 abstract class FallbackColumn extends BaseColumn
 {
     use HasFallback {
-        getFallback as protected getFallbackAttrbiute;
+        getFallback as protected getFallbackAttribute;
     }
     use IsSearchable;
 
@@ -30,6 +30,6 @@ abstract class FallbackColumn extends BaseColumn
 
     public function getFallback()
     {
-        return $this->getFallbackAttrbiute() ?? $this->defaultFallback();
+        return $this->getFallbackAttribute() ?? $this->defaultFallback();
     }
 }

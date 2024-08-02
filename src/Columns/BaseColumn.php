@@ -24,6 +24,7 @@ use Conquest\Table\Columns\Concerns\IsSortable;
 use Conquest\Table\Columns\Concerns\IsSrOnly;
 use Conquest\Table\Columns\Concerns\IsToggleable;
 use Exception;
+use InvalidArgumentException;
 
 abstract class BaseColumn extends Primitive
 {
@@ -48,7 +49,7 @@ abstract class BaseColumn extends Primitive
     public function __construct(string|Closure $name, string|Closure|null $label = null)
     {
         if ($name === 'actions') {
-            throw new Exception('Column name cannot be "actions"');
+            throw new InvalidArgumentException('Column name cannot be "actions"');
         }
         parent::__construct();
         $this->setName($name);
@@ -65,18 +66,23 @@ abstract class BaseColumn extends Primitive
         return [
             'name' => $this->getName(),
             'label' => $this->getLabel(),
+            'type' => $this->getType(),
             'hidden' => $this->isHidden(),
             'placeholder' => $this->getPlaceholder(),
-            'active' => $this->isActive(),
             'tooltip' => $this->getTooltip(),
             'breakpoint' => $this->getBreakpoint(),
-            'srOnly' => $this->isSrOnly(),
+            'sr' => $this->isSrOnly(),
+            
+            'toggleable' => $this->isToggleable(),
+            'active' => $this->isToggledOn(),
 
-            'sort' => $this->hasSort(),
-            'sorting' => $this->isSorting(),
-            'direction' => $this->getSort()?->getDirection(),
+            'sortable' => $this->isSortable(),
+            // 'sorting' => $this->isSorting(),
+            // 'direction' => $this->getSort()?->getDirection(),
 
             'meta' => $this->getMeta(),
+            'prefix' => $this->getPrefix(),
+            'suffix' => $this->getSuffix(),
         ];
     }
 
@@ -89,14 +95,6 @@ abstract class BaseColumn extends Primitive
 
     public function formatValue(mixed $value): mixed
     {
-        if ($this->hasPrefix()) {
-            $value = $this->getPrefix().$value;
-        }
-        
-        if ($this->hasSuffix()) {
-            $value = $value.$this->getSuffix();
-        }
-
         return $value;
     }
 }

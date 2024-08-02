@@ -16,26 +16,21 @@ class Column extends FallbackColumn
     use FormatsNumeric;
     use FormatsSeparator;
 
-    public function setUp(): void
-    {
-        $this->setType('col');
-    }
-
     public function formatValue(mixed $value): mixed
     {
-        if ($this->isBoolean()) {
+        if ($this->formatsBoolean()) {
             return $this->formatBoolean($value);
         }
 
-        if ($this->isNumeric()) {
+        if ($this->formatsNumeric()) {
             return $this->formatNumeric($value);
         }
 
-        if ($this->isMoney()) {
+        if ($this->formatsMoney()) {
             return $this->formatMoney($value);
         }
 
-        if ($this->hasSeparator()) {
+        if ($this->formatsSeparator()) {
             return $this->formatSeparator($value);
         }
 
