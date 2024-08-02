@@ -46,7 +46,7 @@ trait HasActions
         return null;
     }
 
-    public function hasActionRoute(): bool
+    public function canActionRoute(): bool
     {
         return ! is_null($this->getActionRoute());
     }

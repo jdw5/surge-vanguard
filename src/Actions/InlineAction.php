@@ -6,14 +6,14 @@ use Conquest\Core\Concerns\HasHttpMethod;
 use Conquest\Core\Concerns\HasRoute;
 use Conquest\Core\Concerns\IsDefault;
 use Conquest\Table\Actions\Concerns\Confirmation\Confirms;
-use Conquest\Table\Actions\Concerns\HasAction;
+use Conquest\Table\Actions\Concerns\CanAction;
 use Conquest\Table\Actions\Concerns\IsBulk;
 use Conquest\Table\Table;
 
 class InlineAction extends BaseAction
 {
     use Confirms;
-    use HasAction;
+    use CanAction;
     use HasHttpMethod;
     use HasRoute;
     use IsDefault;
@@ -32,7 +32,7 @@ class InlineAction extends BaseAction
             [
                 'route' => $this->getResolvedRoute(),
                 'method' => $this->getMethod(),
-                'actionable' => $this->hasAction(),
+                'actionable' => $this->canAction(),
             ]
         );
     }

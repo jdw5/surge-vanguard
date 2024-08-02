@@ -10,7 +10,7 @@ it('can create a bulk action', function () {
     expect($action->getName())->toBe('delete');
     expect($action->isAuthorised())->toBeTrue();
     expect($action->getType())->toBe(Table::BULK_ACTION);
-    expect($action->hasAction())->toBeFalse();
+    expect($action->canAction())->toBeFalse();
     expect($action->getChunkMethod())->toBe('chunkById');
     expect($action->getChunkSize())->toBe(500);
     expect($action->getMeta())->toBe([]);
@@ -51,7 +51,7 @@ it('can set a default confirmation message', function () {
 });
 
 it('can have handler', function () {
-    expect(BulkAction::make('Delete', action: fn (Product $product) => $product->delete())->hasAction())
+    expect(BulkAction::make('Delete', action: fn (Product $product) => $product->delete())->canAction())
         ->toBeTrue();
 });
 

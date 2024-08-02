@@ -12,7 +12,7 @@ it('can create an inline action', function () {
     expect($action->getResolvedRoute())->toBeNull();
     expect($action->getMethod())->toBeNull();
     expect($action->getType())->toBe(Table::INLINE_ACTION);
-    expect($action->hasAction())->toBeFalse();
+    expect($action->canAction())->toBeFalse();
     expect($action->getMeta())->toBe([]);
     expect($action->getConfirmation())->toBeNull();
     expect($action->isDefault())->toBeFalse();
@@ -61,7 +61,7 @@ it('can set a confirmation message using a record', function () {
 });
 
 it('can have handler', function () {
-    expect(InlineAction::make('Delete', action: fn (Product $product) => $product->delete())->hasAction())
+    expect(InlineAction::make('Delete', action: fn (Product $product) => $product->delete())->canAction())
         ->toBeTrue();
 });
 

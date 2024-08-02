@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'action_route' => '/actions',
     /*
     |--------------------------------------------------------------------------
     | Search configuration

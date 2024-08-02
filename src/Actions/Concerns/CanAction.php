@@ -5,7 +5,7 @@ namespace Conquest\Table\Actions\Concerns;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
 
-trait HasAction
+trait CanAction
 {
     protected ?Closure $action = null;
 
@@ -16,14 +16,22 @@ trait HasAction
         return $this;
     }
 
+    /**
+     * Alias for action
+     */
     public function each(Closure|string $action): static
     {
         return $this->action($action);
     }
 
-    public function hasAction(): bool
+    public function cannotAction(): bool
     {
-        return ! is_null($this->action);
+        return is_null($this->action);
+    }
+
+    public function canAction(): bool
+    {
+        return ! $this->cannotAction();
     }
 
     public function setAction(Closure|string|null $action): void
