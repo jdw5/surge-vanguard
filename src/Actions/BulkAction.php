@@ -6,6 +6,7 @@ use Conquest\Table\Actions\Concerns\Confirmation\Confirms;
 use Conquest\Table\Actions\Concerns\HasAction;
 use Conquest\Table\Actions\Concerns\HasChunking;
 use Conquest\Table\Actions\Concerns\IsDeselectable;
+use Conquest\Table\Actions\Concerns\IsInline;
 use Conquest\Table\Table;
 
 class BulkAction extends BaseAction
@@ -14,6 +15,7 @@ class BulkAction extends BaseAction
     use HasAction;
     use HasChunking;
     use IsDeselectable;
+    use IsInline;
 
     public function setUp(): void
     {
