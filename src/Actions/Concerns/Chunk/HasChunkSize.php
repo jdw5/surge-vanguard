@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Conquest\Table\Actions\Concerns\Chunking;
+namespace Conquest\Table\Actions\Concerns\Chunk;
 
 use Closure;
 
@@ -27,7 +27,7 @@ trait HasChunkSize
 
     public function getChunkSize(): int
     {
-        return $this->evaluate($this->chunkSize) ?? config('table.chunking.size');
+        return $this->evaluate($this->chunkSize) ?? config('table.chunk.size');
     }
 
     public function hasChunkSize(): bool

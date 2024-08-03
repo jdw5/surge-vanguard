@@ -13,7 +13,7 @@ class PageAction extends BaseAction
 
     public function setUp(): void
     {
-        $this->setType(Table::PAGE_ACTION);
+        $this->setType('page');
     }
 
     public function toArray(): array

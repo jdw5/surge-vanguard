@@ -1,66 +1,117 @@
 <?php
 
 use Conquest\Table\Actions\BulkAction;
-use Conquest\Table\Table;
 use Workbench\App\Models\Product;
 
-it('can create a bulk action', function () {
-    $action = new BulkAction($l = 'Delete');
-    expect($action->getLabel())->toBe($l);
-    expect($action->getName())->toBe('delete');
-    expect($action->isAuthorised())->toBeTrue();
-    expect($action->getType())->toBe(Table::BULK_ACTION);
-    expect($action->canAction())->toBeFalse();
-    expect($action->getChunkMethod())->toBe('chunkById');
-    expect($action->getChunkSize())->toBe(500);
-    expect($action->getMeta())->toBe([]);
-    expect($action->getConfirmation())->toBeNull();
+it('can instantiate an bulk action', function () {
+    $action = new BulkAction('Create');
+    expect($action)->toBeInstanceOf(BulkAction::class)
+        ->getLabel()->toBe('Create')
+        ->getName()->toBe('create')
+        ->getType()->toBe('bulk')
+        ->isAuthorised()->toBeTrue()
+        ->canAction()->toBeFalse()
+        ->getMeta()->toBe([])
+        ->isConfirmable()->toBeFalse()
+        ->hasConfirmTitle()->toBeFalse()
+        ->hasConfirmMessage()->toBeFalse()
+        ->hasConfirmType()->toBeFalse()
+        ->isInline()->toBeFalse()
+        ->isDeselectable()->toBeTrue()
+        ->hasChunkById()->toBeFalse()
+        ->HasChunkSize()->toBeFalse()
+        ->getChunkById()->toBe(config('table.chunk.by_id'))
+        ->getChunkSize()->toBe(config('table.chunk.size'));
 });
 
-it('can make a bulk action', function () {
-    expect(BulkAction::make('Delete'))->toBeInstanceOf(BulkAction::class)
-        ->getLabel()->toBe('Delete')
-        ->getName()->toBe('delete')
-        ->getType()->toBe(Table::BULK_ACTION);
+describe('base', function () {
+    beforeEach(function () {
+        $this->action = BulkAction::make('Create');
+    });
+
+    it('can make an bulk action', function () {
+        expect($this->action)->toBeInstanceOf(BulkAction::class)
+            ->getLabel()->toBe('Create')
+            ->getName()->toBe('create')
+            ->getType()->toBe('bulk')
+            ->isAuthorised()->toBeTrue()
+            ->canAction()->toBeFalse()
+            ->hasMeta()->toBeFalse()
+            ->isConfirmable()->toBeFalse()
+            ->hasConfirmTitle()->toBeFalse()
+            ->hasConfirmMessage()->toBeFalse()
+            ->hasConfirmType()->toBeFalse()
+            ->isInline()->toBeFalse()
+            ->isDeselectable()->toBeTrue()
+            ->hasChunkById()->toBeFalse()
+            ->HasChunkSize()->toBeFalse()
+            ->getChunkById()->toBe(config('table.chunk.by_id'))
+            ->getChunkSize()->toBe(config('table.chunk.size'));
+    
+    });
+
+    it('has array form', function () {
+        expect($this->action->toArray())->toEqual([
+            'name' => 'create',
+            'label' => 'Create',
+            'type' => 'bulk',
+            'meta' => [],
+            'confirm' => null,
+            'deselect' => true,
+        ]);
+    });
 });
 
-it('can change chunking parameters', function () {
-    expect(BulkAction::make('Delete', chunkSize: 100, chunkById: false))
-        ->getChunkSize()->toBe(100)
-        ->getChunkMethod()->toBe('chunk');
-});
+describe('chained', function () {
+    beforeEach(function () {
+        $this->action = BulkAction::make('Create')
+            ->name('make')
+            ->meta(['key' => 'value'])
+            ->authorize(fn () => false)
+            ->confirmable()
+            ->confirmTitle('Are you sure?')
+            ->confirmMessage('This action is irreversible')
+            ->confirmType('destructive')
+            ->inline()
+            ->deselectable()
+            ->chunk(1000, false)
+            ->action(fn (Product $product) => $product->create());
+    });
 
-it('can set a confirmation message', function () {
-    expect(BulkAction::make('Delete', confirmation: $m = 'Are you sure?')->getConfirmation())
-        ->toBe($m);
-});
+    it('can make an bulk action', function () {
+        expect($this->action)->toBeInstanceOf(BulkAction::class)
+            ->getLabel()->toBe('Create')
+            ->getName()->toBe('make')
+            ->getType()->toBe('bulk')
+            ->isAuthorised()->toBeFalse()
+            ->canAction()->toBeTrue()
+            ->hasMeta()->toBeTrue()
+            ->isConfirmable()->tobeTrue()
+            ->hasConfirmTitle()->tobeTrue()
+            ->hasConfirmMessage()->tobeTrue()
+            ->hasConfirmType()->tobeTrue()
+            ->isInline()->toBeTrue()
+            ->isDeselectable()->toBeFalse()
+            ->hasChunkById()->toBeTrue()
+            ->HasChunkSize()->toBeTrue()
+            ->getChunkById()->toBe(false)
+            ->getChunkSize()->toBe(1000);    
+    });
 
-it('can set a confirmation message using the action name', function () {
-    expect(BulkAction::make('Delete', confirmation: fn (string $name) => "Are you want to $name this product?")->getConfirmation())
-        ->toBe('Are you want to delete this product?');
-});
-
-it('can set a confirmation message using the action', function () {
-    expect(BulkAction::make('Delete', confirmation: fn ($action) => 'Are you want to '.$action->getLabel().' this product?')->getConfirmation())
-        ->toBe('Are you want to Delete this product?');
-});
-
-it('can set a default confirmation message', function () {
-    expect(BulkAction::make('Delete')->confirmation()->getConfirmation())
-        ->not->toBeNull();
-});
-
-it('can have handler', function () {
-    expect(BulkAction::make('Delete', action: fn (Product $product) => $product->delete())->canAction())
-        ->toBeTrue();
-});
-
-it('can apply an action', function () {
-    $action = BulkAction::make('Delete', action: fn (Product $product) => $product->delete());
-    $product = Product::factory()->create([
-        'category_id' => 1,
-    ]);
-    expect(Product::find($product->id))->not->toBeNull();
-    $action->applyAction(Product::class, $product);
-    expect(Product::find($product->id))->toBeNull();
+    it('has array form', function () {
+        expect($this->action->toArray())->toEqual([
+            'name' => 'make',
+            'label' => 'Create',
+            'type' => 'bulk',
+            'meta' => [
+                'key' => 'value'
+            ],
+            'confirm' => [
+                'title' => 'Are you sure?',
+                'message' => 'This action is irreversible',
+                'type' => 'destructive',
+            ],
+            'deselect' => false,
+        ]);
+    });
 });

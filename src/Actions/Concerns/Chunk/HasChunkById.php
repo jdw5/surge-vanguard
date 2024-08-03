@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Conquest\Table\Actions\Concerns\Chunking;
+namespace Conquest\Table\Actions\Concerns\Chunk;
 
 use Closure;
 
@@ -26,7 +26,7 @@ trait HasChunkById
 
     public function getChunkById(): bool
     {
-        return $this->evaluate($this->chunkById) ?? config('table.chunking.by_id');
+        return $this->evaluate($this->chunkById) ?? config('table.chunk.by_id');
     }
 
     public function hasChunkById(): bool

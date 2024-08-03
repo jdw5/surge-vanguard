@@ -21,7 +21,7 @@ class InlineAction extends BaseAction
 
     public function setUp(): void
     {
-        $this->setType(Table::INLINE_ACTION);
+        $this->setType('inline');
     }
 
     public function toArray(): array

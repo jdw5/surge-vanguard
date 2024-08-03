@@ -2,12 +2,12 @@
 
 namespace Conquest\Table\Actions;
 
+use Conquest\Table\Table;
 use Conquest\Table\Actions\Concerns\Confirm\Confirms;
 use Conquest\Table\Actions\Concerns\CanAction;
-use Conquest\Table\Actions\Concerns\Chunking\Chunks;
+use Conquest\Table\Actions\Concerns\Chunk\Chunks;
 use Conquest\Table\Actions\Concerns\IsDeselectable;
 use Conquest\Table\Actions\Concerns\IsInline;
-use Conquest\Table\Table;
 
 class BulkAction extends BaseAction
 {
@@ -19,7 +19,7 @@ class BulkAction extends BaseAction
 
     public function setUp(): void
     {
-        $this->setType(Table::BULK_ACTION);
+        $this->setType('bulk');
     }
 
     public function toArray(): array
