@@ -66,6 +66,11 @@ return [
         // 'lazy' => false,
     ],
 
+    'confirmation' => [
+        'title' => 'Confirm',
+        'message' => 'Are you sure you want to perform this action?',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Fallbacks

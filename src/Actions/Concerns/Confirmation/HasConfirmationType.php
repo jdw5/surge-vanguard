@@ -4,23 +4,25 @@ declare(strict_types=1);
 
 namespace Conquest\Table\Actions\Concerns\Confirmation;
 
+use Closure;
+
 trait HasConfirmationType
 {
-    protected ?ConfirmationType $confirmationType = null;
+    protected string|Closure|null $confirmationType = null;
 
-    public function confirmationType(ConfirmationType|string $confirmationType): static
+    public function confirmationType(ConfirmationType|string|Closure $confirmationType): static
     {
         $this->setConfirmationType($confirmationType);
 
         return $this;
     }
 
-    public function setConfirmationType(ConfirmationType|string|null $confirmationType): void
+    public function setConfirmationType(ConfirmationType|string|Closure|null $confirmationType): void
     {
         if (is_null($confirmationType)) {
             return;
         }
-        $this->confirmationType = $confirmationType instanceof ConfirmationType ? $confirmationType : ConfirmationType::tryFrom($confirmationType);
+        $this->confirmationType = $confirmationType instanceof ConfirmationType ? $confirmationType->value : $confirmationType;
     }
 
     public function hasConfirmationType(): bool
@@ -33,14 +35,9 @@ trait HasConfirmationType
         return is_null($this->confirmationType);
     }
 
-    public function getConfirmationType(): ?ConfirmationType
+    public function getConfirmationType(): ?string
     {
-        return $this->confirmationType;
-    }
-
-    public function getConfirmationTypeValue(): ?string
-    {
-        return $this->getConfirmationType()?->value;
+        return $this->evaluate($this->confirmationType);
     }
 
     public function constructive(): static

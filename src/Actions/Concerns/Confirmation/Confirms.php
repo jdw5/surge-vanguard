@@ -13,7 +13,7 @@ trait Confirms
     use HasConfirmationType;
     use IsConfirmable;
 
-    public function confirm(string|ConfirmationType|null $type = null, string|Closure|null $title = null, string|Closure|null $message = null): static
+    public function confirm(ConfirmationType|string|Closure $type = null, string|Closure $title = null, string|Closure $message = null): static
     {
         $this->confirmationType($type);
         $this->confirmationTitle($title);
@@ -23,7 +23,7 @@ trait Confirms
     }
 
     /**
-     * @return array<string, array<string, string>|null>
+     * @return array<'confirm', array<string, string>|null>
      */
     public function toArrayConfirm(): array
     {
@@ -35,7 +35,7 @@ trait Confirms
 
         return [
             'confirm' => [
-                'type' => $this->getConfirmationTypeValue(),
+                'type' => $this->getConfirmationType(),
                 'title' => $this->getConfirmationTitle(),
                 'message' => $this->getConfirmationMessage(),
             ],

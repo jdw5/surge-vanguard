@@ -35,9 +35,9 @@ trait HasConfirmationTitle
         return is_null($this->confirmationTitle);
     }
 
-    public function getConfirmationTitle(): ?string
+    public function getConfirmationTitle(): string
     {
-        return $this->evaluate($this->confirmationTitle);
+        return $this->evaluate($this->confirmationTitle) ?? config('table.confirmation.title');
     }
 
     // public function resolveConfirmationTitle(mixed $model): void

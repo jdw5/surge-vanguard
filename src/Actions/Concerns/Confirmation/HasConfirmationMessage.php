@@ -35,10 +35,8 @@ trait HasConfirmationMessage
         return is_null($this->confirmationMessage);
     }
 
-    public function getConfirmationMessage(): ?string
+    public function getConfirmationMessage(): string
     {
-        return $this->evaluate(
-            value: $this->confirmationMessage,
-        );
+        return $this->evaluate($this->confirmationMessage) ?? config('table.confirmation.message');
     }
 }
