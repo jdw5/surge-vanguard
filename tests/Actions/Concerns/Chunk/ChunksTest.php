@@ -7,10 +7,10 @@ beforeEach(function () {
 });
 
 it('uses configuration defaults', function (){
-    expect($this->action->getChunkSize())->toBe(config('table.chunking.size'));
+    expect($this->action->getChunkSize())->toBe(config('table.chunk.size'));
     expect($this->action->hasChunkSize())->toBeFalse();
     expect($this->action->lacksChunkSize())->toBeTrue();
-    expect($this->action->getChunkById())->toBe(config('table.chunking.by_id'));
+    expect($this->action->getChunkById())->toBe(config('table.chunk.by_id'));
     expect($this->action->hasChunkById())->toBeFalse();
     expect($this->action->lacksChunkById())->toBeTrue();
 });

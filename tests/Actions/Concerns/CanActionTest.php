@@ -20,6 +20,12 @@ it('can set action', function () {
     expect($this->action->cannotAction())->toBeFalse();
 });
 
+it('can set action alias', function () {
+    $this->action->each(fn (Product $product) => $product->name = 'New name');
+    expect($this->action->canAction())->toBeTrue();
+    expect($this->action->cannotAction())->toBeFalse();
+});
+
 it('can set as invokable class', function () {
     // $this->action->setAction(Product::class);
     // expect($this->action->getAction())->toBeInstanceOf(Product::class);

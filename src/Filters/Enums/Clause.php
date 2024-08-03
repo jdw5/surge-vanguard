@@ -8,60 +8,60 @@ use Illuminate\Support\Facades\DB;
 
 enum Clause: string
 {
-    case IS = 'is';
-    case IS_NOT = 'is_not';
-    case SEARCH = 'search';
-    case STARTS_WITH = 'starts_with';
-    case ENDS_WITH = 'ends_with';
-    case CONTAINS = 'contains';
-    case DOES_NOT_CONTAIN = 'does_not_contain';
-    case ALL = 'all';
-    case ANY = 'any';
-    case JSON = 'json_contains';
-    case NOT_JSON = 'json_does_not_contain';
-    case JSON_LENGTH = 'json_length';
-    case JSON_KEY = 'json_key';
-    case JSON_NOT_KEY = 'json_not_key';
-    case JSON_OVERLAPS = 'json_overlaps';
-    case JSON_DOESNT_OVERLAP = 'json_doesnt_overlap';
-    case FULL_TEXT = 'fulltext';
-    case LIKE = 'like';
+    case Is = 'is';
+    case IsNot = 'is_not';
+    case Search = 'search';
+    case StartsWith = 'starts_with';
+    case EndsWith = 'ends_with';
+    case Contains = 'contains';
+    case DoesNotContain = 'does_not_contain';
+    case All = 'all';
+    case Any = 'any';
+    case Json = 'json_contains';
+    case NotJson = 'json_does_not_contain';
+    case JsonLength = 'json_length';
+    case JsonKey = 'json_key';
+    case JsonNotKey = 'json_not_key';
+    case JsonOverlaps = 'json_overlaps';
+    case JsonDoesNotOverlap = 'json_doesnt_overlap';
+    case FullText = 'fulltext';
+    case Like = 'like';
 
     public function statement(): string
     {
         return match ($this) {
-            self::IS => 'where',
-            self::IS_NOT => 'whereNot',
-            self::SEARCH => 'search',
-            self::STARTS_WITH => 'where',
-            self::ENDS_WITH => 'where',
-            self::CONTAINS => 'whereIn',
-            self::DOES_NOT_CONTAIN => 'whereNotIn',
-            self::ALL => 'whereAll',
-            self::ANY => 'whereAny',
-            self::JSON => 'whereJsonContains',
-            self::NOT_JSON => 'whereJsonDoesntContain',
-            self::JSON_LENGTH => 'whereJsonLength',
-            self::JSON_KEY => 'whereJsonContainsKey',
-            self::JSON_NOT_KEY => 'whereJsonDoesntContainKey',
-            self::JSON_OVERLAPS => 'whereJsonOverlaps',
-            self::JSON_DOESNT_OVERLAP => 'whereJsonDoesntOverlap',
-            self::FULL_TEXT => 'whereFullText',
-            self::LIKE => 'where',
+            self::Is => 'where',
+            self::IsNot => 'whereNot',
+            self::Search => 'search',
+            self::StartsWith => 'where',
+            self::EndsWith => 'where',
+            self::Contains => 'whereIn',
+            self::DoesNotContain => 'whereNotIn',
+            self::All => 'whereAll',
+            self::Any => 'whereAny',
+            self::Json => 'whereJsonContains',
+            self::NotJson => 'whereJsonDoesntContain',
+            self::JsonLength => 'whereJsonLength',
+            self::JsonKey => 'whereJsonContainsKey',
+            self::JsonNotKey => 'whereJsonDoesntContainKey',
+            self::JsonOverlaps => 'whereJsonOverlaps',
+            self::JsonDoesNotOverlap => 'whereJsonDoesntOverlap',
+            self::FullText => 'whereFullText',
+            self::Like => 'where',
         };
     }
 
     public function needsOperator(): bool
     {
         return match ($this) {
-            self::JSON_LENGTH,
-            self::JSON_KEY,
-            self::JSON_NOT_KEY,
-            self::JSON_OVERLAPS,
-            self::JSON_DOESNT_OVERLAP,
-            self::FULL_TEXT,
-            self::CONTAINS,
-            self::DOES_NOT_CONTAIN => false,
+            self::JsonLength,
+            self::JsonKey,
+            self::JsonNotKey,
+            self::JsonOverlaps,
+            self::JsonDoesNotOverlap,
+            self::FullText,
+            self::Contains,
+            self::DoesNotContain => false,
             default => true,
         };
     }
@@ -69,7 +69,7 @@ enum Clause: string
     public function isMultiple(): bool
     {
         return match ($this) {
-            self::CONTAINS, self::DOES_NOT_CONTAIN, self::JSON, self::NOT_JSON => true,
+            self::Contains, self::DoesNotContain, self::Json, self::NotJson => true,
             default => false,
         };
     }
@@ -77,7 +77,7 @@ enum Clause: string
     public function overrideOperator(Operator $operator): Operator
     {
         return match ($this) {
-            self::STARTS_WITH, self::ENDS_WITH, self::SEARCH, self::LIKE => Operator::LIKE,
+            self::StartsWith, self::EndsWith, self::Search, self::Like => Operator::Like,
             default => $operator,
         };
     }
@@ -89,9 +89,9 @@ enum Clause: string
         }
 
         return match ($this) {
-            self::STARTS_WITH => "$value%",
-            self::ENDS_WITH => "%$value",
-            self::SEARCH, self::LIKE => '%' . strtolower($value) . '%',
+            self::StartsWith => "$value%",
+            self::EndsWith => "%$value",
+            self::Search, self::Like => '%' . strtolower($value) . '%',
             default => $value,
         };
     }
@@ -99,8 +99,8 @@ enum Clause: string
     public function formatProperty(string|array $property)
     {
         return match ($this) {
-            self::ALL, self::ANY => is_array($property) ? $property : [$property],
-            self::SEARCH, self::LIKE => DB::raw("lower($property)"),
+            self::All, self::Any => is_array($property) ? $property : [$property],
+            self::Search, self::Like => DB::raw("lower($property)"),
             default => $property,
         };
     }

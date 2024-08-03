@@ -7,7 +7,7 @@ beforeEach(function () {
 });
 
 it('uses configuration defaults', function (){
-    expect($this->action->getChunkById())->toBe(config('table.chunking.by_id'));
+    expect($this->action->getChunkById())->toBe(config('table.chunk.by_id'));
     expect($this->action->hasChunkById())->toBeFalse();
     expect($this->action->lacksChunkById())->toBeTrue();
 });
@@ -36,7 +36,7 @@ it('can set a chunk by id through chaining', function () {
 it('prevents null behaviour from being set', function () {
     $this->action->setChunkById(null);
     expect($this->action)
-        ->getChunkById()->toBe(config('table.chunking.by_id'))
+        ->getChunkById()->toBe(config('table.chunk.by_id'))
         ->hasChunkById()->toBeFalse()
         ->lacksChunkById()->toBeTrue();
 });

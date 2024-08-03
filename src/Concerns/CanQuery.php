@@ -7,7 +7,7 @@ use Conquest\Table\Exceptions\QueryNotDefined;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-trait HasQuery
+trait CanQuery
 {
     protected ?Closure $query = null;
 
@@ -35,19 +35,19 @@ trait HasQuery
         return $this->query;
     }
 
-    public function lacksQuery(): bool
+    public function canQuery(): bool
     {
         return is_null($this->query);
     }
 
-    public function hasQuery(): bool
+    public function cannotQuery(): bool
     {
-        return ! $this->lacksQuery();
+        return ! $this->canQuery();
     }
 
     public function applyQuery(Builder|QueryBuilder $builder)
     {
-        if ($this->lacksQuery()) {
+        if ($this->cannotQuery()) {
             return $builder;
         }
 

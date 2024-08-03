@@ -1,47 +1,78 @@
 <?php
 
 use Conquest\Table\Actions\PageAction;
-use Conquest\Table\Table;
 
-it('can create a page action', function () {
-    $action = new PageAction($l = 'Page');
-    expect($action->getLabel())->toBe($l);
-    expect($action->getName())->toBe('page');
-    expect($action->isAuthorised())->toBeTrue();
-    expect($action->getType())->toBe(Table::PAGE_ACTION);
-    expect($action->getResolvedRoute())->toBeNull();
-    expect($action->getMethod())->toBeNull();
-    expect($action->getMeta())->toBe([]);
+it('can instantiate an page action', function () {
+    $action = new PageAction('Create');
+    expect($action)->toBeInstanceOf(PageAction::class)
+        ->getLabel()->toBe('Create')
+        ->getName()->toBe('create')
+        ->getType()->toBe('page')
+        ->isAuthorised()->toBeTrue()
+        ->hasRoute()->toBeFalse()
+        ->lacksMethod()->toBeTrue()
+        ->getMeta()->toBe([]);
 });
 
-it('can make a page action', function () {
-    expect(PageAction::make('Page'))->toBeInstanceOf(PageAction::class)
-        ->getLabel()->toBe('Page')
-        ->getName()->toBe('page')
-        ->getType()->toBe(Table::PAGE_ACTION);
+describe('base', function () {
+    beforeEach(function () {
+        $this->action = PageAction::make('Create');
+    });
+
+    it('can make an page action', function () {
+        expect($this->action)->toBeInstanceOf(PageAction::class)
+            ->getLabel()->toBe('Create')
+            ->getName()->toBe('create')
+            ->getType()->toBe('page')
+            ->isAuthorised()->toBeTrue()
+            ->hasRoute()->toBeFalse()
+            ->lacksMethod()->toBeTrue()
+            ->hasMeta()->toBeFalse();
+    });
+
+    it('has array form', function () {
+        expect($this->action->toArray())->toEqual([
+            'name' => 'create',
+            'label' => 'Create',
+            'type' => 'page',
+            'meta' => [],
+            'route' => null,
+            'method' => null,
+        ]);
+    });
 });
 
-it('can set a named route on a page action', function () {
-    $action = PageAction::make('Page', route: 'page.index');
-    expect($action->getResolvedRoute())->toBe(route('page.index'));
-});
+describe('chained', function () {
+    beforeEach(function () {
+        $this->action = PageAction::make('Create')
+            ->name('make')
+            ->meta(['key' => 'value'])
+            ->authorize(fn () => false)
+            ->route('/products')
+            ->method('POST');
+    });
 
-it('can set a uri route on a page action', function () {
-    expect(PageAction::make('Page', route: '/page')->getResolvedRoute())->toBe(url('/page'));
-});
+    it('can make an page action', function () {
+        expect($this->action)->toBeInstanceOf(PageAction::class)
+            ->getLabel()->toBe('Create')
+            ->getName()->toBe('make')
+            ->getType()->toBe('page')
+            ->isAuthorised()->toBeFalse()
+            ->hasRoute()->toBeTrue()
+            ->lacksMethod()->toBeFalse()
+            ->hasMeta()->toBeTrue();
+    });
 
-it('can set a resolvable named route on a page action', function () {
-    expect(PageAction::make('Page', route: fn () => 'page.index')->getResolvedRoute())->toBe(route('page.index'));
-});
-
-it('can set a resolvable uri route on a page action', function () {
-    expect(PageAction::make('Page', route: fn () => '/page')->getResolvedRoute())->toBe(url('/page'));
-});
-
-it('can set a method on a page action', function () {
-    expect(PageAction::make('Page', method: 'POST')->getMethod())->toBe('POST');
-});
-
-it('can set method directly on a page action', function () {
-    expect(PageAction::make('Page')->usePatch()->getMethod())->toBe('PATCH');
+    it('has array form', function () {
+        expect($this->action->toArray())->toEqual([
+            'name' => 'make',
+            'label' => 'Create',
+            'type' => 'page',
+            'meta' => [
+                'key' => 'value'
+            ],
+            'route' => url('/products'),
+            'method' => 'POST',
+        ]);
+    });
 });

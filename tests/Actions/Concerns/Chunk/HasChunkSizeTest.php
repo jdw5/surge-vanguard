@@ -7,7 +7,7 @@ beforeEach(function () {
 });
 
 it('uses configuration defaults', function (){
-    expect($this->action->getChunkSize())->toBe(config('table.chunking.size'));
+    expect($this->action->getChunkSize())->toBe(config('table.chunk.size'));
     expect($this->action->hasChunkSize())->toBeFalse();
     expect($this->action->lacksChunkSize())->toBeTrue();
 });
@@ -36,7 +36,7 @@ it('can set a chunkSize through chaining', function () {
 it('prevents null behaviour from being set', function () {
     $this->action->setChunkSize(null);
     expect($this->action)
-        ->getChunkSize()->toBe(config('table.chunking.size'))
+        ->getChunkSize()->toBe(config('table.chunk.size'))
         ->hasChunkSize()->toBeFalse()
         ->lacksChunkSize()->toBeTrue();
 });

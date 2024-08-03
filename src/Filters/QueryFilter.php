@@ -21,7 +21,7 @@ class QueryFilter extends BaseFilter
 
     public function setUp(): void
     {
-        $this->setType('filter:query');
+        $this->setType('query');
     }
 
     public function __construct(string|Closure $name, string|Closure|null $label = null, ?Closure $query = null)

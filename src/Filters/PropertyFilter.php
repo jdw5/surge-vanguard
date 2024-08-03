@@ -16,13 +16,18 @@ abstract class PropertyFilter extends BaseFilter
     use CanValidate;
     use HasProperty;
 
-    public function __construct(array|string|Closure $property, string|Closure|null $name = null, string|Closure|null $label = null)
+    public function __construct(array|string|Closure $property, string|Closure $name = null, string|Closure $label = null)
     {
         if (is_array($property) && is_null($name)) {
             throw new CannotResolveNameFromProperty($property);
         }
         $this->setProperty($property);
         parent::__construct($name ?? $this->toName($this->evaluate($property)), $label);
+    }
+
+    public static function make(array|string|Closure $property, string|Closure $name = null, string|Closure $label = null): static
+    {
+        return resolve(static::class, compact('property', 'name', 'label'));
     }
 
     public function apply(Builder|QueryBuilder $builder): void

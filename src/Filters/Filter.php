@@ -17,7 +17,7 @@ class Filter extends PropertyFilter
     public function setUp(): void
     {
         $this->setType('filter');
-        $this->setClause(Clause::IS);
+        $this->setClause(Clause::Is);
         $this->setOperator(Operator::EQUAL);
     }
 
