@@ -2,7 +2,7 @@
 
 namespace Conquest\Table\Actions;
 
-use Conquest\Table\Actions\Concerns\Confirmation\Confirms;
+use Conquest\Table\Actions\Concerns\Confirm\Confirms;
 use Conquest\Table\Actions\Concerns\CanAction;
 use Conquest\Table\Actions\Concerns\Chunking\Chunks;
 use Conquest\Table\Actions\Concerns\IsDeselectable;

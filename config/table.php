@@ -66,7 +66,7 @@ return [
         // 'lazy' => false,
     ],
 
-    'confirmation' => [
+    'confirm' => [
         'title' => 'Confirm',
         'message' => 'Are you sure you want to perform this action?',
     ],

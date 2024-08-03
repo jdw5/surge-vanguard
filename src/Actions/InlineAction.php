@@ -5,7 +5,7 @@ namespace Conquest\Table\Actions;
 use Conquest\Core\Concerns\HasHttpMethod;
 use Conquest\Core\Concerns\HasRoute;
 use Conquest\Core\Concerns\IsDefault;
-use Conquest\Table\Actions\Concerns\Confirmation\Confirms;
+use Conquest\Table\Actions\Concerns\Confirm\Confirms;
 use Conquest\Table\Actions\Concerns\CanAction;
 use Conquest\Table\Actions\Concerns\IsBulk;
 use Conquest\Table\Table;

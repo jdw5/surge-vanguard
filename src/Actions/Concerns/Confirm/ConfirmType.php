@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Conquest\Table\Actions\Concerns\Confirmation;
+namespace Conquest\Table\Actions\Concerns\Confirm;
 
-enum ConfirmationType: string
+enum ConfirmType: string
 {
     case Neutral = 'neutral';
     case Destructive = 'destructive';
