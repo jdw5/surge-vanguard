@@ -8,16 +8,16 @@ trait IsRestricted
 {
     protected bool|Closure $restricted = false;
 
-    public function restricted(bool|Closure $restrict = true): static
+    public function restricted(bool|Closure $restricted = true): static
     {
-        $this->setRestricted($restrict);
+        $this->setRestricted($restricted);
 
         return $this;
     }
 
-    public function unrestricted(bool|Closure $restrict = false): static
+    public function unrestricted(bool|Closure $restricted = false): static
     {
-        $this->setRestricted($restrict);
+        $this->setRestricted($restricted);
 
         return $this;
     }

@@ -8,13 +8,13 @@ trait IsMultiple
 {
     protected bool|Closure $multiple = false;
 
-    public function multiple(bool|Closure $restrict = true): static
+    public function multiple(bool|Closure $multiple = true): static
     {
-        $this->setMultiple($restrict);
+        $this->setMultiple($multiple);
 
         return $this;
     }
-    
+
     public function setMultiple(bool|Closure|null $multiple): void
     {
         if (is_null($multiple)) {
@@ -31,5 +31,14 @@ trait IsMultiple
     public function isNotMultiple(): bool
     {
         return ! $this->isMultiple();
+    }
+
+    public function toMultiple(?string $value): array
+    {
+        if (is_null($value)) {
+            return [];
+        }
+
+        return array_map('trim', explode(',', $value));
     }
 }

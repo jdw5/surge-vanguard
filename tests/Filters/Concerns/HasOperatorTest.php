@@ -53,12 +53,12 @@ it('can set "equal" operator through shorthand chain', function () {
 
 it('has alias for "equal" operator "equal"', function () {
     expect($this->filter->equal())->toBeInstanceOf(Filter::class)
-        ->getClause()->toBe(Operator::Equal);
+        ->getOperator()->toBe(Operator::Equal);
 });
 
 it('has alias for "equal" operator "equals"', function () {
     expect($this->filter->equals())->toBeInstanceOf(Filter::class)
-        ->getClause()->toBe(Operator::Equal);
+        ->getOperator()->toBe(Operator::Equal);
 });
 
 it('can set "not equal" operator through shorthand chain', function () {
@@ -68,7 +68,7 @@ it('can set "not equal" operator through shorthand chain', function () {
 
 it('has alias for "not equal" operator "notEqual"', function () {
     expect($this->filter->notEqual())->toBeInstanceOf(Filter::class)
-        ->getClause()->toBe(Operator::NotEqual);
+        ->getOperator()->toBe(Operator::NotEqual);
 });
 
 it('can set "greater than" operator through shorthand chain', function () {
@@ -78,12 +78,12 @@ it('can set "greater than" operator through shorthand chain', function () {
 
 it('has alias for "greater than" operator "greaterThan"', function () {
     expect($this->filter->greaterThan())->toBeInstanceOf(Filter::class)
-        ->getClause()->toBe(Operator::GreaterThan);
+        ->getOperator()->toBe(Operator::GreaterThan);
 });
 
 it('has alias for "greater than" operator "greater"', function () {
     expect($this->filter->greater())->toBeInstanceOf(Filter::class)
-        ->getClause()->toBe(Operator::GreaterThan);
+        ->getOperator()->toBe(Operator::GreaterThan);
 });
 
 it('can set "greater than or equal" operator through shorthand chain', function () {
@@ -93,7 +93,7 @@ it('can set "greater than or equal" operator through shorthand chain', function 
 
 it('has alias for "greater than or equal" operator "greaterThanOrEqual"', function () {
     expect($this->filter->greaterThanOrEqual())->toBeInstanceOf(Filter::class)
-        ->getClause()->toBe(Operator::GreaterThanOrEqual);
+        ->getOperator()->toBe(Operator::GreaterThanOrEqual);
 });
 
 it('can set "less than" operator through shorthand chain', function () {
@@ -103,12 +103,12 @@ it('can set "less than" operator through shorthand chain', function () {
 
 it('has alias for "less than" operator "lessThan"', function () {
     expect($this->filter->lessThan())->toBeInstanceOf(Filter::class)
-        ->getClause()->toBe(Operator::LessThan);
+        ->getOperator()->toBe(Operator::LessThan);
 });
 
 it('has alias for "less than" operator "lesser"', function () {
     expect($this->filter->lesser())->toBeInstanceOf(Filter::class)
-        ->getClause()->toBe(Operator::LessThan);
+        ->getOperator()->toBe(Operator::LessThan);
 });
 
 it('can set "less than or equal" operator through shorthand chain', function () {
@@ -118,7 +118,7 @@ it('can set "less than or equal" operator through shorthand chain', function () 
 
 it('has alias for "less than or equal" operator "lessThanOrEqual"', function () {
     expect($this->filter->lessThanOrEqual())->toBeInstanceOf(Filter::class)
-        ->getClause()->toBe(Operator::LessThanOrEqual);
+        ->getOperator()->toBe(Operator::LessThanOrEqual);
 });
 
 it('can set "like" operator through shorthand chain "fuzzy"', function () {

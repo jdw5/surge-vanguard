@@ -2,16 +2,18 @@
 
 namespace Conquest\Table\Filters;
 
-use Conquest\Core\Options\Concerns\HasOptions;
+use Closure;
 use Conquest\Core\Options\Option;
+use Illuminate\Support\Facades\Request;
+use Conquest\Table\Filters\Enums\Clause;
+use Illuminate\Database\Eloquent\Builder;
+use Conquest\Table\Filters\Enums\Operator;
+use Conquest\Core\Options\Concerns\HasOptions;
 use Conquest\Table\Filters\Concerns\HasClause;
+use Conquest\Table\Filters\Concerns\IsMultiple;
 use Conquest\Table\Filters\Concerns\HasOperator;
 use Conquest\Table\Filters\Concerns\IsRestricted;
-use Conquest\Table\Filters\Enums\Clause;
-use Conquest\Table\Filters\Enums\Operator;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Support\Facades\Request;
 
 class SetFilter extends PropertyFilter
 {
@@ -19,8 +21,10 @@ class SetFilter extends PropertyFilter
     use HasOperator;
     use HasOptions;
     use IsRestricted;
-
-    protected bool $multiple = false;
+    use IsMultiple {
+        setMultiple as setMultipleTrait;
+        isMultiple as isMultipleTrait;
+    }
 
     public function setUp(): void
     {
@@ -48,7 +52,7 @@ class SetFilter extends PropertyFilter
     public function handle(Builder|QueryBuilder $builder): void
     {
         $this->getClause()
-            ->apply($builder,
+            ?->apply($builder,
                 $this->getProperty(),
                 $this->getOperator(),
                 $this->getValue()
@@ -92,35 +96,17 @@ class SetFilter extends PropertyFilter
         ]);
     }
 
-    public function multiple(): static
+    public function setMultiple(bool|Closure|null $multiple): void
     {
-        $this->setMultiple(true);
+        $this->setMultipleTrait($multiple);
 
-        return $this;
-    }
-
-    public function setMultiple(?bool $multiple): void
-    {
-        if (is_null($multiple)) {
-            return;
-        }
-        if ($multiple && ! $this->getClause()?->isMultiple()) {
+        if ($this->isMultipleTrait() && ! $this->getClause()?->isMultiple()) {
             $this->setClause(Clause::Contains);
         }
-        $this->multiple = $multiple;
     }
 
     public function isMultiple(): bool
     {
-        return $this->multiple && $this->getClause()->isMultiple();
-    }
-
-    public function splitToMultiple(?string $value): array
-    {
-        if (is_null($value)) {
-            return [];
-        }
-
-        return array_map('trim', explode(',', $value));
+        return $this->isMultipleTrait() && $this->getClause()->isMultiple();
     }
 }

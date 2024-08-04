@@ -35,3 +35,15 @@ it('prevents null behaviour from being set', function () {
         ->isMultiple()->toBeFalse()
         ->isNotMultiple()->toBeTrue();
 });
+
+it('converts value to empty array if null', function () {
+    expect($this->action->toMultiple(null))->toBe([]);
+});
+
+it('converts value to array', function () {
+    expect($this->action->toMultiple('1,2,3'))->toBe(['1', '2', '3']);
+});
+
+it('converts value to array, trimming whitespace', function () {
+    expect($this->action->toMultiple('1, 2, 3'))->toBe(['1', '2', '3']);
+});
