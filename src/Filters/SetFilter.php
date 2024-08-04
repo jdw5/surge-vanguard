@@ -6,7 +6,7 @@ use Conquest\Core\Options\Concerns\HasOptions;
 use Conquest\Core\Options\Option;
 use Conquest\Table\Filters\Concerns\HasClause;
 use Conquest\Table\Filters\Concerns\HasOperator;
-use Conquest\Table\Filters\Concerns\IsRestrictable;
+use Conquest\Table\Filters\Concerns\IsRestricted;
 use Conquest\Table\Filters\Enums\Clause;
 use Conquest\Table\Filters\Enums\Operator;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,15 +18,15 @@ class SetFilter extends PropertyFilter
     use HasClause;
     use HasOperator;
     use HasOptions;
-    use IsRestrictable;
+    use IsRestricted;
 
     protected bool $multiple = false;
 
     public function setUp(): void
     {
-        $this->setType('filter:set');
-        $this->setClause(Clause::IS);
-        $this->setOperator(Operator::EQUAL);
+        $this->setType('set');
+        $this->setClause(Clause::Is);
+        $this->setOperator(Operator::Equal);
     }
 
     public function apply(Builder|QueryBuilder $builder): void
@@ -105,7 +105,7 @@ class SetFilter extends PropertyFilter
             return;
         }
         if ($multiple && ! $this->getClause()?->isMultiple()) {
-            $this->setClause(Clause::CONTAINS);
+            $this->setClause(Clause::Contains);
         }
         $this->multiple = $multiple;
     }
