@@ -2,21 +2,22 @@
 
 namespace Conquest\Table\Filters\Concerns;
 
+use Closure;
 use Conquest\Table\Filters\Enums\Operator;
 use Illuminate\Support\Collection;
 
 trait HasOperators
 {
-    protected array $operators = [];
+    protected array|null $operators = null;
 
     /**
      * Set the operators to be used, chainable.
      *
      * @param  array<Operator>  $operators
      */
-    public function operators(array $operators): static
+    public function operators(...$operators): static
     {
-        $this->setOperators($operators);
+        $this->setOperators(...$operators);
 
         return $this;
     }
@@ -24,22 +25,23 @@ trait HasOperators
     /**
      * Set the operators to be used quietly.
      *
-     * @param  array<Operator>|null  $operators
+     * @param array<Operator>  $operators
      */
-    public function setOperators(?array $operators): void
+    public function setOperators(...$operators): void
     {
-        if (is_null($operators)) {
+        if (empty($operators)) {
             return;
         }
+        // Ensure that the operators are all instances of Operator.
         $this->operators = $operators;
     }
 
     /**
      * Get the operators to be used.
      *
-     * @return array<Operator>
+     * @return array<Operator>|null
      */
-    public function getOperators(): array
+    public function getOperators(): ?array
     {
         return $this->operators;
     }
@@ -58,11 +60,11 @@ trait HasOperators
 
     public function hasOperators(): bool
     {
-        return count($this->operators) > 0;
+        return ! $this->lacksOperators();
     }
 
     public function lacksOperators(): bool
     {
-        return ! $this->hasOperators();
+        return is_null($this->operators);
     }
 }

@@ -19,8 +19,8 @@ class OperatorFilter extends PropertyFilter
 
     public function setUp(): void
     {
-        $this->setType('filter:operator');
-        $this->setClause(Clause::IS);
+        $this->setType('operator');
+        $this->setClause(Clause::Is);
     }
 
     public function getOperatorFromRequest(): ?Operator
