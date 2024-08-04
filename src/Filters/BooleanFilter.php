@@ -20,9 +20,9 @@ class BooleanFilter extends PropertyFilter
 
     public function setUp(): void
     {
-        $this->setType('filter:boolean');
-        $this->setClause(Clause::IS);
-        $this->setOperator(Operator::EQUAL);
+        $this->setType('boolean');
+        $this->setClause(Clause::Is);
+        $this->setOperator(Operator::Equal);
     }
 
     public function apply(Builder|QueryBuilder $builder): void
