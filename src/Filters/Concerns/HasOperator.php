@@ -26,12 +26,7 @@ trait HasOperator
         if (is_null($operator)) {
             return;
         }
-
-        if ($operator instanceof Operator) {
-            $this->operator = $operator;
-        } else {
-            $this->operator = Operator::tryFrom($operator);
-        }
+        $this->operator = $operator instanceof Operator ? $operator : Operator::tryFrom($operator);
     }
 
     /**
@@ -39,7 +34,7 @@ trait HasOperator
      */
     public function getOperator(): ?Operator
     {
-        return $this->evaluate($this->operator);
+        return $this->operator;
     }
 
     /**
@@ -47,7 +42,7 @@ trait HasOperator
      */
     public function gt(): static
     {
-        $this->setOperator(Operator::GREATER_THAN);
+        $this->setOperator(Operator::GreaterThan);
 
         return $this;
     }
@@ -57,7 +52,7 @@ trait HasOperator
      */
     public function gte(): static
     {
-        $this->setOperator(Operator::GREATER_THAN_OR_EQUAL);
+        $this->setOperator(Operator::GreaterThanOrEqual);
 
         return $this;
     }
@@ -67,7 +62,7 @@ trait HasOperator
      */
     public function lt(): static
     {
-        $this->setOperator(Operator::LESS_THAN);
+        $this->setOperator(Operator::LessThan);
 
         return $this;
     }
@@ -77,7 +72,7 @@ trait HasOperator
      */
     public function lte(): static
     {
-        $this->setOperator(Operator::LESS_THAN_OR_EQUAL);
+        $this->setOperator(Operator::LessThanOrEqual);
 
         return $this;
     }
@@ -87,7 +82,7 @@ trait HasOperator
      */
     public function eq(): static
     {
-        $this->setOperator(Operator::EQUAL);
+        $this->setOperator(Operator::Equal);
 
         return $this;
     }
@@ -97,59 +92,88 @@ trait HasOperator
      */
     public function neq(): static
     {
-        $this->setOperator(Operator::NOT_EQUAL);
+        $this->setOperator(Operator::NotEqual);
 
         return $this;
     }
 
-    // Alias
+    /**
+     * Alias for eq().
+     */
     public function equals(): static
     {
         return $this->eq();
     }
 
+    /**
+     * Alias for eq().
+     */
     public function equal(): static
     {
         return $this->eq();
     }
 
+    /**
+     * Alias for neq().
+     */
     public function notEqual(): static
     {
         return $this->neq();
     }
 
+    /**
+     * Alias for gt().
+     */
     public function greaterThan(): static
     {
         return $this->gt();
     }
 
+    /**
+     * Alias for gte().
+     */
     public function greaterThanOrEqual(): static
     {
         return $this->gte();
     }
 
+    /**
+     * Alias for lt().
+     */
     public function lessThan(): static
     {
         return $this->lt();
     }
 
+    /**
+     * Alias for lte().
+     */
     public function lessThanOrEqual(): static
     {
         return $this->lte();
     }
 
+    /**
+     * Set the operator to be 'like'.
+     */
     public function fuzzy(): static
     {
-        $this->setOperator(Operator::LIKE);
+        $this->setOperator(Operator::Like);
 
         return $this;
     }
 
+    /**
+     * Alias for gt().
+     */
     public function greater(): static
     {
         return $this->gt();
     }
 
+    /**
+     * Alias for lt().
+     */
     public function less(): static
     {
         return $this->lt();

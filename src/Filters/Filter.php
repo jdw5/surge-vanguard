@@ -18,7 +18,7 @@ class Filter extends PropertyFilter
     {
         $this->setType('filter');
         $this->setClause(Clause::Is);
-        $this->setOperator(Operator::EQUAL);
+        $this->setOperator(Operator::Equal);
     }
 
     public function handle(Builder|QueryBuilder $builder): void

@@ -37,24 +37,22 @@ trait HasDateClause
 
     /**
      * Set the clause to be used quietly.
+     * 
+     * @throws ValueError
      */
-    protected function setDateClause(string|DateClause|null $dateClause): void
+    public function setDateClause(string|DateClause|null $dateClause): void
     {
         if (is_null($dateClause)) {
             return;
         }
 
-        if ($dateClause instanceof DateClause) {
-            $this->dateClause = $dateClause;
-        } else {
-            $this->dateClause = DateClause::tryFrom($dateClause);
-        }
+        $this->dateClause = $dateClause instanceof DateClause ? $dateClause : DateClause::from($dateClause);
     }
 
     /**
      * Retrieve the clause property.
      */
-    public function getClause(): ?DateClause
+    public function getDateClause(): ?DateClause
     {
         return $this->dateClause;
     }
@@ -64,7 +62,7 @@ trait HasDateClause
      */
     public function date(): static
     {
-        return $this->dateClause(DateClause::DATE);
+        return $this->dateClause(DateClause::Date);
     }
 
     /**
@@ -72,7 +70,7 @@ trait HasDateClause
      */
     public function day(): static
     {
-        return $this->dateClause(DateClause::DAY);
+        return $this->dateClause(DateClause::Day);
     }
 
     /**
@@ -80,7 +78,7 @@ trait HasDateClause
      */
     public function month(): static
     {
-        return $this->dateClause(DateClause::MONTH);
+        return $this->dateClause(DateClause::Month);
     }
 
     /**
@@ -88,7 +86,7 @@ trait HasDateClause
      */
     public function year(): static
     {
-        return $this->dateClause(DateClause::YEAR);
+        return $this->dateClause(DateClause::Year);
     }
 
     /**
@@ -96,6 +94,6 @@ trait HasDateClause
      */
     public function time(): static
     {
-        return $this->dateClause(DateClause::TIME);
+        return $this->dateClause(DateClause::Time);
     }
 }

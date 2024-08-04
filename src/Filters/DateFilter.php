@@ -20,14 +20,14 @@ class DateFilter extends PropertyFilter
     public function setUp(): void
     {
         $this->setType('filter:date');
-        $this->setDateClause(DateClause::DATE);
-        $this->setOperator(Operator::EQUAL);
+        $this->setDateClause(DateClause::Date);
+        $this->setOperator(Operator::Equal);
     }
 
     public function handle(Builder|QueryBuilder $builder): void
     {
-        $this->getClause()
-            ->apply($builder,
+        $this->getDateClause()
+            ?->apply($builder,
                 $this->getProperty(),
                 $this->getOperator(),
                 $this->getValue()

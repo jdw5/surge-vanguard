@@ -8,31 +8,31 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 
 enum DateClause: string
 {
-    case DATE = 'date';
-    case DAY = 'day';
-    case MONTH = 'month';
-    case YEAR = 'year';
-    case TIME = 'time';
+    case Date = 'date';
+    case Day = 'day';
+    case Month = 'month';
+    case Year = 'year';
+    case Time = 'time';
 
     public function statement(): string
     {
         return match ($this) {
-            self::DATE => 'whereDate',
-            self::DAY => 'whereDay',
-            self::MONTH => 'whereMonth',
-            self::YEAR => 'whereYear',
-            self::TIME => 'whereTime',
+            self::Date => 'whereDate',
+            self::Day => 'whereDay',
+            self::Month => 'whereMonth',
+            self::Year => 'whereYear',
+            self::Time => 'whereTime',
         };
     }
 
     public function formatValue(Carbon $value): string
     {
         return match ($this) {
-            self::DATE => $value->toDateString(),
-            self::DAY => $value->day,
-            self::MONTH => $value->month,
-            self::YEAR => $value->year,
-            self::TIME => $value->toTimeString(),
+            self::Date => $value->toDateString(),
+            self::Day => $value->day,
+            self::Month => $value->month,
+            self::Year => $value->year,
+            self::Time => $value->toTimeString(),
         };
     }
 
