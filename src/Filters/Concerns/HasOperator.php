@@ -20,13 +20,15 @@ trait HasOperator
 
     /**
      * Set the operator to be used quietly.
+     * 
+     * @throws ValueError
      */
     public function setOperator(string|Operator|null $operator): void
     {
         if (is_null($operator)) {
             return;
         }
-        $this->operator = $operator instanceof Operator ? $operator : Operator::tryFrom($operator);
+        $this->operator = $operator instanceof Operator ? $operator : Operator::from($operator);
     }
 
     /**
@@ -35,6 +37,16 @@ trait HasOperator
     public function getOperator(): ?Operator
     {
         return $this->operator;
+    }
+
+    public function lacksOperator(): bool
+    {
+        return is_null($this->operator);
+    }
+
+    public function hasOperator(): bool
+    {
+        return ! $this->lacksOperator();
     }
 
     /**
@@ -174,7 +186,7 @@ trait HasOperator
     /**
      * Alias for lt().
      */
-    public function less(): static
+    public function lesser(): static
     {
         return $this->lt();
     }

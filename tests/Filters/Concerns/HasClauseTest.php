@@ -20,7 +20,6 @@ it('can set a clause', function () {
     expect($this->filter->lacksClause())->toBeFalse();
 });
 
-
 it('can set a clause through chaining', function () {
     expect($this->filter->clause(Clause::IsNot))->toBeInstanceOf(Filter::class)
         ->getClause()->toBe(Clause::IsNot)
