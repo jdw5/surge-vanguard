@@ -12,6 +12,10 @@ trait HasPageName
             return $this->pageName;
         }
 
+        if (method_exists($this, 'pageName')) {
+            return $this->pageName();
+        }
+
         return config('table.pagination.name', 'show');
     }
 

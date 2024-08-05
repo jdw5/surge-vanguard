@@ -12,4 +12,14 @@ final class MethodTable extends Table
         return 20;
     }
 
+    public function showKey(): string
+    {
+        return 'count';
+    }
+
+    public function pageName(): string
+    {
+        return 'p';
+    }
+
 }
