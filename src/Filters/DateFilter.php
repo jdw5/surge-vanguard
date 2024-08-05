@@ -19,7 +19,7 @@ class DateFilter extends PropertyFilter
 
     public function setUp(): void
     {
-        $this->setType('filter:date');
+        $this->setType('date');
         $this->setDateClause(DateClause::Date);
         $this->setOperator(Operator::Equal);
     }

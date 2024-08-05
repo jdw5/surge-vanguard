@@ -2,6 +2,7 @@
 
 use Workbench\App\Models\Product;
 use Conquest\Table\Filters\Filter;
+use Illuminate\Support\Facades\DB;
 use Conquest\Table\Sorts\ToggleSort;
 use Illuminate\Support\Facades\Request;
 use Conquest\Table\Filters\Enums\Clause;
@@ -170,6 +171,69 @@ describe('can be applied', function () {
             beforeEach(function () {
                 $this->filter = Filter::make('name');
                 $this->builder = Product::query();
+                Request::merge(['name' => 'John']);
+            });
+
+            it('can apply to builder', function () {
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products" where "name" = ?');
+                expect($this->filter->getValue())->toBe('John');
+                expect($this->filter->isActive())->toBeTrue();
+            });
+
+            it('can apply and transforms before setting value', function () {
+                $this->filter->transform(fn ($value) => mb_strtoupper($value));
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products" where "name" = ?');
+                expect($this->filter->getValue())->toBe('JOHN');
+                expect($this->filter->isActive())->toBeTrue();
+            });
+
+            it('can apply and transforms and validates before handling', function () {
+                $this->filter->validate(fn ($value) => !is_null($value) && strlen($value) > 4);
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products"');
+                expect($this->filter->getValue())->toBe('John');
+                expect($this->filter->isActive())->toBeTrue();
+            });
+        });
+    });
+
+    describe('to Query builder', function () {
+        beforeEach(function () {
+            $this->filter = Filter::make('name');
+            $this->builder = DB::table('products');
+        });
+
+        it('can be handled', function () {
+            $this->filter->handle($this->builder);
+            expect($this->builder->toSql())->toBe('select * from "products" where "name" is null');
+        });
+
+        it('can be handled with value', function () {
+            $this->filter->value('John')->clause(Clause::IsNot)->Operator(Operator::Like);
+            $this->filter->handle($this->builder);
+            expect($this->builder->toSql())->toBe('select * from "products" where not "name" like ?');
+        });
+    
+        describe('no request', function () {
+            beforeEach(function () {
+                $this->filter = Filter::make('name');
+                $this->builder = DB::table('products');
+            });
+
+            it('is not applied to builder', function () {
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products"');
+                expect($this->filter->getValue())->toBeNull();
+                expect($this->filter->isActive())->toBeFalse();
+            });
+        });
+    
+        describe('request', function () {
+            beforeEach(function () {
+                $this->filter = Filter::make('name');
+                $this->builder = DB::table('products');
                 Request::merge(['name' => 'John']);
             });
 

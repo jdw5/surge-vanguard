@@ -10,9 +10,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Request;
 
-/**
- * Interpolates a value in the query parameter as true, then executes
- */
 class BooleanFilter extends PropertyFilter
 {
     use HasClause;
@@ -25,9 +22,14 @@ class BooleanFilter extends PropertyFilter
         $this->setOperator(Operator::Equal);
     }
 
+    public function getValueFromRequest(): mixed
+    {
+        return Request::boolean($this->getName());
+    }
+
     public function apply(Builder|QueryBuilder $builder): void
     {
-        $this->setActive(Request::boolean($this->getName()));
+        $this->setActive($this->getValueFromRequest());
         $builder->when(
             $this->isActive(),
             fn (Builder|QueryBuilder $builder) => $this->handle($builder),
@@ -48,7 +50,6 @@ class BooleanFilter extends PropertyFilter
     {
         $array = parent::toArray();
         unset($array['value']);
-
         return $array;
     }
 }

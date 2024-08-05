@@ -1,211 +1,271 @@
 <?php
 
 use Carbon\Carbon;
-use Conquest\Table\Filters\DateFilter;
-use Conquest\Table\Filters\Enums\DateClause;
-use Conquest\Table\Filters\Enums\Operator;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request;
 use Workbench\App\Models\Product;
+use Illuminate\Support\Facades\DB;
+use Conquest\Table\Filters\DateFilter;
+use Illuminate\Support\Facades\Request;
+use Conquest\Table\Filters\Enums\Operator;
+use Conquest\Table\Filters\Enums\DateClause;
+use Conquest\Table\Exceptions\CannotResolveNameFromProperty;
 
-it('can create a date filter', function () {
-    $filter = new DateFilter($n = 'name');
-    expect($filter)->getProperty()->toBe($n)
-        ->getName()->toBe($n)
-        ->getLabel()->toBe('Name')
-        ->isAuthorised()->toBeTrue()
-        ->canValidate()->toBeFalse()
-        ->canTransform()->toBeFalse()
-        ->getClause()->toBe(DateClause::DATE)
-        ->getOperator()->toBe(Operator::EQUAL)
-        ->hasMeta()->toBeFalse();
-});
-
-it('can create a date filter with arguments', function () {
-    $filter = new DateFilter('name',
-        name: 'username',
-        authorize: fn () => false,
-        validator: fn () => true,
-        transform: fn ($value) => $value,
-        dateClause: DateClause::MONTH,
-        operator: Operator::GREATER_THAN,
-        meta: ['key' => 'value'],
-    );
-
-    expect($filter)->getProperty()->toBe('name')
-        ->getName()->toBe('username')
-        ->getLabel()->toBe('Username')
-        ->isAuthorised()->toBeFalse()
-        ->canValidate()->toBeTrue()
-        ->canTransform()->toBeTrue()
-        ->getClause()->toBe(DateClause::MONTH)
-        ->getOperator()->toBe(Operator::GREATER_THAN)
-        ->getMeta()->toBe(['key' => 'value']);
-});
-
-it('can make a date filter', function () {
-    expect(DateFilter::make($n = 'name'))->toBeInstanceOf(DateFilter::class)
-        ->getProperty()->toBe($n)
-        ->getName()->toBe($n)
-        ->getLabel()->toBe('Name')
-        ->isAuthorised()->toBeTrue()
-        ->canValidate()->toBeFalse()
-        ->canTransform()->toBeFalse()
-        ->getClause()->toBe(DateClause::DATE)
-        ->getOperator()->toBe(Operator::EQUAL)
-        ->hasMeta()->toBeFalse();
-});
-
-it('can chain methods on a date filter', function () {
-    $filter = DateFilter::make('name')
-        ->name('username')
-        ->authorize(fn () => false)
-        ->validator(fn () => true)
-        ->transform(fn ($value) => $value)
-        ->month()
-        ->gt()
-        ->meta(['key' => 'value']);
-
+it('can instantiate a filter', function () {
+    $filter = new DateFilter('created_at');
     expect($filter)->toBeInstanceOf(DateFilter::class)
-        ->getProperty()->toBe('name')
-        ->getName()->toBe('username')
-        ->getLabel()->toBe('Name')
-        ->isAuthorised()->toBeFalse()
-        ->canValidate()->toBeTrue()
-        ->canTransform()->toBeTrue()
-        ->getClause()->toBe(DateClause::MONTH)
-        ->getOperator()->toBe(Operator::GREATER_THAN)
-        ->getMeta()->toBe(['key' => 'value']);
+        ->getProperty()->toBe('created_at')
+        ->getName()->toBe('created_at')
+        ->getLabel()->toBe('Created at')
+        ->getType()->toBe('date')
+        ->getValue()->toBeNull()
+        ->hasMeta()->toBeFalse()
+        ->isActive()->toBeFalse()
+        ->isAuthorized()->toBeTrue()
+        ->canTransform()->toBeFalse()
+        ->getDateClause()->toBe(DateClause::Date)
+        ->getOperator()->toBe(Operator::Equal);
 });
 
-it('can apply a base date filter to an eloquent builder', function () {
-    $filter = DateFilter::make('created_at', 'is');
-    $builder = Product::query();
-    Request::merge(['is' => '2000-01-01']);
-    $filter->apply($builder);
-    expect($builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") = cast(? as text)');
-    expect($filter->isActive())->toBeTrue();
+it('throws error if array of properties given and no name', function () {
+    $f = DateFilter::make(['a', 'b']);
+})->throws(CannotResolveNameFromProperty::class);
+
+it('can instantiate a filter using resolvable property', function () {
+    expect( DateFilter::make(fn () => 'created_at'))->toBeInstanceOf(DateFilter::class)
+        ->getProperty()->toBe('created_at')
+        ->getName()->toBe('created_at')
+        ->getLabel()->toBe('Created at')
+        ->getType()->toBe('date')
+        ->getValue()->toBeNull()
+        ->hasMeta()->toBeFalse()
+        ->isActive()->toBeFalse()
+        ->isAuthorized()->toBeTrue()
+        ->canTransform()->toBeFalse()
+        ->getDateClause()->toBe(DateClause::Date)
+        ->getOperator()->toBe(Operator::Equal);
 });
 
-it('can apply a base date filter to a query builder', function () {
-    $filter = DateFilter::make('created_at', 'is');
-    $builder = DB::table('products');
-    Request::merge(['is' => '2000-01-01']);
-    $filter->apply($builder);
-    expect($builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") = cast(? as text)');
-    expect($filter->isActive())->toBeTrue();
+describe('base make', function () {
+    beforeEach(function () {
+        $this->filter = DateFilter::make('created_at');
+    });
+
+    it('retrieves value from request', function () {
+        Request::merge(['created_at' => '1990-01-01']);
+        expect($this->filter->getValueFromRequest())->toEqual(Carbon::parse('1990-01-01'));
+    });
+
+    it('retrieves null from request if invalid date', function () {
+        Request::merge(['created_at' => 'word']);
+        expect($this->filter->getValueFromRequest())->toBeNull();
+    });
+
+    it('retrieves null from request', function () {
+        expect($this->filter->getValueFromRequest())->toBeNull();
+    });
+
+    it('retrieves null from request if incorrect name', function () {
+        Request::merge(['not' => '1990-01-01']);
+        expect($this->filter->getValueFromRequest())->toBeNull();
+    });
+
+    it('can filter', function () {
+        expect($this->filter->filtering(now()))->toBeTrue();
+        expect($this->filter->filtering(null))->toBeFalse();
+    });
+
+    it('can make a filter', function () {
+        expect($this->filter)->toBeInstanceOf(DateFilter::class)
+            ->getProperty()->toBe('created_at')
+            ->getName()->toBe('created_at')
+            ->getLabel()->toBe('Created at')
+            ->getType()->toBe('date')
+            ->getValue()->toBeNull()
+            ->hasMeta()->toBeFalse()
+            ->isActive()->toBeFalse()
+            ->isAuthorized()->toBeTrue()
+            ->canTransform()->toBeFalse()
+            ->getDateClause()->toBe(DateClause::Date)
+            ->getOperator()->toBe(Operator::Equal);
+    });
+
+    it('has array form', function () {
+        expect($this->filter->toArray())->toEqual([
+            'name' => 'created_at',
+            'label' => 'Created at',
+            'type' => 'date',
+            'active' => false,
+            'value' => null,
+            'meta' => [],
+        ]);
+    });
+
+    it('has array form with date time string', function () {
+        $this->filter->value(Carbon::parse('1990-01-01'));
+        expect($this->filter->toArray())->toEqual([
+            'name' => 'created_at',
+            'label' => 'Created at',
+            'type' => 'date',
+            'active' => false,
+            'value' => '1990-01-01 00:00:00',
+            'meta' => [],
+        ]);
+    });
 });
 
-it('does not apply a date filter if name not provided', function () {
-    $filter = DateFilter::make('created_at', 'is');
-    $builder = Product::query();
-    $filter->apply($builder);
-    expect($builder->toSql())->toBe('select * from "products"');
-    expect($filter->isActive())->toBeFalse();
+describe('chain make', function () {
+    beforeEach(function () {
+        $this->filter = DateFilter::make('created_at')
+            ->name('when')
+            ->label('Made at')
+            ->authorize(fn () => false)
+            ->transform(fn ($value) => mb_strtoupper($value))
+            ->meta(['key' => 'value'])
+            ->year()
+            ->neq();
+    });
+
+    it('can chain methods on a filter', function () {       
+        expect($this->filter)->toBeInstanceOf(DateFilter::class)
+            ->getProperty()->toBe('created_at')
+            ->getName()->toBe('when')
+            ->getLabel()->toBe('Made at')
+            ->getType()->toBe('date')
+            ->getValue()->toBeNull()
+            ->hasMeta()->toBeTrue()
+            ->getMeta()->toBe(['key' => 'value'])
+            ->isActive()->toBeFalse()
+            ->isAuthorized()->toBeFalse()
+            ->canTransform()->toBeTrue()
+            ->getDateClause()->toBe(DateClause::Year)
+            ->getOperator()->toBe(Operator::NotEqual);
+    });
+
+    it('has array form', function () {
+        expect($this->filter->toArray())->toEqual([
+            'name' => 'when',
+            'label' => 'Made at',
+            'type' => 'date',
+            'active' => false,
+            'value' => null,
+            'meta' => ['key' => 'value'],
+        ]);
+    });
 });
 
-it('does not apply a date filter if name not equal', function () {
-    $filter = DateFilter::make('created_at', 'is');
-    $builder = Product::query();
-    Request::merge(['created_at' => '2000-01-01']);
-    $filter->apply($builder);
-    expect($builder->toSql())->toBe('select * from "products"');
-    expect($filter->isActive())->toBeFalse();
-});
+describe('can be applied', function () {
+    describe('to Eloquent builder', function () {
+        beforeEach(function () {
+            $this->filter = DateFilter::make('created_at');
+            $this->builder = Product::query();
+        });
 
-it('has array representation', function () {
-    $filter = DateFilter::make('name');
-    expect($filter->toArray())->toEqual([
-        'name' => 'name',
-        'label' => 'Name',
-        'type' => 'filter:date',
-        'active' => false,
-        'value' => null,
-        'meta' => [],
-    ]);
-});
+        it('can be handled', function () {
+            $this->filter->value(Carbon::parse('01-01-2000'));
+            $this->filter->handle($this->builder);
+            expect($this->builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") = cast(? as text)');
+        });
+    
+        describe('without request', function () {
+            beforeEach(function () {
+                $this->filter = DateFilter::make('created_at');
+                $this->builder = Product::query();
+            });
 
-it('changes array representation if date filter applied', function () {
-    $f = DateFilter::make('created_at', 'created');
-    $f2 = DateFilter::make('updated_at', 'updated');
-    Request::merge(['created' => $d = '2000-01-01']);
-    $builder = Product::query();
-    $f->apply($builder);
-    $f2->apply($builder);
+            it('is not applied to builder', function () {
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products"');
+                expect($this->filter->getValue())->toBeNull();
+                expect($this->filter->isActive())->toBeFalse();
+            });
+        });
+    
+        describe('with valid request', function () {
+            beforeEach(function () {
+                $this->filter = DateFilter::make('created_at');
+                $this->builder = Product::query();
+                Request::merge(['created_at' => '01-01-2000']);
+            });
 
-    expect($f->isActive())->toBeTrue();
-    expect($f2->isActive())->toBeFalse();
-    expect($builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") = cast(? as text)');
+            it('can apply to builder', function () {
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") = cast(? as text)');
+                expect($this->filter->getValue())->toEqual(Carbon::parse('01-01-2000'));
+                expect($this->filter->isActive())->toBeTrue();
+            });
 
-    expect($f->toArray())->toEqual([
-        'name' => 'created',
-        'label' => 'Created',
-        'type' => 'filter:date',
-        'active' => true,
-        'value' => Carbon::parse($d)->toDateTimeString(),
-        'meta' => [],
-    ]);
+            it('can apply and transforms before setting value', function () {
+                $this->filter->transform(fn ($value) => $value instanceof Carbon ? $value->addDay() : $value);
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") = cast(? as text)');
+                expect($this->filter->getValue())->toEqual(Carbon::parse('01-01-2000')->addDay());
+                expect($this->filter->isActive())->toBeTrue();
+            });
 
-    expect($f2->toArray())->toEqual([
-        'name' => 'updated',
-        'label' => 'Updated',
-        'type' => 'filter:date',
-        'active' => false,
-        'value' => null,
-        'meta' => [],
-    ]);
-});
+            it('can apply and validats before handling', function () {
+                $this->filter->validate(fn ($value) => $value instanceof Carbon && $value->year > 2001);
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products"');
+                expect($this->filter->getValue())->toEqual(Carbon::parse('01-01-2000'));
+                expect($this->filter->isActive())->toBeTrue();
+            });
+        });
+    });
 
-it('can use date clause', function () {
-    $filter = DateFilter::make('created_at', 'is')->date();
-    $builder = Product::query();
-    Request::merge(['is' => '2000-01-01']);
-    $filter->apply($builder);
-    expect($builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") = cast(? as text)');
-    expect($filter->isActive())->toBeTrue();
-});
+    describe('to Query builder', function () {
+        beforeEach(function () {
+            $this->filter = DateFilter::make('created_at');
+            $this->builder = DB::table('products');
+        });
 
-it('can use year date clause', function () {
-    $filter = DateFilter::make('created_at', 'is')->year();
-    $builder = Product::query();
-    Request::merge(['is' => '2000-01-01']);
-    $filter->apply($builder);
-    expect($builder->toSql())->toBe('select * from "products" where strftime(\'%Y\', "created_at") = cast(? as text)');
-    expect($filter->isActive())->toBeTrue();
-});
+        it('can be handled', function () {
+            $this->filter->value(Carbon::parse('01-01-2000'));
+            $this->filter->handle($this->builder);
+            expect($this->builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") = cast(? as text)');
+        });
+    
+        describe('no request', function () {
+            beforeEach(function () {
+                $this->filter = DateFilter::make('created_at');
+                $this->builder = DB::table('products');;
+            });
 
-it('can use month date clause', function () {
-    $filter = DateFilter::make('created_at', 'is')->month();
-    $builder = Product::query();
-    Request::merge(['is' => '2000-01-01']);
-    $filter->apply($builder);
-    expect($builder->toSql())->toBe('select * from "products" where strftime(\'%m\', "created_at") = cast(? as text)');
-    expect($filter->isActive())->toBeTrue();
-});
+            it('is not applied to builder', function () {
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products"');
+                expect($this->filter->getValue())->toBeNull();
+                expect($this->filter->isActive())->toBeFalse();
+            });
+        });
+    
+        describe('request', function () {
+            beforeEach(function () {
+                $this->filter = DateFilter::make('created_at');
+                $this->builder = DB::table('products');;
+                Request::merge(['created_at' => '01-01-2000']);
+            });
 
-it('can use day date clause', function () {
-    $filter = DateFilter::make('created_at', 'is')->day();
-    $builder = Product::query();
-    Request::merge(['is' => '2000-01-01']);
-    $filter->apply($builder);
-    expect($builder->toSql())->toBe('select * from "products" where strftime(\'%d\', "created_at") = cast(? as text)');
-    expect($filter->isActive())->toBeTrue();
-});
+            it('can apply to builder', function () {
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") = cast(? as text)');
+                expect($this->filter->getValue())->toEqual(Carbon::parse('01-01-2000'));
+                expect($this->filter->isActive())->toBeTrue();
+            });
 
-it('can use time date clause', function () {
-    $filter = DateFilter::make('created_at', 'is')->time();
-    $builder = Product::query();
-    Request::merge(['is' => '13:00:00']);
-    $filter->apply($builder);
-    expect($builder->toSql())->toBe('select * from "products" where strftime(\'%H:%M:%S\', "created_at") = cast(? as text)');
-    expect($filter->isActive())->toBeTrue();
-});
+            it('can apply and transforms before setting value', function () {
+                $this->filter->transform(fn ($value) => $value instanceof Carbon ? $value->addDay() : $value);
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") = cast(? as text)');
+                expect($this->filter->getValue())->toEqual(Carbon::parse('01-01-2000')->addDay());
+                expect($this->filter->isActive())->toBeTrue();
+            });
 
-it('can change the operator', function () {
-    $filter = DateFilter::make('created_at', 'is')->gt();
-    $builder = Product::query();
-    Request::merge(['is' => '2000-01-01']);
-    $filter->apply($builder);
-    expect($builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") > cast(? as text)');
-    expect($filter->isActive())->toBeTrue();
+            it('can apply and validats before handling', function () {
+                $this->filter->validate(fn ($value) => $value instanceof Carbon && $value->year > 2001);
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products"');
+                expect($this->filter->getValue())->toEqual(Carbon::parse('01-01-2000'));
+                expect($this->filter->isActive())->toBeTrue();
+            });
+        });
+    });
 });
