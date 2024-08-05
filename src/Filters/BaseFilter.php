@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Request;
 abstract class BaseFilter extends Primitive implements Filters
 {
     use CanTransform;
-    use CanValidate;
     use HasLabel;
     use HasMeta;
     use HasName;

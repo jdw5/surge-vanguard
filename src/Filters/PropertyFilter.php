@@ -12,9 +12,8 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 
 abstract class PropertyFilter extends BaseFilter
 {
-    use CanTransform;
-    use CanValidate;
     use HasProperty;
+    use CanValidate;
 
     public function __construct(array|string|Closure $property, string|Closure $name = null, string|Closure $label = null)
     {
