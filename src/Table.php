@@ -38,13 +38,13 @@ class Table extends Primitive implements Tables
     use Sorts;
 
     public function __construct(
-        Builder|QueryBuilder|null $resource = null,
-        ?array $columns = null,
-        ?array $actions = null,
-        ?array $filters = null,
-        ?array $sorts = null,
-        array|string|null $search = null,
-        array|int|null $pagination = null,
+        Builder|QueryBuilder $resource = null,
+        array $columns = null,
+        array $actions = null,
+        array $filters = null,
+        array $sorts = null,
+        array|string $search = null,
+        array|int $pagination = null,
     ) {
         $this->setResource($resource);
         $this->setColumns($columns);
@@ -59,13 +59,13 @@ class Table extends Primitive implements Tables
      * Create a new table instance.
      */
     public static function make(
-        Builder|QueryBuilder|null $resource = null,
-        ?array $columns = null,
-        ?array $actions = null,
-        ?array $filters = null,
-        ?array $sorts = null,
-        array|string|null $search = null,
-        array|int|null $pagination = null,
+        Builder|QueryBuilder $resource = null,
+        array $columns = null,
+        array $actions = null,
+        array $filters = null,
+        array $sorts = null,
+        array|string $search = null,
+        array|int $pagination = null,
     ): static {
         return resolve(static::class, compact(
             'resource',
@@ -76,29 +76,6 @@ class Table extends Primitive implements Tables
             'search',
             'pagination',
         ));
-    }
-
-    /**
-     * Alias for make
-     */
-    public static function build(
-        Builder|QueryBuilder|null $resource = null,
-        ?array $columns = null,
-        ?array $actions = null,
-        ?array $filters = null,
-        ?array $sorts = null,
-        array|string|null $search = null,
-        array|int|null $pagination = null,
-    ): static {
-        return static::make(
-            $resource,
-            $columns,
-            $actions,
-            $filters,
-            $sorts,
-            $search,
-            $pagination,
-        );
     }
 
     /**
@@ -123,6 +100,7 @@ class Table extends Primitive implements Tables
         $this->create();
 
         return [
+            'id' => '',
             'records' => $this->getTableRecords(),
             'headings' => $this->getHeadingColumns(),
             'meta' => $this->getTableMeta(),

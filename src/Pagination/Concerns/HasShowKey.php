@@ -8,7 +8,7 @@ trait HasShowKey
 {
     protected $showKey;
 
-    public function getShowKey(): ?string
+    public function getShowKey(): string
     {
         if (isset($this->showKey)) {
             return $this->showKey;

@@ -62,7 +62,7 @@ describe('base make', function () {
         expect($this->filter->getClause())->toBe(Clause::Contains);
     });
 
-    it('overrides set multiple to add contains clause', function () {
+    it('uses the clause and attribute to determine multiplicity', function () {
         $this->filter->multiple()->clause(Clause::Is);
         expect($this->filter->isMultiple())->toBeFalse();
         expect($this->filter->getClause())->toBe(Clause::Is);
