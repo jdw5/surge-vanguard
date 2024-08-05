@@ -9,10 +9,6 @@ use Conquest\Table\Filters\Concerns\HasQuery;
 use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 
-/**
- * Allows for custom query filters to be created,
- * based on user-defined value behaviour.
- */
 class QueryFilter extends BaseFilter
 {
     use CanTransform;

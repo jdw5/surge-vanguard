@@ -39,11 +39,11 @@ trait HasOperators
     /**
      * Get the operators to be used.
      *
-     * @return array<Operator>|null
+     * @return array<Operator>
      */
-    public function getOperators(): ?array
+    public function getOperators(): array
     {
-        return $this->operators;
+        return $this->operators ?? [];
     }
 
     /**

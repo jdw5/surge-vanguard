@@ -55,7 +55,7 @@ class OperatorFilter extends PropertyFilter
 
     public function filtering(mixed $value): bool
     {
-        return ! is_null($value) &&
+        return parent::filtering($value) &&
             collect($this->getOperators())->some(fn ($operator) => $operator->value === $this->getOperator()?->value);
     }
 

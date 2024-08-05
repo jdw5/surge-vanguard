@@ -148,7 +148,7 @@ describe('can be applied', function () {
         });
 
         it('can be handled with value', function () {
-            $this->filter->value('John')->clause(Clause::IsNot)->Operator(Operator::Like);
+            $this->filter->value('John')->clause(Clause::IsNot)->operator(Operator::Like);
             $this->filter->handle($this->builder);
             expect($this->builder->toSql())->toBe('select * from "products" where not "name" like ?');
         });
