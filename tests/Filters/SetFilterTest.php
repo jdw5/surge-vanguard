@@ -1,277 +1,362 @@
 <?php
 
-use Conquest\Core\Options\Option;
-use Conquest\Table\Filters\Enums\Clause;
-use Conquest\Table\Filters\Enums\Operator;
+use Workbench\App\Models\Product;
 use Conquest\Table\Filters\SetFilter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
-use Workbench\App\Models\Product;
+use Conquest\Table\Filters\Enums\Clause;
+use Conquest\Table\Filters\Enums\Operator;
+use Conquest\Table\Exceptions\CannotResolveNameFromProperty;
 
-it('can create a set filter', function () {
-    $filter = new SetFilter($n = 'name');
-    expect($filter)->getProperty()->toBe($n)
-        ->getName()->toBe($n)
-        ->getLabel()->toBe('Name')
-        ->isAuthorised()->toBeTrue()
-        ->canValidate()->toBeFalse()
-        ->canTransform()->toBeFalse()
-        ->getClause()->toBe(Clause::IS)
-        ->getOperator()->toBe(Operator::EQUAL)
-        ->isMultiple()->toBeFalse()
-        ->hasMeta()->toBeFalse()
-        ->hasOptions()->toBeFalse()
-        ->isRestricted()->toBeFalse()
-        ->getType()->toBe('filter:set');
-});
-
-it('can create a set filter with arguments', function () {
-    $filter = new SetFilter(
-        property: 'name',
-        name: 'username',
-        label: 'Name',
-        authorize: fn () => false,
-        validator: fn () => true,
-        transform: fn ($value) => $value,
-        clause: Clause::DOES_NOT_CONTAIN,
-        operator: Operator::LESS_THAN,
-        multiple: true,
-        options: [Option::make('value', 'Label')],
-        restrict: true,
-        meta: ['key' => 'value'],
-    );
-
-    expect($filter)->getProperty()->toBe('name')
-        ->getName()->toBe('username')
-        ->getLabel()->toBe('Name')
-        ->isAuthorised()->toBeFalse()
-        ->canValidate()->toBeTrue()
-        ->canTransform()->toBeTrue()
-        ->getClause()->toBe(Clause::DOES_NOT_CONTAIN)
-        ->getOperator()->toBe(Operator::LESS_THAN)
-        ->isMultiple()->toBeTrue()
-        ->hasOptions()->toBeTrue()
-        ->isRestricted()->toBeTrue()
-        ->getMeta()->toBe(['key' => 'value']);
-});
-
-it('can make a set filter', function () {
-    expect(SetFilter::make($n = 'name'))->toBeInstanceOf(SetFilter::class)
-        ->getProperty()->toBe($n)
-        ->getName()->toBe($n)
-        ->getLabel()->toBe('Name')
-        ->isAuthorised()->toBeTrue()
-        ->canValidate()->toBeFalse()
-        ->canTransform()->toBeFalse()
-        ->getClause()->toBe(Clause::IS)
-        ->getOperator()->toBe(Operator::EQUAL)
-        ->isMultiple()->toBeFalse()
-        ->hasMeta()->toBeFalse()
-        ->hasOptions()->toBeFalse()
-        ->isRestricted()->toBeFalse()
-        ->getType()->toBe('filter:set');
-});
-
-it('can chain methods on a set filter', function () {
-    $filter = SetFilter::make('name')
-        ->name('username')
-        ->label('Name')
-        ->authorize(fn () => false)
-        ->validator(fn () => true)
-        ->transform(fn ($value) => $value)
-        ->lte()
-        ->multiple()
-        ->restrict()
-        ->meta(['key' => 'value']);
-
+it('can instantiate a set filter', function () {
+    $filter = new SetFilter('name');
     expect($filter)->toBeInstanceOf(SetFilter::class)
         ->getProperty()->toBe('name')
-        ->getName()->toBe('username')
+        ->getName()->toBe('name')
         ->getLabel()->toBe('Name')
-        ->isAuthorised()->toBeFalse()
-        ->canValidate()->toBeTrue()
-        ->canTransform()->toBeTrue()
-        ->getClause()->toBe(Clause::CONTAINS)
-        ->getOperator()->toBe(Operator::LESS_THAN_OR_EQUAL)
-        ->isMultiple()->toBeTrue()
-        ->getMeta()->toBe(['key' => 'value']);
+        ->getType()->toBe('operator')
+        ->getValue()->toBeNull()
+        ->hasMeta()->toBeFalse()
+        ->isActive()->toBeFalse()
+        ->isAuthorized()->toBeTrue()
+        ->canTransform()->toBeFalse()
+        ->getClause()->toBe(Clause::Is)
+        ->getOperator()->toBe(Operator::Equal)
+        ->isRestricted()->toBeFalse()
+        ->isMultiple()->toBeFalse()
+        ->hasOptions()->toBeFalse()
+        ->getOptions()->toEqual([]);
 });
 
-it('can apply a base set filter to an eloquent builder', function () {
-    $filter = SetFilter::make('name');
-    $builder = Product::query();
-    Request::merge(['name' => 'test']);
-    $filter->apply($builder);
-    expect($builder->toSql())->toBe('select * from "products" where "name" = ?');
-    expect($filter->isActive())->toBeTrue();
+it('throws error if array of properties given and no name', function () {
+    $f = SetFilter::make(['a', 'b']);
+})->throws(CannotResolveNameFromProperty::class);
+
+it('can instantiate a set filter using resolvable property', function () {
+    expect(SetFilter::make(fn () => 'name'))->toBeInstanceOf(SetFilter::class)
+        ->getProperty()->toBe('name')
+        ->getName()->toBe('name')
+        ->getLabel()->toBe('Name')
+        ->getType()->toBe('operator')
+        ->getValue()->toBeNull()
+        ->hasMeta()->toBeFalse()
+        ->isActive()->toBeFalse()
+        ->isAuthorized()->toBeTrue()
+        ->canTransform()->toBeFalse()
+        ->getClause()->toBe(Clause::Is)
+        ->getOperator()->toBe(Operator::Equal)
+        ->isRestricted()->toBeFalse()
+        ->isMultiple()->toBeFalse()
+        ->hasOptions()->toBeFalse()
+        ->getOptions()->toEqual([]);
 });
 
-it('can apply a base set filter to a query builder', function () {
-    $filter = SetFilter::make('name');
-    $builder = DB::table('products');
-    Request::merge(['name' => 'test']);
-    $filter->apply($builder);
-    expect($builder->toSql())->toBe('select * from "products" where "name" = ?');
-    expect($filter->isActive())->toBeTrue();
+describe('base make', function () {
+    beforeEach(function () {
+        $this->filter = SetFilter::make('name');
+    });
 
-});
+    it('overrides set multiple to add contains clause', function () {
+        $this->filter->setMultiple(true);
+        expect($this->filter->isMultiple())->toBeTrue();
+        expect($this->filter->getClause())->toBe(Clause::Contains);
+    });
 
-it('does not apply a set filter if name not provided', function () {
-    $filter = SetFilter::make('name');
-    $builder = Product::query();
-    $filter->apply($builder);
-    expect($builder->toSql())->toBe('select * from "products"');
-    expect($filter->isActive())->toBeFalse();
-});
+    it('overrides set multiple to add contains clause', function () {
+        $this->filter->multiple()->clause(Clause::Is);
+        expect($this->filter->isMultiple())->toBeFalse();
+        expect($this->filter->getClause())->toBe(Clause::Is);
+    });
 
-it('does not apply a date filter if name not equal', function () {
-    $filter = SetFilter::make('name', 'username');
-    $builder = Product::query();
-    Request::merge(['name' => '2000-01-01']);
-    $filter->apply($builder);
-    expect($builder->toSql())->toBe('select * from "products"');
-    expect($filter->isActive())->toBeFalse();
-});
+    it('retrieves value from request for single', function () {
+        Request::merge(['name' => 'John']);
+        expect($this->filter->getValueFromRequest())->toBe('John');
+    });
 
-it('can have options', function () {
-    $filter = SetFilter::make('name', 'username')
-        ->options([
-            Option::make('value', 'Label'),
-            Option::make('value2', 'Label2'),
+    it('retrieves null from request', function () {
+        expect($this->filter->getValueFromRequest())->toBeNull();
+    });
+
+    it('retrieves null from request if incorrect name', function () {
+        Request::merge(['not' => 'John']);
+        expect($this->filter->getValueFromRequest())->toBeNull();
+    });
+
+    it('retrieves array from request if multiple', function () {
+        Request::merge(['name' => 'John']);
+        expect($this->filter->getValueFromRequest())->toEqual(['John']);
+    });
+
+    it('retrieves array from request if multiple using comma separation', function () {
+        Request::merge(['name' => 'John,Jane']);
+        expect($this->filter->getValueFromRequest())->toEqual(['John', 'Jane']);
+    });
+
+    it('can filter', function () {
+        expect($this->filter->filtering('John'))->toBeFalse();
+        expect($this->filter->filtering(null))->toBeFalse();
+    });
+
+    it('can make a set filter', function () {
+        expect($this->filter)->toBeInstanceOf(SetFilter::class)
+            ->getProperty()->toBe('name')
+            ->getName()->toBe('name')
+            ->getLabel()->toBe('Name')
+            ->getType()->toBe('set')
+            ->getValue()->toBeNull()
+            ->hasMeta()->toBeFalse()
+            ->isActive()->toBeFalse()
+            ->isAuthorized()->toBeTrue()
+            ->canTransform()->toBeFalse()
+            ->getClause()->toBe(Clause::Is)
+            ->getOperator()->toBeNull()
+            ->getOperators()->toBe([]);
+    });
+
+    it('has array form', function () {
+        expect($this->filter->toArray())->toEqual([
+            'name' => 'name',
+            'label' => 'Name',
+            'type' => 'set',
+            'active' => false,
+            'value' => null,
+            'meta' => [],
         ]);
-
-    expect($filter)->hasOptions()->toBeTrue()
-        ->getOptions()->toBeArray()
-        ->getOptions()->toHaveCount(2)
-        ->getOptions()->each->toBeInstanceOf(Option::class);
+    });
 });
 
-it('splits values if multiple from request', function () {
-    $filter = SetFilter::make('name')->multiple();
-    Request::merge(['name' => 'test,test2']);
-    expect($filter->getValueFromRequest())->toBeArray()->toHaveCount(2)->toEqual(['test', 'test2']);
-    Request::merge(['name' => 'test']);
-    expect($filter->getValueFromRequest())->toEqual(['test']);
+describe('chain make', function () {
+    beforeEach(function () {
+        $this->filter = SetFilter::make('name')
+            ->name('person')
+            ->label('Username')
+            ->authorize(fn () => false)
+            ->transform(fn ($value) => mb_strtoupper($value))
+            ->meta(['key' => 'value'])
+            ->isNot()
+            ->neq()
+            ->options(['John', 'Jane', 'Jack'])
+            ->restricted()
+            ->multiple();
+    });
+
+    it('can chain methods on a set filter', function () {       
+        expect($this->filter)->toBeInstanceOf(SetFilter::class)
+            ->getProperty()->toBe('name')
+            ->getName()->toBe('person')
+            ->getLabel()->toBe('Username')
+            ->getType()->toBe('set')
+            ->getValue()->toBeNull()
+            ->hasMeta()->toBeTrue()
+            ->getMeta()->toBe(['key' => 'value'])
+            ->isActive()->toBeFalse()
+            ->isAuthorized()->toBeFalse()
+            ->canTransform()->toBeTrue()
+            ->getClause()->toBe(Clause::IsNot)
+            ->getOperator()->toBe(Operator::NotEqual)
+            ->getOperators()->toEqual([Operator::Equal, Operator::NotEqual]);
+    });
+
+    it('has array form', function () {
+        expect($this->filter->toArray())->toEqual([
+            'name' => 'person',
+            'label' => 'Username',
+            'type' => 'set',
+            'active' => false,
+            'value' => null,
+            'meta' => ['key' => 'value'],
+        ]);
+    });
 });
 
-it('does not split if not multiple', function () {
-    $filter = SetFilter::make('name');
-    Request::merge(['name' => 'test,test2']);
-    expect($filter->getValueFromRequest())->toBe('test,test2');
-    Request::merge(['name' => 'test']);
-    expect($filter->getValueFromRequest())->toBe('test');
-});
+describe('can be applied', function () {
+    describe('to Eloquent builder', function () {
+        beforeEach(function () {
+            $this->filter = SetFilter::make('name');
+            $this->builder = Product::query();
+        });
 
-it('restricts only to provided options', function () {
-    $filter = SetFilter::make('name', 'username')
-        ->options([
-            Option::make('value', 'Label'),
-            Option::make('value2', 'Label2'),
-        ])
-        ->restrict();
-    Request::merge(['username' => 'value']);
-    $builder = Product::query();
-    $filter->apply($builder);
-    expect($builder->toSql())->toBe('select * from "products" where "name" = ?');
-    expect($filter->isActive())->toBeTrue();
-    expect(collect($filter->getOptions())->first())->isActive()->toBeTrue();
-});
+        it('can be handled', function () {
+            $this->filter->handle($this->builder);
+            expect($this->builder->toSql())->toBe('select * from "products" where "name" is null');
+        });
 
-it('prevents not provided options from being applied', function () {
-    $filter = SetFilter::make('name', 'username')
-        ->options([
-            Option::make('value', 'Label'),
-            Option::make('value2', 'Label2'),
-        ])
-        ->restrict();
-    Request::merge(['username' => 'value_']);
-    $builder = Product::query();
-    $filter->apply($builder);
-    expect($builder->toSql())->toBe('select * from "products"');
-    expect($filter->isActive())->toBeTrue();
-    expect(collect($filter->getOptions())->first())->isActive()->toBeFalse();
-});
+        it('can be handled with value', function () {
+            $this->filter->value('John')->clause(Clause::IsNot)->operator(Operator::Like);
+            $this->filter->handle($this->builder);
+            expect($this->builder->toSql())->toBe('select * from "products" where not "name" like ?');
+        });
+    
+        describe('without request', function () {
+            beforeEach(function () {
+                $this->filter = SetFilter::make('name');
+                $this->builder = Product::query();
+            });
 
-it('has array representation', function () {
-    $filter = SetFilter::make('name');
-    expect($filter->toArray())->toEqual([
-        'name' => 'name',
-        'label' => 'Name',
-        'type' => 'filter:set',
-        'active' => false,
-        'value' => null,
-        'meta' => [],
-        'options' => [],
-        'multiple' => false,
-    ]);
-});
+            it('is not applied to builder', function () {
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products"');
+                expect($this->filter->getValue())->toBeNull();
+                expect($this->filter->isActive())->toBeFalse();
+            });
 
-it('changes array representation if set filter applied', function () {
-    $f = SetFilter::make('name');
-    $f2 = SetFilter::make('description');
-    Request::merge(['name' => 'test']);
-    $builder = Product::query();
-    $f->apply($builder);
-    $f2->apply($builder);
-    expect($f->isActive())->toBeTrue();
-    expect($f2->isActive())->toBeFalse();
-    expect($builder->toSql())->toBe('select * from "products" where "name" = ?');
+            it('is not applied to builder with only name', function () {
+                Request::merge(['name' => 'john']);
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products"');
+                expect($this->filter->getValue())->toBe('john');
+                expect($this->filter->isActive())->toBeFalse();
+                expect($this->filter->hasOperator())->toBeFalse();
+            });
 
-    expect($f->toArray())->toEqual([
-        'name' => 'name',
-        'label' => 'Name',
-        'type' => 'filter:set',
-        'active' => true,
-        'value' => 'test',
-        'meta' => [],
-        'options' => [],
-        'multiple' => false,
-    ]);
+            it('is not applied to builder with only operator', function () {
+                Request::merge(['[name]' => '>']);
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products"');
+                expect($this->filter->getValue())->toBeNull();
+                expect($this->filter->isActive())->toBeFalse();
+                expect($this->filter->hasOperator())->toBeTrue();
+            });
+        });
+    
+        describe('with request', function () {
+            beforeEach(function () {
+                $this->filter = SetFilter::make('name')->operators(Operator::Equal, Operator::NotEqual);
+                $this->builder = Product::query();
+                Request::merge(['name' => 'John', '[name]' => '=']);
+            });
 
-    expect($f2->toArray())->toEqual([
-        'name' => 'description',
-        'label' => 'Description',
-        'type' => 'filter:set',
-        'active' => false,
-        'value' => null,
-        'meta' => [],
-        'options' => [],
-        'multiple' => false,
-    ]);
-});
+            it('can apply to builder', function () {
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products" where "name" = ?');
+                expect($this->filter->getValue())->toBe('John');
+                expect($this->filter->isActive())->toBeTrue();
+                expect($this->filter->hasOperator())->toBeTrue();
+            });
 
-it('changes array representation if set filter applied and multiple', function () {
-    $f = SetFilter::make('name')->multiple();
-    $f2 = SetFilter::make('description');
-    Request::merge(['name' => 'test']);
-    $builder = Product::query();
-    $f->apply($builder);
-    $f2->apply($builder);
-    expect($f->isActive())->toBeTrue();
-    expect($f2->isActive())->toBeFalse();
-    expect($builder->toSql())->toBe('select * from "products" where "name" in (?)');
+            it('can apply and transforms before setting value', function () {
+                $this->filter->transform(fn ($value) => mb_strtoupper($value));
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products" where "name" = ?');
+                expect($this->filter->getValue())->toBe('JOHN');
+                expect($this->filter->isActive())->toBeTrue();
+                expect($this->filter->hasOperator())->toBeTrue();
+            });
 
-    expect($f->toArray())->toEqual([
-        'name' => 'name',
-        'label' => 'Name',
-        'type' => 'filter:set',
-        'active' => true,
-        'value' => [
-            'test',
-        ],
-        'meta' => [],
-        'options' => [],
-        'multiple' => true,
-    ]);
+            it('can apply and transforms and validates before handling', function () {
+                $this->filter->validate(fn ($value) => !is_null($value) && strlen($value) > 4);
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products"');
+                expect($this->filter->getValue())->toBe('John');
+                expect($this->filter->isActive())->toBeTrue();
+                expect($this->filter->hasOperator())->toBeTrue();
+            });
 
-    expect($f2->toArray())->toEqual([
-        'name' => 'description',
-        'label' => 'Description',
-        'type' => 'filter:set',
-        'active' => false,
-        'value' => null,
-        'meta' => [],
-        'options' => [],
-        'multiple' => false,
-    ]);
+            it('validates the operator', function () {
+                Request::merge(['name' => 'John', '[name]' => '>']);
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products"');
+                expect($this->filter->getValue())->toBe('John');
+                expect($this->filter->hasOperator())->toBeTrue();
+                expect($this->filter->isActive())->toBeFalse();
+
+            });
+        });
+    });
+
+    describe('to Query builder', function () {
+        beforeEach(function () {
+            $this->filter = SetFilter::make('name')->operator(Operator::Equal);
+            $this->builder = DB::table('products');
+        });
+
+        it('can be handled', function () {
+            $this->filter->handle($this->builder);
+            expect($this->builder->toSql())->toBe('select * from "products" where "name" is null');
+        });
+
+        it('can be handled with value', function () {
+            $this->filter->value('John')->clause(Clause::IsNot)->operator(Operator::Like);
+            $this->filter->handle($this->builder);
+            expect($this->builder->toSql())->toBe('select * from "products" where not "name" like ?');
+        });
+    
+        describe('no request', function () {
+            beforeEach(function () {
+                $this->filter = SetFilter::make('name')->operators(Operator::Equal, Operator::NotEqual);
+                $this->builder = DB::table('products');
+            });
+
+            it('is not applied to builder', function () {
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products"');
+                expect($this->filter->getValue())->toBeNull();
+                expect($this->filter->isActive())->toBeFalse();
+            });
+
+            it('is not applied to builder with only name', function () {
+                Request::merge(['name' => 'john']);
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products"');
+                expect($this->filter->getValue())->toBe('john');
+                expect($this->filter->isActive())->toBeFalse();
+                expect($this->filter->hasOperator())->toBeFalse();
+            });
+
+            it('is not applied to builder with only operator', function () {
+                Request::merge(['[name]' => '>']);
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products"');
+                expect($this->filter->getValue())->toBeNull();
+                expect($this->filter->isActive())->toBeFalse();
+                expect($this->filter->hasOperator())->toBeTrue();
+            });
+        });
+    
+        describe('request', function () {
+            beforeEach(function () {
+                $this->filter = SetFilter::make('name')->operators(Operator::Equal, Operator::NotEqual);
+                $this->builder = DB::table('products');
+                Request::merge(['name' => 'John', '[name]' => '=']);
+            });
+
+            it('can apply to builder', function () {
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products" where "name" = ?');
+                expect($this->filter->getValue())->toBe('John');
+                expect($this->filter->isActive())->toBeTrue();
+                expect($this->filter->hasOperator())->toBeTrue();
+            });
+
+            it('can apply and transforms before setting value', function () {
+                $this->filter->transform(fn ($value) => mb_strtoupper($value));
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products" where "name" = ?');
+                expect($this->filter->getValue())->toBe('JOHN');
+                expect($this->filter->isActive())->toBeTrue();
+                expect($this->filter->hasOperator())->toBeTrue();
+            });
+
+            it('can apply and transforms and validates before handling', function () {
+                $this->filter->validate(fn ($value) => !is_null($value) && strlen($value) > 4);
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products"');
+                expect($this->filter->getValue())->toBe('John');
+                expect($this->filter->isActive())->toBeTrue();
+                expect($this->filter->hasOperator())->toBeTrue();
+            });
+
+            it('validates the operator', function () {
+                Request::merge(['name' => 'John', '[name]' => '>']);
+                $this->filter->apply($this->builder);
+                expect($this->builder->toSql())->toBe('select * from "products"');
+                expect($this->filter->getValue())->toBe('John');
+                expect($this->filter->hasOperator())->toBeTrue();
+                expect($this->filter->isActive())->toBeFalse();
+
+            });
+        });
+    });
+
+
 });

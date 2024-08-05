@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Conquest\Table\Filters;
 
 use Closure;
 use Conquest\Core\Concerns\CanTransform;
-use Conquest\Core\Concerns\CanValidate;
 use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Concerns\HasMeta;
 use Conquest\Core\Concerns\HasName;

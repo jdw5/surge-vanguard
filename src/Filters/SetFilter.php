@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Conquest\Table\Filters;
 
 use Closure;
@@ -61,7 +63,7 @@ class SetFilter extends PropertyFilter
 
     public function validateOptions(): bool
     {
-        if (! $this->hasOptions()) {
+        if ($this->lacksOptions()) {
             return true;
         }
 

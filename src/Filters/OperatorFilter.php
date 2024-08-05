@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Conquest\Table\Filters;
 
 use Conquest\Table\Filters\Concerns\HasClause;
@@ -25,7 +27,7 @@ class OperatorFilter extends PropertyFilter
 
     public function getOperatorFromRequest(): ?Operator
     {
-        $q = Request::string('['.$this->getName().']');
+        $q = Request::input('['.$this->getName().']');
 
         return Operator::tryFrom($q);
     }

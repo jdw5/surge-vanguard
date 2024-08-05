@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Conquest\Table\Filters\Concerns;
 
 use Conquest\Table\Filters\Enums\Operator;

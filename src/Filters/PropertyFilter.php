@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Conquest\Table\Filters;
 
 use Closure;
-use Conquest\Core\Concerns\CanTransform;
 use Conquest\Core\Concerns\CanValidate;
 use Conquest\Core\Concerns\HasProperty;
 use Conquest\Table\Exceptions\CannotResolveNameFromProperty;
