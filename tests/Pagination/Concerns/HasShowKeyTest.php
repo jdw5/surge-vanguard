@@ -5,7 +5,7 @@ use Conquest\Table\Table;
 use Workbench\App\Models\Product;
 
 beforeEach(function () {
-    $this->table = Table::make(Product::query());
+    $this->table = Table::make();
 });
 
 it('uses show key default', function (){

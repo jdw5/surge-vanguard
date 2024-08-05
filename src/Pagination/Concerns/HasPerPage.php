@@ -4,8 +4,14 @@ namespace Conquest\Table\Pagination\Concerns;
 
 trait HasPerPage
 {
-    protected int|array $perPage;
+    /**
+     * @var int|array
+     */
+    protected $perPage;
 
+    /**
+     * @return int|array<int>|null
+     */
     public function getPerPage(): int|array|null
     {
         if (isset($this->perPage)) {
@@ -19,6 +25,9 @@ trait HasPerPage
         return null;
     }
 
+    /**
+     * @param int|array<int>|null $perPage
+     */
     public function setPerPage(int|array|null $perPage): void
     {
         if (is_null($perPage)) {
