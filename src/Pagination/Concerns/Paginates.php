@@ -10,7 +10,7 @@ trait Paginates
 {
     use HasDefaultPerPage;
     use HasPageName;
-    use HasPaginationType;
+    use HasPaginator;
     use HasPerPage;
     use HasShowKey;
 

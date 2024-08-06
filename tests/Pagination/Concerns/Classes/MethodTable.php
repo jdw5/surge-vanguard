@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Conquest\Table\Tests\Pagination\Concerns\Classes;
 
 use Conquest\Table\Table;
+use Conquest\Table\Pagination\Enums\Paginator;
 
 final class MethodTable extends Table
 {
@@ -26,6 +27,12 @@ final class MethodTable extends Table
     public function defaultPerPage(): int
     {
         return 20;
+    }
+
+    public function paginator()
+    {
+        return 'cursor';
+
     }
 
 }
