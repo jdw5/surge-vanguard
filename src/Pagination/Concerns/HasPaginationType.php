@@ -1,25 +1,25 @@
 <?php
 
-namespace Conquest\Table\Pagination\Concerns;
+declare(strict_types=1);
 
-use Conquest\Table\Pagination\Enums\PaginationType;
+namespace Conquest\Table\Pagination\Concerns;
 
 trait HasPaginationType
 {
-    protected PaginationType $paginationType;
+    protected $paginationType;
 
-    public function setPaginationType(PaginationType|string $paginationType): void
+    public const PAGINATION_TYPES = [
+        'paginate',
+        'cursor',
+        null
+    ];
+
+    public function setPaginationType(?string $paginationType): void
     {
-        if ($paginationType instanceof PaginationType) {
-            $this->paginationType = $paginationType;
-
-            return;
-        }
-
-        $this->paginationType = PaginationType::from($paginationType);
+        $this->paginationType = $paginationType;
     }
 
-    public function getPaginateType(): PaginationType
+    public function getPaginateType(): ?string
     {
         if (isset($this->paginationType)) {
             return $this->paginationType;
@@ -29,11 +29,6 @@ trait HasPaginationType
             return $this->paginateType();
         }
 
-        return PaginationType::SIMPLE;
-    }
-
-    public function getPaginateTypeString(): string
-    {
-        return $this->getPaginateType()->value;
+        return 'paginate';
     }
 }

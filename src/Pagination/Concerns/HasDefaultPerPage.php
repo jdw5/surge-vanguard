@@ -1,15 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Conquest\Table\Pagination\Concerns;
 
 trait HasDefaultPerPage
 {
-    protected int $defaultPerPage;
+    /**
+     * @var int
+     */
+    protected $defaultPerPage;
 
     public function getDefaultPerPage(): int
     {
         if (isset($this->defaultPerPage)) {
             return $this->defaultPerPage;
+        }
+
+        if (method_exists($this, 'defaultPerPage')) {
+            return $this->defaultPerPage();
         }
 
         return config('table.pagination.default', 10);

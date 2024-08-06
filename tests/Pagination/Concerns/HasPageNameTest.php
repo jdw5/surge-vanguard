@@ -4,9 +4,6 @@ use Conquest\Table\Table;
 use Conquest\Table\Tests\Pagination\Concerns\Classes\MethodTable;
 use Conquest\Table\Tests\Pagination\Concerns\Classes\PropertyTable;
 
-beforeEach(function () {
-    $this->table = Table::make();
-});
 
 it('uses page name default as config', function (){
     expect(Table::make()->getPageName())->toBe(config('table.pagination.name'));

@@ -34,8 +34,8 @@ trait HasShowKey
         $this->showKey = $key;
     }
 
-    public function getPerPageFromRequest(): ?int
+    public function getPerPageFromRequest(): int
     {
-        return (int) Request::input($this->getShowKey(), null);
+        return Request::integer($this->getShowKey(), 0);
     }
 }

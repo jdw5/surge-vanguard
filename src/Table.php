@@ -13,6 +13,7 @@ use Conquest\Table\Concerns\HasResource;
 use Conquest\Table\Concerns\HasFilters;
 use Conquest\Table\Concerns\Sorts;
 use Conquest\Table\Columns\BaseColumn;
+use Conquest\Table\Concerns\EncodesId;
 use Conquest\Table\Concerns\Remember\Remembers;
 use Conquest\Table\Concerns\Search\Searches;
 use Conquest\Table\Contracts\Tables;
@@ -25,6 +26,7 @@ use Illuminate\Support\Collection;
 
 class Table extends Primitive implements Tables
 {
+    use EncodesId;
     use HasActions;
     use HasColumns;
     use HasFilters;
@@ -100,7 +102,7 @@ class Table extends Primitive implements Tables
         $this->create();
 
         return [
-            'id' => '',
+            'id' => $this->getEncodedId($this->getId()),
             'records' => $this->getTableRecords(),
             'headings' => $this->getHeadingColumns(),
             'meta' => $this->getTableMeta(),
