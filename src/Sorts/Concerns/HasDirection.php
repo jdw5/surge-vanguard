@@ -34,6 +34,22 @@ trait HasDirection
     }
 
     /**
+     * Check if the direction is not set
+     */
+    public function lacksDirection(): bool
+    {
+        return is_null($this->direction);
+    }
+    
+    /**
+     * Check if the direction is set
+     */
+    public function hasDirection(): bool
+    {
+        return ! $this->lacksDirection();
+    }
+
+    /**
      * Set the direction to descending
      */
     public function desc(): static
@@ -47,15 +63,5 @@ trait HasDirection
     public function asc(): static
     {
         return $this->direction('asc');
-    }
-
-    public function lacksDirection(): bool
-    {
-        return is_null($this->direction);
-    }
-
-    public function hasDirection(): bool
-    {
-        return ! $this->lacksDirection();
     }
 }

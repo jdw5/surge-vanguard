@@ -1,3 +1,5 @@
+laravel: './vendor/conquest/inertia-testbench/skeleton'
+
 migrations:
   - workbench/database/migrations
 
@@ -32,3 +34,4 @@ workbench:
 
 env:
   APP_DEBUG: true
+  APP_KEY: AckfSECXIvnK5r28GVIWUAxmbBSjTsmF

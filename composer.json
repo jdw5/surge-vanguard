@@ -25,7 +25,8 @@
             "Conquest\\Table\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/",
             "Workbench\\Database\\Factories\\": "workbench/database/factories/",
-            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/",
+            "App\\": "vendor/conquest/inertia-testbench/skeleton/app/"
         }
     },
     "require": {
@@ -47,7 +48,8 @@
         "phpstan/extension-installer": "^1.3",
         "phpstan/phpstan-deprecation-rules": "^1.1",
         "phpstan/phpstan-phpunit": "^1.3",
-        "inertiajs/inertia-laravel": "^1.0"
+        "inertiajs/inertia-laravel": "^1.0",
+        "conquest/inertia-testbench": "^0.1.0"
     },
     "scripts": {
         "post-autoload-dump": [
@@ -69,12 +71,14 @@
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage",
         "format": "vendor/bin/pint",
-        "artisan": "@php ./vendor/bin/testbench",
+        "artisan": "php ./vendor/bin/testbench",
         "check": [
             "@composer run analyse",
             "@composer run test",
             "@composer run format"
-        ]
+        ],
+        "node": "cd vendor/conquest/inertia-testbench/skeleton && npm run dev",
+        "node-install": "cd vendor/conquest/inertia-testbench/skeleton && npm i"
     },
     "config": {
         "allow-plugins": {
