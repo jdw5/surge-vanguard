@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Conquest\Table\Actions\Concerns\Confirm;
+namespace Conquest\Table\Actions\Confirm\Concerns;
 
 use Closure;
+use Conquest\Table\Actions\Confirm\Enums\ConfirmType;
 
 trait HasConfirmType
 {

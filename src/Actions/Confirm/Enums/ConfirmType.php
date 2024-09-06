@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Conquest\Table\Actions\Concerns\Confirm;
+namespace Conquest\Table\Actions\Confirm\Enums;
 
 enum ConfirmType: string
 {
