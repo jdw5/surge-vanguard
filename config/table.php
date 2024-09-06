@@ -66,9 +66,16 @@ return [
         // 'lazy' => false,
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Confirmation configuration
+    |--------------------------------------------------------------------------
+    */
     'confirm' => [
         'title' => 'Confirm',
-        'message' => 'Are you sure you want to perform this action?',
+        'description' => 'Are you sure you want to perform this action?',
+        'cancel' => 'Cancel',
+        'submit' => 'Confirm',
     ],
 
     /*
