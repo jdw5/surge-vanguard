@@ -8,8 +8,6 @@ use Conquest\Table\Actions\Concerns\CanBeConfirmable;
 
 class HigherOrderConfirm implements HigherOrder
 {
-    const PROPERTY = 'confirm';
-
     /**
      * @param Primitive&CanBeConfirmable $primitive
      */

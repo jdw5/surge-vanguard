@@ -10,18 +10,20 @@ use Conquest\Table\Actions\Confirm\Confirm as Confirmable;
 
 trait CanBeConfirmable
 {
-    protected Confirmable|null $confirm = null;
+    /**
+     * @var \Conquest\Table\Actions\Confirm\Confirm|null
+     */
+    protected ?Confirmable $confirm = null;
 
     /**
-     * Set the properties of the confirmations
+     * Set the properties of the confirm
+     * 
+     * @param Closure|array $confirm
+     * @return static
      */
-    public function confirm(Closure|array|false $confirm): static
+    public function confirm(Closure|array $confirm): static
     {
-        $this->setConfirm(!!$confirm);
-
-        if (! $this->isConfirmable()) {
-            return $this;
-        }
+        $this->setConfirm(true);
         
         if (is_array($confirm)) {
             $this->confirm->setState($confirm);
@@ -34,29 +36,30 @@ trait CanBeConfirmable
         return $this;
     }
 
+    /**
+     * Enable a confirm instance.
+     * 
+     * @param \Conquest\Table\Actions\Confirm\Confirm|bool|null $confirm
+     * @return void
+     */
     public function setConfirm(Confirmable|bool|null $confirm): void
     {
         if (is_null($confirm)) {
             return;
         }
 
-        $this->confirm = match (true) {
+        $this->confirm ??= match (true) {
             $confirm instanceof Confirmable => $confirm,
             !!$confirm => Confirmable::make(),
             default => null,
         };
     }
 
-    public function isNotConfirmable(): bool
-    {
-        return is_null($this->confirm);
-    }
-
-    public function isConfirmable(): bool
-    {
-        return ! $this->isNotConfirmable();
-    }
-
+    /**
+     * Get the confirm instance.
+     * 
+     * @return \Conquest\Table\Actions\Confirm\Confirm|null
+     */
     public function getConfirm(): ?Confirmable
     {
         if (! $this->isConfirmable()) {
@@ -66,6 +69,9 @@ trait CanBeConfirmable
         return $this->confirm;
     }
 
+    /**
+     * @internal
+     */
     protected function evaluateConfirmAttribute(): void
     {
         $reflection = new ReflectionClass($this);
@@ -75,5 +81,13 @@ trait CanBeConfirmable
             $confirm = $attributes[0]->newInstance();
             $this->setConfirm($confirm);
         }
+    }
+
+    /**
+     * @internal
+     */
+    protected function isConfirmable(): bool
+    {
+        return !is_null($this->confirm);
     }
 }
