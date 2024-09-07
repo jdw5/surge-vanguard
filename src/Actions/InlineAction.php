@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Conquest\Table\Actions;
 
-use Conquest\Core\Concerns\HasHttpMethod;
-use Conquest\Core\Concerns\HasRoute;
 use Conquest\Core\Concerns\IsDefault;
 use Conquest\Core\Concerns\Routable;
+use Conquest\Core\Contracts\HigherOrder;
 use Conquest\Core\Contracts\ProxiesHigherOrder;
 use Conquest\Table\Actions\Concerns\CanAction;
 use Conquest\Table\Actions\Concerns\CanBeConfirmable;
@@ -39,7 +40,8 @@ class InlineAction extends BaseAction implements ProxiesHigherOrder
         );
     }
 
-    public function __get(string $property) {
+    public function __get(string $property): HigherOrder 
+    {
         return match($property) {
             'confirm' => new HigherOrderConfirm($this),
             default => throw new \Exception("Property [{$property}] not found on " . self::class),

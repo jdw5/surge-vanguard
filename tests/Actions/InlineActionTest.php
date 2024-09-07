@@ -3,6 +3,11 @@
 use Conquest\Table\Actions\InlineAction;
 use Workbench\App\Models\Product;
 
+// it('testing', function () {
+//     $action = InlineAction::make('Create')->confirm->title('Hello');
+//     dd($action, $action->getConfirm());
+// });
+
 it('can instantiate an inline action', function () {
     $action = new InlineAction('Create');
     expect($action)->toBeInstanceOf(InlineAction::class)

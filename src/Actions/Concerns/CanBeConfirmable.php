@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Conquest\Table\Actions\Concerns;
 
 use Closure;
-use Conquest\Table\Actions\Confirm\Confirm;
+use ReflectionClass;
+use Conquest\Table\Actions\Confirm\Confirm as Confirmable;
 
 trait CanBeConfirmable
 {
-    protected Confirm|null $confirm = null;
+    protected Confirmable|null $confirm = null;
 
     /**
      * Set the properties of the confirmations
@@ -33,13 +34,17 @@ trait CanBeConfirmable
         return $this;
     }
 
-    protected function setConfirm(bool|null $confirm): void
+    public function setConfirm(Confirmable|bool|null $confirm): void
     {
         if (is_null($confirm)) {
             return;
         }
 
-        $this->confirm ??= $confirm ? Confirm::make() : null;
+        $this->confirm = match (true) {
+            $confirm instanceof Confirmable => $confirm,
+            !!$confirm => Confirmable::make(),
+            default => null,
+        };
     }
 
     public function isNotConfirmable(): bool
@@ -50,5 +55,25 @@ trait CanBeConfirmable
     public function isConfirmable(): bool
     {
         return ! $this->isNotConfirmable();
+    }
+
+    public function getConfirm(): ?Confirmable
+    {
+        if (! $this->isConfirmable()) {
+            $this->evaluateConfirmAttribute();
+        }
+
+        return $this->confirm;
+    }
+
+    protected function evaluateConfirmAttribute(): void
+    {
+        $reflection = new ReflectionClass($this);
+        $attributes = $reflection->getAttributes(Confirmable::class);
+
+        if (!empty($attributes)) {
+            $confirm = $attributes[0]->newInstance();
+            $this->setConfirm($confirm);
+        }
     }
 }
