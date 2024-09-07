@@ -9,17 +9,17 @@ use Conquest\Core\Primitive;
 use Conquest\Core\Concerns\HasTitle;
 use Conquest\Core\Concerns\HasDescription;
 use Conquest\Core\Contracts\ProxiesHigherOrder;
-use Conquest\Table\Actions\Confirm\Concerns\HasCancelText;
-use Conquest\Table\Actions\Confirm\Concerns\HasSubmitText;
-use Conquest\Table\Actions\Confirm\Concerns\HasConfirmType;
+use Conquest\Table\Actions\Confirm\Concerns\HasCancel;
+use Conquest\Table\Actions\Confirm\Concerns\HasSubmit;
+use Conquest\Table\Actions\Confirm\Concerns\HasIntent;
 
 class Confirm extends Primitive
 {
     use HasTitle;
     use HasDescription; 
-    use HasCancelText;
-    use HasSubmitText;
-    use HasConfirmType;
+    use HasCancel;
+    use HasSubmit;
+    use HasIntent;
 
     public function __construct(array $state = [])
     {
@@ -52,9 +52,9 @@ class Confirm extends Primitive
         return [
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
-            'cancel' => $this->getCancelText(),
-            'submit' => $this->getSubmitText(),
-            'type' => $this->getType(),
+            'cancel' => $this->getCancel(),
+            'submit' => $this->getSubmit(),
+            'intent' => $this->getIntent(),
         ];
     }
 }

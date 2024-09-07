@@ -6,7 +6,7 @@ namespace Conquest\Table\Actions\Confirm\Concerns;
 
 use Closure;
 
-trait HasCancelText
+trait HasCancel
 {
     protected string|Closure|null $cancel = null;
 
@@ -25,7 +25,7 @@ trait HasCancelText
         $this->cancel = $cancel;
     }
 
-    public function hasCancelText(): bool
+    public function HasCancel(): bool
     {
         return ! $this->lacksCancelText();
     }

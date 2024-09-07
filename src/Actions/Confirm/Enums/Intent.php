@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Conquest\Table\Actions\Confirm\Enums;
 
-enum ConfirmType: string
+enum Intent: string
 {
     case Neutral = 'neutral';
     case Destructive = 'destructive';

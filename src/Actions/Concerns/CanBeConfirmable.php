@@ -39,6 +39,7 @@ trait CanBeConfirmable
     /**
      * Enable a confirm instance.
      * 
+     * @internal
      * @param \Conquest\Table\Actions\Confirm\Confirm|bool|null $confirm
      * @return void
      */
@@ -70,6 +71,8 @@ trait CanBeConfirmable
     }
 
     /**
+     * Evaluate for a possible confirm attribute as a fallback.
+     * 
      * @internal
      */
     protected function evaluateConfirmAttribute(): void
@@ -78,12 +81,13 @@ trait CanBeConfirmable
         $attributes = $reflection->getAttributes(Confirmable::class);
 
         if (!empty($attributes)) {
-            $confirm = $attributes[0]->newInstance();
-            $this->setConfirm($confirm);
+            $this->setConfirm($attributes[0]->newInstance());
         }
     }
 
     /**
+     * Check if the action is confirmable.
+     * 
      * @internal
      */
     protected function isConfirmable(): bool

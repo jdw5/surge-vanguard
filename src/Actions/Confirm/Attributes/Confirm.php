@@ -4,7 +4,7 @@ namespace Conquest\Table\Actions\Confirm\Attributes;
 
 use Closure;
 use Attribute;
-use Conquest\Table\Actions\Confirm\Enums\ConfirmType;
+use Conquest\Table\Actions\Confirm\Enums\Intent;
 use Conquest\Table\Actions\Confirm\Confirm as Confirmable;
 
 #[Attribute(Attribute::TARGET_CLASS)]
@@ -15,7 +15,7 @@ class Confirm
     public function __construct(
         string|Closure $title = null,
         string|Closure $description = null,
-        string|ConfirmType|Closure $type = null,
+        string|Intent|Closure $type = null,
         string|Closure $cancel = null,
         string|Closure $submit = null,
     ) {

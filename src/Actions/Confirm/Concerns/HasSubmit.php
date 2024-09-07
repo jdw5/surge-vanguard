@@ -6,7 +6,7 @@ namespace Conquest\Table\Actions\Confirm\Concerns;
 
 use Closure;
 
-trait HasSubmitText
+trait HasSubmit
 {
     protected string|Closure|null $submit = null;
 
@@ -25,7 +25,7 @@ trait HasSubmitText
         $this->submit = $submit;
     }
 
-    public function hasSubmitText(): bool
+    public function HasSubmit(): bool
     {
         return ! $this->lacksSubmitText();
     }
