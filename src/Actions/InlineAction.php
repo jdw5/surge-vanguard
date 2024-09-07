@@ -5,19 +5,21 @@ namespace Conquest\Table\Actions;
 use Conquest\Core\Concerns\HasHttpMethod;
 use Conquest\Core\Concerns\HasRoute;
 use Conquest\Core\Concerns\IsDefault;
-use Conquest\Table\Actions\Concerns\Confirm\Confirms;
+use Conquest\Core\Concerns\Routable;
+use Conquest\Core\Contracts\ProxiesHigherOrder;
 use Conquest\Table\Actions\Concerns\CanAction;
+use Conquest\Table\Actions\Concerns\CanBeConfirmable;
 use Conquest\Table\Actions\Concerns\IsBulk;
+use Conquest\Table\Actions\Confirm\HigherOrderConfirm;
 use Conquest\Table\Table;
 
-class InlineAction extends BaseAction
+class InlineAction extends BaseAction implements ProxiesHigherOrder
 {
-    use Confirms;
+    use CanBeConfirmable;
     use CanAction;
-    use HasHttpMethod;
-    use HasRoute;
     use IsDefault;
     use IsBulk;
+    use Routable;
 
     public function setUp(): void
     {
@@ -37,9 +39,11 @@ class InlineAction extends BaseAction
         );
     }
 
-    // public function forRecord($record): static
-    // {
-    //     if ($this->hasRoute()) $this->resolveRoute($record);
-    //     return $this;
-    // }
+    public function __get(string $property) {
+        return match($property) {
+            'confirm' => new HigherOrderConfirm($this),
+            default => throw new \Exception("Property [{$property}] not found on " . self::class),
+        };
+
+    }
 }

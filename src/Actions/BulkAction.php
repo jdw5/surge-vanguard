@@ -3,19 +3,19 @@
 namespace Conquest\Table\Actions;
 
 use Conquest\Table\Table;
-use Conquest\Table\Actions\Concerns\Confirm\Confirms;
 use Conquest\Table\Actions\Concerns\CanAction;
+use Conquest\Table\Actions\Concerns\CanBeConfirmable;
 use Conquest\Table\Actions\Concerns\Chunk\Chunks;
 use Conquest\Table\Actions\Concerns\IsDeselectable;
 use Conquest\Table\Actions\Concerns\IsInline;
 
-class BulkAction extends BaseAction
+class BulkAction extends BaseAction 
 {
-    use Confirms;
     use CanAction;
     use Chunks;
     use IsDeselectable;
     use IsInline;
+    use CanBeConfirmable;
 
     public function setUp(): void
     {

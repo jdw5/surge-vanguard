@@ -37,6 +37,6 @@ trait HasSubmitText
 
     public function getSubmitText(): string
     {
-        return $this->evaluate($this->submit) ?? config('table.confirm.submit', 'Submit');
+        return $this->evaluate($this->submit) ?? config('table.confirm.submit', 'Confirm');
     }
 }

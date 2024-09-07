@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Conquest\Table\Actions\Confirm;
 
 use Closure;
@@ -29,16 +31,20 @@ class Confirm extends Primitive
         return resolve(static::class, compact('title', 'description'));
     }
 
-    protected function setState(array $state): static
+    public function state(array $state): static
+    {
+        $this->setState($state);
+        return $this;
+    }
+
+    public function setState(array $state): void
     {
         foreach ($state as $key => $value) {
-            $method = 'set' . ucfirst($key);
+            $method = 'set' . str($key)->studly()->value();
             if (method_exists($this, $method)) {
                 $this->{$method}($value);
             }
         }
-
-        return $this;
     }
 
     public function toArray(): array
