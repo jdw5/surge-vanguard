@@ -1,9 +1,7 @@
 <?php
 
-use Carbon\Carbon;
-use Conquest\Table\Sorts\ToggleSort;
 use Conquest\Table\Columns\KeyColumn;
-
+use Conquest\Table\Sorts\ToggleSort;
 
 it('can instantiate a key column', function () {
     $col = new KeyColumn('id');
@@ -93,7 +91,7 @@ describe('chain make', function () {
             ->prefix('#');
     });
 
-    it('can chain methods on a key column', function () {       
+    it('can chain methods on a key column', function () {
         expect($this->col)->toBeInstanceOf(KeyColumn::class)
             ->getName()->toBe('id')
             ->getLabel()->toBe('Identifier')
@@ -141,7 +139,6 @@ describe('chain make', function () {
     });
 });
 
-
 it('does not allow key column name to be actions from instantiation', function () {
     $col = new KeyColumn('actions');
 })->throws(InvalidArgumentException::class, 'Column name cannot be "actions"');
@@ -154,7 +151,6 @@ it('can apply a key column for same output', function () {
     $col = KeyColumn::make('id');
     expect($col->apply(null))->toBe(null);
 });
-
 
 it('can apply a key column and transforms value', function () {
     $col = KeyColumn::make('id')->transform(fn ($value) => mb_strtoupper($value));

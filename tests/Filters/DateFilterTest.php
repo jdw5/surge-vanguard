@@ -1,13 +1,13 @@
 <?php
 
 use Carbon\Carbon;
-use Workbench\App\Models\Product;
-use Illuminate\Support\Facades\DB;
-use Conquest\Table\Filters\DateFilter;
-use Illuminate\Support\Facades\Request;
-use Conquest\Table\Filters\Enums\Operator;
-use Conquest\Table\Filters\Enums\DateClause;
 use Conquest\Table\Exceptions\CannotResolveNameFromProperty;
+use Conquest\Table\Filters\DateFilter;
+use Conquest\Table\Filters\Enums\DateClause;
+use Conquest\Table\Filters\Enums\Operator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
+use Workbench\App\Models\Product;
 
 it('can instantiate a filter', function () {
     $filter = new DateFilter('created_at');
@@ -30,7 +30,7 @@ it('throws error if array of properties given and no name', function () {
 })->throws(CannotResolveNameFromProperty::class);
 
 it('can instantiate a filter using resolvable property', function () {
-    expect( DateFilter::make(fn () => 'created_at'))->toBeInstanceOf(DateFilter::class)
+    expect(DateFilter::make(fn () => 'created_at'))->toBeInstanceOf(DateFilter::class)
         ->getProperty()->toBe('created_at')
         ->getName()->toBe('created_at')
         ->getLabel()->toBe('Created at')
@@ -124,7 +124,7 @@ describe('chain make', function () {
             ->neq();
     });
 
-    it('can chain methods on a filter', function () {       
+    it('can chain methods on a filter', function () {
         expect($this->filter)->toBeInstanceOf(DateFilter::class)
             ->getProperty()->toBe('created_at')
             ->getName()->toBe('when')
@@ -164,7 +164,7 @@ describe('can be applied', function () {
             $this->filter->handle($this->builder);
             expect($this->builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") = cast(? as text)');
         });
-    
+
         describe('without request', function () {
             beforeEach(function () {
                 $this->filter = DateFilter::make('created_at');
@@ -178,7 +178,7 @@ describe('can be applied', function () {
                 expect($this->filter->isActive())->toBeFalse();
             });
         });
-    
+
         describe('with valid request', function () {
             beforeEach(function () {
                 $this->filter = DateFilter::make('created_at');
@@ -222,11 +222,11 @@ describe('can be applied', function () {
             $this->filter->handle($this->builder);
             expect($this->builder->toSql())->toBe('select * from "products" where strftime(\'%Y-%m-%d\', "created_at") = cast(? as text)');
         });
-    
+
         describe('no request', function () {
             beforeEach(function () {
                 $this->filter = DateFilter::make('created_at');
-                $this->builder = DB::table('products');;
+                $this->builder = DB::table('products');
             });
 
             it('is not applied to builder', function () {
@@ -236,11 +236,11 @@ describe('can be applied', function () {
                 expect($this->filter->isActive())->toBeFalse();
             });
         });
-    
+
         describe('request', function () {
             beforeEach(function () {
                 $this->filter = DateFilter::make('created_at');
-                $this->builder = DB::table('products');;
+                $this->builder = DB::table('products');
                 Request::merge(['created_at' => '01-01-2000']);
             });
 

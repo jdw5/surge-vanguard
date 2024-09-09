@@ -7,7 +7,7 @@ beforeEach(function () {
     $this->action = BulkAction::make('Delete');
 });
 
-it('has no confirm type by default', function (){
+it('has no confirm type by default', function () {
     expect($this->action->getConfirmType())->toBeNull();
     expect($this->action->hasConfirmType())->toBeFalse();
     expect($this->action->lacksConfirmType())->toBeTrue();

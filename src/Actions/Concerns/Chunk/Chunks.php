@@ -8,10 +8,10 @@ use Closure;
 
 trait Chunks
 {
-    use HasChunkSize;
     use HasChunkById;
+    use HasChunkSize;
 
-    public function chunk(int|Closure $size = null, bool|Closure $chunkById = null): static
+    public function chunk(int|Closure|null $size = null, bool|Closure|null $chunkById = null): static
     {
         $this->setChunkSize($size);
         $this->setChunkById($chunkById);

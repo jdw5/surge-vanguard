@@ -13,6 +13,7 @@ trait HasChunkById
     public function chunkById(bool|Closure $chunkById = true): static
     {
         $this->setChunkById($chunkById);
+
         return $this;
     }
 

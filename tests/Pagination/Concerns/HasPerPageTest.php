@@ -4,7 +4,7 @@ use Conquest\Table\Table;
 use Conquest\Table\Tests\Pagination\Concerns\Classes\MethodTable;
 use Conquest\Table\Tests\Pagination\Concerns\Classes\PropertyTable;
 
-it('uses per page default as null', function (){
+it('uses per page default as null', function () {
     expect(Table::make()->getPerPage())->toBeNull();
 });
 

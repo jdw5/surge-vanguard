@@ -3,8 +3,8 @@
 namespace App\Table\Pipes;
 
 use Closure;
-use Conquest\Table\Table;
 use Conquest\Table\Pipes\Contracts\Filters;
+use Conquest\Table\Table;
 
 /**
  * @internal
@@ -18,6 +18,7 @@ class ApplyFilters implements Filters
             $filter->apply($builder);
         }
         $table->setResource($builder);
+
         return $next($table);
     }
 }

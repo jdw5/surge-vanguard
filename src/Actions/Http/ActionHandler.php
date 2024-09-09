@@ -3,12 +3,12 @@
 namespace Conques\Table\Actions\Http;
 
 use Conquest\Table\Actions\BaseAction;
-use Conquest\Table\Table;
-use Illuminate\Http\Request;
 use Conquest\Table\Actions\Enums\Context;
 use Conquest\Table\Actions\Http\DTOs\ActionData;
 use Conquest\Table\Actions\Http\DTOs\BulkActionData;
 use Conquest\Table\Actions\Http\DTOs\InlineActionData;
+use Conquest\Table\Table;
+use Illuminate\Http\Request;
 
 class ActionHandler
 {
@@ -16,7 +16,7 @@ class ActionHandler
     {
         $context = Context::tryFrom($request->input('type'));
 
-        match($context) {
+        match ($context) {
             Context::Inline => $this->handleInlineAction(InlineActionData::from($request)),
             Context::Bulk => $this->handleBulkAction(BulkActionData::from($request)),
             default => throw new \Exception('Invalid action type'),
@@ -38,10 +38,7 @@ class ActionHandler
 
     }
 
-    protected function handleBulkAction(BulkActionData $data)
-    {
-
-    }
+    protected function handleBulkAction(BulkActionData $data) {}
 
     protected function resolveTable(ActionData $data): Table
     {
@@ -53,7 +50,7 @@ class ActionHandler
             throw CouldNotResolveTableException::with($decoded);
         }
 
-        if (!$table instanceof Table) {
+        if (! $table instanceof Table) {
             throw InvalidTableException::with($decoded);
         }
 
@@ -64,14 +61,7 @@ class ActionHandler
         return $table;
     }
 
-    
-
-    protected function resolveAction(ActionData $data, Table $table): BaseAction
-    {
-
-    }
-
-
+    protected function resolveAction(ActionData $data, Table $table): BaseAction {}
 
     // public function handle(Request $request)
     // {

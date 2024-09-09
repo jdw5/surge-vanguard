@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Conquest\Table\Actions\Concerns;
 
 use Closure;
-use ReflectionClass;
 use Conquest\Table\Actions\Confirm\Confirmable;
+use ReflectionClass;
 
 trait CanBeConfirmable
 {
@@ -17,18 +17,15 @@ trait CanBeConfirmable
 
     /**
      * Set the properties of the confirm
-     * 
-     * @param Closure|array $confirm
-     * @return static
      */
     public function confirm(Closure|array $confirm): static
     {
         $this->setConfirm(true);
-        
+
         if (is_array($confirm)) {
             $this->confirm->setState($confirm);
-        } 
-        
+        }
+
         if (is_callable($confirm)) {
             $confirm($this->confirm);
         }
@@ -38,10 +35,10 @@ trait CanBeConfirmable
 
     /**
      * Enable a confirm instance.
-     * 
+     *
      * @internal
-     * @param \Conquest\Table\Actions\Confirm\Confirm|bool|null $confirm
-     * @return void
+     *
+     * @param  \Conquest\Table\Actions\Confirm\Confirm|bool|null  $confirm
      */
     public function setConfirm(Confirmable|bool|null $confirm): void
     {
@@ -51,20 +48,20 @@ trait CanBeConfirmable
 
         $this->confirm ??= match (true) {
             $confirm instanceof Confirmable => $confirm,
-            !!$confirm => Confirmable::make(),
+            (bool) $confirm => Confirmable::make(),
             default => null,
         };
     }
 
     /**
      * Get the confirm instance.
-     * 
+     *
      * @return \Conquest\Table\Actions\Confirm\Confirm|null
      */
     public function getConfirm(): ?Confirmable
     {
         if (! $this->isConfirmable()) {
-            
+
         }
 
         return $this->confirm;
@@ -72,7 +69,7 @@ trait CanBeConfirmable
 
     /**
      * Evaluate for a possible confirm attribute as a fallback.
-     * 
+     *
      * @internal
      */
     protected function evaluateConfirmAttribute(): void
@@ -80,18 +77,18 @@ trait CanBeConfirmable
         $reflection = new ReflectionClass($this);
         $attributes = $reflection->getAttributes(Confirmable::class);
 
-        if (!empty($attributes)) {
+        if (! empty($attributes)) {
             $this->setConfirm($attributes[0]->newInstance());
         }
     }
 
     /**
      * Check if the action is confirmable.
-     * 
+     *
      * @internal
      */
     protected function isConfirmable(): bool
     {
-        return !is_null($this->confirm);
+        return ! is_null($this->confirm);
     }
 }

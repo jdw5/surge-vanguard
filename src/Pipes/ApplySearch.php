@@ -15,10 +15,10 @@ class ApplySearch implements Searches
     {
         $builder = $table->getResource();
         $searches = array_merge(
-            $table->getSearch(), 
+            $table->getSearch(),
             $table->getSearchableColumns()->toArray()
         );
-        // Handle scout case 
+        // Handle scout case
 
         return $next($table);
     }

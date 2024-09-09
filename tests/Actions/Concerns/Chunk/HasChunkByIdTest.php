@@ -6,7 +6,7 @@ beforeEach(function () {
     $this->action = BulkAction::make('Delete');
 });
 
-it('uses configuration defaults', function (){
+it('uses configuration defaults', function () {
     expect($this->action->getChunkById())->toBe(config('table.chunk.by_id'));
     expect($this->action->hasChunkById())->toBeFalse();
     expect($this->action->lacksChunkById())->toBeTrue();

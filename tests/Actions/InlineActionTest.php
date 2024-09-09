@@ -105,7 +105,7 @@ describe('chained', function () {
             'label' => 'Create',
             'type' => 'inline',
             'meta' => [
-                'key' => 'value'
+                'key' => 'value',
             ],
             'route' => url('/products'),
             'method' => 'POST',

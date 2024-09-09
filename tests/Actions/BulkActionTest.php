@@ -47,7 +47,7 @@ describe('base', function () {
             ->HasChunkSize()->toBeFalse()
             ->getChunkById()->toBe(config('table.chunk.by_id'))
             ->getChunkSize()->toBe(config('table.chunk.size'));
-    
+
     });
 
     it('has array form', function () {
@@ -95,7 +95,7 @@ describe('chained', function () {
             ->hasChunkById()->toBeTrue()
             ->HasChunkSize()->toBeTrue()
             ->getChunkById()->toBe(false)
-            ->getChunkSize()->toBe(1000);    
+            ->getChunkSize()->toBe(1000);
     });
 
     it('has array form', function () {
@@ -104,7 +104,7 @@ describe('chained', function () {
             'label' => 'Create',
             'type' => 'bulk',
             'meta' => [
-                'key' => 'value'
+                'key' => 'value',
             ],
             'confirm' => [
                 'title' => 'Are you sure?',

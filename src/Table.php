@@ -4,31 +4,31 @@ declare(strict_types=1);
 
 namespace Conquest\Table;
 
-use Conquest\Core\Primitive;
-use App\Table\Pipes\Paginate;
-use App\Table\Pipes\ApplySorts;
-use App\Table\Pipes\ApplySearch;
 use App\Table\Pipes\ApplyFilters;
-use Illuminate\Pipeline\Pipeline;
+use App\Table\Pipes\ApplySearch;
+use App\Table\Pipes\ApplySorts;
 use App\Table\Pipes\FormatRecords;
+use App\Table\Pipes\Paginate;
 use Conquest\Core\Concerns\IsAnonymous;
-use Conquest\Table\Concerns\Sorts;
-use Conquest\Table\Concerns\HasMeta;
-use Conquest\Table\Pipes\SetActions;
-use Conquest\Table\Concerns\EncodesId;
-use Conquest\Table\Pipes\ApplyToggles;
 use Conquest\Core\Concerns\RequiresKey;
+use Conquest\Core\Exceptions\MissingRequiredAttributeException;
+use Conquest\Core\Primitive;
+use Conquest\Table\Concerns\EncodesId;
 use Conquest\Table\Concerns\HasActions;
 use Conquest\Table\Concerns\HasColumns;
 use Conquest\Table\Concerns\HasFilters;
+use Conquest\Table\Concerns\HasMeta;
 use Conquest\Table\Concerns\HasRecords;
 use Conquest\Table\Concerns\HasResource;
-use Illuminate\Database\Eloquent\Builder;
-use Conquest\Table\Concerns\Search\Searches;
 use Conquest\Table\Concerns\Remember\Remembers;
+use Conquest\Table\Concerns\Search\Searches;
+use Conquest\Table\Concerns\Sorts;
 use Conquest\Table\Pagination\Concerns\Paginates;
+use Conquest\Table\Pipes\ApplyToggles;
+use Conquest\Table\Pipes\SetActions;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Conquest\Core\Exceptions\MissingRequiredAttributeException;
+use Illuminate\Pipeline\Pipeline;
 
 class Table extends Primitive
 {
@@ -39,16 +39,16 @@ class Table extends Primitive
     use HasMeta;
     use HasRecords;
     use HasResource;
+    use IsAnonymous;
     use Paginates;
     use Remembers;
     use RequiresKey;
     use Searches;
     use Sorts;
-    use IsAnonymous;
 
     protected $anonymous = Table::class;
 
-    public function __construct(array $assignments = []) 
+    public function __construct(array $assignments = [])
     {
         $this->setAssignments($assignments);
     }
@@ -57,13 +57,13 @@ class Table extends Primitive
      * Create a new table instance.
      */
     public static function make(
-        Builder|QueryBuilder $resource = null,
-        array $columns = null,
-        array $actions = null,
-        array $filters = null,
-        array $sorts = null,
-        array|string $search = null,
-        array|int $pagination = null,
+        Builder|QueryBuilder|null $resource = null,
+        ?array $columns = null,
+        ?array $actions = null,
+        ?array $filters = null,
+        ?array $sorts = null,
+        array|string|null $search = null,
+        array|int|null $pagination = null,
     ): static {
         return resolve(static::class, compact(
             'resource',
@@ -79,7 +79,6 @@ class Table extends Primitive
     /**
      * Get the key for the table.
      *
-     * @return string
      * @throws MissingRequiredAttributeException
      */
     public function getTableKey(): string
@@ -127,7 +126,7 @@ class Table extends Primitive
 
     /**
      * Retrieve the records and table metadata.
-     * 
+     *
      * @internal
      */
     protected function pipeline(): void

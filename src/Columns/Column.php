@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Conquest\Table\Columns;
 
-use Conquest\Table\Columns\Concerns\Formatters\FormatsMoney;
 use Conquest\Table\Columns\Concerns\Formatters\FormatsBoolean;
+use Conquest\Table\Columns\Concerns\Formatters\FormatsMoney;
 use Conquest\Table\Columns\Concerns\Formatters\FormatsNumeric;
 use Conquest\Table\Columns\Concerns\Formatters\FormatsSeparator;
 

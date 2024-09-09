@@ -2,8 +2,8 @@
 
 namespace Conquest\Table\Concerns;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Database\Query\Builder as BaseContract;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 

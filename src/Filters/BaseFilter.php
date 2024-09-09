@@ -28,7 +28,7 @@ abstract class BaseFilter extends Primitive implements Filters
     use IsActive;
     use IsAuthorized;
 
-    public function __construct(string|Closure $name, string|Closure $label = null)
+    public function __construct(string|Closure $name, string|Closure|null $label = null)
     {
         parent::__construct();
         $this->setName($name);

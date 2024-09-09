@@ -36,12 +36,14 @@ trait CanAction
 
     public function setAction(Closure|string|null $action): void
     {
-        if (is_null($action)) return;
+        if (is_null($action)) {
+            return;
+        }
 
         if (\is_string($action) && class_exists($action) && method_exists($action, '__invoke')) {
             $action = resolve($action)->__invoke(...);
         }
-        
+
         $this->action = $action;
     }
 

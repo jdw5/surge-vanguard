@@ -14,6 +14,7 @@ enum Paginator: string
 
     /**
      * Retrieve the records and metadata based on the selected paginator.
+     *
      * @return array{\Illuminate\Support\Collection, array}
      */
     public function paginate(Table $table): array
@@ -27,7 +28,7 @@ enum Paginator: string
                     cursorName: $table->getPageName(),
                 )->withQueryString(),
                 self::getMeta($data),
-                ],
+            ],
             self::None => [
                 $data = $builder->get(),
                 self::getMeta($data),
@@ -45,10 +46,9 @@ enum Paginator: string
     /**
      * Get metadata based on the current pagination type.
      *
-     * @param \Illuminate\Support\Collection $data When self::None
-     * @param \Illuminate\Pagination\CursorPaginator $data When self::Cursor
-     * @param \Illuminate\Pagination\LengthAwarePaginator $data When self::Page
-     * @return array
+     * @param  \Illuminate\Support\Collection  $data  When self::None
+     * @param  \Illuminate\Pagination\CursorPaginator  $data  When self::Cursor
+     * @param  \Illuminate\Pagination\LengthAwarePaginator  $data  When self::Page
      */
     public function getMeta($data): array
     {
@@ -80,7 +80,7 @@ enum Paginator: string
                 'prev_url' => $data->previousPageUrl(),
                 'show' => $data->hasPages(),
                 'empty' => $data->isEmpty(),
-            ],  
+            ],
         };
     }
 }

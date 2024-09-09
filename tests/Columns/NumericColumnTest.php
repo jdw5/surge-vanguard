@@ -103,7 +103,7 @@ describe('chain make', function () {
             ->numeric();
     });
 
-    it('can chain methods on a numeric column', function () {       
+    it('can chain methods on a numeric column', function () {
         expect($this->col)->toBeInstanceOf(NumericColumn::class)
             ->getName()->toBe('amount')
             ->getLabel()->toBe('Paid')
@@ -156,7 +156,6 @@ describe('chain make', function () {
         ]);
     });
 });
-
 
 it('does not allow column name to be actions from instantiation', function () {
     $col = new NumericColumn('actions');

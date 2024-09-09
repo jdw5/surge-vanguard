@@ -28,7 +28,7 @@ trait HasPerPage
     }
 
     /**
-     * @param int|array<int>|null $perPage
+     * @param  int|array<int>|null  $perPage
      */
     public function setPerPage(int|array|null $perPage): void
     {

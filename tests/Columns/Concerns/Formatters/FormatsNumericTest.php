@@ -83,7 +83,6 @@ it('formats to string', function () {
     expect($this->column->numeric()->formatNumeric(2000))->toBe('2000');
 });
 
-
 it('can format numeric using decimal places', function () {
     expect($this->column->numeric(decimalPlaces: 2))
         ->formatNumeric(1000)->toBe('1,000.00')

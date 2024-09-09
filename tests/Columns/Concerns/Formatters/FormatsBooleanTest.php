@@ -53,7 +53,6 @@ it('can format boolean providing the true label', function () {
         ->formatBoolean(fn () => 100)->toBe('Yes');
 });
 
-
 it('can format boolean providing the false label', function () {
     expect($this->column->boolean())
         ->formatBoolean(0)->toBe('No')

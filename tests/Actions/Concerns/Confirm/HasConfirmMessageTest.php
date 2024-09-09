@@ -6,7 +6,7 @@ beforeEach(function () {
     $this->action = BulkAction::make('Delete');
 });
 
-it('uses confirm message default', function (){
+it('uses confirm message default', function () {
     expect($this->action->getConfirmMessage())->toBe(config('table.confirm.message'));
     expect($this->action->hasConfirmMessage())->toBeFalse();
     expect($this->action->lacksConfirmMessage())->toBeTrue();

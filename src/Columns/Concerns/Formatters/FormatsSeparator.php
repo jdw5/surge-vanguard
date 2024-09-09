@@ -22,7 +22,6 @@ trait FormatsSeparator
         return ! is_null($this->separator);
     }
 
-
     public function getSeparator(): ?string
     {
         return $this->evaluate($this->separator);

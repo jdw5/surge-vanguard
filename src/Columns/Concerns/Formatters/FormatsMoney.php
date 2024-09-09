@@ -21,6 +21,7 @@ trait FormatsMoney
         $this->setCurrency($currency);
         $this->setDivideBy($divideBy);
         $this->setLocale($locale);
+
         return $this;
     }
 

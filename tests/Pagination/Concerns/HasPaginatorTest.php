@@ -1,7 +1,7 @@
 <?php
 
-use Conquest\Table\Table;
 use Conquest\Table\Pagination\Enums\Paginator;
+use Conquest\Table\Table;
 use Conquest\Table\Tests\Pagination\Concerns\Classes\MethodTable;
 use Conquest\Table\Tests\Pagination\Concerns\Classes\PropertyTable;
 
@@ -32,7 +32,7 @@ it('prevents setting invalid paginator', function () {
 
 it('allows setting all valid paginators', function () {
     $table = Table::make();
-    
+
     $table->setPaginator(Paginator::None);
     expect($table->getPaginator())->toBe(Paginator::None);
 

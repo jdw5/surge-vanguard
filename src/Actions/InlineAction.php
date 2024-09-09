@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Conquest\Table\Actions;
 
-use Conquest\Core\Concerns\Routable;
 use Conquest\Core\Concerns\IsDefault;
+use Conquest\Core\Concerns\Routable;
 use Conquest\Core\Contracts\HigherOrder;
-use Conquest\Table\Actions\Concerns\IsBulk;
-use Conquest\Table\Actions\Concerns\CanAction;
 use Conquest\Core\Contracts\ProxiesHigherOrder;
+use Conquest\Table\Actions\Concerns\CanAction;
 use Conquest\Table\Actions\Concerns\CanBeConfirmable;
+use Conquest\Table\Actions\Concerns\IsBulk;
 use Conquest\Table\Actions\Confirm\Proxies\HigherOrderConfirm;
 
 /**
@@ -18,10 +18,10 @@ use Conquest\Table\Actions\Confirm\Proxies\HigherOrderConfirm;
  */
 class InlineAction extends BaseAction implements ProxiesHigherOrder
 {
-    use CanBeConfirmable;
     use CanAction;
-    use IsDefault;
+    use CanBeConfirmable;
     use IsBulk;
+    use IsDefault;
     use Routable;
 
     public function setUp(): void
@@ -42,11 +42,11 @@ class InlineAction extends BaseAction implements ProxiesHigherOrder
         );
     }
 
-    public function __get(string $property): HigherOrder 
+    public function __get(string $property): HigherOrder
     {
-        return match($property) {
+        return match ($property) {
             'confirm' => new HigherOrderConfirm($this),
-            default => throw new \Exception("Property [{$property}] does not exist on " . self::class),
+            default => throw new \Exception("Property [{$property}] does not exist on ".self::class),
         };
     }
 }

@@ -5,28 +5,28 @@ declare(strict_types=1);
 namespace Conquest\Table\Filters;
 
 use Closure;
-use Conquest\Core\Options\Option;
-use Illuminate\Support\Facades\Request;
-use Conquest\Table\Filters\Enums\Clause;
-use Illuminate\Database\Eloquent\Builder;
-use Conquest\Table\Filters\Enums\Operator;
 use Conquest\Core\Options\Concerns\HasOptions;
+use Conquest\Core\Options\Option;
 use Conquest\Table\Filters\Concerns\HasClause;
-use Conquest\Table\Filters\Concerns\IsMultiple;
 use Conquest\Table\Filters\Concerns\HasOperator;
+use Conquest\Table\Filters\Concerns\IsMultiple;
 use Conquest\Table\Filters\Concerns\IsRestricted;
+use Conquest\Table\Filters\Enums\Clause;
+use Conquest\Table\Filters\Enums\Operator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Request;
 
 class SetFilter extends PropertyFilter
 {
     use HasClause;
     use HasOperator;
     use HasOptions;
-    use IsRestricted;
     use IsMultiple {
         setMultiple as setMultipleTrait;
         isMultiple as isMultipleTrait;
     }
+    use IsRestricted;
 
     public function setUp(): void
     {

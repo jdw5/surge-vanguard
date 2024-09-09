@@ -19,24 +19,24 @@ class Paginate implements Paginates
         $data = match ($table->getPaginateType()) {
             Paginator::Cursor => [
                 $data = $builder->cursorPaginate(
-                        perPage: $table->usePerPage(),
-                        cursorName: $table->getPageName(),
-                    )->withQueryString(),
-                    $this->getCursorMeta($data),
-                ],
-                Paginator::None => [
-                    $data = $builder->get(),
-                    $this->getCollectionMeta($data),
-                ],
-                default => [
-                    $data = $builder->paginate(
-                        perPage: $this->usePerPage(),
-                        pageName: $this->getPageName(),
-                    )->withQueryString(),
-                    $this->getPaginateMeta($data),
-                ],
-            };
-    
+                    perPage: $table->usePerPage(),
+                    cursorName: $table->getPageName(),
+                )->withQueryString(),
+                $this->getCursorMeta($data),
+            ],
+            Paginator::None => [
+                $data = $builder->get(),
+                $this->getCollectionMeta($data),
+            ],
+            default => [
+                $data = $builder->paginate(
+                    perPage: $this->usePerPage(),
+                    pageName: $this->getPageName(),
+                )->withQueryString(),
+                $this->getPaginateMeta($data),
+            ],
+        };
+
         return $next($table);
     }
 }

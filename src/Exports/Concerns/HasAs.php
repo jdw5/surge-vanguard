@@ -17,5 +17,4 @@ trait HasAs
     {
         return $this->as;
     }
-    
 }

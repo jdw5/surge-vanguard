@@ -40,7 +40,7 @@ trait HasDirection
     {
         return is_null($this->direction);
     }
-    
+
     /**
      * Check if the direction is set
      */

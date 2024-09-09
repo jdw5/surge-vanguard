@@ -1,9 +1,7 @@
 <?php
 
-use Carbon\Carbon;
-use Conquest\Table\Sorts\ToggleSort;
 use Conquest\Table\Columns\BooleanColumn;
-
+use Conquest\Table\Sorts\ToggleSort;
 
 it('can instantiate a boolean column', function () {
     $col = new BooleanColumn('active');
@@ -91,7 +89,7 @@ describe('chain make', function () {
             ->prefix('@');
     });
 
-    it('can chain methods on a boolean column', function () {       
+    it('can chain methods on a boolean column', function () {
         expect($this->col)->toBeInstanceOf(BooleanColumn::class)
             ->getName()->toBe('active')
             ->getLabel()->toBe('When')
@@ -138,7 +136,6 @@ describe('chain make', function () {
     });
 });
 
-
 it('does not allow boolean column name to be actions from instantiation', function () {
     $col = new BooleanColumn('actions');
 })->throws(InvalidArgumentException::class, 'Column name cannot be "actions"');
@@ -158,6 +155,6 @@ it('can apply a boolean column for truthy values', function () {
 });
 
 it('can apply a boolean column and transforms value', function () {
-    $col = BooleanColumn::make('active')->transform(fn ($value) => !$value);
+    $col = BooleanColumn::make('active')->transform(fn ($value) => ! $value);
     expect($col->apply('Example'))->toBe('No');
 });

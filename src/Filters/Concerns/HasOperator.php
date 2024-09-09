@@ -22,7 +22,7 @@ trait HasOperator
 
     /**
      * Set the operator to be used quietly.
-     * 
+     *
      * @throws ValueError
      */
     public function setOperator(string|Operator|null $operator): void

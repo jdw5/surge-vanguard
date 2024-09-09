@@ -1,12 +1,11 @@
 <?php
 
 use Conquest\Table\Table;
-use Illuminate\Support\Facades\Request;
 use Conquest\Table\Tests\Pagination\Concerns\Classes\MethodTable;
 use Conquest\Table\Tests\Pagination\Concerns\Classes\PropertyTable;
+use Illuminate\Support\Facades\Request;
 
-
-it('uses show key default as config', function (){
+it('uses show key default as config', function () {
     expect(Table::make()->getShowKey())->toBe(config('table.pagination.key'));
 });
 
@@ -39,7 +38,7 @@ it('gets show key from request using show key', function () {
 
 it('returns null when show key is not in request', function () {
     $table = Table::make();
-    $table->setShowKey('display');    
+    $table->setShowKey('display');
     expect($table->getPerPageFromRequest())->toBe(0);
 });
 

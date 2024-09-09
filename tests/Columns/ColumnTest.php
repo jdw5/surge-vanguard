@@ -112,7 +112,7 @@ describe('chain make', function () {
             ->prefix('Mr ');
     });
 
-    it('can chain methods on a column', function () {       
+    it('can chain methods on a column', function () {
         expect($this->col)->toBeInstanceOf(Column::class)
             ->getName()->toBe('name')
             ->getLabel()->toBe('Username')
@@ -170,7 +170,6 @@ describe('chain make', function () {
         ]);
     });
 });
-
 
 it('does not allow column name to be actions from instantiation', function () {
     $col = new Column('actions');

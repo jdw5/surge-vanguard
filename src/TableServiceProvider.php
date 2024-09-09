@@ -22,7 +22,7 @@ class TableServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Route::bind('table', fn (int|string $value) => Table::from($value));
-        
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 TableMakeCommand::class,

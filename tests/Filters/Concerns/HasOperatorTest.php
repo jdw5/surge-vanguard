@@ -125,4 +125,3 @@ it('can set "like" operator through shorthand chain "fuzzy"', function () {
     expect($this->filter->fuzzy())->toBeInstanceOf(Filter::class)
         ->getOperator()->toBe(Operator::Like);
 });
-

@@ -8,6 +8,5 @@ class ActionData
         public readonly string|int $table,
         public readonly string $name,
         public readonly string $type,
-    ) {
-    }
+    ) {}
 }

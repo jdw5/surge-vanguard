@@ -1,8 +1,8 @@
 <?php
 
 use Carbon\Carbon;
-use Conquest\Table\Sorts\ToggleSort;
 use Conquest\Table\Columns\DateColumn;
+use Conquest\Table\Sorts\ToggleSort;
 
 beforeEach(function () {
     Carbon::setTestNow('2000-01-01 00:00:00');
@@ -106,7 +106,7 @@ describe('chain make', function () {
             ->since();
     });
 
-    it('can chain methods on a date column', function () {       
+    it('can chain methods on a date column', function () {
         expect($this->col)->toBeInstanceOf(DateColumn::class)
             ->getName()->toBe('created_at')
             ->getLabel()->toBe('When')
@@ -160,7 +160,6 @@ describe('chain make', function () {
         ]);
     });
 });
-
 
 it('does not allow date column name to be actions from instantiation', function () {
     $col = new DateColumn('actions');

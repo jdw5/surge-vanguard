@@ -52,6 +52,7 @@ class BooleanFilter extends PropertyFilter
     {
         $array = parent::toArray();
         unset($array['value']);
+
         return $array;
     }
 }

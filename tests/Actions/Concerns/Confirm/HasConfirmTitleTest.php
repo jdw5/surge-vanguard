@@ -6,7 +6,7 @@ beforeEach(function () {
     $this->action = BulkAction::make('Delete');
 });
 
-it('uses confirm title default', function (){
+it('uses confirm title default', function () {
     expect($this->action->getConfirmTitle())->toBe(config('table.confirm.title'));
     expect($this->action->hasConfirmTitle())->toBeFalse();
     expect($this->action->lacksConfirmTitle())->toBeTrue();

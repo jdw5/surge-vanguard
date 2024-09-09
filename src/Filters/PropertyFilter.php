@@ -13,10 +13,10 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 
 abstract class PropertyFilter extends BaseFilter
 {
-    use HasProperty;
     use CanValidate;
+    use HasProperty;
 
-    public function __construct(array|string|Closure $property, string|Closure $name = null, string|Closure $label = null)
+    public function __construct(array|string|Closure $property, string|Closure|null $name = null, string|Closure|null $label = null)
     {
         if (is_array($property) && is_null($name)) {
             throw new CannotResolveNameFromProperty($property);
@@ -25,7 +25,7 @@ abstract class PropertyFilter extends BaseFilter
         parent::__construct($name ?? $this->toName($this->evaluate($property)), $label);
     }
 
-    public static function make(array|string|Closure $property, string|Closure $name = null, string|Closure $label = null): static
+    public static function make(array|string|Closure $property, string|Closure|null $name = null, string|Closure|null $label = null): static
     {
         return resolve(static::class, compact('property', 'name', 'label'));
     }

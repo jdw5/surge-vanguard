@@ -1,7 +1,7 @@
 <?php
 
-use Conquest\Table\Filters\Enums\DateClause;
 use Conquest\Table\Filters\DateFilter;
+use Conquest\Table\Filters\Enums\DateClause;
 
 beforeEach(function () {
     $this->filter = DateFilter::make('name');
@@ -70,4 +70,3 @@ it('can set "time" date clause through shorthand chain', function () {
     expect($this->filter->time())->toBeInstanceOf(DateFilter::class)
         ->getDateClause()->toBe(DateClause::Time);
 });
-

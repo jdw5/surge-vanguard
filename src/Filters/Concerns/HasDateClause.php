@@ -39,7 +39,7 @@ trait HasDateClause
 
     /**
      * Set the clause to be used quietly.
-     * 
+     *
      * @throws ValueError
      */
     public function setDateClause(string|DateClause|null $dateClause): void

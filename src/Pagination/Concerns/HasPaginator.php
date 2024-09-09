@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Conquest\Table\Pagination\Concerns;
 
-use InvalidArgumentException;
 use Conquest\Table\Pagination\Enums\Paginator;
 
 trait HasPaginator
@@ -30,6 +29,7 @@ trait HasPaginator
 
         if (method_exists($this, 'paginator')) {
             $result = $this->paginator();
+
             return $this->resolvePaginator($result);
         }
 

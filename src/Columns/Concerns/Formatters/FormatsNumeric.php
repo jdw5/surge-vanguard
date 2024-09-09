@@ -16,7 +16,7 @@ trait FormatsNumeric
 
     protected bool $numeric = false;
 
-    public function numeric(int|Closure $decimalPlaces = null, int|Closure $roundToNearest = null, string|Closure $locale = null, int|Closure $divideBy = null): static
+    public function numeric(int|Closure|null $decimalPlaces = null, int|Closure|null $roundToNearest = null, string|Closure|null $locale = null, int|Closure|null $divideBy = null): static
     {
         $this->numeric = true;
         $this->setDecimalPlaces($decimalPlaces);
@@ -49,7 +49,7 @@ trait FormatsNumeric
         if ($this->hasDecimalPlaces() || $this->hasLocale()) {
             return Number::format($value, precision: $this->getDecimalPlaces(), locale: $this->getLocale());
         }
+
         return (string) $value;
     }
-
 }

@@ -31,7 +31,6 @@ it('can set as invokable class', function () {
     // expect($this->action->getAction())->toBeInstanceOf(Product::class);
 })->skip();
 
-
 it('can set action through chaining', function () {
     expect($this->action->action(fn (Product $product) => $product->name = 'New name'))
         ->toBeInstanceOf(InlineAction::class)

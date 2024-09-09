@@ -2,10 +2,7 @@
 
 namespace Conquest\Table\Actions;
 
-use Conquest\Core\Concerns\HasHttpMethod;
-use Conquest\Core\Concerns\HasRoute;
 use Conquest\Core\Concerns\Routable;
-use Conquest\Table\Table;
 
 class PageAction extends BaseAction
 {

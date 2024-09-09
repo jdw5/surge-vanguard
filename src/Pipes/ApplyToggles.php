@@ -16,7 +16,7 @@ class ApplyToggles implements Toggles
         return $next($table);
     }
 
-        // private function getToggledColumns(): array
+    // private function getToggledColumns(): array
     // {
     //     $cols = request()->query($this->getToggleKey(), null);
     //     return (is_null($cols)) ? [] : explode(',', $cols);

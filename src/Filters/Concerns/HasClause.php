@@ -33,7 +33,7 @@ trait HasClause
 
     public function hasClause(): bool
     {
-        return !$this->lacksClause();
+        return ! $this->lacksClause();
     }
 
     public function getClause(): ?Clause
@@ -135,7 +135,6 @@ trait HasClause
     {
         return $this->clause(Clause::JsonDoesNotOverlap);
     }
-
 
     public function like(): static
     {

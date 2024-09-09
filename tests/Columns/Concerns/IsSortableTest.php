@@ -23,14 +23,14 @@ it('can set as sortable', function () {
     expect($this->column->getSort())->toBeInstanceOf(ToggleSort::class)
         ->getProperty()->toBe('name')
         ->getName()->toBe('name');
-        
+
 });
 
 it('can set as sortable through chaining', function () {
     expect($this->column->sortable())->toBeInstanceOf(Column::class)
         ->isSortable()->toBeTrue()
         ->isNotSortable()->toBeFalse();
-    
+
     expect($this->column->getSort())->toBeInstanceOf(ToggleSort::class)
         ->getProperty()->toBe('name')
         ->getName()->toBe('name');
@@ -46,7 +46,7 @@ it('has a chain alias', function () {
     expect($this->column->sort())->toBeInstanceOf(Column::class)
         ->isSortable()->toBeTrue()
         ->isNotSortable()->toBeFalse();
-    
+
     expect($this->column->getSort())->toBeInstanceOf(ToggleSort::class)
         ->getProperty()->toBe('name')
         ->getName()->toBe('name');
@@ -55,7 +55,7 @@ it('has a chain alias', function () {
 it('can check if sorting', function () {
     $this->column->setSortable();
     expect($this->column->isSorting())->toBeFalse();
-    
+
     $this->column->getSort()->setActive(true);
     expect($this->column->isSorting())->toBeTrue();
 });

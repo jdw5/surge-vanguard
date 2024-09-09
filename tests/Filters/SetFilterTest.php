@@ -1,12 +1,12 @@
 <?php
 
-use Workbench\App\Models\Product;
+use Conquest\Table\Exceptions\CannotResolveNameFromProperty;
+use Conquest\Table\Filters\Enums\Clause;
+use Conquest\Table\Filters\Enums\Operator;
 use Conquest\Table\Filters\SetFilter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
-use Conquest\Table\Filters\Enums\Clause;
-use Conquest\Table\Filters\Enums\Operator;
-use Conquest\Table\Exceptions\CannotResolveNameFromProperty;
+use Workbench\App\Models\Product;
 
 it('can instantiate a set filter', function () {
     $filter = new SetFilter('name');
@@ -140,7 +140,7 @@ describe('chain make', function () {
             ->multiple();
     });
 
-    it('can chain methods on a set filter', function () {       
+    it('can chain methods on a set filter', function () {
         expect($this->filter)->toBeInstanceOf(SetFilter::class)
             ->getProperty()->toBe('name')
             ->getName()->toBe('person')
@@ -186,7 +186,7 @@ describe('can be applied', function () {
             $this->filter->handle($this->builder);
             expect($this->builder->toSql())->toBe('select * from "products" where not "name" like ?');
         });
-    
+
         describe('without request', function () {
             beforeEach(function () {
                 $this->filter = SetFilter::make('name');
@@ -218,7 +218,7 @@ describe('can be applied', function () {
                 expect($this->filter->hasOperator())->toBeTrue();
             });
         });
-    
+
         describe('with request', function () {
             beforeEach(function () {
                 $this->filter = SetFilter::make('name')->operators(Operator::Equal, Operator::NotEqual);
@@ -244,7 +244,7 @@ describe('can be applied', function () {
             });
 
             it('can apply and transforms and validates before handling', function () {
-                $this->filter->validate(fn ($value) => !is_null($value) && strlen($value) > 4);
+                $this->filter->validate(fn ($value) => ! is_null($value) && strlen($value) > 4);
                 $this->filter->apply($this->builder);
                 expect($this->builder->toSql())->toBe('select * from "products"');
                 expect($this->filter->getValue())->toBe('John');
@@ -280,7 +280,7 @@ describe('can be applied', function () {
             $this->filter->handle($this->builder);
             expect($this->builder->toSql())->toBe('select * from "products" where not "name" like ?');
         });
-    
+
         describe('no request', function () {
             beforeEach(function () {
                 $this->filter = SetFilter::make('name')->operators(Operator::Equal, Operator::NotEqual);
@@ -312,7 +312,7 @@ describe('can be applied', function () {
                 expect($this->filter->hasOperator())->toBeTrue();
             });
         });
-    
+
         describe('request', function () {
             beforeEach(function () {
                 $this->filter = SetFilter::make('name')->operators(Operator::Equal, Operator::NotEqual);
@@ -338,7 +338,7 @@ describe('can be applied', function () {
             });
 
             it('can apply and transforms and validates before handling', function () {
-                $this->filter->validate(fn ($value) => !is_null($value) && strlen($value) > 4);
+                $this->filter->validate(fn ($value) => ! is_null($value) && strlen($value) > 4);
                 $this->filter->apply($this->builder);
                 expect($this->builder->toSql())->toBe('select * from "products"');
                 expect($this->filter->getValue())->toBe('John');
@@ -357,6 +357,5 @@ describe('can be applied', function () {
             });
         });
     });
-
 
 });

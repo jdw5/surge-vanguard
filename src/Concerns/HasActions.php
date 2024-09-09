@@ -22,8 +22,9 @@ trait HasActions
 
     /**
      * Get the actions for the table.
-     * 
-     * @internal 
+     *
+     * @internal
+     *
      * @return array<int, Conquest\Table\Actions\BaseAction>
      */
     public function getActions(): array
@@ -41,21 +42,21 @@ trait HasActions
 
     /**
      * Set the actions for the table.
-     * 
-     * @param array<int, Conquest\Table\Actions\BaseAction> $actions
+     *
+     * @param  array<int, Conquest\Table\Actions\BaseAction>  $actions
      */
     public function setActions(?array $actions): void
     {
         if (is_null($actions)) {
             return;
         }
-        
+
         $this->actions = $actions;
     }
 
     /**
      * Get all available actions.
-     * 
+     *
      * @return Collection<int, Conquest\Table\Actions\BaseAction>
      */
     public function getTableActions(): Collection
@@ -66,7 +67,7 @@ trait HasActions
 
     /**
      * Get the inline actions.
-     * 
+     *
      * @return Collection<int, Conquest\Table\Actions\InlineAction>
      */
     public function getInlineActions(): Collection
@@ -77,7 +78,7 @@ trait HasActions
 
     /**
      * Get the bulk actions.
-     * 
+     *
      * @return Collection<int, Conquest\Table\Actions\BulkAction>
      */
     public function getBulkActions(): Collection
@@ -88,7 +89,7 @@ trait HasActions
 
     /**
      * Get the page actions.
-     * 
+     *
      * @return Collection<int, Conquest\Table\Actions\PageAction>
      */
     public function getPageActions(): Collection
@@ -99,7 +100,7 @@ trait HasActions
 
     /**
      * Get the default inline action for a record.
-     * 
+     *
      * @return ?Conquest\Table\Actions\BaseAction
      */
     public function getDefaultAction(): ?BaseAction

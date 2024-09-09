@@ -7,6 +7,7 @@ use Closure;
 trait EncodesId
 {
     protected static ?Closure $encodeUsing = null;
+
     protected static ?Closure $decodeUsing = null;
 
     public static function encodeUsing(Closure $encodeUsing): void

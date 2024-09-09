@@ -2,29 +2,28 @@
 
 namespace Conquest\Table\Actions\Confirm\Proxies;
 
-use Conquest\Core\Primitive;
 use Conquest\Core\Contracts\HigherOrder;
+use Conquest\Core\Primitive;
 
 /**
  * @internal
+ *
  * @mixin Conquest\Table\Actions\Confirm\Confirmable
+ *
  * @template T of Conquest\Core\Primitive
+ *
  * @template-implements Conquest\Core\Concerns\HigherOrder
  */
 class HigherOrderConfirm implements HigherOrder
 {
     /**
-     * @param T $primitive
+     * @param  T  $primitive
      */
     public function __construct(
         protected readonly Primitive $primitive
-    ) {
-
-    }
+    ) {}
 
     /**
-     * @param string $name
-     * @param array $arguments
      * @return T
      */
     public function __call(string $name, array $arguments)

@@ -4,8 +4,7 @@ use Conquest\Table\Table;
 use Conquest\Table\Tests\Pagination\Concerns\Classes\MethodTable;
 use Conquest\Table\Tests\Pagination\Concerns\Classes\PropertyTable;
 
-
-it('uses page name default as config', function (){
+it('uses page name default as config', function () {
     expect(Table::make()->getPageName())->toBe(config('table.pagination.name'));
 });
 

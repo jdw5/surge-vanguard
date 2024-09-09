@@ -22,6 +22,7 @@ class ApplySorts implements Sorts
             $sort->apply($builder);
         }
         $table->setResource($builder);
+
         return $next($table);
     }
 }

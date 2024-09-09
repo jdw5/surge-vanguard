@@ -85,8 +85,7 @@ it('can format money using divide by', function () {
 it('can format money using the locale', function () {
     expect($this->column->money(locale: 'es'))
         ->formatMoney(100)->toBe('100,00 US$')
-        
-        
+
         ->formatMoney(100.125)->toBe('100,12 US$')
         ->formatMoney(1000.125)->toBe('1.000,12 US$');
 });

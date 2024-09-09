@@ -3,12 +3,12 @@
 namespace Conquest\Table\Actions;
 
 use Closure;
-use Conquest\Core\Primitive;
 use Conquest\Core\Concerns\HasLabel;
 use Conquest\Core\Concerns\HasMeta;
 use Conquest\Core\Concerns\HasName;
 use Conquest\Core\Concerns\HasType;
 use Conquest\Core\Concerns\IsAuthorized;
+use Conquest\Core\Primitive;
 
 abstract class BaseAction extends Primitive
 {

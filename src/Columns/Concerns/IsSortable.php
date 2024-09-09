@@ -20,10 +20,11 @@ trait IsSortable
     {
         return $this->sortable($property);
     }
-    
+
     public function sortable(?string $property = null): static
     {
         $this->setSortable($property);
+
         return $this;
     }
 
@@ -41,7 +42,7 @@ trait IsSortable
     {
         return ! $this->isNotSortable();
     }
-    
+
     public function isNotSortable(): bool
     {
         return is_null($this->sort);

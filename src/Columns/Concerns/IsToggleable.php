@@ -9,12 +9,14 @@ use Closure;
 trait IsToggleable
 {
     protected bool|Closure $toggleable = false;
+
     protected bool|Closure $toggledOn = true;
 
     public function toggleable(bool|Closure $toggledOn = true): static
     {
         $this->setToggleable(true);
         $this->setToggledOn($toggledOn);
+
         return $this;
     }
 

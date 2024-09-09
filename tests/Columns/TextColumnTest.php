@@ -102,7 +102,7 @@ describe('chain make', function () {
             ->prefix('Mr ');
     });
 
-    it('can chain methods on a text column', function () {       
+    it('can chain methods on a text column', function () {
         expect($this->col)->toBeInstanceOf(TextColumn::class)
             ->getName()->toBe('name')
             ->getLabel()->toBe('Username')
@@ -156,7 +156,6 @@ describe('chain make', function () {
         ]);
     });
 });
-
 
 it('does not allow column name to be actions from instantiation', function () {
     $col = new TextColumn('actions');

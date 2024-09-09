@@ -27,7 +27,7 @@ abstract class BaseSort extends Primitive implements Sorts
     use IsActive;
     use IsAuthorized;
 
-    public function __construct(string|Closure $property, string|Closure $name = null, string|Closure $label = null)
+    public function __construct(string|Closure $property, string|Closure|null $name = null, string|Closure|null $label = null)
     {
         parent::__construct();
         $this->setProperty($property);
@@ -35,7 +35,7 @@ abstract class BaseSort extends Primitive implements Sorts
         $this->setLabel($label ?? $this->toLabel($this->getName()));
     }
 
-    public static function make(string|Closure $property, string|Closure $name = null, string|Closure $label = null): static
+    public static function make(string|Closure $property, string|Closure|null $name = null, string|Closure|null $label = null): static
     {
         return resolve(static::class, compact('property', 'name', 'label'));
     }

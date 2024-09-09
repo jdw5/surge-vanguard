@@ -50,7 +50,7 @@ it('returns multiple pagination options when per page is an array', function () 
 it('uses correct per page value', function () {
     $this->setPerPage([10, 20, 30]);
     $this->setDefaultPerPage(10);
-    
+
     // Mock getPerPageFromRequest to return 20
     $this->mock(Table::class, function ($mock) {
         $mock->shouldReceive('getPerPageFromRequest')->andReturn(20);
@@ -62,7 +62,7 @@ it('uses correct per page value', function () {
 it('falls back to default per page when requested value is not in options', function () {
     $this->setPerPage([10, 20, 30]);
     $this->setDefaultPerPage(10);
-    
+
     // Mock getPerPageFromRequest to return 40 (not in options)
     $this->mock(Table::class, function ($mock) {
         $mock->shouldReceive('getPerPageFromRequest')->andReturn(40);

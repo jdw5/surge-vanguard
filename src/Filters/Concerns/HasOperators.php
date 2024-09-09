@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 trait HasOperators
 {
-    protected array|null $operators = null;
+    protected ?array $operators = null;
 
     /**
      * Set the operators to be used, chainable.
@@ -26,7 +26,7 @@ trait HasOperators
     /**
      * Set the operators to be used quietly.
      *
-     * @param array<Operator>  $operators
+     * @param  array<Operator>  $operators
      */
     public function setOperators(...$operators): void
     {

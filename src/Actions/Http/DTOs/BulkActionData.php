@@ -3,7 +3,6 @@
 namespace Conquest\Table\Actions\Http\DTOs;
 
 use Illuminate\Http\Request;
-use Conquest\Table\Actions\Http\DTOs\ActionData;
 
 class BulkActionData extends ActionData
 {

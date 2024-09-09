@@ -19,7 +19,7 @@ trait HasShowKey
             return $this->showKey;
         }
 
-        if(method_exists($this, 'showKey')) {
+        if (method_exists($this, 'showKey')) {
             return $this->showKey();
         }
 

@@ -69,7 +69,7 @@ describe('chained', function () {
             'label' => 'Create',
             'type' => 'page',
             'meta' => [
-                'key' => 'value'
+                'key' => 'value',
             ],
             'route' => url('/products'),
             'method' => 'POST',

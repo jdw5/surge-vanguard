@@ -21,4 +21,3 @@ it('can format since', function () {
     $this->column->since();
     expect($this->column->formatSince('31-12-1999'))->toBe('Yesterday');
 });
-

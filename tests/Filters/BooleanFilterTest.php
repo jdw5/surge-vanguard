@@ -1,12 +1,12 @@
 <?php
 
-use Workbench\App\Models\Product;
+use Conquest\Table\Exceptions\CannotResolveNameFromProperty;
+use Conquest\Table\Filters\BooleanFilter;
+use Conquest\Table\Filters\Enums\Clause;
+use Conquest\Table\Filters\Enums\Operator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
-use Conquest\Table\Filters\Enums\Clause;
-use Conquest\Table\Filters\BooleanFilter;
-use Conquest\Table\Filters\Enums\Operator;
-use Conquest\Table\Exceptions\CannotResolveNameFromProperty;
+use Workbench\App\Models\Product;
 
 it('can instantiate a boolean filter', function () {
     $filter = new BooleanFilter('name');
@@ -125,7 +125,7 @@ describe('chain make', function () {
             ->neq();
     });
 
-    it('can chain methods on a filter', function () {       
+    it('can chain methods on a filter', function () {
         expect($this->filter)->toBeInstanceOf(BooleanFilter::class)
             ->getProperty()->toBe('name')
             ->getName()->toBe('person')
@@ -168,7 +168,7 @@ describe('can be applied', function () {
             $this->filter->handle($this->builder);
             expect($this->builder->toSql())->toBe('select * from "products" where not "name" like ?');
         });
-    
+
         describe('without request', function () {
             beforeEach(function () {
                 $this->filter = BooleanFilter::make('name')->value('john');
@@ -182,7 +182,7 @@ describe('can be applied', function () {
                 expect($this->filter->isActive())->toBeFalse();
             });
         });
-    
+
         describe('with request', function () {
             beforeEach(function () {
                 $this->filter = BooleanFilter::make('name')->value('john');
@@ -223,7 +223,7 @@ describe('can be applied', function () {
             $this->filter->handle($this->builder);
             expect($this->builder->toSql())->toBe('select * from "products" where not "name" like ?');
         });
-    
+
         describe('no request', function () {
             beforeEach(function () {
                 $this->filter = BooleanFilter::make('name')->value('john');
@@ -237,7 +237,7 @@ describe('can be applied', function () {
                 expect($this->filter->isActive())->toBeFalse();
             });
         });
-    
+
         describe('request', function () {
             beforeEach(function () {
                 $this->filter = BooleanFilter::make('name')->value('john');
