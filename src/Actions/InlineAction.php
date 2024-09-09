@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Conquest\Table\Actions;
 
-use Conquest\Core\Concerns\IsDefault;
 use Conquest\Core\Concerns\Routable;
+use Conquest\Core\Concerns\IsDefault;
 use Conquest\Core\Contracts\HigherOrder;
-use Conquest\Core\Contracts\ProxiesHigherOrder;
-use Conquest\Table\Actions\Concerns\CanAction;
-use Conquest\Table\Actions\Concerns\CanBeConfirmable;
 use Conquest\Table\Actions\Concerns\IsBulk;
-use Conquest\Table\Actions\Confirm\HigherOrderConfirm;
-use Conquest\Table\Table;
+use Conquest\Table\Actions\Concerns\CanAction;
+use Conquest\Core\Contracts\ProxiesHigherOrder;
+use Conquest\Table\Actions\Concerns\CanBeConfirmable;
+use Conquest\Table\Actions\Confirm\Proxies\HigherOrderConfirm;
 
+/**
+ * @property-read \Conquest\Table\Actions\Confirm\Confirm $confirm
+ */
 class InlineAction extends BaseAction implements ProxiesHigherOrder
 {
     use CanBeConfirmable;
@@ -31,11 +33,11 @@ class InlineAction extends BaseAction implements ProxiesHigherOrder
     {
         return array_merge(
             parent::toArray(),
-            $this->toArrayConfirm(),
             [
-                'route' => $this->getResolvedRoute(),
+                'route' => $this->getRoute(),
                 'method' => $this->getMethod(),
                 'actionable' => $this->canAction(),
+                'confirm' => $this->getConfirm()?->toArray(),
             ]
         );
     }
@@ -44,8 +46,7 @@ class InlineAction extends BaseAction implements ProxiesHigherOrder
     {
         return match($property) {
             'confirm' => new HigherOrderConfirm($this),
-            default => throw new \Exception("Property [{$property}] not found on " . self::class),
+            default => throw new \Exception("Property [{$property}] does not exist on " . self::class),
         };
-
     }
 }

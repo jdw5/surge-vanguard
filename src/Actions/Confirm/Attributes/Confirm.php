@@ -19,7 +19,7 @@ class Confirm
         string|Closure $cancel = null,
         string|Closure $submit = null,
     ) {
-        $this->confirm = Confirmable::make()->state(func_get_args());
+        $this->confirm = new Confirmable(func_get_args());
     }
 
     /**

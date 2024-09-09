@@ -1,28 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Conquest\Table;
 
 use Conquest\Core\Primitive;
-use Conquest\Core\Concerns\RequiresKey;
-use Conquest\Core\Exceptions\MissingRequiredAttributeException;
-use Conquest\Table\Concerns\HasActions;
-use Conquest\Table\Concerns\HasColumns;
-use Conquest\Table\Concerns\HasMeta;
-use Conquest\Table\Concerns\HasRecords;
-use Conquest\Table\Concerns\HasResource;
-use Conquest\Table\Concerns\HasFilters;
+use App\Table\Pipes\Paginate;
+use App\Table\Pipes\ApplySorts;
+use App\Table\Pipes\ApplySearch;
+use App\Table\Pipes\ApplyFilters;
+use Illuminate\Pipeline\Pipeline;
+use App\Table\Pipes\FormatRecords;
 use Conquest\Table\Concerns\Sorts;
+use Conquest\Table\Sorts\BaseSort;
+use Illuminate\Support\Collection;
+use Conquest\Table\Concerns\HasMeta;
+use Conquest\Table\Contracts\Tables;
 use Conquest\Table\Columns\BaseColumn;
 use Conquest\Table\Concerns\EncodesId;
-use Conquest\Table\Concerns\Remember\Remembers;
+use Conquest\Core\Concerns\RequiresKey;
+use Conquest\Table\Concerns\HasActions;
+use Conquest\Table\Concerns\HasColumns;
+use Conquest\Table\Concerns\HasFilters;
+use Conquest\Table\Concerns\HasRecords;
+use Conquest\Table\Concerns\HasResource;
+use Illuminate\Database\Eloquent\Builder;
 use Conquest\Table\Concerns\Search\Searches;
-use Conquest\Table\Contracts\Tables;
+use Conquest\Table\Pipes\ApplyToggleability;
+use Conquest\Table\Concerns\Remember\Remembers;
 use Conquest\Table\Pagination\Concerns\Paginates;
 use Conquest\Table\Pagination\Enums\PaginationType;
-use Conquest\Table\Sorts\BaseSort;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Support\Collection;
+use Conquest\Core\Exceptions\MissingRequiredAttributeException;
 
 class Table extends Primitive implements Tables
 {
@@ -83,6 +92,7 @@ class Table extends Primitive implements Tables
     /**
      * Get the key for the table.
      *
+     * @return string
      * @throws MissingRequiredAttributeException
      */
     public function getTableKey(): string
@@ -136,7 +146,7 @@ class Table extends Primitive implements Tables
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string, array-key>
      */
     public function getTableMeta(): array
     {
@@ -145,11 +155,43 @@ class Table extends Primitive implements Tables
         return $this->getMeta();
     }
 
+    /**
+     * Persist the records and table metadata to variables.
+     * 
+     * @internal
+     * @param array{records: \Illuminate\Support\Collection, meta: array} $data
+     */
+    protected function update(array $data): void
+    {
+        [$records, $meta] = $data;
+        $this->setRecords($records);
+        $this->setMeta($meta);
+    }
+
+    /**
+     * Retrieve the records and table metadata.
+     * 
+     * @internal
+     */
     protected function create(): void
     {
         if ($this->hasRecords()) {
             return;
         }
+
+        app(Pipeline::class)->send($this)
+            ->through([
+                ApplyToggleability::class,
+                ApplyFilters::class,
+                ApplySearch::class,
+                ApplySorts::class,
+                Paginate::class,
+                FormatRecords::class,
+            ])
+            ->via('handle')
+            ->then(fn (array $data) => $this->update($data));
+
+
 
         $builder = $this->getResource();
         // $this->applyToggleability();
