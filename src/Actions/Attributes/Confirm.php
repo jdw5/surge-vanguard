@@ -1,6 +1,6 @@
 <?php
 
-namespace Conquest\Table\Actions\Confirm\Attributes;
+namespace Conquest\Table\Actions\Attributes;
 
 use Closure;
 use Attribute;

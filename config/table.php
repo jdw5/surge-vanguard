@@ -22,13 +22,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Remember configuration
+    | Toggle configuration
     |--------------------------------------------------------------------------
     */
-    'remember' => [
-        'default' => false,
+    'toggle' => [
+        'always' => false,
+        'key' => 'cols',
         'duration' => 2592000,
-        'toggle_key' => 'cols',
         'cookie' => false,
     ],
 
@@ -38,9 +38,9 @@ return [
     |--------------------------------------------------------------------------
     */
     'sorting' => [
-        'sort_key' => 'sort',
-        'order_key' => 'order',
-        'default_order' => 'asc', // 'asc' or 'desc'
+        'sort' => 'sort',
+        'order' => 'order',
+        'by_default' => 'asc', // 'asc' or 'desc'
         // 'signed' => false,
     ],
 
@@ -49,10 +49,10 @@ return [
     | Pagination configuration
     |--------------------------------------------------------------------------
     */
-    'pagination' => [
-        'default' => 10,
-        'name' => 'page',
+    'paginator' => [
         'key' => 'show',
+        'name' => 'page',
+        'count' => 10,
     ],
 
     /*
@@ -63,7 +63,6 @@ return [
     'chunk' => [
         'by_id' => true,
         'size' => 500,
-        // 'lazy' => false,
     ],
 
     /*
@@ -86,7 +85,7 @@ return [
     | Control the fallback values for columns when the value is null.
     |
     */
-    'fallback' => [
+    'fallbacks' => [
         'default' => null,
         'text' => '—',
         'numeric' => 0,
