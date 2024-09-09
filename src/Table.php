@@ -14,7 +14,6 @@ use App\Table\Pipes\FormatRecords;
 use Conquest\Core\Concerns\IsAnonymous;
 use Conquest\Table\Concerns\Sorts;
 use Conquest\Table\Concerns\HasMeta;
-use Conquest\Table\Contracts\Tables;
 use Conquest\Table\Pipes\SetActions;
 use Conquest\Table\Concerns\EncodesId;
 use Conquest\Table\Pipes\ApplyToggles;

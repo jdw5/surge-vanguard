@@ -1,44 +1,32 @@
 <?php
 
-namespace Conquest\Table\DataObjects;
+namespace Conquest\Table\Actions\Http\DTOs;
 
 use Illuminate\Http\Request;
+use Conquest\Table\Actions\Http\DTOs\ActionData;
 
 class BulkActionData extends ActionData
 {
     public function __construct(
+        string|int $table,
         string $name,
         string $type,
         public readonly bool $all,
         public readonly array $except,
         public readonly array $only,
     ) {
-        parent::__construct(name: $name, type: $type);
+        parent::__construct($table, $name, $type);
     }
 
     public static function from(Request $request): static
     {
         return resolve(static::class, [
+            'id' => $request->input('id'),
             'name' => $request->string('name'),
             'type' => $request->string('type'),
             'all' => $request->boolean('all'),
             'except' => $request->input('except', []),
             'only' => $request->input('only', []),
         ]);
-    }
-
-    public function isAll(): bool
-    {
-        return $this->all;
-    }
-
-    public function getExcept(): array
-    {
-        return $this->except;
-    }
-
-    public function getOnly(): array
-    {
-        return $this->only;
     }
 }
