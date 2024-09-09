@@ -4,11 +4,10 @@ namespace Conquest\Table\Actions\Confirm\Proxies;
 
 use Conquest\Core\Primitive;
 use Conquest\Core\Contracts\HigherOrder;
-use Conquest\Table\Actions\Concerns\CanBeConfirmable;
 
 /**
  * @internal
- * @mixin Conquest\Table\Actions\Confirm\Confirm
+ * @mixin Conquest\Table\Actions\Confirm\Confirmable
  * @template T of Conquest\Core\Primitive
  * @template-implements Conquest\Core\Concerns\HigherOrder
  */

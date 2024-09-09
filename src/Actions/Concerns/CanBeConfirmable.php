@@ -6,7 +6,7 @@ namespace Conquest\Table\Actions\Concerns;
 
 use Closure;
 use ReflectionClass;
-use Conquest\Table\Actions\Confirm\Confirm as Confirmable;
+use Conquest\Table\Actions\Confirm\Confirmable;
 
 trait CanBeConfirmable
 {
@@ -64,7 +64,7 @@ trait CanBeConfirmable
     public function getConfirm(): ?Confirmable
     {
         if (! $this->isConfirmable()) {
-            $this->evaluateConfirmAttribute();
+            
         }
 
         return $this->confirm;

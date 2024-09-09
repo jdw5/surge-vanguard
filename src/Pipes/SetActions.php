@@ -13,6 +13,7 @@ class SetActions implements SetsActions
 {
     public function handle(Table $table, Closure $next)
     {
+        
         return $next($table);
     }
 }

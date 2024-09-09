@@ -12,7 +12,7 @@ use Conquest\Table\Actions\Confirm\Concerns\HasCancel;
 use Conquest\Table\Actions\Confirm\Concerns\HasSubmit;
 use Conquest\Table\Actions\Confirm\Concerns\HasIntent;
 
-class Confirm extends Primitive
+class Confirmable extends Primitive
 {
     use HasTitle;
     use HasDescription; 

@@ -11,13 +11,13 @@ use App\Table\Pipes\ApplySearch;
 use App\Table\Pipes\ApplyFilters;
 use Illuminate\Pipeline\Pipeline;
 use App\Table\Pipes\FormatRecords;
+use Conquest\Core\Concerns\IsAnonymous;
 use Conquest\Table\Concerns\Sorts;
-use Conquest\Table\Sorts\BaseSort;
-use Illuminate\Support\Collection;
 use Conquest\Table\Concerns\HasMeta;
 use Conquest\Table\Contracts\Tables;
-use Conquest\Table\Columns\BaseColumn;
+use Conquest\Table\Pipes\SetActions;
 use Conquest\Table\Concerns\EncodesId;
+use Conquest\Table\Pipes\ApplyToggles;
 use Conquest\Core\Concerns\RequiresKey;
 use Conquest\Table\Concerns\HasActions;
 use Conquest\Table\Concerns\HasColumns;
@@ -26,14 +26,12 @@ use Conquest\Table\Concerns\HasRecords;
 use Conquest\Table\Concerns\HasResource;
 use Illuminate\Database\Eloquent\Builder;
 use Conquest\Table\Concerns\Search\Searches;
-use Conquest\Table\Pipes\ApplyToggleability;
 use Conquest\Table\Concerns\Remember\Remembers;
 use Conquest\Table\Pagination\Concerns\Paginates;
-use Conquest\Table\Pagination\Enums\PaginationType;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Conquest\Core\Exceptions\MissingRequiredAttributeException;
 
-class Table extends Primitive implements Tables
+class Table extends Primitive
 {
     use EncodesId;
     use HasActions;
@@ -47,25 +45,13 @@ class Table extends Primitive implements Tables
     use RequiresKey;
     use Searches;
     use Sorts;
+    use IsAnonymous;
 
-    // Add records and metadata from trait into here
+    protected $anonymous = Table::class;
 
-    public function __construct(
-        Builder|QueryBuilder $resource = null,
-        array $columns = null,
-        array $actions = null,
-        array $filters = null,
-        array $sorts = null,
-        array|string $search = null,
-        array|int $pagination = null,
-    ) {
-        $this->setResource($resource);
-        $this->setColumns($columns);
-        $this->setActions($actions);
-        $this->setFilters($filters);
-        $this->setSorts($sorts);
-        $this->setSearch($search);
-        $this->setPagination($pagination);
+    public function __construct(array $assignments = []) 
+    {
+        $this->setAssignments($assignments);
     }
 
     /**
@@ -115,9 +101,9 @@ class Table extends Primitive implements Tables
 
         return [
             'id' => $this->getEncodedId($this->getId()),
-            'records' => $this->getTableRecords(),
+            'records' => $this->records,
             'headings' => $this->getHeadingColumns(),
-            'meta' => $this->getTableMeta(),
+            'meta' => $this->meta,
             'sorts' => $this->getSorts(),
             'filters' => $this->getFilters(),
             'columns' => $this->getTableColumns(),
@@ -140,36 +126,6 @@ class Table extends Primitive implements Tables
         ];
     }
 
-    public function getTableRecords(): Collection
-    {
-        $this->pipeline();
-
-        return $this->getRecords();
-    }
-
-    /**
-     * @return array<string, array-key>
-     */
-    public function getTableMeta(): array
-    {
-        $this->pipeline();
-
-        return $this->getMeta();
-    }
-
-    /**
-     * Persist the records and table metadata to variables.
-     * 
-     * @internal
-     * @param array{records: \Illuminate\Support\Collection, meta: array} $data
-     */
-    protected function update(array $data): void
-    {
-        [$records, $meta] = $data;
-        $this->setRecords($records);
-        $this->setMeta($meta);
-    }
-
     /**
      * Retrieve the records and table metadata.
      * 
@@ -183,31 +139,15 @@ class Table extends Primitive implements Tables
 
         app(Pipeline::class)->send($this)
             ->through([
-                ApplyToggleability::class,
+                ApplyToggles::class,
                 ApplyFilters::class,
                 ApplySearch::class,
                 ApplySorts::class,
                 Paginate::class,
                 FormatRecords::class,
+                SetActions::class,
             ])
             ->via('handle')
-            ->then(fn (array $data) => $this->update($data));
+            ->thenReturn();
     }
-
-    /**
-     * @return array<string>
-     */
-    public function combinedSearch(): array
-    {
-        return array_merge($this->getSearch(), $this->getSearchableColumns()->toArray());
-    }
-
-    /**
-     * @return array<BaseSort>
-     */
-    public function combinedSorts(): array
-    {
-        return array_merge($this->getSorts(), $this->getSortableColumns()->map(fn ($column) => $column->getSort())->toArray());
-    }
-
 }
