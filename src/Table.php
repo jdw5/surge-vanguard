@@ -109,7 +109,7 @@ class Table extends Primitive implements Tables
      */
     public function toArray(): array
     {
-        $this->create();
+        $this->pipeline();
 
         return [
             'id' => $this->getEncodedId($this->getId()),
@@ -140,7 +140,7 @@ class Table extends Primitive implements Tables
 
     public function getTableRecords(): Collection
     {
-        $this->create();
+        $this->pipeline();
 
         return $this->getRecords();
     }
@@ -150,7 +150,7 @@ class Table extends Primitive implements Tables
      */
     public function getTableMeta(): array
     {
-        $this->create();
+        $this->pipeline();
 
         return $this->getMeta();
     }
@@ -173,7 +173,7 @@ class Table extends Primitive implements Tables
      * 
      * @internal
      */
-    protected function create(): void
+    protected function pipeline(): void
     {
         if ($this->hasRecords()) {
             return;
@@ -190,48 +190,6 @@ class Table extends Primitive implements Tables
             ])
             ->via('handle')
             ->then(fn (array $data) => $this->update($data));
-
-
-
-        $builder = $this->getResource();
-        // $this->applyToggleability();
-        $this->filter($builder);
-        $this->sort($builder, $this->combinedSorts());
-        $this->search($builder, $this->combinedSearch());
-
-        [$records, $meta] = match ($this->getPaginateType()) {
-            PaginationType::CURSOR => [
-                $data = $builder->cursorPaginate(
-                    perPage: $this->usePerPage(),
-                    cursorName: $this->getPageName(),
-                )->withQueryString(),
-                $this->getCursorMeta($data),
-            ],
-            PaginationType::NONE => [
-                $data = $builder->get(),
-                $this->getCollectionMeta($data),
-            ],
-            default => [
-                $data = $builder->paginate(
-                    perPage: $this->usePerPage(),
-                    pageName: $this->getPageName(),
-                )->withQueryString(),
-                $this->getPaginateMeta($data),
-            ],
-        };
-
-        $records = collect($records instanceof Collection ? $records : $records->items())
-            ->map(function ($record) {
-                return $this->getTableColumns()->reduce(function ($filteredRecord, BaseColumn $column) use ($record) {
-                    $columnName = $column->getName();
-                    $filteredRecord[$columnName] = $column->apply($record[$columnName] ?? null);
-
-                    return $filteredRecord;
-                }, []);
-            });
-
-        $this->setRecords($records);
-        $this->setMeta($meta);
     }
 
     /**
@@ -250,42 +208,4 @@ class Table extends Primitive implements Tables
         return array_merge($this->getSorts(), $this->getSortableColumns()->map(fn ($column) => $column->getSort())->toArray());
     }
 
-    public function toggle(): void
-    {
-
-        // $this->applyToggleability();
-    }
-
-    // private function getToggledColumns(): array
-    // {
-    //     $cols = request()->query($this->getToggleKey(), null);
-    //     return (is_null($cols)) ? [] : explode(',', $cols);
-    // }
-
-    // private function applyToggleability(): void
-    // {
-    //     // If it isn't toggleable then dont do anything
-    //     if (!$this->isToggleable()) return;
-
-    //     $cols = $this->getToggledColumns();
-
-    //     if ($this->hasRememberKey() && empty($cols)) {
-    //         // Use the remember key to get the columns
-    //         $cols = json_decode(request()->cookie($this->getRememberKey(), []));
-    //     }
-
-    //     if (empty($cols)) {
-    //         // If there are no columns, then set the default columns
-    //         return;
-    //     }
-
-    //     foreach ($this->getTableColumns() as $column) {
-    //         if (in_array($column->getName(), $cols)) $column->active(true);
-    //         else $column->active(false);
-    //     }
-
-    //     if ($this->hasRememberKey()) {
-    //         Cookie::queue($this->getRememberKey(), json_encode($cols), $this->getRememberDuration());
-    //     }
-    // }
 }

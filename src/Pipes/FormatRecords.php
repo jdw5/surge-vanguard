@@ -3,12 +3,13 @@
 namespace App\Table\Pipes;
 
 use Closure;
+use Conquest\Table\Pipes\Contracts\FormatsRecords;
 use Conquest\Table\Table;
 
 /**
  * @internal
  */
-class FormatRecords
+class FormatRecords implements FormatsRecords
 {
     public function handle(Table $table, Closure $next)
     {

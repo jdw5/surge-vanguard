@@ -4,11 +4,12 @@ namespace App\Table\Pipes;
 
 use Closure;
 use Conquest\Table\Table;
+use Conquest\Table\Pipes\Contracts\Filters;
 
 /**
  * @internal
  */
-class ApplyFilters
+class ApplyFilters implements Filters
 {
     public function handle(Table $table, Closure $next)
     {
@@ -16,7 +17,7 @@ class ApplyFilters
         foreach ($table->getFilters() as $filter) {
             $filter->apply($builder);
         }
-
+        $table->setResource($builder);
         return $next($table);
     }
 }
