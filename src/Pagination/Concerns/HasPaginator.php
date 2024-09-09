@@ -33,7 +33,7 @@ trait HasPaginator
             return $this->resolvePaginator($result);
         }
 
-        return Paginator::Simple;
+        return Paginator::Page;
     }
 
     private function resolvePaginator(string|Paginator $paginator): Paginator

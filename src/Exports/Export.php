@@ -3,7 +3,9 @@
 
 namespace Conquest\Table\Exports;
 
-class Export
+use Conquest\Core\Primitive;
+
+class Export extends Primitive
 {
-    
+
 }

@@ -48,6 +48,8 @@ class Table extends Primitive implements Tables
     use Searches;
     use Sorts;
 
+    // Add records and metadata from trait into here
+
     public function __construct(
         Builder|QueryBuilder $resource = null,
         array $columns = null,

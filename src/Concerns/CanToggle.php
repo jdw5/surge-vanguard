@@ -2,7 +2,7 @@
 
 namespace Conquest\Table\Concerns;
 
-trait CanChangeView
+trait CanToggle
 {
     /**
      * @var string
