@@ -11,7 +11,7 @@ class Record implements \ArrayAccess
 {
     private $data;
 
-    public function __construct(array $data)
+    public function __construct(mixed $data)
     {
         $this->data = $data;
     }
